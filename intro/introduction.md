@@ -152,7 +152,6 @@ Next we [create a table](https://api.seatable.io/reference/create-new-table) and
 But even after the initial creation you could [append new columns](https://api.seatable.io/reference/append-columns) at every time you want. Open the base with your browser and you will immediately see the new table with the new columns. 
 
 Congratulations! You created your first base with a seconds table and some extra columns.
-...
 
 <hr></details>
 
@@ -166,11 +165,10 @@ Generate a Base-Token like in example no. 1. This will also give you the `base_u
 ### Step 1: Determine the row you would like to update
 
 To [update a row](https://api.seatable.io/reference/update-row) you need to know the row_id you want to update. You can either get the `row_id` just by [opening the row details in the browser](https://seatable.io/docs/haeufig-gestellte-fragen/was-ist-die-zeilen-id/?lang=auto) or you could use one of the various API requests to get the content of a base:
-<ul>
-<li>[List Rows (with SQL)](https://api.seatable.io/reference/list-rows-with-sql)</li>
-<li>[List Rows](https://api.seatable.io/reference/list-rows)</li>
-<li>[Base Info](https://api.seatable.io/reference/get-base-info)</li>
-</ul>
+
+- [List Rows (with SQL)](https://api.seatable.io/reference/list-rows-with-sql)
+- [List Rows](https://api.seatable.io/reference/list-rows)
+- [Base Info](https://api.seatable.io/reference/get-base-info)
 
 ### Step 2: Update the row
 
@@ -190,7 +188,7 @@ I assume that you already have a base with a table in which a file column exists
 First we have to [generate an upload link](https://api.seatable.io/reference/get-file-image-upload-link). Be aware that this requests needs the API-Token for authentification, because technically speaking it does not happen inside a base. 
 
 The result will be look like this:
-```json
+```json Temporary upload link, generated with the SeaTable-API
 {
   "upload_link": "https://cloud.seafile.com/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e",
   "parent_path": "/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765",
@@ -207,12 +205,11 @@ Next you have to really upload the file to the base. The right API request is [U
 You have to provide the information you received from the last call. Don't get confused about `parent_path` and `parent_dir`. These are just the same values.
 
 Here is the input you should use: (example data)
-<ul>
-<li>upload_link: 83e701c8-84ba-498c-91b1-ddb3789edb7e</li>
-<li>file: (select your file)</li>
-<li>parent_dir: /asset/a275d870-fd55-48e4-8c4a-5fd6f2549765</li>
-<li>relative_path: files/2021-08</li>
-</ul>
+
+- upload_link: **83e701c8-84ba-498c-91b1-ddb3789edb7e**
+- file: **(select your file)**
+- parent_dir: **/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765**
+- relative_path: **files/2021-08**
 
 As soon as you uploaded the file, it can be found via the [file management of the base](https://seatable.io/docs/dateien-und-bilder/das-dateimanagement-einer-base/?lang=auto). 
 To append the file an image or file column, you still need another API request.
@@ -224,18 +221,22 @@ Do not be confused by the fact that the upload of a file and an image is differe
 
 ```json Example how to add an already uploaded image to a row:
 "row": {
-  "My Image Column": ["/workspace/24/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765/images/2023-07/party.png`"]
+  "My Image Column": [
+    "/workspace/24/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765/images/2023-07/party.png"
+  ]
 }
 ```
 
 ```json Example how to add an already uploaded file to a row:
 "row": {
-  "My File Column": [{
+  "My File Column": [
+    {
     "name": "invoice.pdf", 
     "size": 101454, 
     "type": "file", 
     "url": "/workspace/24/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765/images/2023-07/invoice.pdf"
-  }]
+    }
+  ]
 }
 ```
 
