@@ -17,7 +17,7 @@ details > p, details > div, details > ul, details > pre {
 
 The SeaTable API is organized around REST. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-Take a look at our [development quick start guide](https://seatable.io/docs/) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.io/integration/) like Zapier, Make.com to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://seatable.io/docs/).
+Take a look at our [development quick start guide](https://seatable.io/docs/?lang=auto) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.io/integration/) like Zapier, Make.com to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://seatable.io/docs/?lang=auto).
 
 ## Prerequisites
 
@@ -42,13 +42,13 @@ So don't let us waste time and let's start right away. The first step with every
 <details>
   <summary><strong>Write data to a base and read it out again</strong></summary><hr>
 
-**Step 1: Create an API-Token**
+### Step 1: Create an API-Token
 
 The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.io/docs/seatable-api/erzeugen-eines-api-tokens/?lang=auto). You only have to do this once! The `API-Token` keeps valid forever for this specific base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](/reference/create-api-token).
 
 An API-Token might look like this: `1de50f1a57143bfe72873cbbd28ecb4de9eb3c61`
 
-**Step 2: Generate Base-Token**
+## Step 2: Generate Base-Token
 
 Next you need the API-Token to [generate a Base-Token](/reference/get-base-token-with-api-token). The `Base-Token` is only valid for three days and exactly for the one base for which you created the API-Token. If you want to interact with your base more frequently via API, you need to repeat this step. You need the `Base-Token` to authenticate all the following API requests. 
 
@@ -66,7 +66,7 @@ The result of the [Get Base-Token with API-Token](https://api.seatable.io/refere
 }
 ```
 
-**Step 3: Get to know the structure of your base**
+### Step 3: Get to know the structure of your base
 
 Equipped with the `Base-Token` we can start to display the current structure of the base. Use the [Get Metadata](/reference/get-metadata) request and pass the `Base-Token` and the `base_uuid` as parameters. The result will be a very long *metadata* object which contains all *tables* with all their *columns* and *views*. The *metadata* does not contain any data, it contains only the structure of your base. 
 
@@ -98,7 +98,7 @@ Use the small arrows in the response box to fold the elements to get an overview
 
 Note down the name of the tables and the name of the columns. You will need these values to write a new row to this table.
 
-**Step 4: Write some data to your base**
+### Step 4: Write some data to your base
 
 The request to [Add a row](/reference/add-row) to a base, requires the following information. You have to know ...
 - the `Base-Token` for authentication -> ok
@@ -115,7 +115,7 @@ At first it looks difficult to define the row object, but in fact it is quite ea
 ```
 Easy, right? This documentation helps you to create the API request just by filling out all the input fields. The code that is generated in the right black box, is the API request that you can execute either via this page or with any programming language.
 
-**Step 5: Get all rows of your base**
+### Step 5: Get all rows of your base
 
 Also this last step is quite easy. Use the [List rows](/reference/list-rows) request and fill all mandatory input fields. Leave all optional fields blank and hit the **Try It!** button. You should see your previously created line with John Doe now in the result list.
 
@@ -126,7 +126,7 @@ Congratulations! You wrote your first row to a table in a base in SeaTable via t
 <details>
   <summary><strong>Create a new base, a new table and add two new columns</strong></summary><hr>
 
-**Step 1: Generate an Account-Token**
+### Step 1: Generate an Account-Token
 
 SeaTable requires a different authentication depending on whether you want to do something inside a base or outside. To create a Base, we need an account token, which we can generate with our credentials. Therefore you have to use the [Get Account-Token with Username and Password](/reference/get-account-token). Fill in your username and password and hit **Try It!**. The result will be your `Account-Token` which might look like this:
 ```json
@@ -135,16 +135,16 @@ SeaTable requires a different authentication depending on whether you want to do
 }
 ```
 
-**Step 2: Find out the workspace id**
+### Step 2: Find out the workspace id
 
 To generate a base inside SeaTable you have to tell SeaTable where the base should be created. It could be in the area of `My bases` or it could be in one of your groups. To define the target where you want to create a base you have to provide the `workspace_id`. The easiest way to determine the workspace id of a group or `My bases` is to open a base of that area in the browser and look at the URL. This [help article](https://seatable.io/docs/arbeiten-mit-gruppen/workspace-id-einer-gruppe-ermitteln/?lang=auto) explains this in more details. Open the base and write down the workspace id.
 
-**Step 3: Create the base**
+### Step 3: Create the base
 
 Equiped with all these information it should be easy for you to create a new base. Use the request [Create base](https://api.seatable.io/reference/create-base) and fill out all the required values and hit
 **Try It!**. Every new base will automatically contain a first empty table with the name `Table1`.
 
-**Step 4: Create a table and two columns (you will need a Base-Token)**
+### Step 4: Create a table and two columns (you will need a Base-Token)
 
 The following requests have to be executed inside the base. There the necessary API calls can be found in the area **Base operations** and you will need a [Base-Token](/reference/get-base-token-with-api-token) instead of an account-token. Check example no. 1 if you don't know how to create a Base-Token.
 
@@ -159,18 +159,33 @@ Congratulations! You created your first base with a seconds table and some extra
 <details>
   <summary><strong>Update the content of a specific row</strong></summary><hr>
 
-**Step 1: Generate an upload link**
+### Step 0: Generate a Base-Token
+
+Generate a Base-Token like in example no. 1. This will also give you the `base_uuid`. 
+
+### Step 1: Determine the row you would like to update
+
+To [update a row](https://api.seatable.io/reference/update-row) you need to know the row_id you want to update. You can either get the `row_id` just by [opening the row details in the browser](https://seatable.io/docs/haeufig-gestellte-fragen/was-ist-die-zeilen-id/?lang=auto) or you could use one of the various API requests to get the content of a base:
+<ul>
+<li>[List Rows (with SQL)](https://api.seatable.io/reference/list-rows-with-sql)</li>
+<li>[List Rows](https://api.seatable.io/reference/list-rows)</li>
+<li>[Base Info](https://api.seatable.io/reference/get-base-info)</li>
+</ul>
+
+### Step 2: Update the row
+
+Next you have all the information to [update a row](https://api.seatable.io/reference/update-row). You can easily update multiple values in the row specified by the `row_id`. The `row` object contains `key:value` pairs with the column name as key and the desired values.
 
 <hr></details>
 
 <details>
   <summary><strong>Upload a file to a file column</strong></summary><hr>
 
-**Step 0: Prerequisites**
+### Step 0: Prerequisites
 
-I assume that you already have a base with a table in which a file column exists. In addition I assume that you know how to generate a [Base-Token](/reference/get-base-token-with-api-token) from an API-Token. If not, check out the first example. In the following I call the table `File Upload` and the file column `my files`. The name of the base is irrelevant because the Base-Token is enough to identify the right base.
+I assume that you already have a base with a table in which a file column exists. In addition I assume that you know how to generate a [Base-Token](/reference/get-base-token-with-api-token) from an API-Token. If not, check out the first example.
 
-**Step 1: Generate an upload link for this base**
+### Step 1: Generate an upload link for this base
 
 First we have to [generate an upload link](https://api.seatable.io/reference/get-file-image-upload-link). Be aware that this requests needs the API-Token for authentification, because technically speaking it does not happen inside a base. 
 
@@ -186,20 +201,43 @@ The result will be look like this:
 
 This is a temporary path, where SeaTable accepts new files that can be uploaded either to an images or a files directory. 
 
-**Step 2: Upload the file**
+### Step 2: Upload the file
 
 Next you have to really upload the file to the base. The right API request is [Upload a file](https://api.seatable.io/reference/upload-file-image).
 You have to provide the information you received from the last call. Don't get confused about `parent_path` and `parent_dir`. These are just the same values.
 
-As soon as you uploaded the file, it can be found via the [file management of the base](https://seatable.io/docs/dateien-und-bilder/das-dateimanagement-einer-base/).
+Here is the input you should use: (example data)
+<ul>
+<li>upload_link: 83e701c8-84ba-498c-91b1-ddb3789edb7e</li>
+<li>file: (select your file)</li>
+<li>parent_dir: /asset/a275d870-fd55-48e4-8c4a-5fd6f2549765</li>
+<li>relative_path: files/2021-08</li>
+</ul>
 
-**Step 3a: Update an existing file column**
+As soon as you uploaded the file, it can be found via the [file management of the base](https://seatable.io/docs/dateien-und-bilder/das-dateimanagement-einer-base/?lang=auto). 
+To append the file an image or file column, you still need another API request.
 
-...
+### Step 3: Update an existing file/image column
 
-**Step 3a: Update an existing image column**
+Now you have to [update a row](https://api.seatable.io/reference/update-row) and write the required information of the previously uploaded file to the right file/image column.
+Do not be confused by the fact that the upload of a file and an image is different. The `row` element has to be different. In case of an image you just have to provide the internal URL of the image as an array item. In cas of a file you have to provide more informations as an object. 
 
-...
+```json Example how to add an already uploaded image to a row:
+"row": {
+  "My Image Column": ["/workspace/24/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765/images/2023-07/party.png`"]
+}
+```
+
+```json Example how to add an already uploaded file to a row:
+"row": {
+  "My File Column": [{
+    "name": "invoice.pdf", 
+    "size": 101454, 
+    "type": "file", 
+    "url": "/workspace/24/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765/images/2023-07/invoice.pdf"
+  }]
+}
+```
 
 <hr></details>
 
@@ -213,10 +251,3 @@ As soon as you uploaded the file, it can be found via the [file management of th
 -->
 
 
-<!-- 
-| What you want to achieve | What you should do |
-| :- | :- |
-| Read some data from a base | 1. `Create an API-Token` with read-only permission for one of your bases at SeaTable Cloud. You only have to do this once! The `API-token` keeps valid forever.<br/>2. Use this `API-Token` and [generate a Base-Token](/reference/get-base-token-with-api-token).<br/>3. Use the `Base-Token` and [read the data from your base](/reference/list-rows). |
-| Write some data to your base | 1. Create an `API-Token` with write permission for one of your bases at SeaTable Cloud. You only have to do this once! The `API-token` keeps valid forever.<br/>2. Use this `API-Token` and [generate a Base-Token](/reference/get-base-token-with-api-token).<br/>- Use the `Base-Token` and [add a new row](/reference/add-row) to your base. |
-| Get more info about your team | 1. [Create an Account-Token](/reference/get-account-token) from your username and password. You only have to do this once! The `Account-Token` keeps valid forever.<br/>2. Use this `Account-Token` and call the [Get Team Info](/reference/get-team-info) request. |   
--->
