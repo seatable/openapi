@@ -1,1 +1,1 @@
-# SeaTable openapi
+# SeaTable OpenAPI
