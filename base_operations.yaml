@@ -3080,7 +3080,7 @@ paths:
                 type: object
               example:
                 upload_link: >-
-                  https://table.seafile.com/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e
+                  https://cloud.seafile.com/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e
                 parent_path: /asset/a275d870-fd55-48e4-8c4a-5fd6f2549765
                 img_relative_path: images/2021-08
                 file_relative_path: files/2021-08
@@ -3827,7 +3827,7 @@ paths:
         - Columns
       summary: Insert Column
       description: >-
-        Create a new column.
+        Create a new column. You can only add one new column at the end of a table.
       requestBody:
         description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/append-columns).
         content:

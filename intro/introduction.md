@@ -10,6 +10,9 @@ slug: introduction
 .markdown-body {
 	--markdown-title-marginTop: 2em;
 }
+details > p, details > div, details > ul, details > pre {
+  margin-left: 30px;
+}
 </style>
 
 The SeaTable API is organized around REST. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
@@ -41,7 +44,7 @@ So don't let us waste time and let's start right away. The first step with every
 
 **Step 1: Create an API-Token**
 
-The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.io/docs/seatable-api/erzeugen-eines-api-tokens/?lang=auto). You only have to do this once! The `API-Token` keeps valid forever for this one base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](/reference/create-api-token).
+The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.io/docs/seatable-api/erzeugen-eines-api-tokens/?lang=auto). You only have to do this once! The `API-Token` keeps valid forever for this specific base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](/reference/create-api-token).
 
 An API-Token might look like this: `1de50f1a57143bfe72873cbbd28ecb4de9eb3c61`
 
@@ -49,7 +52,7 @@ An API-Token might look like this: `1de50f1a57143bfe72873cbbd28ecb4de9eb3c61`
 
 Next you need the API-Token to [generate a Base-Token](/reference/get-base-token-with-api-token). The `Base-Token` is only valid for three days and exactly for the one base for which you created the API-Token. If you want to interact with your base more frequently via API, you need to repeat this step. You need the `Base-Token` to authenticate all the following API requests. 
 
-The result of the *Get Base-Token with API-Token* request might look like this. Write down all values, you will need them in the following. The `access_token`, this long string of characters, is what we will call a `Base-Token` in all future requests. The `dtable_uuid` is equivalent to `base_uuid`.
+The result of the [Get Base-Token with API-Token](https://api.seatable.io/reference/get-base-token-with-api-token) request might look like this. Write down all values, you will need them in the following. The `access_token`, this long string of characters, is what we will call a `Base-Token` in all future requests. The `dtable_uuid` is equivalent to `base_uuid`.
 ```json Example response with the Base-Token (access_token) and base_uuid (dtable_uuid)
 {
   "app_name": "my first api token",
@@ -104,9 +107,9 @@ The request to [Add a row](/reference/add-row) to a base, requires the following
 - and you have to define the row object, meaning that you have to tell the API what values you want to write to the table.
 
 At first it looks difficult to define the row object, but in fact it is quite easy. The row object consists of key:value pairs. The key is the name of the column and the value is that what you want to write to the base. So if you want to create a line with **John Doe**, then the row object looks like this:
-```
+```json Row object, writing some values to the columns with the name First name and Last name.
 {
-    "First Name": "John",
+    "First name": "John",
     "Last name": "Doe",
 }
 ```
@@ -134,17 +137,73 @@ SeaTable requires a different authentication depending on whether you want to do
 
 **Step 2: Find out the workspace id**
 
-To generate a base inside SeaTable you have to tell SeaTable where the base should be created. It could be in the area of `My bases` or it could be in one of your groups. To define the target where you want to create a base you have to provide the `workspace id`. The easiest way to determine the workspace id of a group or `My bases` is to open a base of that area in the browser and look at the URL. This [help article](https://seatable.io/docs/arbeiten-mit-gruppen/workspace-id-einer-gruppe-ermitteln/?lang=auto) explains this in more details. Open the base and write down the workspace id.
+To generate a base inside SeaTable you have to tell SeaTable where the base should be created. It could be in the area of `My bases` or it could be in one of your groups. To define the target where you want to create a base you have to provide the `workspace_id`. The easiest way to determine the workspace id of a group or `My bases` is to open a base of that area in the browser and look at the URL. This [help article](https://seatable.io/docs/arbeiten-mit-gruppen/workspace-id-einer-gruppe-ermitteln/?lang=auto) explains this in more details. Open the base and write down the workspace id.
 
 **Step 3: Create the base**
+
+Equiped with all these information it should be easy for you to create a new base. Use the request [Create base](https://api.seatable.io/reference/create-base) and fill out all the required values and hit
+**Try It!**. Every new base will automatically contain a first empty table with the name `Table1`.
+
+**Step 4: Create a table and two columns (you will need a Base-Token)**
+
+The following requests have to be executed inside the base. There the necessary API calls can be found in the area **Base operations** and you will need a [Base-Token](/reference/get-base-token-with-api-token) instead of an account-token. Check example no. 1 if you don't know how to create a Base-Token.
+
+Next we [create a table](https://api.seatable.io/reference/create-new-table) and call it `Table 2`. You can already define as many columns as you want that should be created. 
+But even after the initial creation you could [append new columns](https://api.seatable.io/reference/append-columns) at every time you want. Open the base with your browser and you will immediately see the new table with the new columns. 
+
+Congratulations! You created your first base with a seconds table and some extra columns.
+...
+
+<hr></details>
+
+<details>
+  <summary><strong>Update the content of a specific row</strong></summary><hr>
+
+**Step 1: Generate an upload link**
+
+<hr></details>
+
+<details>
+  <summary><strong>Upload a file to a file column</strong></summary><hr>
+
+**Step 0: Prerequisites**
+
+I assume that you already have a base with a table in which a file column exists. In addition I assume that you know how to generate a [Base-Token](/reference/get-base-token-with-api-token) from an API-Token. If not, check out the first example. In the following I call the table `File Upload` and the file column `my files`. The name of the base is irrelevant because the Base-Token is enough to identify the right base.
+
+**Step 1: Generate an upload link for this base**
+
+First we have to [generate an upload link](https://api.seatable.io/reference/get-file-image-upload-link). Be aware that this requests needs the API-Token for authentification, because technically speaking it does not happen inside a base. 
+
+The result will be look like this:
+```json
+{
+  "upload_link": "https://cloud.seafile.com/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e",
+  "parent_path": "/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765",
+  "img_relative_path": "images/2021-08",
+  "file_relative_path": "files/2021-08"
+}
+```
+
+This is a temporary path, where SeaTable accepts new files that can be uploaded either to an images or a files directory. 
+
+**Step 2: Upload the file**
+
+Next you have to really upload the file to the base. The right API request is [Upload a file](https://api.seatable.io/reference/upload-file-image).
+You have to provide the information you received from the last call. Don't get confused about `parent_path` and `parent_dir`. These are just the same values.
+
+As soon as you uploaded the file, it can be found via the [file management of the base](https://seatable.io/docs/dateien-und-bilder/das-dateimanagement-einer-base/).
+
+**Step 3a: Update an existing file column**
+
+...
+
+**Step 3a: Update an existing image column**
 
 ...
 
 <hr></details>
+
 <!-- 
-<details>
-  <summary><strong>Upload a file to a file column</strong></summary><hr>
-<hr></details>
 <details>
   <summary><strong>Get more information about your team (as team admin)</strong></summary><hr>
 <hr></details>
