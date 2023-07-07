@@ -13,6 +13,9 @@ slug: introduction
 details > p, details > div, details > ul, details > pre {
   margin-left: 30px;
 }
+summary {
+  font-size: 1.1rem !important;
+}
 </style>
 
 The SeaTable API is organized around REST. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
