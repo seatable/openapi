@@ -22,7 +22,7 @@ servers:
 # - sometimes "convert", sometimes "convert_keys"
 # - create row link and create row links => one time table names, one time table_ids
 # - "get row": why do I have to provide row_id as path and body?
-# - Upload File/Image: why ret-json=1 in url?
+# - Upload File/Image: why ret-json=1 in URL?
 
 x-readme: 
   explorer-enabled: true
