@@ -1,0 +1,3938 @@
+openapi: 3.0.0
+info:
+  title: "Account Operations: System admin"
+  description: >-
+    The official SeaTable API Reference (OpenAPI 3.0).
+  version: "4.0"
+servers:
+  - url: 'https://{server}'
+    variables: 
+      server:
+        default: cloud.seatable.io
+
+x-readme: 
+  explorer-enabled: true
+  metrics-enabled: false 
+  proxy-enabled: false
+
+# why uses /api/v2.1/admin/organizations-basic-info/ query_params? Why not using a body?
+# why sometimes base_uuid, sometimes manchmal base_id?
+# the auth.local has many different descriptions: owner, user_id, username or email. Keeping to the same description would be great.
+# is there a possibility to get "internal-links"?
+
+components:
+  securitySchemes:
+    AccountTokenAuth:
+      type: http
+      scheme: bearer
+      description: This is the [Account-Token](/reference/authentication).
+
+  parameters:
+    #=======================Query parameters=======================#
+    page:
+      name: page
+      description: The page number you want to start showing the entries. If no value is provided, 1 will be used. 
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+      required: false
+    per_page:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      description: The number of results that should be returned. If no value is provided, 25 results will be returned.
+      example: 25
+      required: false
+    name:
+      name: name
+      in: query
+      schema:
+        type: string
+      description: Enter any query string from the name of the group.
+    contact_email:
+      name: contact_email
+      in: query
+      schema:
+        type: string
+        pattern: '^.*@.*$'
+      description: >-
+        The contact email of the user you're querying. Optional if
+        `username` is defined.
+      example: test013@fun-mail.net
+    dtable_uuid:
+      name: dtable_uuid
+      in: query
+      schema:
+        type: string
+        pattern: '^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$'
+      required: true
+      description: The unique identifier of a base. Sometimes also called dtable_uuid.
+      example: 5c264e76-0e5a-448a-9f34-580b551364ca
+    return_ancestors:
+      name: return_ancestors
+      in: query
+      schema:
+        type: boolean
+      example: 'true'
+    starting_time:
+      name: start
+      in: query
+      schema:
+        type: string
+        pattern: ^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?\+(2[0-3]|[01]?[0-9])(:[0-5]?[0-9]){2}$
+      description: >-
+        Starting time of the statistics in ISO format like in the example.
+        Required.
+      example: 2021-02-21+00:00:00
+    ending_time:
+      name: end
+      in: query
+      schema:
+        type: string
+        pattern: ^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?\+(2[0-3]|[01]?[0-9])(:[0-5]?[0-9]){2}$
+      description: >-
+        Ending time of the statistics in ISO format like in the example.
+        Required.
+      example: 2021-02-24+00:00:00
+    date:
+      name: date
+      in: query
+      schema:
+        type: string
+        pattern: ^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?\+(2[0-3]|[01]?[0-9])(:[0-5]?[0-9]){2}$
+      description: The date in ISO format. Required.
+      example: 2020-06-19+00:00:00  
+    is_user:
+      name: is_user
+      in: query
+      schema:
+        type: boolean
+      required: true
+      description: >-
+        Whether you'd like to list automation rules triggered by single
+        users who are not in any teams (`true`) or by teams (`false`).  The
+        usage of `true` here is seldom meaningful for cloud.seatable.io as
+        all the users in the SeaTable Cloud are team users.
+      example: 'false'
+    month:
+      name: month
+      in: query
+      schema:
+        type: integer
+        pattern: ^[0-9]{4}((0[1-9])|1[0-2])$
+      description: >-
+        For which month you'd like to list the statistics in the format of
+        YYYYMM. Statistics of automation rules before 202109 are not
+        correctly summarized.
+      example: '202109'
+    owner:
+      name: owner
+      in: query
+      schema:
+        type: string
+        pattern: '^[a-f0-9]{32}(@auth.local)$'
+      description: >-
+        The ID of the user you are querying. Optional. If you don't define a
+        user, all the users are queried.
+      example: 123abc456def789ghi123jkl456mno789@auth.local
+    role:
+      name: role
+      in: query
+      schema:
+        type: string
+      description: Optional. When left blank, all role types are returned.
+      example: default
+    query_user:
+      name: query
+      in: query
+      schema:
+        type: string
+        pattern: ^.*@.*$
+      description: Enter any query string from the user's name, ID, or contact email.
+      example: teamuser001@example.com
+    parent_dir:
+      name: parent_dir
+      in: query
+      schema:
+        type: string
+      example: /asset/
+    query:
+      name: query
+      in: query
+      schema:
+        type: string
+    org_id_query:
+      name: org_id
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+    limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      description: Limit of search User
+      example: 10
+    username:
+      name: username
+      in: query
+      schema:
+        type: string
+      description: Who you want to get the notifications of, optional
+    seen:
+      name: seen
+      in: query
+      schema:
+        type: integer
+        enum: [0,1]
+      description: Seen status, whether seen or not, 0/1, optional
+
+
+    #=======================Path parameters=======================#
+    base_uuid:
+      name: base_uuid
+      in: path
+      schema:
+        type: string
+        pattern: '^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$'
+      required: true
+      description: The unique identifier of a base. Sometimes also called dtable_uuid.
+      example: 5c264e76-0e5a-448a-9f34-580b551364ca
+    user_id:
+      name: user_id
+      description: The unique user id in the form ...@auth.local. This is not the email address of the user.
+      in: path
+      schema:
+        type: string
+        pattern: '^[a-f0-9]{32}(@auth.local)$'
+      required: true
+      example: 23abc456def789ghi123jkl456mno789@auth.local
+    org_id:
+      name: org_id
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      description: >-
+        The id of your team/organization. Get it from [Get Team](/reference/get-team-info). Contact your team admin, if you
+        are not the admin.
+      example: 1
+    base_id:
+      name: base_id
+      description: The id of the base. This is not the base_uuid.
+      in: path
+      schema:
+        type: string
+      required: true
+      example: base_id
+    automation_rule_id:
+      name: automation_rule_id
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 10
+    notification_rule_id:
+      name: notification_rule_id
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 2
+    collection_table_token:
+      name: collection_table_token
+      in: path
+      schema:
+        type: string
+        pattern: ^[0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$
+      required: true
+      example: 12345678-d378-4c12-8d7a-6da0fb48ee83
+    sync_id:
+      name: sync_id
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      description: >-
+        The ID of the invalid synchronization, retrievable from the previous
+        call.
+      example: 2
+    parent_department_id:
+      name: parent_department_id
+      in: path
+      schema:
+        type: integer
+      required: true
+      description: Optional. -1 by default.
+      example: 1
+    department_id:
+      name: department_id
+      in: path
+      schema:
+        type: string
+        minimum: 1
+      required: true
+      example: 1
+    external_link_token:
+      name: external_link_token
+      in: path
+      schema:
+        type: string
+      required: true
+      example: fleischkaesebroetchen
+    view_external_link_token:
+      name: view_external_link_token
+      in: path
+      schema:
+        type: string
+        pattern: ^[a-f0-9]{20}$
+      required: true
+      example: "1f0447eab4df4343ab6d"
+    form_token:
+      name: form_token
+      in: path
+      schema:
+        type: string
+        pattern: ^[0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$
+      required: true
+      example: "12345678-d378-4c12-8d7a-6da0fb48ee83"
+    plugin_id:
+      name: plugin_id
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 5
+    sys_notification_id:
+      name: sys_notification_id
+      in: path
+      schema:
+        type: integer
+      required: true
+      example: 1
+    group_id:
+      name: group_id
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 48
+    abuse_report_id:
+      name: abuse_report_id
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 1
+    task_id:
+      name: task_id
+      in: path
+      schema:
+        type: string
+      required: true
+      example: "5f81ae15-a818-4990-889c-e38e33f02b4a"
+
+  schemas:
+    msg:
+      type: string
+      example: "Hello user!"
+    username: 
+      type: string
+      example: "123abc456def789ghi123jkl456mno789@auth.local"
+    force_2fa:
+      type: integer
+      enum: [0,1]
+    email:
+      type: string
+      description: Login email of the user.
+      example: username_test
+    password:
+      type: string
+      description: Login password of the user.
+      example: password_test
+    name:
+      type: string
+      description: Full name of the user.
+      example: Example User
+    is_staff:
+      type: boolean
+      description: >-
+          `true` or `false` if the user will be an admin. `false` by
+          default.
+      default: false
+    is_active:
+      type: boolean
+      description: >-
+        `true` or `false` if the user could log in. `true` by
+        default.
+      default: true
+    role:
+      type: string
+      description: >-
+        Update their role. For details about roles, refer to
+        [SeaTable Roles and
+        Permissions](https://manual.seatable.io/config/enterprise/roles_permissions/).  
+    login_id:
+      type: string
+      description: >-
+        Optional login ID. Valid only if the system configuration
+        allows login ID. 
+    contact_email:
+      type: string
+      description: The contact email address of the user.
+    id_in_org:
+      type: string
+      description: >-
+        The team ID of the user, could be a student's ID or employee
+        ID. String.
+    unit:
+      type: string
+      description: >-
+        Business unit. Only valid if the system configuration allows
+        the feature.
+    institution:
+      type: string
+      description: >-
+        Institution. Only valid if the system configuration allows
+        the feature.
+    row_limit:
+      type: integer
+      description: User's total row limit in number. For example 10000.
+      example: '50000'
+    quota_total:
+      type: string
+      description: Update their total quota in MB.
+    asset_quota_mb:
+      type: string
+      description: The asset quota in MB.
+    file:
+      type: string
+      format: binary
+    org_name:
+      type: string
+      description: 'Name of the team. Required. '
+      example: Demo Testing
+    admin_email:
+      type: string
+      description: >-
+        Login email of the team administrator. Required. Has to be
+        unique in the system.
+      example: username
+    admin_name:
+      type: string
+      description: Full name of the team administrator. Optional.
+      example: Max Example
+    with_workspace:
+      type: boolean
+      description: >-
+        If a workspace should be automatically created for the user.
+        Optional. `false` by default.
+      example: 'true'
+    max_user_number:
+      type: string
+      description: The maximum user number.
+    group_name:
+      type: string
+      description: The name of the new department.
+      example: Test department
+    group_quota:
+      type: integer
+      description: The quota in MB.
+    parent_group:
+      type: string
+      description: The ID of the parent department. Optional. -1 by default.
+      example: parent_department_id
+    handled:
+      type: boolean
+      description: >-
+        Required. Use `true` or `false` to mark the status of the
+        report.
+      example: 'true'
+    plugin:
+      type: string
+      description: Path and file name to the plugin file.
+      format: binary
+    SITE_TITLE:
+      type: string
+      description: >-
+        The title of your SeaTable web interface, like appeared on
+        the browser tab. Optional. Default value is `SeaTable
+        Private`.
+      example: SeaTable Private
+    SITE_NAME:
+      type: string
+      description: >-
+        The name of your site, like appeared in the notification
+        emails. Optional. Default value is `SeaTable`.
+      example: SeaTable
+    ENABLE_BRANDING_CSS:
+      type: integer
+      description: >-
+        If a custom CSS should be used. Optional, `0` by default. If
+        set to `1`, paste your CSS into the param `CUSTOM_CSS`.
+      example: '0'
+    CUSTOM_CSS:
+      type: string
+      description: The content of your custom CSS. Optional. Empty by default.
+      example: ' '
+    ACTIVATE_AFTER_REGISTRATION:
+      type: integer
+      description: >-
+        If users should be automatically activated after the
+        registration. Optional, `1` by default. If `0`, then the
+        user need to be activated by the administrator or via the
+        activation email.
+      example: '1'
+    REGISTRATION_SEND_MAIL:
+      type: integer
+      description: >-
+        If an activation email should be sent after the user has
+        registered. Optional, `0` by default.
+      example: '0'
+    LOGIN_REMEMBER_DAYS:
+      type: integer
+      description: >-
+        How many default days a user could be kept signed in.
+        Optional, `7` by default.
+      example: '7'
+    LOGIN_ATTEMPT_LIMIT:
+      type: integer
+      description: >-
+        The maximum number of failed login attempts before showing
+        CAPTCHA. Optional, `5` by default.
+      example: '5'
+    FREEZE_USER_ON_LOGIN_FAILED:
+      type: integer
+      description: >-
+        If the user's account should be frozen when they exceed the
+        login attempts limit. Optional, `0` by default.
+      example: '0'
+    USER_STRONG_PASSWORD_REQUIRED:
+      type: integer
+      description: >-
+        Force the users to use a strong password when signing up or
+        changing password. Optional, `0` by default.
+      example: '0'
+    FORCE_PASSWORD_CHANGE:
+      type: integer
+      description: >-
+        Force newly added users to change their password, or when
+        the admin resets their password. Optional, `1` by default.
+      example: '1'
+    USER_PASSWORD_MIN_LENGTH:
+      type: integer
+      description: >-
+        The minimum length of user passwords. Optional, `6` by
+        default.
+      example: '6'
+    USER_PASSWORD_STRENGTH_LEVEL:
+      type: integer
+      description: >-
+        The level (`1`-`4`) of a password's strength. For example,
+        `3` means password must have at least 3 of the following: a
+        number, an upper letter, a lower letter and a special
+        symbol. Optional, `3` by default.
+      example: '3'
+    ENABLE_TWO_FACTOR_AUTH:
+      type: integer
+      description: >-
+        If two factor authentication should be activated for the
+        system. Optional, `0` by default.
+      example: '0'
+    ENABLE_SIGNUP:
+      type: integer
+      description: >-
+        If registration on the web interface is allowed. Optional,
+        `0` by default.
+      example: '1'
+    logo:
+      type: string
+      description: The path and filename of the image file of your logo.
+      format: binary
+    favicon:
+      type: string
+      description: The path and filename of the image file of your favicon.
+      format: binary
+    with_notify:
+      type: boolean
+      description: >-
+        Leave this param as its default (`false`) to upload your
+        favicon, and use this param as `true` to upload a favicon
+        with a notification sign.
+      example: 'true'
+    login_bg_image:
+      type: string
+      description: The path and filename of the background image.
+      format: binary
+
+    update_admins_role:
+      type: object
+      properties:
+        email:
+          type: string
+          description: >-
+            The ID of another administrator user. **Never use your own
+            ID here!**
+          example: other_admin_id
+        role:
+          type: string
+          description: >-
+            The desired role of the administrator user. Use
+            `default_admin`, `system_admin`, `daily_admin`, or
+            `audit_admin`. See the table above for details.
+          example: default_admin
+
+
+paths:
+  # Users
+  /api/v2.1/admin/users/:
+    get:
+      tags:
+        - Users
+      summary: List Users
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - email: 1234567866874f15bd5b17afc3527754@auth.local
+                    name: admin
+                    contact_email: admin@example.com
+                    login_id: ''
+                    is_staff: true
+                    is_active: true
+                    create_time: '2019-11-13T11:07:24+00:00'
+                    last_login: '2020-12-04T16:10:20+00:00'
+                    role: default
+                    storage_usage: 2853
+                    rows_count: 6
+                  - email: 123456789f1e4c8d8e1c31415867317c@auth.local
+                    name: Daniel
+                    contact_email: daniel@example.com
+                    login_id: ''
+                    is_staff: false
+                    is_active: true
+                    create_time: '2019-11-14T02:25:39+00:00'
+                    last_login: '2020-12-03T08:21:22+00:00'
+                    role: guest
+                    storage_usage: 1721496
+                    rows_count: 142
+                total_count: 2000
+    post:
+      tags:
+        - Users
+      summary: Add New User
+      description: Add a new user with desired details.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  $ref: "#/components/schemas/email"
+                password:
+                  $ref: "#/components/schemas/password"
+                name:
+                  $ref: "#/components/schemas/name"
+                is_staff:
+                  $ref: "#/components/schemas/is_staff"
+                is_active:
+                  $ref: "#/components/schemas/is_active"
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                email: 12345678219d4067816452757a850b61@auth.local
+                name: Example User
+                contact_email: example_user@example.com
+                login_id: ''
+                id_in_org: ''
+                is_staff: false
+                is_active: true
+                create_time: '2021-03-17T13:52:40+00:00'
+                role: default
+                add_user_tip: >-
+                  Successfully added user example_user@example.com. An email
+                  notification has been sent.
+  /api/v2.1/admin/users/{user_id}/:
+    get:
+      tags:
+        - Users
+      summary: Get User
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '403':
+          description: Successful response
+          content:
+            application/json: {}
+    put:
+      tags:
+        - Users
+      summary: Update User
+      description: >-
+        Update a user's details. See the parameter list for the detailed
+        description of each entry.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                is_staff:
+                  $ref: "#/components/schemas/is_staff"
+                is_active:
+                  $ref: "#/components/schemas/is_active"
+                role:
+                  $ref: "#/components/schemas/role"
+                name:
+                  $ref: "#/components/schemas/name"
+                login_id:
+                  $ref: "#/components/schemas/login_id"
+                contact_email:
+                  $ref: "#/components/schemas/contact_email"
+                id_in_org:
+                  $ref: "#/components/schemas/id_in_org"
+                unit:
+                  $ref: "#/components/schemas/unit"
+                password:
+                  $ref: "#/components/schemas/password"
+                institution:
+                  $ref: "#/components/schemas/institution"
+                row_limit:
+                  $ref: "#/components/schemas/row_limit"
+                quota_total:
+                  $ref: "#/components/schemas/quota_total"
+                asset_quota_mb:
+                  $ref: "#/components/schemas/asset_quota_mb"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                email: 876543216569491ba42905bf1647fd3f@auth.local
+                name: Michael Jackson
+                contact_email: test013@fun-mail.net
+                unit: ''
+                login_id: ''
+                id_in_org: '013'
+                is_staff: false
+                is_active: true
+                phone: ''
+                org_id: 176
+                org_name: SeaTable GmbH
+                create_time: '2020-11-18T12:30:31+00:00'
+                role: default
+                update_status_tip: ''
+    delete:
+      tags:
+        - Users
+      summary: Delete User
+      description: >-
+        Delete a user by their ID.
+
+
+        If the user is in a team, you cannot delete them with this request, but
+        with the request [Delete Team User](/reference/delete-team-user).
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/admin-users/:
+    get:
+      tags:
+        - Users
+      summary: List Admin Users
+      description: List all the system administrators in the current system.
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                admin_user_list:
+                  - email: 12345678bb674f15bd5b17afc3527754@auth.local
+                    name: admin
+                    contact_email: admin@seafile.com
+                    login_id: ''
+                    is_staff: true
+                    is_active: true
+                    storage_usage: 9477804
+                    rows_count: 6
+                    create_time: '2019-11-13T11:07:24+00:00'
+                    last_login: '2021-03-17T13:53:59+00:00'
+                    admin_role: default_admin
+  /api/v2.1/admin/admin-role/:
+    put:
+      tags:
+        - Users
+      summary: Update Admin's Role
+      description: >-
+        > Use this request with caution!!
+
+        > -
+
+        > Do not change your own role! Once your role has been changed, you
+        **cannot use this API request to change it back**: You'll get a
+        permission error, and lose access to a majority of admin functions. If
+        you already did that, the only solution left for you is to login as
+        another superuser and change your role back with that account. If
+        there's no further superuser available, you can create one. Don't
+        remember how to create a superuser? Read the
+        [Manual](https://manual.seatable.io/).
+
+
+        ### There are 4 types of system administrators:
+
+        - default admin (can use this request)
+
+        - system admin (cannot use this request)
+
+        - daily admin (cannot use this request)
+
+        - audit admin (cannot use this request)
+
+
+
+
+        The default admin has the most permissions, while the other 3 types have
+        limited permissions:
+
+
+        |      Permissions         | Default admin     | Daily admin        |
+        System admin       | Audit admin        |
+
+        |   -------------:
+        |:--------------------:|:--------------------:|:--------------------:|:--------------------:|
+
+        |               Info | &check; | &check; | &check; | &check; |
+
+        |         Statistics | &check; | &check; |                   
+        |                    |
+
+        |           Settings | &check; |                    | &check;
+        |                    |
+
+        |              Bases | &check; |                    |                   
+        |                    |
+
+        |              Forms | &check; |                    |                   
+        |                    |
+
+        |              Users | &check; | &check; |                   
+        |                    |
+
+        |             Groups | &check; | &check; |                   
+        |                    |
+
+        |     External links | &check; |                    |                   
+        |                    |
+
+        |      Organizations | &check; |                    |                   
+        |                    |
+
+        |      Notifications | &check; |                    |                   
+        |                    |
+
+        | Administrator-logs | &check; |                    |                   
+        | &check; |
+
+        |            Plugins | &check; |                    |                   
+        |                    |
+
+        |              Rules | &check; |                    |                   
+        |                    |
+
+        |      Abuse reports | &check; |                    |                   
+        |                    |
+
+        |            Scripts | &check; |                    |                   
+        |                    |
+
+        | Email sending logs | &check; |                    |                   
+        |                    |
+
+
+        ### Do not change your own admin role
+
+
+        As seen from the table above - If you change your role from "default
+        admin" to "system admin" or "audit admin", you won't be able to change
+        it back because the "Users" page is gone.
+
+
+        ### What to do if you already did that
+
+
+        Add another super user, login as that super user and change your role
+        back. Unfortunately, you cannot do this with the API. Refer to [SeaTable
+        Admin Manual - Starting SeaTable
+        Server](https://manual.seatable.io/docker/Developer-Edition/Deploy%20SeaTable-DE%20with%20Docker/#starting-seatable-server)
+        for details.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/update_admins_role"
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                email: 66b44dccaf0547baae267d96b3123456@auth.local
+                role: default_admin
+  /api/v2.1/admin/users/{user_id}/reset-password/:
+    put:
+      tags:
+        - Users
+      summary: Reset User's Password
+      description: Reset a user's password.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                new_password: 758ITxYjNM
+                reset_tip: >-
+                  Successfully reset password to 758ITxYjNM, an email has been
+                  sent to test@example.com.
+  /api/v2.1/admin/users/{user_id}/two-factor-auth/:
+    put:
+      tags:
+        - Users
+      summary: Enforce 2FA
+      description: >-
+        As the system administrator, you can force each user to use 2-factor
+        authentication (2FA).
+
+
+        When the value of `force_2fa` is `1` in this request, the user will be
+        requested to activate 2FA by scanning a QR code next time they log in.
+        To cancel enforcing them to use 2FA, change the value to `0` and send
+        this request again.
+
+
+        This request is to be distinguished from the next request, because
+        cancelling the enforcement doesn't necesssarily [Disable 2FA for A User
+        in System](/reference/disable-2fa), which serves a different purpose.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                force_2fa:
+                  $ref: "#/components/schemas/force_2fa"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api2/two-factor-auth/{user_id}/:
+    delete:
+      tags:
+        - Users
+      summary: Disable 2FA
+      description: >-
+        When users activate 2 factor authentication (2FA) in their personal
+        settings, they need to provide a one-time passcode after entering their
+        username and password at login.
+
+
+        However, sometimes bad things happen: lost of the phone or similar, and
+        they cannot retrieve that passcode any more. If they also didn't save
+        their backup codes, login would become impossible for them.
+
+
+        They should contact you, the system administrator then. You can then use
+        this API request to disable their 2FA. After successful operation, they
+        can login with just their username and password, and eventually
+        reactivate their 2FA.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/search-user/:
+    get:
+      tags:
+        - Users
+      summary: Search User / Users
+      description: >-
+        As system administrator, you can search all the users in your system by
+        using this API request. 
+
+
+        For the `query` value, you can give any string from the user's name,
+        `email` (ID) or contact email address. All the users that fit to this
+        search criteria will be listed in the response.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/query_user"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                user_list:
+                  - email: cb4495bddf9743c88c2185bc0fcaae73@auth.local
+                    name: Michael Jackson
+                    contact_email: teamuser001@example.com
+                    is_staff: false
+                    is_active: true
+                    source: db
+                    org_id: 246
+                    org_name: Team SeaTable
+                    quota_usage: 0
+                    quota_total: -2
+                    create_time: '2021-06-28T13:43:09+00:00'
+                    last_login: ''
+                    role: default
+                    storage_usage: 0
+                    rows_count: 0
+                has_next_page: 'false'
+  /api/v2.1/admin/search-user-by-org-id/:
+    get:
+      tags:
+        - Users
+      summary: Search User by Org-ID
+      description: >-
+        Hier muss noch eine Beschreibung ergänzt werden
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/org_id_query"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "users": [
+                    {
+                      "email": "148768b50bb44c9d9d04f101a2b34a49@auth.local",
+                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                      "name": "org_guest1",
+                      "contact_email": "org_guest1@qq.com"
+                    },
+                    {
+                      "email": "4919f22fa6e14a538b47428b5589ec60@auth.local",
+                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                      "name": "org_guest2",
+                      "contact_email": "org_guest2@qq.com"
+                    },
+                    {
+                      "email": "53f1af67b0dd492491264dd8143040b3@auth.local",
+                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                      "name": "org_guest",
+                      "contact_email": "org_guest@qq.com"
+                    }
+                  ]
+                }
+  /api/v2.1/admin/import-users/:
+    post:
+      tags:
+        - Users
+      summary: Import users
+      description: >-
+        As system administrator, you can batch import users with an Excel file,
+        which lists the users'
+
+
+        - `email` as their contact email address, which is also used to login as
+        their username;
+
+        - `password` as their initial login password;
+
+        - Optionally, also define their display name, role, and quota.
+            
+
+        An example user list Excel file looks like this:
+
+
+        <img src="https://seatable.io/wp-content/uploads/2022/12/example.png">
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  $ref: "#/components/schemas/file"
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                failed:
+                  - email: test0@example.com
+                    error_msg: user test0@example.com exists.
+                  - email: test1@example.com
+                    error_msg: user test1@example.com exists.
+                  - email: test2@example.com
+                    error_msg: user test2@example.com exists.
+                success:
+                  - email: 4fbacc904e7145bba5a15d9be9f51c92@auth.local
+                    name: test3
+                    contact_email: test3@example.com
+                    unit: ''
+                    login_id: ''
+                    id_in_org: ''
+                    is_staff: false
+                    is_active: true
+                    phone: ''
+                    create_time: '2022-12-18T13:18:06+00:00'
+                    role: default
+                  - email: 2b3ac8d8a5044616bb65db1f4da95802@auth.local
+                    name: test4
+                    contact_email: test4@example.com
+                    unit: ''
+                    login_id: ''
+                    id_in_org: ''
+                    is_staff: false
+                    is_active: true
+                    phone: ''
+                    create_time: '2022-12-18T13:18:07+00:00'
+                    role: default
+  /api/v2.1/admin/users/{user_id}/shared-dtables/:
+    get:
+      tags:
+        - Users
+      summary: List Bases Shared to User
+      description: List all the bases shared to a certain user with the user's ID.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable_list:
+                  - id: 362
+                    workspace_id: 6
+                    uuid: 12345678-bdb9-4a51-a17b-2b699ca0e0bc
+                    name: collaborators
+                    creator: Ginger Ale
+                    modifier: Ginger Ale
+                    created_at: '2020-11-18T13:02:43+00:00'
+                    updated_at: '2020-11-18T13:02:43+00:00'
+                    color: null
+                    text_color: null
+                    icon: null
+                    rows_count: 19
+                    from_user: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    from_user_name: Ginger Ale
+                count: 1
+  /api/v2.1/admin/users/{user_id}/storage/:
+    get:
+      tags:
+        - Users
+      summary: List User's Storage Objects
+      description: >-
+        List objects stored by a certain user by the user's ID. In the returned
+        list, if the `is_file` value is `false`, it means this object is a
+        folder.
+
+
+        In this example, the `obj_name` stands for the base's UUID. By using
+        `/asset/<base_uuid>` as the value of `parent_dir`, you can go into the
+        base's asset folder, where there're probably a `files` and an `images`
+        folder for your further inspections.
+
+
+        However, you as system administrator can only see the names and size of
+        these objects, but cannot access the data saved in them.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/parent_dir"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dirent_list:
+                  - obj_id: 8965a72a226c5190ff4693bebb3e32325dc5ca9b
+                    is_file: false
+                    obj_name: 4bf3c4b3-61c6-4b3c-a108-c033cfff9862
+                    file_size: ''
+                    last_update: '2021-03-11T13:36:37+00:00'
+                  - obj_id: 8965a72a226c5190ff4693bebb3e32325dc5ca9b
+                    is_file: false
+                    obj_name: 650d8a0d-7e27-46a8-8b18-6cc6f3db2057
+                    file_size: ''
+                    last_update: '2021-03-11T13:36:37+00:00'
+                email: 123abc456def789ghi123jkl456mno789@auth.local
+  /api/v2.1/admin/users/{user_id}/dtables/:
+    get:
+      tags:
+        - Bases
+      summary: List User's Bases
+      description: List all the bases of a certain user by the user's ID.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable_list:
+                  - id: 100
+                    workspace_id: 200
+                    uuid: 12345678-1f00-46af-98df-4007b3635e1c
+                    name: Templates Overview
+                    creator: Jasmin Tee
+                    modifier: Jasmin Tee
+                    created_at: '2021-01-08T15:09:03+00:00'
+                    updated_at: '2021-01-21T16:06:26+00:00'
+                    color: null
+                    text_color: null
+                    icon: null
+                    rows_count: 34
+                  - id: 101
+                    workspace_id: 200
+                    uuid: 12345678-03c1-48de-8e98-85d32ff59635
+                    name: CRM
+                    creator: Jasmin Tee
+                    modifier: Jasmin Tee
+                    created_at: '2021-03-02T10:15:40+00:00'
+                    updated_at: '2021-03-02T10:18:01+00:00'
+                    color: null
+                    text_color: null
+                    icon: null
+                    rows_count: 0
+                  - id: 102
+                    workspace_id: 201
+                    uuid: 12345678-d1cb-40c7-adbe-6b3f97723d99
+                    name: Sales
+                    creator: Jasmin Tee
+                    modifier: Jasmin Tee
+                    created_at: '2021-02-22T16:10:44+00:00'
+                    updated_at: '2021-02-22T16:10:44+00:00'
+                    color: null
+                    text_color: null
+                    icon: null
+                    rows_count: 0
+                count: 8
+
+  # Bases
+  /api/v2.1/admin/dtables/:
+    get:
+      tags:
+        - Bases
+      summary: List All Bases
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/page"
+      responses:
+        '403':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v2.1/admin/dtable/{base_uuid}/:
+    delete:
+      tags:
+        - Bases
+      summary: Delete Base
+      description: Delete a base. This will move this base to its team's trash.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/trash-dtables/:
+    get:
+      tags:
+        - Bases
+      summary: List Trashed Bases
+      description: List all the trashed bases of all teams in the system.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                count: 8
+                trash_dtable_list:
+                  - id: 123
+                    workspace_id: 201
+                    uuid: 12345678-c0bd-40c6-aaf0-fa6d22e5334d
+                    name: Test report
+                    creator: Example creator
+                    modifier: Example modifier
+                    created_at: '2021-01-22T09:13:12+00:00'
+                    updated_at: '2021-01-22T09:13:12+00:00'
+                    color: null
+                    text_color: null
+                    icon: null
+                    deleted: true
+                    delete_time: '2021-03-02T13:02:32+00:00'
+                    owner: Example owner
+                    org_id: 176
+                    org_name: McDonald's
+  /api/v2.1/admin/trash-dtables/{base_id}/:
+    put:
+      tags:
+        - Bases
+      summary: Restore Trashed Base
+      description: >-
+        Restore a deleted base from the trash bin and put it back where it was.
+        If a base already exists there with the same name, the operation will
+        fail and return an error.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/dtable-notifications/:
+    get:
+      tags:
+        - Bases
+      summary: List Notifications
+      description: >-
+        As the system administrator, you can inspect a certain user's
+        notifications inside of a certain base. To enquire these notifications,
+        you'll need the base's UUID and the user's contact email or their
+        username. You can also filter the result by read or unread status.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/dtable_uuid" 
+        - $ref: "#/components/parameters/username"
+        - $ref: "#/components/parameters/contact_email"
+        - $ref: "#/components/parameters/seen"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                notification_list:
+                  - id: 568
+                    username: 876543216569491ba42905bf1647fd3f@auth.local
+                    dtable_uuid: base_uuid
+                    msg_type: notification_rules
+                    created_at: '2021-10-14T13:51:37+00:00'
+                    detail:
+                      table_id: '0000'
+                      view_id: '0000'
+                      condition: rows_added
+                      rule_id: 24
+                      rule_name: Untitled rule
+                      msg: Something strange is there
+                      row_id_list:
+                        - O9NRekteQguhsYo2F6acOg
+                    seen: 1
+                  - id: 567
+                    username: 876543216569491ba42905bf1647fd3f@auth.local
+                    dtable_uuid: base_uuid
+                    msg_type: notification_rules
+                    created_at: '2021-10-14T13:49:21+00:00'
+                    detail:
+                      table_id: '0000'
+                      view_id: '0000'
+                      condition: filters_satisfy
+                      rule_id: 40
+                      rule_name: Untitled rule
+                      msg: This is just to say hello!
+                      row_id_list:
+                        - Novo2as0RBWNroLiBwSPxw
+                    seen: 1
+                count: 2
+  /api/v2.1/admin/dtable/{base_uuid}/unset-password/:
+    put:
+      tags:
+        - Bases
+      summary: Delete Base Password
+      description: >-
+        In the case that a user has forgotten their base password, the system
+        admin can unset the base password with this API request. The returned
+        value of `is_encrypted` indicates that the base's password has been
+        unset.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable:
+                  id: 724
+                  workspace_id: 204
+                  uuid: 12345678-ba46-4c07-8116-d237bdeb35a3
+                  name: Termine
+                  created_at: '2022-01-12T10:30:01+00:00'
+                  updated_at: '2022-03-11T12:02:22+00:00'
+                  color: '#972CB0'
+                  text_color: null
+                  icon: icon-leave-record
+                  is_encrypted: false
+
+  # Groups
+  /api/v2.1/admin/groups/:
+    get:
+      tags:
+        - Groups
+      summary: List Groups
+      description: Shows a list of all groups of the system. You can also search for a group by his name.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                page_info:
+                  has_next_page: true
+                  current_page: 1
+                groups:
+                  - id: 1
+                    name: "Important Projects"
+                    owner: "5c9f13dc9f37495e822d8ecdce301f8f@auth.local"
+                    owner_name: "Bert"
+                    created_at: '2023-06-01T12:46:26+00:00'
+                    quota: -1
+                    parent_group_id: 0
+                    size: 4073123
+                  - id: 2
+                    name: "ABC Projects"
+                    owner: "5c9f13dc9f37495e822d8ecdce301f8f@auth.local"
+                    owner_name: "Bert"
+                    created_at: '2023-06-01T12:36:16+00:00'
+                    quota: -1
+                    parent_group_id: 0
+                    size: 3226771
+    post:
+      tags: [Groups]
+      summary: Create Group
+      security:
+        - AccountTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                group_name:
+                  $ref: "#/components/schemas/group_name"
+                group_owner:
+                  $ref: "#/components/schemas/username"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                - success: "?"
+  /api/v2.1/admin/groups/{group_id}/:
+    put:
+      tags: [Groups]
+      summary: Transfer Group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_owner:
+                  $ref: "#/components/schemas/username"
+                #quota:
+                #  $ref: "#/components/schemas/group_quota"
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/group_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 1
+                parent_group_id: 0
+                name: Group New
+                owner: 123abc456def789ghi123jkl456mno789@auth.local
+                created_at: '2020-11-19T08:14:52+00:00'
+                avatar_url: "http://cloud.seatable.io/media/avatars/groups/default.png"
+                admins:
+                  - 2d67c225c64f4305ada3e5820ce6d660@auth.local
+    delete:
+      tags: [Groups]
+      summary: Delete Group
+      description: Delete a group with its ID.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/group_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  # Teams
+  /api/v2.1/admin/organizations/:
+    get:
+      tags:
+        - Teams
+      summary: List Teams
+      description: >-
+        List all the current teams (organizations) in the system.
+
+
+        Use the `role` filter to only return a type of teams. The exact roles
+        depend on your configuration.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/role"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                organizations:
+                  - org_id: 1
+                    org_name: Test-Admin
+                    ctime: '2020-06-01T12:46:26+00:00'
+                    org_url_prefix: org_8hz6uh
+                    role: org_default
+                    creator_email: 8ca1997823b44dffbaa51e0dd0c35ac0@auth.local
+                    creator_name: Christoph Dyllick
+                    creator_contact_email: christoph@example.com
+                    quota: -2
+                    storage_usage: 0
+                    storage_quota: 1000000000
+                    max_user_number: 25
+                    rows_count: 0
+                    row_limit: 2000
+                  - org_id: 2
+                    org_name: Testteam
+                    ctime: '2020-06-01T16:04:06+00:00'
+                    org_url_prefix: org_yuvlgo
+                    role: org_default
+                    creator_email: 6a339c8f57e34010a63f2c46bb0d7e6c@auth.local
+                    creator_name: Ionas RDB (Teamadmin)
+                    creator_contact_email: rdb@example.com
+                    quota: -2
+                    storage_usage: 20011
+                    storage_quota: 1000000000
+                    max_user_number: 25
+                    rows_count: 3
+                    row_limit: 2000
+                count: 152
+    post:
+      tags:
+        - Teams
+      summary: Add Team
+      description: >-
+        Add a team (organization) with its name and admin credentials.
+
+
+        In the request body, define the new team admin's `admin_email`,
+        `admin_name` and `password`. 
+
+
+        SeaTable does not automatically create a workspace for a newly added
+        user: the `with_workspace` parameter is `false` by default. If you would
+        like your new user to have a workspace when they are added (so that they
+        can start operating workspaces and bases right away with API requests),
+        make sure you set `true` for this parameter.
+
+
+        Otherwise, their workspace will only be created when they login to the
+        SeaTable web interface for the first time.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                org_name:
+                  $ref: "#/components/schemas/org_name"
+                admin_email:
+                  $ref: "#/components/schemas/admin_email"
+                password:
+                  $ref: "#/components/schemas/password"
+                admin_name:
+                  $ref: "#/components/schemas/admin_name"
+                with_workspace:
+                  $ref: "#/components/schemas/with_workspace"
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                org_id: 2937
+                org_name: SeaTable Testing
+                ctime: '2021-03-17T13:32:33+00:00'
+                org_url_prefix: org_3yz9yw0h0ze2zawb9cun
+                role: org_default
+                creator_email: 123456787839458f973104901fb22456@auth.local
+                creator_name: Max Example
+                creator_contact_email: seatabletesting@example.com
+                quota: -2
+                storage_usage: 0
+                storage_quota: 1000000000
+                max_user_number: 25
+                rows_count: 0
+                row_limit: 2000
+  /api/v2.1/admin/organizations/{org_id}/dtables/:
+    get:
+      tags:
+        - Teams
+      summary: List Team Bases
+      description: >-
+        List all the bases of a team. As system administrator, you can see the
+        information of these bases, but you do not have access to the data
+        inside of them.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable_list:
+                  - id: 216
+                    workspace_id: 1
+                    uuid: d5be63a2-0fc0-4bbf-9731-e706a002ba81
+                    name: Project Tracker
+                    creator: Jasmin Tee
+                    modifier: Jasmin Tee
+                    created_at: '2020-10-26T14:05:53+00:00'
+                    updated_at: '2020-10-26T14:05:58+00:00'
+                    color: '#656463'
+                    text_color: null
+                    icon: icon-company-inventory
+                    owner: Jasmin Tee
+                    rows_count: 0
+                  - id: 163
+                    workspace_id: 2
+                    uuid: 5db730e5-2d33-3h75-b640-b94728ee9984
+                    name: CRM & Sales
+                    creator: Jasmin Tee
+                    modifier: Jasmin Tee
+                    created_at: '2020-10-26T14:05:58+00:00'
+                    updated_at: '2020-10-26T14:06:05+00:00'
+                    color: '#4CAF50'
+                    text_color: null
+                    icon: icon-dollar
+                    owner: Jasmin Tee
+                    rows_count: 65
+                count: 2
+  /api/v2.1/admin/organizations-basic-info/:
+    get:
+      tags:
+        - Teams
+      summary: Get Organization Names
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - name: org_ids
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          example: '2'
+      responses:
+        '200':
+          description: ok
+  /api/v2.1/admin/organizations/{org_id}/:
+    put:
+      tags:
+        - Teams
+      summary: Update Team
+      description: Change an organization's attributes.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                org_name:
+                  $ref: "#/components/schemas/org_name"
+                role:
+                  type: string
+                  description: >-
+                    The class of the team. For example, on cloud.seatable.io, we
+                    have free teams (`org_default`), Plus teams (`org_plus`) and
+                    Enterprise teams (`org_enterprise`).
+                row_limit:
+                  $ref: "#/components/schemas/row_limit"
+                max_user_number:
+                  $ref: "#/components/schemas/max_user_number"
+                asset_quota_mb:
+                  $ref: "#/components/schemas/asset_quota_mb"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                org_id: 176
+                org_name: Team SeaTable
+                ctime: '2020-11-18T12:30:31+00:00'
+                org_url_prefix: org_d0hfk6jeupd72ab2nasd
+                role: org_enterprise
+                creator_email: 123456786569491ba42905bf1647fd3f@auth.local
+                creator_name: Jasmin Tee
+                creator_contact_email: jasmin@example.com
+                quota: -2
+                storage_usage: 182130770
+                storage_quota: 100000000000
+                max_user_number: 3
+                rows_count: 7185
+                row_limit: -1
+    get:
+      tags:
+        - Teams
+      summary: Search Team
+      description: >-
+        As system administrator, you can query a team by its `org_id` with this
+        API request.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                org_id: 1
+                org_name: SeaTable
+                ctime: '2020-11-18T12:30:31+00:00'
+                org_url_prefix: org_d0hfk6jeupd72ab2nxnh
+                role: org_enterprise
+                creator_email: 87654321569491ba42905bf1647fd3f@auth.local
+                creator_name: Michael Jackson
+                creator_contact_email: test@example.com
+                quota: -2
+                storage_usage: 147751258
+                storage_quota: 300000000000
+                max_user_number: 10
+                rows_count: 9875
+                row_limit: -1
+                users_count: 4
+                active_users_count: 4
+                groups_count: 5
+    delete:
+      tags:
+        - Teams
+      summary: Delete Team
+      description: >-
+        Delete a team (organization) with its ID. This will eliminate the team! 
+
+
+        However, this won't delete the team users - but all its members will
+        become team-less users in the system.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/organizations/{org_id}/users/:
+    get:
+      tags:
+        - Teams
+      summary: List Team Users
+      description: >-
+        List a team's members with their detailed information.
+
+
+        The `is_org_admin` value in the response indicates if this member is the
+        administrator of the team.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                users:
+                  - org_id: 176
+                    workspace_id: 206
+                    email: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    name: Ginger Ale
+                    contact_email: ginger@example.com
+                    is_org_admin: false
+                    quota_total: -2
+                    quota_usage: 0
+                    create_time: '2020-11-18T12:43:22+00:00'
+                    last_login: '2021-10-20T07:10:11.691284'
+                    active: true
+                  - org_id: 176
+                    workspace_id: 204
+                    email: 876543216569491ba42905bf1647fd3f@auth.local
+                    name: Michael Jackson
+                    contact_email: michael@example.com
+                    is_org_admin: true
+                    quota_total: -2
+                    quota_usage: 0
+                    create_time: '2020-11-18T12:30:31+00:00'
+                    last_login: '2021-11-03T08:29:00.310330'
+                    active: true
+    post:
+      tags:
+        - Teams
+      summary: Add Team User
+      description: >-
+        Add a new team user with desired details.
+
+
+        In the request body:
+
+
+        \*   `email` is the contact email address of your new user;
+
+        \*   `password` could be an initial login password you asign to them;
+
+        \*   `name` is the display name of your new user;
+
+        \*   `with_workspace` should be set to `true` if you want your new user
+        to acquire a `workspace_id` immediately after adding them. The default
+        value is `false`, which means they won't have a `workspace_id` until
+        they login for the first time.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  $ref: "#/components/schemas/email"
+                password:
+                  $ref: "#/components/schemas/password"
+                name:
+                  $ref: "#/components/schemas/name"
+                with_workspace:
+                  $ref: "#/components/schemas/with_workspace"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                org_id: 1
+                workspace_id: 357
+                email: 43211234db1e4f10bdd6d9fa4964b922@auth.local
+                name: Example User
+                contact_email: new_user@example.com
+                is_org_admin: false
+                quota_total: -2
+                quota_usage: 0
+                create_time: '2022-03-13T10:05:52+00:00'
+                last_login: ''
+                active: true
+  /api/v2.1/admin/organizations/{org_id}/users/{user_id}/:
+    delete:
+      tags:
+        - Teams
+      summary: Delete Team User
+      description: Delete a team user with this request.
+      security:
+        - AccountTokenAuth: []      
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/organizations/{org_id}/groups/:
+    get:
+      tags:
+        - Teams
+      summary: List Team Groups
+      description: List all the groups in a team with its `org_id`.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                group_list:
+                  - group_name: testgroup
+                    creator_name: Jasmin Tee
+                    creator_email: 123456786569491ba42905bf1647fd3f@auth.local
+                    created_at: '2020-11-18T12:44:07+00:00'
+                    group_id: 48
+                  - group_name: Students
+                    creator_name: Jasmin Tee
+                    creator_email: 123456786569491ba42905bf1647fd3f@auth.local
+                    created_at: '2021-03-11T09:11:21+00:00'
+                    group_id: 87
+  /api/v2.1/admin/organizations/{org_id}/groups/{group_id}/:
+    delete:
+      tags:
+        - Teams
+      summary: Delete Group
+      description: >-
+        Delete a group with its group_id. As system administrator, you can
+        delete any group in the system by their ID, no matter in which team they
+        are.
+      security:
+        - AccountTokenAuth: []      
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/group_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  # Base Export
+  /api/v2.1/admin/dtables/{base_uuid}/export-dtable/:
+    get:
+      deprecated: true
+      tags: [Export]
+      summary: Create Export Task
+      description: |
+        Use this request to start exporting a base.
+        A `task_id` will be returned. A `task_id` doesn't mean, that the export has been completed. 
+        Large bases will need some time before they can be downloaded.
+
+        To automate your workflow, use the request Query export task status to check if the task is finished. 
+        Once it is finished, proceed with the download. 
+
+        > 📘 Deprecated due to asynchronous request
+        > 
+        > Requests with `task_id` will be replaced in the future with synchronous requests. Therefore you should be aware that this call might be removed in the future.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                task_id: "5f81ae15-a818-4990-889c-e38e33f02b4a"
+  /api/v2.1/dtable-io-status/?task_id={task_id}:
+    get:
+      deprecated: true
+      tags: [Export]
+      summary: Get Export Task status
+      description: |
+        When you have sent a request to export a base/a view, a task_id is returned to you. Sometimes when the base/the view is too large, the generating of downloadable file could take a while. 
+        In this case, use this request to query the task status.
+        To automate your workflow, it is recommended to query every 10 seconds until `is_finished:true` is returned. Once it's finished, the query will return a 404 error if you query again. 
+        This means you should proceed to **Download the exported data**.
+
+        > 📘 Deprecated due to asynchronous request
+        > 
+        > Requests with `task_id` will be replaced in the future with synchronous requests. Therefore you should be aware that this call might be removed in the future.
+      security:
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/task_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                is_finished: true
+  /dtable-export-content/?dtable_uuid={base_uuid}&task_id={task_id}:
+    get:
+      deprecated: true
+      tags: [Export]
+      summary: Download exported data
+      description: |
+        When the export task is finished, you can download the exported file with this request.
+        Use the task_id from the previous requests and the UUID of the target base. And of course, you need authorization to download the file. See the example request for details.
+
+        > 📘 Deprecated due to asynchronous request
+        > 
+        > Requests with `task_id` will be replaced in the future with synchronous requests. Therefore you should be aware that this call might be removed in the future.
+
+        > 📘 Permission denied from command line
+        > 
+        > Currently it is only possible to download the dtable file via a browser if you are already authenticated. Sending the authentication header will always result in a *Permission denied*.
+      security:
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/task_id"
+      responses:
+        '200':
+          description: OK
+
+  # Common Dataset
+  /api/v2.1/admin/common-datasets/:
+    get:
+      tags:
+        - Common Dataset
+      summary: List Common Dataset
+      description: >-
+        List all the common datasets in the current system. In the response, you
+        can see
+        *   The name of the common datasets,
+        *   The source base's name,
+        *   The creator's name, and
+        *   The time of the creation.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dataset_list:
+                  - dataset_name: guest table2
+                    src_dtable_name: Guest registration
+                    creator: Michael Jackson
+                    created_at: '2022-01-25T15:32:47+00:00'
+                  - dataset_name: Table3
+                    src_dtable_name: All types
+                    creator: Michael Jackson
+                    created_at: '2022-01-25T15:31:16+00:00'
+  /api/v2.1/admin/common-dataset/periodical-syncs/:
+    get:
+      tags:
+        - Common Dataset
+      summary: List Common Dataset Syncs
+      description: >-
+        Use this request to explicitly list off the periodically synchronized
+        common datasets in the system.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                periodical_sync_list:
+                  - dataset_name: Success
+                    src_dtable_name: students
+                    dst_dtable_name: Income
+                    creator: Michael Jackson
+                    created_at: '2022-03-13T09:13:39+00:00'
+                  - dataset_name: Success
+                    src_dtable_name: students
+                    dst_dtable_name: All types
+                    creator: Michael Jackson
+                    created_at: '2022-01-10T11:03:32+00:00'
+  /api/v2.1/admin/common-dataset/invalid-syncs/:
+    get:
+      tags:
+        - Common Dataset
+      summary: List invalid Syncs
+      description: >-
+        In some cases, a common dataset synchronization configuration becomes
+        invalid. Such cases happen when, for example, the source or destination
+        tables are deleted. Use this request to list off all the invalid common
+        dataset synchronization configurations in the system.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                invalid_sync_list:
+                  - dataset_name: Success
+                    src_dtable_name: students
+                    dst_dtable_name: Income
+                    creator: Michael Jackson
+                    created_at: '2022-03-13T09:13:39+00:00'
+                  - dataset_name: Success
+                    src_dtable_name: students
+                    dst_dtable_name: All types (1)
+                    creator: Michael Jackson
+                    created_at: '2022-01-10T11:03:32+00:00'
+    delete:
+      tags:
+        - Common Dataset
+      summary: Delete Invalid Syncs
+      description: >-
+        Use this request to delete all invalid common dataset synchronization
+        configurations at once.
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: "ok"
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example-0:
+                  summary: Success
+                  value:
+                    success: true
+                example-1:
+                  summary: Delete Invalid Syncs
+                  value:
+                    success: true
+  /api/v2.1/admin/common-dataset/sync/{sync_id}/:
+    delete:
+      tags:
+        - Common Dataset
+      summary: Delete Invalid Sync
+      description: >-
+        Delete an invalid common dataset synchronization configuration with its
+        ID retrieved from the previous request.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/sync_id"
+      responses:
+        '200':
+          description: "ok"
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  
+  # Departments
+  /api/v2.1/admin/address-book/groups/{parent_department_id}/:
+    get:
+      tags:
+        - Departments
+      summary: List Departments
+      description: >-
+        List all the departments in the current level.
+        The parameter `parent_department_id` in the URL is optional. If not
+        given, the default of `-1` is taken.
+        In this example, the parent department has the ID of `1`, and there are
+        two departments with the IDs of `2` and `3` in it.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/parent_department_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 1
+                name: Sys Dev
+                owner: system admin
+                created_at: '2021-02-26T11:21:19+00:00'
+                parent_group_id: -1
+                quota: -2
+                groups:
+                  - id: 2
+                    name: Developers
+                    owner: system admin
+                    created_at: '2021-02-26T13:53:44+00:00'
+                    parent_group_id: 1
+                    quota: -2
+                  - id: 3
+                    name: Test Department
+                    owner: system admin
+                    created_at: '2021-02-26T14:17:06+00:00'
+                    parent_group_id: 1
+                    quota: -2
+                members: []
+                ancestor_groups: []
+  /api/v2.1/admin/address-book/groups/:
+    post:
+      tags:
+        - Departments
+      summary: Add Department
+      description: >-
+        Add a new department with a desired name and, by optional, in a parent
+        department.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                group_name:
+                  $ref: "#/components/schemas/group_name"
+                parent_group:
+                  $ref: "#/components/schemas/parent_group"
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 2
+                name: Test Department
+                owner: system admin
+                created_at: '2021-02-26T14:17:06+00:00'
+                parent_group_id: 1
+                quota: -2
+  /api/v2.1/admin/address-book/groups/{department_id}/:
+    get:
+      tags:
+        - Departments
+      summary: Get Department
+      description: Get the information of a certain department by its ID.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/return_ancestors"
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 2
+                name: Test department
+                owner: system admin
+                created_at: '2021-02-26T11:21:34+00:00'
+                parent_group_id: 74
+                quota: -2
+                groups: []
+                members: []
+                ancestor_groups:
+                  - id: 1
+                    name: sys-dep-1
+                    owner: system admin
+                    created_at: '2021-02-26T11:20:47+00:00'
+                    parent_group_id: -1
+                    quota: -2
+    delete:
+      tags:
+        - Departments
+      summary: Delete Department
+      description: Delete a department by its ID.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  
+  # Sharing Links
+  /api/v2.1/admin/dtable/{base_id}/external-links/:
+    get:
+      tags:
+        - Sharing Links
+      summary: List Base External Links
+      description: >-
+        List all the external links and view external links of a base. For this
+        request, you'll need the base's `base_id`, which is to be distinguished
+        from the base's `base_uuid`. You can retrieve a base's `base_id` with
+        the API request e.g. [List User's Bases](/reference/list-users-bases).
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable_external_link_list:
+                  base_external_links:
+                    - id: 72
+                      from_dtable: Example
+                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator_name: Jasmin Tee
+                      token: fleischkaesebroetchen
+                      permission: r
+                      create_at: '2021-05-18T14:28:12+00:00'
+                      view_cnt: 0
+                      url: >-
+                        https://cloud.seatable.io/dtable/external-links/custom/fleischkaesebroetchen/
+                    - id: 73
+                      from_dtable: Example
+                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator_name: Jasmin Tee
+                      token: 42a42b34f97745948765
+                      permission: r
+                      create_at: '2021-05-27T11:16:54+00:00'
+                      view_cnt: 0
+                      url: >-
+                        https://cloud.seatable.io/dtable/external-links/42a42b34f97745948765/
+                  view_external_links:
+                    - id: 12
+                      from_dtable: Example
+                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator_name: Jasmin Tee
+                      token: 922008ae1f1742f788f8
+                      permission: r
+                      create_at: '2021-05-18T14:21:57+00:00'
+                      view_cnt: 0
+                      table_id: '0000'
+                      view_id: Jz4d
+                      url: >-
+                        https://cloud.seatable.io/dtable/view-external-links/922008ae1f1742f788f8/
+                      is_custom: false
+                      expire_date: ''
+                    - id: 13
+                      from_dtable: Example
+                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator_name: Jasmin Tee
+                      token: 35967f61163848b29c44
+                      permission: r
+                      create_at: '2021-05-18T14:22:52+00:00'
+                      view_cnt: 0
+                      table_id: '0000'
+                      view_id: NdFD
+                      url: >-
+                        https://cloud.seatable.io/dtable/view-external-links/35967f61163848b29c44/
+                      is_custom: false
+                      expire_date: ''
+  /api/v2.1/admin/external-links/:
+    get:
+      tags:
+        - Sharing Links
+      summary: List External Links
+      description: >-
+        List all the base external links generated in the system. 
+        In the returned objects, you can see the creator of the links, and how
+        many times these links have been viewed.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                has_next_page: true
+                external_link_list:
+                  - id: 1
+                    from_dtable: Income
+                    creator: 876543216569491ba42905bf1647fd3f@auth.local
+                    creator_name: Michael Jackson
+                    token: 12345b3bd1fe47d08cd4
+                    permission: r
+                    create_at: '2021-12-08T16:04:59+00:00'
+                    view_cnt: 1
+                    url: >-
+                      https://cloud.seatable.io/dtable/external-links/12345b3bd1fe47d08cd4/
+                    from_base_uuid: 87654321-c790-462b-b136-54bdfb5f5a8d
+  /api/v2.1/admin/external-links/{external_link_token}/:
+    delete:
+      tags:
+        - Sharing Links
+      summary: Delete Base External Link
+      description: A base external link can be deleted by its token.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/external_link_token"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/view-external-links/:
+    get:
+      tags:
+        - Sharing Links
+      summary: List View External Links
+      description: >-
+        Use this request to list all the view external links generated in the
+        current system.
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                has_next_page: false
+                external_link_list:
+                  - id: 37
+                    from_dtable: Test Base
+                    creator: cc933922e332422b9b09c24c000df8be@auth.local
+                    creator_name: Jason
+                    token: da564e108fc04852abac
+                    permission: r
+                    create_at: '2021-03-31T08:21:58+00:00'
+                    view_cnt: 1
+                    table_id: '0000'
+                    view_id: '0000'
+                    url: >-
+                      https://cloud.seatable.io/dtable/view-external-links/da564e108fc04852abac/
+                    is_custom: false
+                    expire_date: ''
+  /api/v2.1/admin/view-external-links/{view_external_link_token}/:
+    delete:
+      tags:
+        - Sharing Links
+      summary: Delete View External Link
+      description: Delete a view external link with its token.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/view_external_link_token"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  
+  # Forms
+  /api/v2.1/admin/forms/:
+    get:
+      tags:
+        - Forms
+      summary: List Forms
+      description: >-
+        List all the forms in the current system. The returned `id` value is the
+        ID of the form, and the `token` is the form's token.
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                form_list:
+                  - id: 7
+                    form_name: zufriedenheitsanalyse
+                    username: admin
+                    dtable_name: test
+                    token: 839697dc-1234-4a0f-92d1-86f05e64d013
+                    created_at: null
+                    submit_count: 0
+                  - id: 8
+                    form_name: Testform
+                    username: Meng Wu
+                    dtable_name: Arbeit
+                    token: d2dca68d-32a8-5678-8805-76b97915faf4
+                    created_at: null
+                    submit_count: 0
+                count: 57
+  /api/v2.1/admin/forms/{form_token}/:
+    delete:
+      tags:
+        - Forms
+      summary: Delete Form
+      description: >-
+        Delete a form with its token. Get a form's token with the call [List Forms](/reference/user-forms-list-forms).
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/form_token"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/collection-tables/:
+    get:
+      tags:
+        - Forms
+      summary: List Data Collection Forms
+      description: List all the data collection forms generated in the system.
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                collection_table_list:
+                  - id: 1
+                    table_name: Example
+                    username: Christoph Dyllick-Brenzinger
+                    dtable_name: Aufgaben
+                    token: 12345678-4c63-4171-81cf-ddb4bfb72cba
+                    created_at: '2021-03-08T10:02:09+00:00'
+                  - id: 2
+                    table_name: data collection
+                    username: Max Teamleiter
+                    dtable_name: Templates
+                    token: 12345678-d2fd-4c3c-a670-501a859fb02d
+                    created_at: '2021-03-08T10:51:26+00:00'
+                count: 9
+  /api/v2.1/admin/collection-tables/{collection_table_token}/:
+    delete:
+      tags:
+        - Forms
+      summary: Delete Data Collection Forms
+      description: >-
+        Delete a data collection table with its token. The token can be
+        retrieved with the call [List Data Collection Tables](/reference/list-data-collection-forms), or from the
+        table's URL as its suffix.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/collection_table_token"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  
+  # Automations
+  /api/v2.1/admin/automation-rules/:
+    get:
+      tags:
+        - Automations
+      summary: List Automations
+      description: List all the existing base automation rules in the current system.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                automation_rule_list:
+                  - id: 6
+                    dtable_uuid: 12345678-e910-472c-802b-0943c0b95610
+                    run_condition: per_day
+                    trigger:
+                      rule_name: Untitled rule
+                      table_id: '0000'
+                      view_id: '0000'
+                      condition: run_periodically
+                      date_column_name: Date
+                      notify_hour: 14
+                    actions:
+                      - type: add_record
+                        row:
+                          Name: new record um 15 uhr
+                        _id: '548370'
+                      - type: notify
+                        users:
+                          - 12345667d1754bb4afa2c2cb7369d244@auth.local
+                        default_msg: New record {Name} has been added.
+                        _id: '421534'
+                      - type: add_record
+                        row:
+                          Name: ''
+                        _id: '659765'
+                    creator: Michael Jackson
+                    ctime: '2021-07-15T12:48:33+00:00'
+                    last_trigger_time: '2021-08-25T14:00:00+00:00'
+                    is_valid: true
+                    trigger_count: 7
+                count: 5
+  /api/v2.1/admin/automation-rules/{automation_rule_id}/:
+    delete:
+      tags:
+        - Automations
+      summary: Delete Automation
+      description: >-
+        As system administrator, you can delete any automation rule existing in
+        the current system. Attention - This operation cannot be undone!
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/automation_rule_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/invalid-automation-rules/:
+    get:
+      tags:
+        - Automations
+      summary: List Invalid Automations
+      description: >-
+        When an automation rule's dependent base, row or column doesn't exist
+        any more, it may become invalid. In this case, the system administrator
+        can list all the invalid automation rules and eventually delete them.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                invalid_automation_rule_list:
+                  - id: 45
+                    dtable_uuid: 12345678-7715-44f2-9efc-1e58743a9cd6
+                    run_condition: per_update
+                    trigger:
+                      rule_name: TestRules
+                      table_id: '0000'
+                      view_id: '0000'
+                      condition: filters_satisfy
+                      filters: []
+                      filter_conjunction: ''
+                      column_keys: []
+                      watch_all_columns: true
+                    actions:
+                      - type: lock_record
+                        is_locked: true
+                        _id: '470594'
+                      - type: add_record
+                        row:
+                          '0000': '11'
+                        _id: '863821'
+                    creator: Ginger Ale
+                    ctime: '2021-08-02T15:21:52+08:00'
+                    last_trigger_time: '2021-08-02T15:22:55+08:00'
+                    is_valid: false
+                count: 10
+    delete:
+      tags:
+        - Automations
+      summary: Delete Invalid Automations
+      description: >-
+        If you don't want to delete the invalid automation rules one by one, you
+        can use this request to delete them all at once.
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  
+  # Notification Rules
+  /api/v2.1/admin/notification-rules/:
+    get:
+      tags:
+        - Notifications
+      summary: List Notifications
+      description: >-
+        List all the existing notification rules in the system. The returned
+        `id` values are the IDs of each notification rule.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                notifications_rules_list:
+                  - id: 4
+                    dtable_uuid: 12345678-d895-402f-9718-a85f26c65d99
+                    run_condition: per_day
+                    trigger:
+                      rule_name: Testing rule
+                      table_id: 9sEa
+                      view_id: '0000'
+                      condition: filters_satisfy
+                      filters:
+                        - column_key: hn8H
+                          filter_predicate: is
+                          filter_term: true
+                      filter_conjunction: And
+                    action:
+                      type: notify
+                      default_msg: Hey Ginger, this task has been completed.
+                      users:
+                        - 1234567891754bb4afa2c2cb7369d244@auth.local
+                    creator: Jasmin Tee
+                    ctime: '2020-11-18T12:45:32+00:00'
+                    last_trigger_time: '2020-11-17T12:45:32+00:00'
+                count: 8
+  /api/v2.1/admin/notification-rules/{notification_rule_id}/:
+    delete:
+      tags:
+        - Notifications
+      summary: Delete Notification
+      description: Delete a notification rule by its ID.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/notification_rule_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/invalid-notification-rules/:
+    get:
+      tags:
+        - Notifications
+      summary: List Invalid Notifications
+      description: >-
+        The system can detect notification rules that are invalid. You can list
+        all the invalid notification rules here.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                invalid_notification_rule_list:
+                  - id: 14
+                    dtable_uuid: 88b0e65a-18f1-4b08-9e6f-fe63d6199c87
+                    run_condition: per_update
+                    trigger:
+                      rule_name: wd的提醒规则
+                      table_id: clk6
+                      view_id: '0000'
+                      condition: rows_modified
+                      column_keys: []
+                      watch_all_columns: true
+                    action:
+                      type: notify
+                      default_msg: 呜呜呜
+                      users:
+                        - 3d3ef49e927a4ff99e605763355027e2@auth.local
+                      users_column_key: ''
+                    creator: admin
+                    ctime: '2021-06-03T09:51:58+00:00'
+                    last_trigger_time: ''
+                    is_valid: 1
+                  - id: 15
+                    dtable_uuid: 88b0e65a-18f1-4b08-9e6f-fe63d6199c87
+                    run_condition: per_update
+                    trigger:
+                      rule_name: wd的提醒规则2
+                      table_id: clk6
+                      view_id: '0000'
+                      condition: rows_modified
+                      column_keys: []
+                      watch_all_columns: true
+                    action:
+                      type: notify
+                      default_msg: 呜呜呜
+                      users:
+                        - 3d3ef49e927a4ff99e605763355027e2@auth.local
+                      users_column_key: ''
+                    creator: admin
+                    ctime: '2021-06-03T09:52:24+00:00'
+                    last_trigger_time: ''
+                    is_valid: 1
+                count: 6
+    delete:
+      tags:
+        - Notifications
+      summary: Delete Invalid Notifications
+      description: Delete all the notification rules that are invalid.
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  # Logs
+  /api/v2.1/admin/email-sending-logs/:
+    get:
+      tags:
+        - Logs
+      summary: List Email Logs
+      description: >-
+        List the email sending logs in the system. The emails sent via 3rd party
+        email accounts are listed here.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                email_sending_logs:
+                  - create_time: '2021-08-23T13:27:22+00:00'
+                    name: automation-rules
+                    host: smtp.web.de
+                    success: true
+                count: 1
+  /api/v2.1/admin/registration-logs/:
+    get:
+      tags:
+        - Logs
+      summary: List Registration Logs
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '403':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v2.1/admin/abuse-reports/:
+    get:
+      tags:
+        - Logs
+      summary: List Abuse Reports
+      description: >-
+        As system administrator, use this API request to list current abuse
+        reports in the system.
+
+
+        The returned `id` param is the ID of each abuse report.
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                abuse_report_list:
+                  - id: 1
+                    dtable_uuid: 12345678-ebe8-466c-89f6-492a0f956af9
+                    reporter: Jasmine
+                    external_link_token: e6cf8b02a74341261234
+                    create_time: '2021-07-14T12:09:49+00:00'
+                    abuse_type: abuse_content
+                    description: This is a test
+                    handled: false
+                    dtable_name: Guest registration
+                has_next_page: false
+  /api/v2.1/admin/abuse-reports/{abuse_report_id}/:
+    put:
+      tags:
+        - Logs
+      summary: Update Abuse Report
+      description: >-
+        As system administrator, use this API request to list current abuse
+        reports in the system.
+
+        In the request URL, type in the `abuse_report_id` that you got from the
+        call to list abuse reports.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                handled:
+                  $ref: "#/components/schemas/handled"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/abuse_report_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 1
+                dtable_uuid: 12345678-ebe8-466c-89f6-492a0f956af9
+                reporter: Jasmine
+                external_link_token: e6cf8b02a74341261234
+                create_time: '2021-07-14T12:09:49+00:00'
+                abuse_type: abuse_content
+                description: This is a test
+                handled: true
+                dtable_name: Guest registration
+
+  # Plugins
+  /api/v2.1/admin/dtable-system-plugins/:
+    get:
+      tags:
+        - Plugins
+      summary: List Plugins
+      description: List all the plugins currently available in the system.
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                plugin_list:
+                  - id: 1
+                    plugin_name: gallery
+                    info:
+                      name: gallery
+                      version: 0.1.33
+                      display_type: overlay
+                      display_name:
+                        de: Galerie
+                        en: Gallery
+                        fr: Galerie
+                        zh-cn: 图库
+                      description:
+                        de: Zeigen Sie Ihre Datensätze in einer Galerie an.
+                        en: Display your records in a gallery.
+                        fr: Affichez vos enregistrements dans une galerie.
+                        zh-cn: 用图库的方式展示你的记录。
+                      last_modified: '2021-03-12T12:04:33+08:00'
+                      has_css: true
+                      has_icon: true
+                      has_card_image: false
+                    added_by: admin
+                    added_time: '2020-07-02T06:26:48+00:00'
+                  - id: 2
+                    plugin_name: timeline
+                    info:
+                      name: timeline
+                      version: 0.4.29
+                      display_type: overlay
+                      display_name:
+                        de: ''
+                        en: Timeline
+                        fr: ''
+                        zh-cn: 时间线
+                      description:
+                        de: >-
+                          Visualisieren Sie die aufgezeichneten Informationen
+                          auf der Timeline.
+                        en: Visualize the recorded information on the timeline.
+                        fr: >-
+                          Visualisez les informations enregistrées sur la
+                          chronologie.
+                        zh-cn: 在时间线上可视化展现记录信息。
+                      last_modified: '2021-03-08T10:29:27+08:00'
+                      has_css: true
+                      has_icon: true
+                      has_card_image: false
+                    added_by: admin
+                    added_time: '2020-07-02T06:28:22+00:00'
+                  - id: 3
+                    plugin_name: map-en
+                    info:
+                      name: map-en
+                      version: 0.0.16
+                      display_name:
+                        cs: Mapy
+                        de: Karten
+                        en: Map
+                        es: Mapas
+                        fr: Les cartes
+                        it: mappa
+                        ru: карта
+                        zh-cn: 地图
+                      description:
+                        de: >-
+                          Das Karten-Plugin kann Datensätze auf der Karte
+                          anzeigen
+                        en: Map plugin can display records on the map
+                        fr: >-
+                          Le plugin de carte peut afficher des enregistrements
+                          sur la carte
+                        zh-cn: 地图插件能把记录显示到地图上
+                      last_modified: '2020-12-08T11:04:56+08:00'
+                      has_css: true
+                      has_icon: true
+                      has_card_image: false
+                    added_by: admin
+                    added_time: '2020-07-07T09:32:56+00:00'
+                  - id: 4
+                    plugin_name: deduplication
+                    info:
+                      name: deduplication
+                      version: 0.0.18
+                      display_name:
+                        de: Datendeduplizierung
+                        en: Deduplication
+                        fr: Déduplication des données
+                        zh-cn: 数据去重
+                      description:
+                        de: Entfernen Sie doppelte Datensätze in einer Tabelle
+                        en: Remove duplicated records in a table
+                        fr: Supprimer les enregistrements dupliqués dans une table
+                        zh-cn: 删除表格中的重复数据
+                      last_modified: '2021-02-04T11:55:26+08:00'
+                      has_css: true
+                      has_icon: true
+                      has_card_image: false
+                    added_by: admin
+                    added_time: '2021-03-08T09:07:06+00:00'
+    post:
+      tags:
+        - Plugins
+      summary: Add Plugin
+      description: >-
+        Add a plugin with a .zip file. This file could be retrieved from the
+        internet, for example, from the [SeaTable Plugins
+        Market](https://cloud.seatable.io/dtable/view-external-links/custom/plugins/).
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                plugin:
+                  $ref: "#/components/schemas/plugin"
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data;
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 6
+                plugin_name: deduplication
+                info:
+                  name: deduplication
+                  version: 0.0.18
+                  display_name:
+                    de: Datendeduplizierung
+                    en: Deduplication
+                    fr: Déduplication des données
+                    zh-cn: 数据去重
+                  description:
+                    de: Entfernen Sie doppelte Datensätze in einer Tabelle
+                    en: Remove duplicated records in a table
+                    fr: Supprimer les enregistrements dupliqués dans une table
+                    zh-cn: 删除表格中的重复数据
+                  last_modified: '2021-02-04T11:55:26+08:00'
+                  has_css: true
+                  has_icon: true
+                  has_card_image: false
+                added_by: admin
+                added_time: '2021-03-25T14:13:16+00:00'
+
+  /api/v2.1/admin/plugins-install-count/:
+    get:
+      tags:
+        - Plugins
+      summary: List Plugins Install Count
+      description: "List plugins install count logs"
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "plugins_install_count_list": [
+                    {
+                      "id": 1,
+                      "plugin_name": "calendar",
+                      "count": 1,
+                      "updated_at": "2023-04-26T12:48:26+00:00",
+                      "created_at": "2023-04-26T12:48:26+00:00"
+                    }
+                  ],
+                  "count": 1
+                }
+
+  /api/v2.1/admin/dtable-system-plugins/{plugin_id}/:
+    put:
+      tags:
+        - Plugins
+      summary: Update Plugin
+      description: >-
+        Update a plugin via its ID (retrieved from the call [List Plugins](/reference/list-plugins)) with a .zip file.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                plugin:
+                  $ref: "#/components/schemas/plugin"
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data; boundary
+        - $ref: "#/components/parameters/plugin_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 6
+                plugin_name: deduplication
+                info:
+                  name: deduplication
+                  version: 0.0.18
+                  display_name:
+                    de: Datendeduplizierung
+                    en: Deduplication
+                    fr: Déduplication des données
+                    zh-cn: 数据去重
+                  description:
+                    de: Entfernen Sie doppelte Datensätze in einer Tabelle
+                    en: Remove duplicated records in a table
+                    fr: Supprimer les enregistrements dupliqués dans une table
+                    zh-cn: 删除表格中的重复数据
+                  last_modified: '2021-02-04T11:55:26+08:00'
+                  has_css: true
+                  has_icon: true
+                  has_card_image: false
+                added_by: admin
+                added_time: '2021-03-25T14:13:16+00:00'
+    delete:
+      tags:
+        - Plugins
+      summary: Delete Plugin
+      description: >-
+        Delete a plugin via its ID (retrieved from the call [List Plugins](/reference/list-plugins)).
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/plugin_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  
+  # Statistics
+  /api/v2.1/admin/statistics/active-users/:
+    get:
+      tags:
+        - Statistics
+      summary: Get Active Users (per Day)
+      description: List the number of daily active users in a given period of time.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/starting_time"
+        - $ref: "#/components/parameters/ending_time"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                active_users:
+                  - datetime: '2021-02-21T00:00:00+00:00'
+                    count: 100
+                  - datetime: '2021-02-22T00:00:00+00:00'
+                    count: 86
+                  - datetime: '2021-02-23T00:00:00+00:00'
+                    count: 122
+                  - datetime: '2021-02-24T00:00:00+00:00'
+                    count: 120
+  /api/v2.1/admin/daily-active-users/:
+    get:
+      tags:
+        - Statistics
+      summary: List Active Users (one Day)
+      description: List the active users' details on a given day.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/date"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                active_user_list:
+                  - avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    email: 8765432382a244d395ff53a1ec2f3a19@auth.local
+                    contact_email: lustig@example.com
+                    name: Hannah Lustig
+                    reg_date: '2020-06-09T19:58:47.228413'
+                  - avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    email: kdjfhgls5f1e4c8d8e1c42d95867317c@auth.local
+                    contact_email: pan@example.com
+                    name: Peter Pan
+                    reg_date: '2019-11-14T02:25:39.929507'
+                page: 1
+                total_count: 87
+  /api/v2.1/admin/statistics/auto-rules/:
+    get:
+      tags:
+        - Statistics
+      summary: Get Automation Rules
+      description: >-
+        The system documents automation rules by single users (users who are not
+        in any teams) or by teams. In most cases, especially on
+        cloud.seatable.io, there're no such scenario that a single user could
+        exist, so the usage of the param `is_user` as `true` is seldom.
+        As this API request is developed in SeaTable 2.4.2 which came out in
+        September 2021, automation rules statistics before September 2021 could
+        not be correctly summarized with this call.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/is_user"
+        - $ref: "#/components/parameters/month"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - org_id: 176
+                    org_name: SeaTable
+                    trigger_date: '202109'
+                    trigger_count: 3
+                    update_at: '2021-09-27T10:08:05+00:00'
+                count: 1
+  /api/v2.1/admin/statistics/scripts-running/:
+    get:
+      tags:
+        - Statistics
+      summary: Get Script Running by User
+      description: >-
+        Use this request to overview the scripts running statistics of a certain
+        user, or all the users in your system.
+
+
+        In the response:
+
+
+        *   `total_run_count` is the total number of runs;
+
+        *   `total_run_time` is the total time of runs, in seconds.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/is_user"
+        - $ref: "#/components/parameters/owner"
+        - $ref: "#/components/parameters/month"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - total_run_count: 5
+                    total_run_time: 4
+                    username: 12345678bb674f15bd5b17afc3527754@auth.local
+                    name: admin
+                count: 1
+  /api/v2.1/admin/scripts-tasks/:
+    get:
+      tags:
+        - Statistics
+      summary: List Scripts Tasks
+      description: List off all the scheduled scripts tasks in the current system.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                count: 12
+                task_list:
+                  - context_data:
+                      table: Table1
+                    dtable_name: Example 1
+                    dtable_uuid: 5249874f-ffc2-4bf9-bf0c-eeb4ad80b7ae
+                    id: 3
+                    is_active: true
+                    last_trigger_time: Tue, 01 Jun 2021 09:51:36 GMT
+                    owner: 3d3ef49e927a4ff99e605763355027e2@auth.local
+                    script_name: DScG.py
+                    trigger:
+                      alarm_days: 1
+                      condition: daily
+                  - context_data:
+                      table: Table2
+                    dtable_name: admin_2
+                    dtable_uuid: 5249874f-ffc2-4bf9-bf0c-eeb4ad80b7ae
+                    id: 5
+                    is_active: true
+                    last_trigger_time: Tue, 01 Jun 2021 09:51:36 GMT
+                    owner: 3d3ef49e927a4ff99e605763355027e2@auth.local
+                    script_name: woKG.py
+                    trigger:
+                      alarm_days: 1
+                      condition: daily
+  /api/v2.1/admin/statistics/external-apps/:
+    get:
+      tags:
+        - Statistics
+      summary: Get External Apps
+      description: >-
+        As system admin, you can have an overview of the external apps
+        statistics with this API request. The result can be queried by user or
+        by team.
+
+
+        In the request parameter:
+
+
+        *   `is_user` is `true` by default. If you need to see the results by
+        team, use this param and let it be `false`.
+
+        *   `month` is the time filter, and it lets you see the result by month.
+        Use e.g. 202207 for July, 2022.
+
+        *   `page` and `per_page` are your controls of the returned pages and
+        results per page.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/is_user"
+        - $ref: "#/components/parameters/month"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - org_id: 1
+                    visit_date: '202207'
+                    visit_count: 2
+                    latest_visit_at: '2022-07-02T14:09:37+00:00'
+                    org_name: SeaTable GmbH
+                count: 1
+  
+  # System Notifications
+  /api/v2.1/admin/sys-user-notifications/:
+    get:
+      tags:
+        - System Notifications
+      summary: List Notifications
+      description: List all the system notifications sent to the users.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                notifications:
+                  - id: 10
+                    msg: Hello user!
+                    username: 1234567a6569491ba42905bf1647fd3f@auth.local
+                    name: Jasmin Tee
+                    contact_email: johndoe@example.com
+                    seen: false
+                    org_name: Team Jasmin Tee
+                    created_at: '2021-02-26T16:55:10+00:00'
+                    msg_format: Hello user!
+                total_count: 1
+    post:
+      tags:
+        - System Notifications
+      summary: Add Notification to User
+      description: Add a system notification to a specific user with their ID.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                msg:
+                  $ref: "#/components/schemas/msg"
+                username: 
+                  $ref: "#/components/schemas/username"
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                notification:
+                  id: 10
+                  msg: Hello user!
+                  username: 1234567a6569491ba42905bf1647fd3f@auth.local
+                  name: Jasmin Tee
+                  contact_email: johndoe@example.com
+                  seen: false
+                  org_name: Team Jasmin Tee
+                  created_at: '2021-02-26T16:55:10+00:00'
+                  msg_format: Hello user!
+  /api/v2.1/admin/sys-user-notifications/{sys_notification_id}/:
+    delete:
+      tags:
+        - System Notifications
+      summary: Delete Notification
+      description: Delete a system notification with its ID.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/sys_notification_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+   
+  # System Info & Customizing
+  /api/v2.1/admin/sysinfo/:
+    get:
+      tags:
+        - System Info & Customizing
+      summary: Get system information
+      description: >-
+        Get the general system information with this request as system
+        administrator.
+      security:
+        - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                version: 3.3.7
+                users_count: 417
+                active_users_count: 396
+                groups_count: 138
+                org_count: 287
+                dtables_count: 454
+                multi_tenancy_enabled: true
+                is_pro: true
+                with_license: true
+                license_expiration: '2024-12-31'
+                license_mode: subscription
+                license_maxusers: 1000
+                license_to: table.example.com
+                dtable_server_info:
+                  - enable_cluster: false
+                    web_socket_count: 0
+                    operation_count_since_up: 3
+                    loaded_dtables_count: 5
+                    last_period_operations_count: 0
+                    app_connection_count: 0
+                    last_dtable_saving_count: 0
+                    last_dtable_saving_start_time: 1671368763485
+                    last_dtable_saving_end_time: 1671368763487
+                dtable_server_info_in_etcd: []
+                archived_base_count: 5
+                archived_row_count: 106777
+                archived_base_storage: 316229934
+  /api/v2.1/admin/web-settings/:
+    put:
+      tags:
+        - System Info & Customizing
+      summary: Update General Settings
+      description: >-
+        Change the general settings of your system. For details, see the
+        description for each parameter in the request body.
+        Just like the settings via web interface, these settings via API request
+        are also saved in the database table (dtable-db/constance_config). They
+        have a higher priority over the settings in the config files.
+        However, in the `dtable_web_settings` you'll find more setting options.
+        For details, visit the [SeaTable Admin
+        Manual](https://manual.seatable.io/config/dtable_web_settings/#user-management-options).
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                SITE_TITLE:
+                  $ref: "#/components/schemas/SITE_TITLE"
+                SITE_NAME:
+                  $ref: "#/components/schemas/SITE_NAME"
+                ENABLE_BRANDING_CSS:
+                  $ref: "#/components/schemas/ENABLE_BRANDING_CSS"
+                CUSTOM_CSS:
+                  $ref: "#/components/schemas/CUSTOM_CSS"
+                ACTIVATE_AFTER_REGISTRATION:
+                  $ref: "#/components/schemas/ACTIVATE_AFTER_REGISTRATION"
+                REGISTRATION_SEND_MAIL:
+                  $ref: "#/components/schemas/REGISTRATION_SEND_MAIL"
+                LOGIN_REMEMBER_DAYS:
+                  $ref: "#/components/schemas/LOGIN_REMEMBER_DAYS"
+                LOGIN_ATTEMPT_LIMIT:
+                  $ref: "#/components/schemas/LOGIN_ATTEMPT_LIMIT"
+                FREEZE_USER_ON_LOGIN_FAILED:
+                  $ref: "#/components/schemas/FREEZE_USER_ON_LOGIN_FAILED"
+                USER_STRONG_PASSWORD_REQUIRED:
+                  $ref: "#/components/schemas/USER_STRONG_PASSWORD_REQUIRED"
+                FORCE_PASSWORD_CHANGE:
+                  $ref: "#/components/schemas/FORCE_PASSWORD_CHANGE"
+                USER_PASSWORD_MIN_LENGTH:
+                  $ref: "#/components/schemas/USER_PASSWORD_MIN_LENGTH"
+                USER_PASSWORD_STRENGTH_LEVEL:
+                  $ref: "#/components/schemas/USER_PASSWORD_STRENGTH_LEVEL"
+                ENABLE_TWO_FACTOR_AUTH:
+                  $ref: "#/components/schemas/ENABLE_TWO_FACTOR_AUTH"
+                ENABLE_SIGNUP:
+                  $ref: "#/components/schemas/ENABLE_SIGNUP"
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                ENABLE_SIGNUP: 1
+                ACTIVATE_AFTER_REGISTRATION: 1
+                REGISTRATION_SEND_MAIL: 0
+                LOGIN_REMEMBER_DAYS: 7
+                USER_STRONG_PASSWORD_REQUIRED: 0
+                USER_PASSWORD_MIN_LENGTH: 6
+                USER_PASSWORD_STRENGTH_LEVEL: 3
+                FORCE_PASSWORD_CHANGE: 1
+                LOGIN_ATTEMPT_LIMIT: 5
+                FREEZE_USER_ON_LOGIN_FAILED: 0
+                ENABLE_TWO_FACTOR_AUTH: 0
+                ENABLE_BRANDING_CSS: 0
+                SITE_NAME: SeaTable
+                SITE_TITLE: SeaTable Private
+                CUSTOM_CSS: ' '
+  /api/v2.1/admin/logo/:
+    post:
+      tags:
+        - System Info & Customizing
+      summary: Update Logo
+      description: >-
+        Upload an image (.png with a transparent background is recommended) as
+        the logo of your SeaTable installation.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                logo:
+                  $ref: "#/components/schemas/logo"
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                logo_path: https://cloud.seatable.io/media/custom/mylogo.png
+  /api/v2.1/admin/favicon/:
+    post:
+      tags:
+        - System Info & Customizing
+      summary: Update Favicon
+      description: >-
+        Upload an image (.png with a transparent background is recommended) as
+        the favicon of your SeaTable installation.
+        As per the `with_notify` param in the request body: you can use this API
+        request twice to upload two favicons:
+        - one is the "normal" favicon（leave `with_nofity` blank).
+        - the other one is the "notifying" favicon which should have something
+        like a "notifying" red dot on it (set `with_notify` to `true`).
+        ![Image](https://seatable.io/wp-content/uploads/2021/11/favicon.png)
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                favicon:
+                  $ref: "#/components/schemas/favicon"
+                with_notify:
+                  $ref: "#/components/schemas/with_notify"
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                favicon_path: https://cloud.seatable.io/media/custom/seatable-favicon.ico
+  /api/v2.1/admin/login-background-image/:
+    post:
+      tags:
+        - System Info & Customizing
+      summary: Update Login Background Image
+      description: Change the background image shown on the login mask.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                login_bg_image:
+                  $ref: "#/components/schemas/login_bg_image"
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                login_bg_image_path: https://cloud.seatable.io/media/custom/login-bg.jpg

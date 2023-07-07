@@ -1,0 +1,416 @@
+openapi: 3.0.0
+info:
+  title: Authentication
+  description: >-
+    The official SeaTable API Reference (OpenAPI 3.0).
+  version: "4.0"
+servers:
+  - url: 'https://{server}'
+    variables: 
+      server:
+        default: cloud.seatable.io
+
+## Questions for later:
+# - why is the return value always 200 but only once 201?
+# - create temporary token > why is this a GET request?
+# - app_name is sometimes param, sometimes body, is there a reason for that?
+# - return values of auth. varies: "get base-token with api-token delivers 8 values back", "Get base-token with account-token" delivers only 5 values back. Why not the same?
+
+x-readme: 
+  explorer-enabled: true
+  metrics-enabled: false 
+  proxy-enabled: false
+
+components:
+  securitySchemes:
+    AccountTokenAuth:
+      type: http
+      scheme: bearer
+      description: This is the [Account-Token](/reference/authentication).
+      bearerFormat: Account-Token
+
+    ApiTokenAuth:
+      type: http
+      scheme: bearer
+      description: This is the [API-Token](/reference/authentication).
+      bearerFormat: API-Token
+
+  parameters:
+  #=======================Header parameters=======================#
+    X-SEAFILE-OTP:
+      name: X-SEAFILE-OTP
+      in: header
+      schema:
+        type: string
+        pattern: '^\d{6}$'
+      description: > 
+        Two-factor token (usually generated with a mobile app like the
+        google authenticator), optional, only needed if 2FA is activated for your account.
+
+  #=======================Query parameters=======================#
+  # there are no query params in authentication.
+      
+  #=======================Path parameters=======================#
+    workspace_id:
+      name: workspace_id
+      description: |
+        The id of the workspace. For an explanation how to get the *workspace_id*, check out this [help-article](https://seatable.io/docs/arbeiten-mit-gruppen/workspace-id-einer-gruppe-ermitteln/?lang=auto). 
+        Alternatively the API endpoint [get metadata](/reference/get-metadata) can be used.
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 127
+    base_name:
+      name: base_name
+      description: The name of your base.
+      in: path
+      schema:
+        type: string
+      required: true
+      example: 'My Projects'
+    app_name:
+      name: app_name
+      description: The name of your app. Every API-Token has a name to identify the purpose. The name of the app must be unique for every base.
+      in: path
+      schema:
+        type: string
+      required: true
+      example: 'My App'
+    external_link_token:
+      name: external_link_token
+      description: |
+        The random string from the external link. Eg: 
+        - If the external link is https://cloud.seatable.io/dtable/external-links/c41cef71f5094827a786, the link token is *c41cef71f5094827a786*.
+        - If the external link is a custom link like https://cloud.seatable.io/dtable/external-links/custom/my-personal-link, the link token is only *my-personal-link*.
+      in: path
+      schema:
+        type: string
+      required: true
+      example: c41cef71f5094827a786
+
+  schemas:
+    AccountToken:
+      type: object
+      description: account-token ...
+      properties:
+        token:
+          type: string
+          example: "25285a3da6fff1f7a6f9c9abc8da12dcd2bd4470"
+          minLength: 40
+          maxLength: 40
+    ApiTokenList:
+      type: object
+      description: ...
+      properties:
+        api_tokens:
+          items:
+            $ref: "#/components/schemas/ApiToken"
+    ApiToken:
+      type: object
+      description: api-token return object
+      properties:
+        app_name:
+          type: string
+        api_token:
+          type: string
+          minLength: 40
+          maxLength: 40
+        generated_by:
+          type: string
+          format: email
+        generated_at:
+          type: string
+          format: date-time
+        last_access:
+          type: string
+          format: date-time
+        permission:
+          type: string
+          enum: ["", "rw", "r"]
+      example: 
+        app_name: Example
+        api_token: 1234567f17157cd6c41fdb202813f8d9a9fi3yr7
+        generated_by: 1234566569491ba42905bf1647fd3f@auth.local
+        generated_at: '2021-03-02T09:47:41+00:00'
+        last_access: '2021-03-02T09:47:41+00:00'
+        permission: rw
+
+    ApiTokenTemporary:
+      type: object
+      description: Temporary Api-Token, valid only for one hour
+      properties:
+        api_token:
+          type: string
+      example:
+        api_token: 1234567iOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IjhjYjJhNmRhNjU2OTQ5MWJhNDI5M1234567NDdmZDNmQGF1dGgubG9jYWwiLCJkdGFibGVfdXVpZCI6IjY1MGQ4YTBkLTdlMjctNDZhOC04YjE4LTZjYzZmM2RiMjA1NyIsImV4cCI6MTYxNDY4MjEyNi43ODY5MDE3fQ.FjRR-yur8lb0peiwD-h7j_gF97WXp17LS_n1HXipzKM
+
+    AccessToken:
+      type: object
+      description: blub
+      properties:
+        app_name:
+          type: string
+        access_token:
+          type: string
+        dtable_uuid:
+          type: string
+          format: uuid
+        dtable_server:
+          type: string
+          format: url
+        dtable_socket: 
+          type: string
+          format: url
+        workspace_id: 
+          type: integer
+        dtable_name: 
+          type: string
+      example:
+        app_name: My App
+        access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTQzNTI1OTQsImR0YWJsZV91dWlkIjoiNjUwZDhhMGQtN2UyNy00NmE4LThiMTgtNmNjNmYzZGIyMDU3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6InBvc3RtYW4ifQ.4aTmvBfFElyB3xg5jjF7zWCiyRZI17SZD980GdHT6e3
+        dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6f384ufy4
+        dtable_server: https://cloud.seatable.io/dtable-server/
+        dtable_socket: https://cloud.seatable.io/
+        workspace_id: 127
+        dtable_name: Test Base
+    
+    permission:
+      type: string
+      description: |
+        - rw for read-write 
+        - r for read-only
+      enum: ["", "rw", "r"]
+      default: ""
+
+paths: 
+  /api2/auth-token/:
+    post:
+      tags:
+        - Account-Token
+      summary: Get Account-Token with Username and Password
+      description: |
+        Generate an *Account-Token* with your username and password. This Account-Token is necessary for all the following account operations.
+        Use the optional paramater if two-factor-authentication (2FA) is activated for your account.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Your email address
+                password:
+                  type: string
+                  description: Your password
+              required:
+              - username
+              - password
+      parameters:
+        - $ref: "#/components/parameters/X-SEAFILE-OTP"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountToken"
+      security: []
+
+  /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/api-tokens/:
+    get:
+      tags:
+        - API-Token
+      summary: List API-Tokens
+      description: | 
+        List all *API-Tokens* of a base with additional informations like permission, generation date and last access time.   
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+        - $ref: "#/components/parameters/base_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiTokenList"
+    post:
+      tags:
+        - API-Token
+      summary: Create API-Token
+      description: >
+        Create an *API-Token* for a base.  
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                app_name:
+                  type: string
+                  description: The name of your app. Every API-Token has a name to identify the purpose. The name of the app must be unique for every base.
+                  example: My App
+                permission:
+                  $ref: "#/components/schemas/permission"
+              required:
+                - app_name
+                - permission
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+        - $ref: "#/components/parameters/base_name"
+      responses:
+        '201':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiToken"
+
+  /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/temp-api-token/:
+    get:
+      tags:
+        - API-Token
+      summary: Create API-Token (temporary)
+      description: Create a *temporary API-Token* for a base that expires after one hour. 
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+        - $ref: "#/components/parameters/base_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiTokenTemporary"
+                
+  /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/api-tokens/{app_name}/:
+    put:
+      tags:
+        - API-Token
+      summary: Update API-Token
+      description: Update the permission of an existing *API-Token*.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                permission:
+                  $ref: "#/components/schemas/permission"
+              required:
+                - permission
+
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+        - $ref: "#/components/parameters/base_name"
+        - $ref: "#/components/parameters/app_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiToken"
+    delete:
+      tags:
+        - API-Token
+      summary: Delete API-Token
+      description: >-
+        Delete one specific API token from a base. The token is identified by his *app_name*.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+        - $ref: "#/components/parameters/base_name"
+        - $ref: "#/components/parameters/app_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  /api/v2.1/dtable/app-access-token/:
+    get:
+      tags:
+        - Base-Token
+      summary: Get Base-Token with API-Token
+      description: >-
+        Generate a Base-Token with an API-Token. The API-Token grants either read or write permission to this base, depending of the permission of the API-Token.
+      security: 
+      - ApiTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                app_name: postman
+                access_token: >-
+                  eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTQzNTI1OTQsImR0YWJsZV91dWlkIjoiNjUwZDhhMGQtN2UyNy00NmE4LThiMTgtNmNjNmYzZGIyMDU3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6InBvc3RtYW4ifQ.4aTmvBfFElyB3xg5jjF7zWCiyRZI17SZD980GdHT6e3
+                dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6f384ufy4
+                dtable_server: https://cloud.seatable.io/dtable-server/
+                dtable_socket: https://cloud.seatable.io/
+                dtable_db: https://cloud.seatable.io/dtable-db/
+                workspace_id: 20
+                dtable_name: Test base
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error_msg: Permission denied.
+                
+  /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/access-token/:
+    get:
+      tags:
+        - Base-Token
+      summary: Get Base-Token with Account-Token
+      description: >-
+        Generate a Base-Token using the user's Account-Token. The read/write permission depends on the user's access permissions to the base.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+        - $ref: "#/components/parameters/base_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+
+  /api/v2.1/external-link-tokens/{external_link_token}/access-token/:
+    get:
+      tags:
+        - Base-Token
+      summary: Get Base-Token with External-Link
+      description: >-
+        Generate a Base-Token from an external link to this base. Because external links always grant read-only permissions, the Base-Token generated from a external link will only grant read permissions to the base.
+      parameters:
+        - $ref: "#/components/parameters/external_link_token"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"

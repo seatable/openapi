@@ -1,0 +1,4875 @@
+openapi: 3.0.0
+info:
+  title: Base Operations
+  description: >-
+    The official SeaTable API Reference (OpenAPI 3.0).
+  version: "4.0"
+servers:
+  - url: 'https://{server}'
+    variables: 
+      server:
+        default: cloud.seatable.io
+
+## Questions for later:
+# - same variables as path and query? Why? 
+# - objects not uniform: table_id sometimes inside the object, sometimes outside the object (compare insert column vs append columns)
+# - File-Upload super complicated: a) "parent_dir, parent_file, parent_path"? why not using the same name for the same thing? b) why requires appending file to a base, type, name and size? Image requires only url.
+# - why is it necessary to pass the base_uuid? The base-token identifies the base already...
+# - sometimes column_key, sometimes column_name. Why?
+# - why column_key and not column_id?
+# - sometimes base_uuid, sometimes dtable_uuid. Why?
+# - some calls allow table_name or table_id. "lock rows" requires table_name. "links" requires table_id. Confusing!
+# - sometimes "convert", sometimes "convert_keys"
+# - create row link and create row links => one time table names, one time table_ids
+# - "get row": why do I have to provide row_id as path and body?
+# - Upload File/Image: why ret-json=1 in url?
+
+x-readme: 
+  explorer-enabled: true
+  metrics-enabled: false 
+  proxy-enabled: false
+  
+components:
+  # Security scheme definitions (see Authentication)
+  securitySchemes:
+    BaseTokenAuth:
+      type: http
+      scheme: bearer
+      description: This is the [Base-Token](/reference/authentication).
+
+    ApiTokenAuth:
+      type: http
+      scheme: bearer
+      description: This is the [API-Token](/reference/authentication).
+
+  # Reusable path, query, header and cookie parameters
+  parameters:
+    #=======================Query parameters=======================#
+    row_id:
+      name: row_id
+      description: Unique id of a row. 
+      in: query
+      schema:
+        type: string
+        pattern: ^[A-Za-z0-9]{22}$
+      example: YMIviMeERQCUiQhPPqo6Gw
+      required: true
+    page:
+      name: page
+      description: The page number you want to start showing the entries. If no value is provided, 1 will be used. 
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+      required: false
+    per_page:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      description: The number of results that should be returned. If no value is provided, 25 results will be returned.
+      example: 25
+      required: false
+    op_type:
+      name: op_type
+      description: >-
+        Type of delete operation that should be listed. Optional. Choose
+        from `delete_row`, `delete_rows`, `delete_table`, and
+        `delete_column`.
+      in: query
+      schema:
+        type: string
+        enum: ["delete_row", "delete_rows", "delete_table", "delete_column"]
+      example: delete_row
+      required: true
+    table_id:
+      name: table_id
+      in: query
+      schema:
+        type: string
+        pattern: '^[A-Za-z0-9]{4}$'
+      description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. **Important: the table_id is not the table_name**."
+      example: "0000"
+      required: true
+    table_name:
+      name: table_name
+      description: The name of the table.
+      in: query
+      schema:
+        type: string
+      example: Table1
+      required: true
+
+    view_name:
+      name: view_name
+      in: query
+      schema:
+        type: string
+      required: false
+      description: The name of the view.
+      example: 'Default View'
+    convert_link_id:
+      name: convert_link_id
+      description: Whether the link column in the returned row is the ID (false) of the linked row or the name (true) of the linked row. If no value is provided, false is the default.
+      in: query
+      schema:
+        type: boolean
+      example: false
+      required: false
+    order_by:
+      name: order_by
+      in: query
+      schema:
+        type: string
+      required: false
+      description: The name or id of a column that is used to sort the results.
+      example: Likes
+    direction:
+      name: direction
+      in: query
+      schema:
+        type: string
+        enum: ["", "asc", "desc"]
+        default: ""
+      required: false
+      description: The direction of the sort, ascending `asc` or descending `desc`. asc by default. Works only if start and limit are set, too.
+      example: 'desc'
+    start:
+      name: start
+      in: query
+      schema: 
+        type: integer
+      required: false
+      description: Starting position (number) of the returned rows. 0 by default. 
+      example: 0
+    limit:
+      name: limit
+      in: query
+      schema: 
+        type: integer
+        minimum: 1
+        maximum: 1000
+      required: false
+      description: Number of rows that should be returned. 1000 by default.
+      example: 100
+    file_path:
+      name: path
+      in: query
+      schema:
+        type: string
+        pattern: ^\/(images|files){1}\/[0-9]{4}\-[0-9]{2}\/.
+      description: "Path to the file"
+      example: "/images/2021-03/test.png"
+      required: true
+    days:
+      name: days
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      example: 7
+    convert:
+      name: convert
+      in: query
+      schema:
+        type: boolean
+      description: If 'true', the column's id will be converted to column names.
+      example: true
+    custom_folder_path:
+      name: path
+      in: query
+      schema:
+        type: string
+      description: "Path of the custom folder"
+      example: "/"
+      required: true
+    custom_folder_file_name:
+      name: name
+      in: query
+      schema:
+        type: string
+      description: "Name of the file in the custom folder"
+      example: "b374.pdf"
+      required: true
+    custom_folder_path_with_filename:
+      name: path
+      in: query
+      schema:
+        type: string
+      description: "Path and name of the file in the custom folder"
+      example: "/supplierOne/b374.pdf"
+      required: true
+
+    #=======================Path parameters=======================#
+    base_uuid:
+      name: base_uuid
+      in: path
+      schema:
+        type: string
+        pattern: '^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$'
+      required: true
+      description: The unique identifier of a base. Sometimes also called dtable_uuid.
+      example: 5c264e76-0e5a-448a-9f34-580b551364ca
+    row_id_path:
+      name: row_id
+      in: path
+      schema:
+        type: string
+        pattern: ^[A-Za-z0-9]{22}$
+      required: true
+      description: The id of the row.
+      example: Qtf7xPmoRaiFyQPO1aENTjb
+    view_name_path:
+      name: view_name
+      in: path
+      schema:
+        type: string
+      required: true
+      description: The name of the view.
+      example: 'Default View'
+    comment_id:
+      name: comment_id
+      description: The id of the comment.
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 1
+    notification_id:
+      name: notification_id
+      description: The id of the notification.
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 1
+    upload_link:
+      name: upload_link
+      description: "This is the value you got from the call Get File/Image Upload Link via API Token."
+      in: path
+      schema:
+        type: string
+        pattern: ^[a-z0-9]{8}(-[a-z0-9]{4}){3}-[a-z0-9]{12}$
+      required: true
+      example: "5e666848-4152-45e5-990e-d686960f2a05"
+
+  # Reusable schemas (data models)
+  schemas:
+    row_id:
+      type: string
+      pattern: '^[a-zA-Z0-9\-]{22}$'
+      description: The id of the row. The id of a row is unique inside a base and is often used to identify one specific row.
+      example: "Qtf7xPmoRaiFyQPO1aENTjb"
+    base:
+      type: object
+      description: base (database) in SeaTable
+      properties:
+        _id:
+          type: string
+          pattern: '^[a-zA-Z]{4}$'
+        name:
+          type: string
+        is_header_locked:
+          type: boolean
+        summary_configs:
+          type: object
+        columns:
+          type: object
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/row_id"
+        views:
+          type: object
+        id_row_map:
+          type: object
+      example:
+        _id: IfcB
+        name: New table
+        is_header_locked: false
+        summary_configs: {}
+        columns:
+          - key: '0000'
+            type: number
+            name: First column
+            editable: true
+            width: 200
+            resizable: true
+            draggable: true
+            data: null
+            permission_type: ''
+            permitted_users: []
+          - key: 2w6F
+            type: text
+            name: second column
+            editable: true
+            width: 200
+            resizable: true
+            draggable: true
+            data: null
+            permission_type: ''
+            permitted_users: []
+          - key: 3aAf
+            type: date
+            name: third column
+            editable: true
+            width: 200
+            resizable: true
+            draggable: true
+            data: null
+            permission_type: ''
+            permitted_users: []
+        rows: []
+        views:
+          - _id: '0000'
+            name: Default View
+            type: table
+            is_locked: false
+            filter_conjunction: And
+            filters: []
+            sorts: []
+            groupbys: []
+            group_rows: []
+            groups: []
+            colorbys: {}
+            hidden_columns: []
+            rows: []
+            formula_rows: {}
+            link_rows: {}
+            summaries: {}
+            colors: {}
+        id_row_map: {}
+    
+    sql_query:
+      type: object
+      properties:
+        sql:
+          type: string
+          format: SQL-Query
+          description: SQL-Query to get rows from base
+        convert_keys:
+          type: boolean
+          description: Determines if the columns are returned as their keys (true) or their names (false by default).
+      example:
+        sql: "SELECT Name, Status FROM Table1 LIMIT 3"
+        convert_keys: true
+      required:
+        - sql
+        - convert_keys
+    
+    sql_query_response:
+      type: object
+      properties:
+        base_metadata:
+          $ref: "#/components/schemas/base_metadata"
+        results:
+          type: object
+          description: abc
+          properties:
+            _id:
+              type: string
+            all_other_columns:
+              type: string
+              description: All other columns
+        success:
+          type: string
+          description: success or error message
+      example:
+        metadata:
+          - key: '0000'
+            name: Name
+            type: text
+            data:
+              default_value: '{creator.id}'
+              enable_fill_default_value: true
+        results:
+          - Name: Box
+            _id: Re7GZaC9Sh-G6RC5zeAn2w
+          - Name: Chocolate
+            _id: BrmPfAWyQaO7PDdAPe7G-w
+          - Name: Flowers
+            _id: ZrFd2YOXQ0eIYJjPbQPGng
+        success: true
+
+    base_metadata:
+      type: object
+      description: Metadata object of the base
+      properties:
+        key:
+          type: string
+        name: 
+          type: string
+        type:
+          type: string
+        data:
+          type: object
+          properties:
+            default_value:
+              type: string
+            enable_fill_default_value:
+              type: string
+
+    row:
+      type: object
+      title: Row
+      description: |
+        Pass the set of column names and their values. The column names must be present in your table. Different column types require different ways to input values. For eg:
+        {"Name":"Max", "Age":"21", "Birthday":"2023-02-18", "Checkbox":"true"}
+      example: 
+        Name: "Max"
+        Age: 21
+        Birthday: "2023-02-18"
+        Checkbox: true
+    
+    table_name:
+      type: string
+      description: The name of the table.
+      example: "Table1"
+
+    table_name_object:
+      type: object
+      properties:
+        table_name: 
+          $ref: "#/components/schemas/table_name"
+      required:
+        - table_name
+
+    column_name:
+      type: string
+      # all chars except [., {}, `´]  
+      pattern: '^[^.}{`]*$'        
+      description: The name of the column.
+
+    append_row:
+      title: Append a row
+      type: object
+      description: Append a new row at the end of your table.
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        row:
+          $ref: "#/components/schemas/row"
+      required: 
+        - table_name
+        - row
+
+    insert_row:
+      title: Insert a row (above or below another row)
+      type: object
+      description: Insert a row below or above another row your specified by his row-ID.
+      properties:
+        table_name: 
+          $ref: "#/components/schemas/table_name"
+        anchor_row_id:
+          type: string
+          description: "Id of the row the new row should be added next to"
+          example: "Qtf7xPmoRaiFyQPO1aNTjA"
+        row_insert_position:
+          type: string
+          description: Defines if the new row is added below or above anchor row. If this parameter is left blank, `insert_below` is taken as default value.
+          enum: ["", "insert_above", "insert_below"]
+        row:
+          $ref: "#/components/schemas/row"
+      required: 
+        - table_name
+        - row
+
+    update_row:
+      type: object
+      description: update Row
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        row_id:
+          $ref: "#/components/schemas/row_id"
+        row:
+          $ref: "#/components/schemas/row"
+      required: 
+        - table_name
+        - row
+        - row_id
+        
+    delete_row:
+      type: object
+      description: delete a row
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        row_id:
+          $ref: "#/components/schemas/row_id"
+      required: 
+        - table_name
+        - row_id
+
+    rows:
+      type: object
+      description: object to append multiple rows
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/row"
+      required:
+        - rows
+
+    rows_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/rows"
+
+    append_rows:
+      type: object
+      description: add multiple rows
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        rows:
+          type: array
+          description: "Defines the rows which should be added."
+          title: Row Object X
+          items:
+            $ref: "#/components/schemas/row"
+      required: 
+        - table_name
+        - rows
+
+    update_rows:
+      type: object
+      description: update multiple rows
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        updates:
+          type: array
+          description: "Defines the rows which should be updated."
+          items:
+            type: object
+            properties:
+              row_id:
+                $ref: "#/components/schemas/row_id"
+              row:
+                $ref: "#/components/schemas/row"
+      required: 
+        - table_name
+        - updates
+      
+    delete_rows:
+      type: object
+      description: delete multiple rows
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        row_ids:
+          type: array
+          description: "Defines the rows which should be updated."
+          items:
+            $ref: "#/components/schemas/row_id"
+      required: 
+        - table_name
+        - row_ids
+
+    table_with_row_ids:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        row_ids:
+          type: array
+          description: ID of the rows
+          items:
+            $ref: "#/components/schemas/row_id"
+      example:  
+        row_ids: 
+          - "ZrFd2YOXQ0eIYJjPbQPGng"
+          - "afCU_L5PQLe5AOVwCuGXVw"
+      required:
+        - table_name
+        - row_ids
+
+    create_row_link: 
+      type: object
+      description: create row link
+      properties:
+        table_name: 
+          $ref: "#/components/schemas/table_name"
+        other_table_name:
+          $ref: "#/components/schemas/table_name"
+        link_id: 
+          $ref: "#/components/schemas/link_id"
+        table_row_id:
+          $ref: "#/components/schemas/row_id"
+        other_table_row_id:
+          $ref: "#/components/schemas/row_id"
+      required:
+        - table_name
+        - other_table_name
+        - link_id
+        - table_row_id
+        - other_table_row_id
+
+    table_id:
+      type: string
+      description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. **Important: the table_id is not the table_name**."
+      pattern: '^[a-zA-Z0-9]{4}$'
+      example: "0000"
+
+    link_id:
+      type: string
+      description: Every *link column* has a `key` and `link_id` in the column object. Use [Get Metadata](/reference/get-metadata) or [Get Base Info](/reference/get-base-info) to get this `link_id`. Don't use the `key` of the link column.
+      minLength: 4
+      maxLength: 4
+      example: jYc7
+
+    create_row_links:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        other_table_name:
+          $ref: "#/components/schemas/table_name"
+        link_id: 
+          $ref: "#/components/schemas/link_id"
+        row_id: 
+          $ref: "#/components/schemas/row_id"
+        other_rows_ids:
+          type: array
+          description: ID of the rows
+          items:
+            type: string
+            example: "GconSYtETlWLyRs5xqkHLQ"
+      required:
+        - row_id
+        - link_id
+        - table_name
+        - other_table_name
+        - other_rows_id
+    
+    update_links:
+      type: object
+      description: update row links (batch)
+      properties: 
+        table_id:
+          $ref: "#/components/schemas/table_id"
+        other_table_id:
+          $ref: "#/components/schemas/table_id"
+        link_id: 
+          $ref: "#/components/schemas/link_id"
+        row_id_list:
+          type: array
+          description: List of the source rows IDs whose links you'd like to update.
+          items:
+            $ref: "#/components/schemas/row_id"
+        other_rows_ids_map:
+          type: object
+          description: Map of IDs of the target rows which you'd like to link your source rows to.
+          items:
+            type: string
+      required:
+        - link_id
+        - table_id
+        - other_table_id
+        - row_id_list
+        - other_rows_ids_map
+
+    delete_row_link: 
+      type: object
+      properties:
+        table_name: 
+          $ref: "#/components/schemas/table_name"
+        other_table_name:
+          $ref: "#/components/schemas/table_name"
+        link_id: 
+          $ref: "#/components/schemas/link_id"
+        table_row_id:
+          $ref: "#/components/schemas/table_id"
+        other_table_row_id:
+          $ref: "#/components/schemas/table_id"
+      required:
+        - table_name
+        - other_table_name
+        - link_id
+        - table_row_id
+        - other_table_row_id
+
+    list_row_links:
+      type: object
+      properties:
+        table_id:
+          $ref: "#/components/schemas/table_id"
+        link_column:
+          type: string
+          description: This is the key of the link column. Do not use the `link_id` of the link column here.
+          minLength: 4  
+          maxLength: 4  
+        rows:
+          type: array
+          description: the rows you want to get the links for.
+          items:
+            type: object
+            properties:
+              row_id: 
+                $ref: "#/components/schemas/row_id"
+              offset:
+                type: integer
+                description: "offset is the beginning number of your query. If your record is linked to multiple records, use e.g. 0 to start quering from the 1st element or e.g. 5 to start querying from the 6th element, etc. Attention: The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime)."
+              limit:
+                type: integer
+                description: "limit lets you to set a limit to the number of records returned. Use e.g. 10 to return no more than 10 records."
+      required:
+        - table_id
+        - link_column
+        - row_id
+        - rows_id
+
+    rename_table:
+      type: object
+      description: Rename Table
+      properties:
+        table_name: 
+          $ref: "#/components/schemas/table_name"
+        new_table_name:
+          type: string
+      required:
+        - table_name
+        - new_table_name
+      example: 
+        new_table_name: New Name
+
+    delete_table:
+      type: object
+      description: Delete a table
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+      required:
+        - table_name
+
+    duplicate_table:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        is_duplicate_records:
+          type: boolean
+      required:
+        - table_name
+        - is_duplicate_records
+      example:
+        - is_duplicate_records: true
+
+    new_view:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the new view.
+          example: "New view"
+        type: 
+          type: string
+          description: Type of the view, either normal view or a big data view. The default value is *table*.
+          enum: ["", "table", "archive"]
+        is_locked: 
+          type: boolean
+      required:
+        - name
+        - type
+      example: 
+        - name: Table1
+        - type: table
+        - is_locked: false
+
+    view_name:  
+      type: string
+      description: "The new name of the view, if you want to give the view a new name."
+      example: "Default View"
+
+    is_locked:
+      type: boolean
+
+    column_key: 
+      type: string
+
+    string_filter_predicate:
+      type: string
+      enum: ["contains", "does not contain", "is", "is not", "is empty", "is not empty", "is current user's ID"]
+
+    number_filter_predicate:
+      type: string
+      enum: ["equal", "not_equal", "less", "greater", "less_or_equal", "greater_or_equal", "is empty", "is not empty"]
+
+    collaborator_filter_predicate:
+      type: string
+      enum: ["has_any_of", "has_all_of", "has_none_of", "is_exactly", "is_empty", "is_not_empty", "include_me"]
+
+    date_filter_predicate:
+      type: string
+      enum: ["is", "is_within", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not", "is_empty", "is_not_empty"]
+
+    single-select_filter_predicate:
+      type: string
+      enum: ["is", "is_not", "is_any_of", "is_none_of", "is_empty", "is_not_empty"]
+
+    multiple-select_filter_predicate:
+      type: string
+      enum: ["has_any_of", "has_all_of", "has_none_of", "is_exactly", "is_empty", "is_not_empty"]
+
+    image_filter_predicate:
+      type: string
+      enum: ["is_empty", "is_not_empty"]
+
+    email_filter_predicate:
+      type: string
+      enum: ["contains", "does_not_contain", "is", "is_not", "is_empty", "is_not_empty"]
+
+    checkbox_filter_predicate:
+      type: string
+      enum: ["is"]
+
+    link_filter_predicate:
+      type: string
+      enum: ["contains", "does_not_contain", "is", "is_not", "is_empty", "is_not_empty", "is_current_user_ID"]
+
+    creator_filter_predicate:
+      type: string
+      enum: ["contains", "does_not_contain", "include_me", "is", "is_not"]
+
+    automatic_filter_predicate:
+      type: string
+      enum: ["contains", "does not contain", "is", "is not"]
+
+    filter_term:
+      type: string
+
+    integer_filter_term:
+      type: integer
+
+    array_of_strings_filter_term:
+      type: array
+      items:
+        type: string
+
+    boolean_filter_term:
+      type: boolean
+
+    rating_filter_term:
+      type: integer
+      enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    date_filter_term:
+      type: string
+      pattern: '^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?$'   # --> pattern für das Datum im Format 2012-03-30
+
+    filter_term_modifier:
+      type: string
+
+    date_filter_term_modifier:
+      type: string
+      enum: ["today", "tomorrow", "yesterday", "one_week_ago", "one_week_from_now", "one_month_ago", "one_month_from_now", "number_of_days_ago", "number_of_days_from_now", "exact_date"]
+
+    filter_conjunction:
+      type: string
+      enum: ["And", "Or"]
+      description: "If your view has multiple filters you have to decide how the filters are should hang together."
+
+    sort_type:
+      type: string
+      enum: ["up", "down"]
+
+    sorts: 
+      type: array
+      items: 
+        type: object
+        properties:
+          column_key:
+            $ref: "#/components/schemas/column_key"
+          sort_type:
+            $ref: "#/components/schemas/sort_type"
+      description: "sorting of your view"
+
+    groupbys:
+      type: array
+      items: 
+        type: object
+        properties:
+          column_key:
+            $ref: "#/components/schemas/column_key"
+          sort_type:
+            $ref: "#/components/schemas/sort_type"
+      description: "grouping of your view"
+
+    hidden_columns:
+      type: array
+      items: 
+        type: string
+      description: "IDs of the rows that should be hidden"
+
+    filters_text: 
+      title: Text
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/string_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_long_text: 
+      title: Long Text
+      type: object
+      properties:
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/image_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_number: 
+      title: Number
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/number_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_collaborator:
+      title: Collaborator
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/collaborator_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/array_of_strings_filter_term"
+    filters_date:
+      title: Date
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/date_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/date_filter_term"
+        filter_term_modifier:
+          $ref: "#/components/schemas/date_filter_term_modifier"
+    filters_duration:
+      title: Duration
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/number_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_single_select:
+      title: Single-select
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/single-select_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_multi_select:
+      title: Multiple-select
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/multiple-select_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/array_of_strings_filter_term"
+    filters_image:
+      title: Image
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/image_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_file:
+      title: File
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/image_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_email:
+      title: Email
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        email_filter_predicate:
+          $ref: "#/components/schemas/email_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_checkbox:
+      title: Checkbox
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/checkbox_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/boolean_filter_term"
+    filters_rating:
+      title: Rating
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/number_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/rating_filter_term"
+    filters_formula:
+      title: Formula
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/string_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_link:
+      title: Link
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/link_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_link_formula:
+      title: Link Formula
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/link_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_creator:
+      title: Creator
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/creator_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/array_of_strings_filter_term"
+    filters_created:
+      title: Created
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/date_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+        filter_term_modifier:
+          $ref: "#/components/schemas/date_filter_term_modifier"
+    filters_editor:
+      title: Editor
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/creator_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/array_of_strings_filter_term"
+    filters_modified:
+      title: Modified
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/date_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+        filter_term_modifier:
+          $ref: "#/components/schemas/date_filter_term_modifier"
+    filters_automatic:
+      title: Automatic
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/automatic_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_percentage:
+      title: Percentage
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/number_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/integer_filter_term"
+    filters_date-time:
+      title: Date-time
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/date_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+        filter_term_modifier:
+          $ref: "#/components/schemas/date_filter_term_modifier"
+    filters_url:
+      title: URL
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/email_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+    filters_geolocation:
+      title: Geolocation
+      type: object
+      properties: 
+        column_key:
+          $ref: "#/components/schemas/column_key"
+        filter_predicate:
+          $ref: "#/components/schemas/email_filter_predicate"
+        filter_term:
+          $ref: "#/components/schemas/filter_term"
+
+    update_view:
+      type: object
+      properties:
+        name: 
+          $ref: "#/components/schemas/view_name"
+        is_locked: 
+          $ref: "#/components/schemas/is_locked"
+        filters: 
+          type: array
+          description: filter of your view
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/filters_text"
+              - $ref: "#/components/schemas/filters_long_text"
+              - $ref: "#/components/schemas/filters_number"
+              - $ref: "#/components/schemas/filters_collaborator"
+              - $ref: "#/components/schemas/filters_date"
+              - $ref: "#/components/schemas/filters_duration"
+              - $ref: "#/components/schemas/filters_single_select"
+              - $ref: "#/components/schemas/filters_multi_select"
+              - $ref: "#/components/schemas/filters_image"
+              - $ref: "#/components/schemas/filters_file"
+              - $ref: "#/components/schemas/filters_email"
+              - $ref: "#/components/schemas/filters_url"
+              - $ref: "#/components/schemas/filters_checkbox"
+              - $ref: "#/components/schemas/filters_rating"
+              - $ref: "#/components/schemas/filters_link"
+              - $ref: "#/components/schemas/filters_link_formula"
+              - $ref: "#/components/schemas/filters_creator"
+              - $ref: "#/components/schemas/filters_created"
+              - $ref: "#/components/schemas/filters_editor"
+              - $ref: "#/components/schemas/filters_modified"
+              - $ref: "#/components/schemas/filters_automatic"
+              - $ref: "#/components/schemas/filters_percentage"
+              - $ref: "#/components/schemas/filters_date-time"
+              - $ref: "#/components/schemas/filters_url"
+              - $ref: "#/components/schemas/filters_geolocation"
+        filter_conjunction:
+          $ref: "#/components/schemas/filter_conjunction"
+        sorts: 
+          $ref: "#/components/schemas/sorts"
+        groupbys: 
+          $ref: "#/components/schemas/groupbys"
+        hidden_columns:
+          $ref: "#/components/schemas/hidden_columns"
+    
+    update_comment:
+      type: object
+      properties:
+        options:
+          type: object
+          properties:
+            comment:
+              type: string
+            resolved:
+              type: string
+              enum: ["0", "1"]
+      required: 
+        - options
+        - comment
+        - resolved
+    
+    anchor_column:
+      description: Give the name or the key of a column after you would like to add this new column. If you leave this empty, the new column will be created at the end.
+      type: string
+    
+    
+    # text column
+    text_column:
+      title: Text
+      type: object
+      description: Add a text column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["text"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    text_column_with_table_name:
+      title: Text
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/text_column"
+    
+    # long text (no column_data)
+    long_text_column:
+      title: Long text
+      type: object
+      description: Add a long text column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["long-text"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    long_text_column_with_table_name:
+      title: Long text
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/long_text_column"
+    
+    # number column (with column_data)
+    number_column:
+      title: Number / Currency / Percentage
+      type: object
+      description: Add a number column and define if the column should contain numbers, currencies or percentage values.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["number"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/number_column_format"
+      required:
+        - column_name
+        - column_type
+    number_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/number_column"
+    number_column_format:
+      description: Specify the number column.
+      type: object
+      properties:
+        format:
+          type: string
+          enum: ["", "number", "percent", "dollar", "euro", "yuan"]
+          description: Choose what kind of number this column should contain.
+        decimal:
+          type: string
+          enum: ["dot", "comma"]
+          description: |
+            Choose how decimals are shown: 1.00 or 1,00
+        thousands: 
+          type: string
+          enum: ["", "no", "space", "comma"]
+          description: | 
+            Choose how bigger numbers are displayed. Eg:
+            no: 1000000
+            dot: 1.000.000
+            comma: 1,000,000
+
+    # collaborator column (no column_data)
+    collaborator_column:
+      title: Collaborator
+      type: object
+      description: Add a collaborator column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["collaborator"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    collaborator_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/collaborator_column"
+
+    # date column (with column_data)
+    date_column:
+      title: Date
+      type: object
+      description: Add a date column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["date"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/date_column_format"
+      required:
+        - column_name
+        - column_type
+    date_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/date_column"
+    date_column_format:
+      description: Specify the date column.
+      type: object
+      properties:
+        format:
+          type: string
+          enum: ["", "YYYY-MM-DD", "YYYY-MM-DD HH:mm", "M/D/YYYY", "M/D/YYYY HH:mm", "DD/MM/YYYY", "DD/MM/YYYY HH:mm", "DD.MM.YYYY", "DD.MM.YYYY HH:mm"]
+          description: |
+            Choose how date values are displayed. Eg:
+            YYYY-MM-DD: ISO-Format
+            M/D/YYYY: US-Format
+            DD/MM/YYYY: European-Format
+            DD.MM.YYYY: German-Format
+            HH:mm: Accurate to minute
+
+    # duration column (with column_data)
+    duration_column:
+      title: Duration
+      type: object
+      description: Add a duration column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["duration"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/duration_column_format"
+      required:
+        - column_name
+        - column_type
+    duration_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/duration_column"
+    duration_column_format:
+      description: Specify the duration column.
+      type: object
+      properties:
+        format:
+          type: string
+          enum: ["duration"]
+        duration_format:
+          type: string
+          enum: ["", "h:mm", "h:mm:ss"]
+          description: |
+            Choose how to save the duration values. Eg:
+            h:mm: hours and minutes (1:23)
+            h:mm:ss: hours, minutes and seconds (1:23:24)
+
+    # single select (with column_data)
+    single_select_column:
+      title: Single-select
+      type: object
+      description: Add a single-select column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["single-select"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/select_column_format"
+      required:
+        - column_name
+        - column_type
+    single_select_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/single_select_column"
+    select_column_format:
+      description: Specify the single-select column.
+      type: object
+      properties:
+        options:
+          type: array
+          items:
+            type: object
+            description: Define one or many options for this column
+            properties:
+              id:
+                type: integer
+                description: Select any unique id.
+                pattern: '^([A-Za-z0-9]){4}$'
+              name:
+                type: string
+                description: The name of your option.
+              color: 
+                type: string
+                description: select your code-code for the background.
+                pattern: '#([A-Za-z0-9]){6}'
+                example: #F4667C
+              text-color:
+                type: string
+                description: select your color-code for the text.
+                pattern: '#([A-Za-z0-9]){6}'
+                example: #FFFFFF
+
+    # multiple select (with column_data)
+    multiple_select_column:
+      title: Multiple-select
+      type: object
+      description: Add a multiple-select column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["multiple-select"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/select_column_format"
+      required:
+        - column_name
+        - column_type
+    multiple_select_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/multiple_select_column"
+
+    # image column (no column_data)
+    image_column:
+      title: Image
+      type: object
+      description: Add an image column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["image"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    image_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/image_column"
+
+    # file column (no column_data)
+    file_column:
+      title: File
+      type: object
+      description: Add a file column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["file"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    file_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/file_column"
+
+    # email column (no column_data)
+    email_column:
+      title: Email
+      type: object
+      description: Add an email column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["email"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    email_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/email_column"
+    url_column:
+      title: Url
+      type: object
+      description: Add an url column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["url"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    url_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/url_column"
+
+    checkbox_column:
+      title: Checkbox
+      type: object
+      description: Add a checkbox column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["checkbox"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    checkbox_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/checkbox_column"
+
+
+    rating_column:
+      title: Rating
+      type: object
+      description: Add a rating column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["rate"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/rating_column_format"
+      required:
+        - column_name
+        - column_type
+        - column_data
+    rating_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/rating_column"
+    rating_column_format:
+      description: Specify the rating column.
+      type: object
+      properties:
+        rate_max_number:
+          type: integer
+          minimum: 0
+          maximum: 10 
+          example: 5
+        rate_style_color:
+          type: string
+          pattern: ^#[A-Fa-f0-9]{6}$
+          example: "#EB00B1"
+        rate_style_type:
+          type: string
+          enum: ["dtable-icon-rate", "dtable-icon-like", "dtable-icon-praise", "dtable-icon-flag"]
+          example: dtable-icon-rate
+
+    formula_column:
+      title: Formula
+      type: object
+      description: Add a formula column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["formula"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/formula_column_format"
+      required:
+        - column_name
+        - column_type
+        - column_data
+    formula_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/formula_column"
+    formula_column_format:
+      description: Specify the formula column.
+      type: object
+      properties:
+        formula:
+          type: string
+          description: The formula of this column.
+          example: dateAdd({Date}, 1, 'year'
+      required:
+        - formula
+    
+    link_column:
+      title: Link column
+      type: object
+      description: Add a link column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["link"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/link_column_format"
+      required:
+        - column_name
+        - column_type
+        - column_data
+    link_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/link_column"
+    link_column_format:
+      description: Specify the link column.
+      type: object
+      properties:
+        table:
+          type: string
+          description: Name of this table.
+        other_table:
+          type: string
+          description: Name of the other table.
+      required:
+        - table
+        - other_table
+    
+    
+    link_formula_column:
+      title: Link-Formula column
+      type: object
+      description: Add a link-formula column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["link-formula"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          oneOf:
+            - $ref: "#/components/schemas/link_formula_column_countLinks_format"
+            - $ref: "#/components/schemas/link_formula_column_lookup_format"
+            - $ref: "#/components/schemas/link_formula_column_rollup_format"
+            - $ref: "#/components/schemas/link_formula_column_findmax_format"
+            - $ref: "#/components/schemas/link_formula_column_findmin_format"
+      required:
+        - column_name
+        - column_type
+        - column_data
+    link_formula_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/link_formula_column"
+    link_formula_column_countLinks_format:
+      title: countlinks
+      description: Specify the link-formula column.
+      type: object
+      properties:
+        formula:
+          type: string
+          description: | 
+            The formula of this column.
+          enum: ["count_links"]
+          example: lookup
+        link_column:
+          type: string
+          description: Name of the link column.
+      required:
+        - formula
+        - link_column
+    link_formula_column_lookup_format:
+      title: lookup
+      description: Specify the link-formula column.
+      type: object
+      properties:
+        formula:
+          type: string
+          description: | 
+            The formula of this column.
+          enum: ["lookup"]
+        link_column:
+          type: string
+          description: Name of the link column.
+        level1_linked_column:
+          type: string
+          description: Name of the column in the linked table to look up.
+      required:
+        - formula
+        - link_column
+        - level1_linked_column
+    link_formula_column_rollup_format:
+      title: rollup
+      description: Specify the link-formula column.
+      type: object
+      properties:
+        formula:
+          type: string
+          description: | 
+            The formula of this column.
+          enum: ["rollup"]
+          example: lookup
+        link_column:
+          type: string
+          description: Name of the link column.
+        summary_column:
+          type: string
+          description: The column in the linked table to be summarized.
+        summary_method:
+          type: string
+          enum: ["average", "concatenate", "max", "min", "sum"]
+      required:
+        - formula
+        - link_column
+        - summary_column
+        - summary_method
+    link_formula_column_findmin_format:
+      title: findmin
+      description: Specify the link-formula column.
+      type: object
+      properties:
+        formula:
+          type: string
+          description: | 
+            The formula of this column.
+          enum: ["findmin"]
+          example: lookup
+        link_column:
+          type: string
+          description: Name of the link column.
+        searched_column:
+          type: string
+          description: The column in the linked table to look up.
+        comparison_column:
+          type: string
+          description: The column in the linked table to be evaluated.
+      required:
+        - formula
+        - link_column
+        - searched_column
+        - comparison_column
+    link_formula_column_findmax_format:
+      title: findmax
+      description: Specify the link-formula column.
+      type: object
+      properties:
+        formula:
+          type: string
+          description: | 
+            The formula of this column.
+          enum: ["findmax"]
+          example: lookup
+        link_column:
+          type: string
+          description: Name of the link column.
+        searched_column:
+          type: string
+          description: The column in the linked table to look up.
+        comparison_column:
+          type: string
+          description: The column in the linked table to be evaluated.
+      required:
+        - formula
+        - link_column
+        - searched_column
+        - comparison_column
+
+    creator_column:
+      title: Creator
+      type: object
+      description: Add a creator column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["creator"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    creator_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/creator_column"
+
+    ctime_column:
+      title: Creation time
+      type: object
+      description: Add a creation time column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["ctime"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    ctime_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/ctime_column"
+
+    last_modifier_column:
+      title: Last Modifier
+      type: object
+      description: Add a last modifier column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["last-modifier"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    last_modifier_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/last_modifier_column"
+
+    mtime_column:
+      title: Last modification time
+      type: object
+      description: Add a last modification time column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["mtime"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+      required:
+        - column_name
+        - column_type
+    mtime_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/mtime_column"
+
+    autonumber_column:
+      title: Auto number
+      type: object
+      description: Add an auto number column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["auto-number"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/autonumber_column_format"
+      required:
+        - column_name
+        - column_type
+    autonumber_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/autonumber_column"
+    autonumber_column_format:
+      description: Specify the auto number column.
+      type: object
+      properties:
+        format:
+          type: string
+          example: "ID-0000"
+      required:
+        - format
+    
+
+    button_column:
+      title: Button column
+      description: Add a button column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type: 
+          type: string
+          enum: ["file"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/button_column_format"
+      required:
+        - column_name
+        - column_type
+        - column_data
+    button_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/button_column"
+    button_column_format:
+      description: Specify the button column.
+      type: object
+      properties:
+        button_type:
+          type: string
+          enum: ["", "run_script", "send_email", "copy_row_to_another_table", "modify_row"]
+        button_name:
+          type: string
+        button_color:
+          type: string
+          pattern: ^#[A-Fa-f0-9]{6}$
+        table_id:
+          type: string
+          description: id of the target table, if `copy_row_to_another_table` is selected.
+        script_id:
+          type: string
+        selected_columns:
+          type: array
+          items:
+            type: object
+            properties:
+              key: 
+                type: string
+              value:
+                type: string
+      required:
+        - button_type
+        - button_name
+        - button_color
+   
+    rename_column:
+      title: Rename Column
+      type: object
+      properties:
+        op_type:
+          type: string
+          enum: [rename_column]
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column: 
+          $ref: "#/components/schemas/column_name"
+        new_column_name:
+          type: string
+          example: "New Oranges"
+      required:
+          - op_type
+          - table_name
+          - column
+          - new_column_name
+
+    resize_column: 
+      title: Resize Column
+      type: object
+      properties:
+        op_type:  
+          type: string
+          enum: ["resize_column"]
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column: 
+          $ref: "#/components/schemas/column_name"
+        new_column_width:
+          type: integer
+          example: 400
+      required:
+          - op_type
+          - table_name
+          - column
+          - new_column_width
+      
+    freeze_unfreeze_column:
+      title: Freeze/Unfreeze Column
+      type: object
+      properties:
+        op_type:  
+          type: string
+          enum: ["freeze_column"]
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column: 
+          $ref: "#/components/schemas/column_name"
+        frozen:
+          type: boolean
+      required:
+          - op_type
+          - table_name
+          - column
+          - frozen
+
+    move_column:
+      title: Move Column
+      type: object
+      properties:
+        op_type:  
+          type: string
+          enum: ["move_column"]
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column: 
+          $ref: "#/components/schemas/column_name"
+        target_column:
+          type: string
+          example: "Likes"
+      required:
+          - op_type
+          - table_name
+          - column
+          - target_column
+
+    update_column_type:
+      title: Update Column Type
+      type: object
+      properties:
+        op_type:  
+          type: string
+          enum: ["modify_column_type"]
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column: 
+          $ref: "#/components/schemas/column_name"
+        new_column_type:
+          type: string
+          example: "number"
+      required:
+          - op_type
+          - table_name
+          - column
+          - new_column_type
+
+    update_column:
+      oneOf:
+        - $ref: "#/components/schemas/update_column_type"
+        - $ref: "#/components/schemas/rename_column"
+        - $ref: "#/components/schemas/resize_column"
+        - $ref: "#/components/schemas/move_column"
+        - $ref: "#/components/schemas/freeze_unfreeze_column"
+
+    delete_column:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column:
+          $ref: "#/components/schemas/column_name"
+      required:
+        - table_name
+        - column
+
+    add_single__multiple_select_options:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column:
+          $ref: "#/components/schemas/column_name"
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "Option 1"
+              color: 
+                type: string
+                example: "#FF8000"
+              textColor:
+                type: string
+                example: "#1DDD1D"
+    
+    update_single__multiple_select_options:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column:
+          $ref: "#/components/schemas/column_name"
+        options:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "119376"
+              color: 
+                type: string
+                example: "#4ECCCB"
+              textColor: 
+                type: string
+                example: "#1DDD1D"
+              name:
+                type: string
+                example: "Finished"
+            required:
+              - id
+        return_options:
+          type: boolean
+
+    delete_select_options:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        column:
+          $ref: "#/components/schemas/column_name"
+        option_names:
+          type: array
+          items:
+            type: string
+            description: Name of the select options
+      required: 
+        - table_name
+        - column
+        - option_names
+
+    insert_rows_into_big_data:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/row"
+      required:
+        - table_name
+        - rows
+
+    archive-view:
+      type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        where:
+          type: string
+          description: > 
+            Use an sql-like clause to select the rows you want to archive. If not set, all rows in the table will be archived. 
+            More examples are: <br/>
+            \`Name\` = 'Michael' <br/>
+            \`Gender\` != 'Michael' <br/>
+            \`Name of the column\` ilike '%error%'
+          example: "`Name` like '%Hans%'"
+      required:
+        - table_name
+
+    create_row_comment:
+      type: object
+      properties:
+        comment:
+          type: string
+          example: "Let's discuss this tomorrow"
+
+    generate_snapshot:
+      type: object
+      properties:
+        dtable_name:
+          type: string
+          example: Example
+
+    upload_file_image:
+      type: object
+      properties:
+        file:
+          type: string
+          description: >-
+            The file or image you'd like to upload from your local
+            drive.
+          format: binary
+        parent_dir:
+          type: string
+          description: >-
+            This is the value of the `parent_path` you got from the call
+            **Get File/Image Upload Link via API Token**.
+          example: /asset/a275d870-fd55-48e4-8c4a-5fd6f2549765
+        replace:
+          type: string
+          enum: ["0", "1"]
+          description: >-
+            Do you want to overwrite a file/image with the same name?
+            `0` - No, `1` - Yes. Optional. `0` by default. If existing
+            file is not overwritten, the uploaded file will be renamed
+            as `filename(1).xxx`.
+          example: "0"
+        relative_path:
+          type: string
+          description: >-
+            If you are uploading a file, use the value of the
+            `file_relative_path` returned in the call **Get File/Image
+            Upload Link via API Token**; or the `img_relative_path` for
+            image.
+          example: images/2021-08
+          pattern: '^(images|files){1}\/[0-9]{4}\-[0-9]{2}$'
+      required:
+        - file
+        - parent_dir
+        - relative_path
+    filtered-rows-filter:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            type: object
+            properties:
+              column_name:
+                type: string
+              filter_predicate:
+                type: string
+              filter_term:
+                type: string
+              filter_term_modifier:
+                type: string
+
+paths:
+    # Base Info
+  /dtable-server/dtables/{base_uuid}:
+    get:
+      tags:
+        - Base Info
+      summary: Get Base Info
+      description: Get the basic information of a base.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                version: 20
+                format_version: 7
+                statistics: []
+                links: []
+                tables:
+                  - _id: '0000'
+                    name: Table1
+                    rows:
+                      - _id: Qtf7xPmoRaiFyQPO1aNTjA
+                        _participants: []
+                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _ctime: '2020-11-18T12:42:14.779+00:00'
+                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _mtime: '2021-01-14T09:01:57.357+00:00'
+                        '0000': Meng
+                        BydO: '2020-08-19'
+                      - _id: V_jBEGOXQ3mC3rJkQi-DOQ
+                        _participants: []
+                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _ctime: '2021-01-14T08:56:05.666+00:00'
+                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _mtime: '2021-01-14T08:56:59.458+00:00'
+                        '0000': Bao
+                        BydO: '2020-09-18'
+                      - _id: HtZb516CTwCZRuBlY8d7Wg
+                        _participants: []
+                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _ctime: '2021-01-14T08:56:07.135+00:00'
+                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _mtime: '2021-01-14T08:57:04.073+00:00'
+                        '0000': Daniel
+                        BydO: '2020-10-22'
+                      - _id: fS8qtN6FQ1uPOaNAC0Locw
+                        _participants: []
+                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _ctime: '2021-01-14T08:56:08.259+00:00'
+                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
+                        _mtime: '2021-01-14T08:57:06.657+00:00'
+                        '0000': Jonas
+                        BydO: '2021-01-20'
+                    columns:
+                      - key: '0000'
+                        name: Name
+                        type: text
+                        width: 200
+                        editable: true
+                        resizable: true
+                      - key: BydO
+                        type: date
+                        name: Date
+                        editable: true
+                        width: 200
+                        resizable: true
+                        draggable: true
+                        data:
+                          format: YYYY-MM-DD
+                        permission_type: ''
+                        permitted_users: []
+                    views:
+                      - _id: '0000'
+                        name: "Default\r\n> View"
+                        type: table
+                        is_locked: false
+                        rows: []
+                        formula_rows: {}
+                        summaries: []
+                        filter_conjunction: And
+                        filters: []
+                        sorts: []
+                        hidden_columns: []
+                        groupbys: []
+                        groups: []
+                    id_row_map: {}
+  /dtable-server/api/v1/dtables/{base_uuid}/metadata/:
+    get:
+      tags:
+        - Base Info
+      summary: Get Metadata
+      description: Get the complete metadata of a base with all tables, columns and views and settings. The metadata does not contain any data.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                metadata:
+                  tables:
+                    - _id: '0000'
+                      name: Table1
+                      columns:
+                        - key: '0000'
+                          name: Name
+                          type: text
+                          width: 200
+                          editable: true
+                          resizable: true
+                        - key: Cw35
+                          type: link
+                          name: Link
+                          editable: true
+                          width: 141
+                          resizable: true
+                          draggable: true
+                          data:
+                            display_column_key: '0000'
+                            table_id: '0000'
+                            other_table_id: '0000'
+                            is_internal_link: true
+                            is_multiple: true
+                            is_row_from_view: false
+                            other_view_id: '0000'
+                            link_id: 7V2M
+                          permission_type: ''
+                          permitted_users: []
+                        - key: BydO
+                          type: date
+                          name: Date
+                          editable: true
+                          width: 200
+                          resizable: true
+                          draggable: true
+                          data:
+                            format: YYYY-MM-DD
+                          permission_type: ''
+                          permitted_users: []
+                      views:
+                        - _id: '0000'
+                          name: Default View
+                          type: table
+                          is_locked: false
+                          rows: []
+                          formula_rows: {}
+                          summaries: []
+                          filter_conjunction: And
+                          filters: []
+                          sorts: []
+                          hidden_columns: []
+                          groupbys: []
+                          groups: []
+                  version: 482
+                  format_version: 7
+                  settings:
+                    securities:
+                      table_settings:
+                        can_copy: false
+                        can_export: false
+                        can_print: false
+                      share_user_settings:
+                        can_copy: false
+                        can_export: false
+                        can_print: false
+  /dtable-db/api/v1/base-info/{base_uuid}/:
+    get:
+      tags:
+        - Base Info
+      summary: Get Big Data Status
+      description: Returns the number of rows, stored in the big data backend. It returns the total number and the number of rows per table.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: abcdefgh-fd55-48e4-8c4a-5fd6f2549765
+                tables:
+                  - id: Z7dm
+                    name: Table1
+                    rows: 9
+                  - id: QoSF
+                    name: Table2
+                    rows: 0
+                  - id: 0bqQ
+                    name: Table3
+                    rows: 0
+                  - id: 1kjR
+                    name: Table4
+                    rows: 4
+                  - id: wB7j
+                    name: Table5
+                    rows: 71011
+                  - id: 8h4H
+                    name: Table7
+                    rows: 0
+                  - id: l9x9
+                    name: Table8
+                    rows: 0
+                storage: 309620017
+                rows: 101031
+  /dtable-server/api/v1/dtables/{base_uuid}/related-users/:
+    get:
+      tags:
+        - Base Info
+      summary: List Collaborators
+      description: List all collaborators of a base with name, email address and avatar.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                user_list:
+                  - email: 244b43hr6fy54bb4afa2c2cb7369d244@auth.local
+                    name: Ginger Ale
+                    contact_email: gingerale@example.com
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                  - email: 8cb2a6da656876hgf42905bf1647fd3f@auth.local
+                    name: Jasmin Tee
+                    contact_email: jasmintee@example.com
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+
+  # Rows
+  /dtable-db/api/v1/query/{base_uuid}/:
+    post:
+      tags:
+        - Rows
+      summary: List Rows (with SQL)
+      description: |
+        Gets a list or rows contained in a table, according to the `select` SQL-query provided in the request. Also the metadata of the table is returned.
+
+        Typical SQL-statements are supported. For more details check the [supported SQL Syntax from SeaTable](https://seatable.github.io/seatable-scripts/python/sql/).
+
+        Here are some basic examples how to use this request for a fictitious table *Participants* with the columns: *name*, *age*, *birthday* and *gender*:
+        `SELECT name, age, birthday, gender FROM Participants`<br/>
+        `SELECT name, surname FROM Participants ORDER BY name`<br/>
+        `SELECT * FROM Participants LIMIT 25`
+
+        > 📘 Returns also data from big data backend
+        > 
+        > This request is the only available endpoint that can also returns rows from the big data backend. 
+
+        > 🚧 Returns at most 10.000 rows
+        >
+        > Even if you specify LIMIT > 10,000, this request will return a maximum of 10,000 rows.
+      requestBody:
+        description: description des requestBody
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/sql_query"              
+  
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sql_query_response"              
+  /dtable-server/api/v1/dtables/{base_uuid}/rows/:
+    get:
+      tags:
+        - Rows
+      summary: List Rows
+      description: |
+        Gets a list of rows contained in a table (or in a view if provided), ordered according to the filter conditions and sort criteria provided in the request. 
+        The response contains a maximum of 1.000 rows regardless of the specified limit.
+
+        > 📘 No rows from big data backend
+        > 
+        > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/list-rows-with-sql) instead.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/table_name"
+        - $ref: "#/components/parameters/view_name"
+        - $ref: "#/components/parameters/convert_link_id"
+        - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/direction"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/limit"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                #$ref: "#/components/schema/rows"
+                type: object
+              example:
+                rows:
+                  - _id: Bko1e60YT-egit2SljWSZA
+                    _mtime: '2021-03-10T16:06:48.981+00:00'
+                    Name: Second new row
+                    link: []
+                  - _id: RzeUwIhFSp-iNi81-bZvpA
+                    _mtime: '2021-03-10T16:11:11.176+00:00'
+                    Name: Matcha
+                    link: []
+    post:
+      tags:
+        - Rows
+      summary: Add Row
+      description: |
+        Either insert or append a row. If you want to insert the row at a desired position, you need to provide the id of an anchor row.
+
+        > 📘 How to define the row object
+        > 
+        > The row object contains key:value pairs with the column name as key and the desired values. Check the page [Models](/reference/models) to get a better understanding of the row object.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/append_row'
+                - $ref: '#/components/schemas/insert_row'
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                '0000': Second new row
+                _id: Bko1e60YT-egit2SljWSZA
+                _creator: 123456786569491ba42905bf1647fd3f@auth.local
+                _last_modifier: 123456786569491ba42905bf1647fd3f@auth.local
+    put:
+      tags:
+        - Rows
+      summary: Update Row
+      description: |
+        Change the values in an existing row by defining the new values for necessary columns in the row object.
+
+        > 📘 Structure of the row object
+        > 
+        > The row object contains key:value pairs with the column name as key and the desired values. Check the page [Models](/reference/models) to get a better understanding of the row object.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_row"
+ 
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    delete:
+      tags:
+        - Rows
+      summary: Delete Row
+      description: |
+        Deletes one row from the table, identified by its row id.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_row"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true               
+  /dtable-server/api/v1/dtables/{base_uuid}/rows/{row_id}/:
+    get:
+      tags:
+        - Rows
+      summary: Get Row
+      description: Get the values of one row with all columns and values, according to the row id provided. Depending of `convert` the response will contain the column names or the column keys.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/row_id_path"
+        - $ref: "#/components/parameters/table_name"
+        - $ref: "#/components/parameters/convert"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                _id: Qtf7xPmoRaiFyQPO1aENTjb
+                _mtime: '2021-03-10T16:19:31.761+00:00'
+                Name: NewName
+                Date: '2020-08-01'
+                Content: '111'
+                link: [] 
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-append-rows/:
+    post:
+      tags:
+        - Rows
+      summary: Append Rows
+      description: |-
+        Append multiple rows to a table. Define the column:values pairs of each column in the [rows object](/reference/models).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/append_rows"
+              
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                inserted_row_count: 3
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-update-rows/:
+    put:
+      tags:
+        - Rows
+      summary: Update Rows
+      description: Update the values of multiple rows in one request.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_rows"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/:
+    delete:
+      tags:
+        - Rows
+      summary: Delete Rows
+      description: Delete multiple rows in one request.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_rows"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/lock-rows/:
+    put:
+      tags:
+        - Rows
+      summary: Lock Rows
+      description: |
+        Locks one or more rows. It is ok to include rows that were already locked.
+
+        > 📘 Advanced feature
+        > 
+        > Lock rows is an advanced feature in SeaTable and only available for [enterprise subscriptions](https://seatable.io/preise/?lang=auto).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/table_with_row_ids"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/unlock-rows/:
+    put:
+      tags:
+        - Rows
+      summary: Unlock Rows
+      description: |
+        Use this API request to unlock one or more locked rows. As this request
+        makes sure that all the mentioned rows are unlocked, it's OK to include
+        rows that were not locked.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/table_with_row_ids"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/filtered-rows/:
+    get:
+      deprecated: true
+      tags:
+        - Rows
+      summary: List Filtered Rows
+      description: |
+        List rows by filter conditions. This is especially useful when you want to filter out records and only see those records.
+        > 🚧 Deprecated since version 2.3
+        > 
+        > This request has been depricated since SeaTable 2.3. This means you can probably still use it, but it will not be maintained and will probably be removed/deactivated any time without further notice in the future.
+        > Please use [List rows (with SQL)](/reference/list-rows-with-sql) or [List rows](/reference/list-rows) instead.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/table_name"
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/filtered-rows-filter"
+      responses:
+        '200':
+          description: OK
+  # Links
+  /dtable-server/api/v1/dtables/{base_uuid}/links/:
+    post:
+      tags:
+        - Links
+      summary: Create Row Link
+      description: |
+        You can link a row to another row in the same table, or in another table in the same base. **Before you use this request**, you should create a
+        link column first, and retrieve its `link_id`. This value is an attribute of a link column, and can also be retrieved from the call
+        [Get Metadata](/reference/get-metadata).
+
+        Check out the [Models](/reference/models#a-link) page to get more information about the structure of a link.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create_row_link"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    put:
+      tags:
+        - Links
+      summary: Create Row Links
+      description: |
+        Creates multiple links between one column and many others (1:n relation).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    delete:
+      tags:
+        - Links
+      summary: Delete Row Link
+      description: Delete an existing link between two rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_row_link"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                deleted_links_count: 1
+
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-update-links/:
+    put:
+      tags: [Links]
+      summary: Create Row Links (Batch)
+      description: | 
+        Update multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
+        Here is an example how the body with `row_id_list` and `other_rows_ids_map` should look like: 
+        ```
+        "row_id_list": [
+                "Qtf7xPmoRaiFyQPO1aENTjb",
+                "Qtf7xPmoRaiFyQPO1aENTjc"
+            ],
+            "other_rows_ids_map": {
+                "Qtf7xPmoRaiFyQPO1aENTjb": ["Qtf7xPmoRaiFyQPO1aENTjc", "{{row3_id}}"],
+                "Qtf7xPmoRaiFyQPO1aENTjc": ["Qtf7xPmoRaiFyQPO1aENTjb", "{{row3_id}}"]
+            }
+        ```
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  /dtable-db/api/v1/linked-records/{base_uuid}:
+    post:
+      tags:
+        - Links
+      summary: List Row Links
+      description: >-
+        When you have a "Link to other records" column in your table and you
+        have created some links to the current or another table, you can use
+        this request to query each row's linked records' IDs and display values.
+
+        In the request body (see example request for demonstration):
+
+        - `table_id` is the ID of the table you are querying;
+
+        - `link_column` is the `key` of the "Link to other records" column.
+        **Attention**: do not use the `link_id` of the link column here.
+
+        - `rows` is an array. Include the following details of each row you are
+        querying in every object:
+            - `row_id` is the ID of the row you are querying;
+            - `offset` is the beginning number of your query. If your record is linked to multiple records, use e.g. `0` to start quering from the 1st element or e.g. `5` to start querying from the 6th element, etc. **Attention**: The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (`ctime`).
+            - `limit` lets you to set a limit to the number of records returned. Use e.g. `10` to return no more than 10 records.
+
+        In the response:
+        - `row_id` is the ID of each linked record;
+        - `display_value` is how this record is displayed on the web interface.
+            
+        To get more information about each linked record, retrieve their
+        `row_id` and use the **Query with SQL** request, for example:
+        ```
+        SELECT * FROM Table2 WHERE _id IN (row_id1, row_id2, ...);
+        ```
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/list_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                Qtf7xPmoRaiFyQPO1aENTjb:
+                  - row_id: G5rbgqudTKKfAm1-cjnjbQ
+                    display_value: Orson
+
+  
+  # Files & Images
+  /api/v2.1/dtable/app-upload-link/:
+    get:
+      tags:
+        - Files & Images
+      summary: Get Upload Link
+      description: |
+        With the **API token** (not the Base Token), you can generate an upload link, the parent- and the relative path. These information are needed to upload a file / an image to a bases.
+        Then this file/image can be attached to a file/image column. 
+
+        > 📘 The upload link is only valid for a short time
+        > 
+        > The upload link is only valid for some minutes. After that the upload link must be created again.
+      security:
+        - ApiTokenAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                upload_link: >-
+                  https://table.seafile.com/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e
+                parent_path: /asset/a275d870-fd55-48e4-8c4a-5fd6f2549765
+                img_relative_path: images/2021-08
+                file_relative_path: files/2021-08
+  /seafhttp/upload-api/{upload_link}?ret-json=1:
+    post:
+      tags:
+        - Files & Images
+      summary: Upload File/Image
+      description: |
+        Upload a file or an image as an attachment to a base. To execute this request you need to generate an [upload link](/reference/get-file-image-upload-link) first. 
+        
+        > 📘 Three steps to add a file/an image to a base
+        > 
+        > To add an image or a file to a base, three steps are necessary: 
+        > 1. [Generate an upload link](/reference/get-file-image-upload-link).
+        > 2. Upload the file to the base as an attachment.
+        > 3. [Update a row](/reference/update-row) and attach the file/the image to a file or image column. 
+        
+        > 📘 Different variable names
+        > 
+        > Pay attention that the return values of [upload link](/reference/get-file-image-upload-link) have slightly different names, so `parent_path` is `parent_dir` in this call.
+
+        **Attach the file/image to a file or image column
+
+        After uploading the file/image to a base, SeaTable saves the uploaded file at non-public URL in the form: `/workspace/{workspace_id}`+`parent_dir`+`relative_path`+`name`. 
+        
+        Here is an example how this might look like: `https://cloud.seatable.io/workspace/24/asset/55f2f056-5da1-4095-b5f8-791bb51b991e/images/2023-07/party.png`
+        If you are logged in with your browser, you can access this file. Otherwise you will see the login screen.
+
+        Knowing this URL, you can add a new row or update an existing row and use the URL to add this attachment to your file/image column.
+        ```
+        # Example how to add an already uploaded image to a row:
+        "row": {
+          "My Image Column": ["/workspace/24/asset/55f2f056-5da1-4095-b5f8-791bb51b991e/images/2023-07/party.png`"]
+        }
+
+        # Example how to add an already uploaded file to a row:
+        "row": {
+          "File Column": [{
+            "name": "invoice.pdf", 
+            "size": 101454, 
+            "type": "file", 
+            "url": "/workspace/24/asset/55f2f056-5da1-4095-b5f8-791bb51b991e/images/2023-07/invoice.pdf"
+          }]
+        }
+        ```
+        > 📘 File requires the input variables size, type and url
+        > 
+        > As you can see, in the case of an image the URL is sufficient to attach the image to an image column. In case of a file, you have to provide all four input values.
+
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/upload_file_image"
+      security:
+        - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/upload_link"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                - name: favicon.ico
+                  id: b4356e3000d01a37b458524b59cecb1a5d23d964
+                  size: 67646
+  /api/v2.1/dtable/app-download-link/:
+    get:
+      tags:
+        - Files & Images
+      summary: Get File Download Link
+      description: |
+        Get the file download link of a base's attachment.
+
+        > 🚧 This request needs the API-Token
+        >
+        > Obwohl wir im Bereich Base Operations sind, werden für die requests im Abschnitt Files & Images der API-Token benötigt.
+      security:
+        - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/file_path"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                download_link: >-
+                  https://cloud.seatable.io/seafhttp/files/12345678-1234-4672-834c-4eca40dc104b/test.png
+
+  # Files & Images (Custom Folder)
+  /api/v2.1/dtable/custom/app-asset-dir/:
+    get:
+      tags: [Files & Images (Custom Folder)]
+      summary: Get Folder Content
+      security:
+        - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/custom_folder_path"
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: object
+              example:
+                dir: 
+                  - name: "Invoices"
+                  - name: "Requests"
+                file:
+                  - name: "b347.pdf"
+
+  /api/v2.1/dtable/custom/app-asset-file/:
+    get:
+      tags: [Files & Images (Custom Folder)]
+      summary: Get File Metadata
+      security:
+        - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/custom_folder_path"
+        - $ref: "#/components/parameters/custom_folder_file_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: object
+              example:
+                dirent: 
+                  is_file: true
+                  obj_name: "b347.pdf"
+                  file_size: 11583
+                  last_update: "2023-04-11T14:59:53+08:00"
+                  uuid: "2bbe9499-e1df-4086-bdd3-d130d6c91bd3"
+  /api/v2.1/dtable/custom/app-upload-link/:
+    get:
+      tags: [Files & Images (Custom Folder)]
+      summary: Get Upload Link
+      security:
+        - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/custom_folder_path"
+      responses: 
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: object
+              example:
+                dirent: 
+                  upload_link: "https://cloud.seatable.io/seafhttp/upload-api/e943a56a-c5b3-441a-ac1d-9199819dec71"
+                  parent_path: "/asset/1338f224-8482-4d71-b8be-63c8f37b896a/custom"
+                  relative_path": "/"
+  /api/v2.1/dtable/custom/app-download-link:
+    get:
+      tags: [Files & Images (Custom Folder)]
+      summary: Get Download Link
+      security:
+        - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/custom_folder_path_with_filename"
+      responses: 
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: object
+              example:
+                dirent: 
+                  download_link: "https://cloud.seatable.io/seafhttp/files/a73e26e9-0417-4d98-bb5d-92826f4af671/b347.pdf"
+
+  # Tables
+  /dtable-server/api/v1/dtables/{base_uuid}/tables/:
+    post:
+      tags:
+        - Tables
+      summary: Create New Table
+      description: |
+        Creates a new table in a base. Optionally, you can already add some columns to the base.
+
+        > 📘 The first column is special
+        >
+        > Please be aware, that the first column can only be the column type `text`, `number`, `date`, `single select`, `formula` and `autonumber`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                table_name:
+                  $ref: "#/components/schemas/table_name"
+                columns:
+                  type: array
+                  items:
+                    oneOf:
+                      - $ref: "#/components/schemas/text_column"
+                      - $ref: "#/components/schemas/long_text_column"
+                      - $ref: "#/components/schemas/number_column"
+                      - $ref: "#/components/schemas/collaborator_column"
+                      - $ref: "#/components/schemas/date_column"
+                      - $ref: "#/components/schemas/duration_column"
+                      - $ref: "#/components/schemas/single_select_column"
+                      - $ref: "#/components/schemas/multiple_select_column"
+                      - $ref: "#/components/schemas/image_column"
+                      - $ref: "#/components/schemas/file_column"
+                      - $ref: "#/components/schemas/email_column"
+                      - $ref: "#/components/schemas/url_column"
+                      - $ref: "#/components/schemas/checkbox_column"
+                      - $ref: "#/components/schemas/rating_column"
+                      - $ref: "#/components/schemas/formula_column"
+                      - $ref: "#/components/schemas/link_column"
+                      - $ref: "#/components/schemas/link_formula_column"
+                      - $ref: "#/components/schemas/creator_column"
+                      - $ref: "#/components/schemas/ctime_column"
+                      - $ref: "#/components/schemas/last_modifier_column"
+                      - $ref: "#/components/schemas/mtime_column"
+                      - $ref: "#/components/schemas/autonumber_column"
+                      - $ref: "#/components/schemas/button_column"
+              required:
+                - table_name
+                - columns
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/base"
+                
+    put:
+      tags:
+        - Tables
+      summary: Rename Table
+      description: Rename a table by providing it's original `table_name` and the desired `new_table_name`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/rename_table"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    delete:
+      tags:
+        - Tables
+      summary: Delete Table
+      description: Delete an existing table identified by its name.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_table"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/tables/duplicate-table/:
+    post:
+      tags:
+        - Tables
+      summary: Duplicate Table
+      description: |
+        Duplicate an existing table in your base with or without the existing data in it.
+
+        > 🚧 Rename the table in a second step
+        >
+        > If you duplicate one table, the name of this new table will always be the same like the original one plus the appendix **(copy)**. To rename the table, you will need another call.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/duplicate_table"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                _id: oW2Q
+                name: Appointments(copy)
+                columns:
+                  - key: '0000'
+                    name: New Date
+                    type: date
+                    width: 169
+                    editable: true
+                    resizable: true
+                    editor:
+                      key: null
+                      ref: null
+                      props: {}
+                      _owner: null
+                    formatter:
+                      key: null
+                      ref: null
+                      props: {}
+                      _owner: null
+                    data:
+                      format: YYYY-MM-DD HH:mm
+                      enable_fill_default_value: false
+                      default_value: ''
+                      default_date_type: specific_date
+                  - key: 004l
+                    type: link
+                    name: Pax
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      display_column_key: '0000'
+                      table_id: anJ2
+                      other_table_id: oW2Q
+                      is_internal_link: true
+                      is_multiple: true
+                      is_row_from_view: false
+                      other_view_id: ''
+                      link_id: EeKy
+                    permission_type: ''
+                    permitted_users: []
+                    colorbys: null
+                  - key: TlwL
+                    type: duration
+                    name: dauer
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      format: duration
+                      duration_format: h:mm
+                    permission_type: ''
+                    permitted_users: []
+                  - key: E5kr
+                    type: formula
+                    name: Ende
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      formula: '{Termine}+{dauer}'
+                      operated_columns:
+                        - '0000'
+                        - TlwL
+                      result_type: date
+                      format: YYYY-MM-DD HH:mm
+                    permission_type: ''
+                    permitted_users: []
+                  - key: quLi
+                    type: text
+                    name: Name
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data: null
+                    permission_type: ''
+                    permitted_users: []
+                    description: null
+                  - key: X16v
+                    type: number
+                    name: Amount
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      format: number
+                      precision: 3
+                      enable_precision: true
+                      enable_fill_default_value: false
+                      decimal: dot
+                      thousands: 'no'
+                    permission_type: ''
+                    permitted_users: []
+                    description: null
+                  - key: '0000'
+                    type: text
+                    name: Name2
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data: null
+                    permission_type: ''
+                    permitted_users: []
+                    description: null
+                  - key: '0000'
+                    type: text
+                    name: Name3
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data: null
+                    permission_type: ''
+                    permitted_users: []
+                    description: null
+                rows: []
+                id_row_map: {}
+                views:
+                  - _id: '0000'
+                    name: Default View
+                    type: table
+                    is_locked: false
+                    rows: []
+                    formula_rows: {}
+                    summaries: []
+                    filter_conjunction: And
+                    filters: []
+                    sorts: []
+                    hidden_columns: []
+                    groupbys: []
+                    groups: []
+                  - _id: kIZQ
+                    name: Frei
+                    type: table
+                    private_for: null
+                    is_locked: false
+                    row_height: default
+                    filter_conjunction: And
+                    filters:
+                      - column_key: 004l
+                        filter_predicate: is_empty
+                        filter_term_modifier: exact_date
+                        filter_term: ''
+                    sorts: []
+                    groupbys: []
+                    group_rows: []
+                    groups: []
+                    colorbys: {}
+                    hidden_columns: []
+                    rows: []
+                    formula_rows: {}
+                    link_rows: {}
+                    summaries: {}
+                    colors: {}
+                  - _id: 0Uz1
+                    name: Besetzt
+                    type: table
+                    private_for: null
+                    is_locked: false
+                    row_height: default
+                    filter_conjunction: And
+                    filters:
+                      - column_key: 004l
+                        filter_predicate: is_not_empty
+                        filter_term_modifier: exact_date
+                        filter_term: ''
+                    sorts: []
+                    groupbys: []
+                    group_rows: []
+                    groups: []
+                    colorbys: {}
+                    hidden_columns: []
+                    rows: []
+                    formula_rows: {}
+                    link_rows: {}
+                    summaries: {}
+                    colors: {}
+  
+  # Views
+  /dtable-server/api/v1/dtables/{base_uuid}/views/:
+    get:
+      tags:
+        - Views
+      summary: List Views
+      description: List all the views and their settings in a table.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/table_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                views:
+                  - _id: '0000'
+                    name: Default View
+                    type: table
+                    is_locked: false
+                    rows: []
+                    formula_rows: {}
+                    summaries: []
+                    filter_conjunction: And
+                    sorts: []
+                    filters: []
+                    hidden_columns: []
+                    groupbys: []
+                    group_rows: []
+                    groups: []
+    post:
+      tags:
+        - Views
+      summary: Create View
+      description: Create a new view in the current table. 
+
+        In the **request body**, use `name` for the name of the new view. After
+        creating the new view, use the request [Update View](/reference/update-view) to further
+        define your view.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/new_view"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/table_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                _id: PeJE
+                name: New view
+                type: table
+                is_locked: false
+                filter_conjunction: And
+                filters: []
+                sorts: []
+                groupbys: []
+                group_rows: []
+                groups: []
+                colorbys: {}
+                hidden_columns: []
+                rows: []
+                formula_rows: {}
+                link_rows: {}
+                summaries: {}
+                colors: {}
+  /dtable-server/api/v1/dtables/{base_uuid}/views/{view_name}/:
+    get:
+      tags:
+        - Views
+      summary: Get View
+      description: Get the detailed settings of a view by its name.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/view_name_path"
+        - $ref: "#/components/parameters/table_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                _id: r535
+                name: Default View
+                type: table
+                is_locked: false
+                filter_conjunction: And
+                filters: []
+                sorts: []
+                groupbys: []
+                group_rows: []
+                groups: []
+                colorbys:
+                  type: by_rules
+                  color_by_rules:
+                    - color: '#F4667C'
+                      filters:
+                        - column_key: '0000'
+                          filter_predicate: contains
+                          filter_term: ''
+                      filter_conjunction: Or
+                hidden_columns: []
+                rows: []
+                formula_rows: {}
+                link_rows: {}
+                summaries: {}
+                colors: {}
+    put:
+      tags:
+        - Views
+      summary: Update View
+      description: |
+        Change the settings of a current view by its name. All parameters are
+        optional. 
+        
+        If you don't define a parameter, existing settings for this parameter will not be changed.
+        
+        To remove existing filters, sortings or groups you have to send an empty object like this:
+        `"sorts": [{}]`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_view"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/view_name_path"
+        - $ref: "#/components/parameters/table_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                _id: r535
+                name: View1234567
+                type: table
+                is_locked: false
+                filter_conjunction: And
+                filters: []
+                sorts: []
+                groupbys: []
+                group_rows: []
+                groups: []
+                colorbys:
+                  type: by_rules
+                  color_by_rules:
+                    - color: '#F4667C'
+                      filters:
+                        - column_key: '0000'
+                          filter_predicate: contains
+                          filter_term: ''
+                      filter_conjunction: Or
+                hidden_columns: []
+                rows: []
+                formula_rows: {}
+                link_rows: {}
+                summaries: {}
+                colors: {}
+    delete:
+      tags:
+        - Views
+      summary: Delete View
+      description: Delete a view by its name.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/view_name_path"
+        - $ref: "#/components/parameters/table_name"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  # Columns
+  /dtable-server/api/v1/dtables/{base_uuid}/columns/:
+    get:
+      tags:
+        - Columns
+      summary: List Columns
+      description: >-
+        List all the visible columns in a certain view in a table.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/table_name"
+        - $ref: "#/components/parameters/view_name"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                columns:
+                  - key: '0000'
+                    name: Name
+                    type: text
+                    width: 200
+                    editable: true
+                    resizable: true
+                  - key: g4s1
+                    type: number
+                    name: api3
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data: null
+                    permission_type: ''
+                    permitted_users: []
+    post:
+      tags:
+        - Columns
+      summary: Insert Column
+      description: >-
+        Create a new column.
+      requestBody:
+        description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/append-columns).
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/text_column_with_table_name"
+                - $ref: "#/components/schemas/long_text_column_with_table_name"
+                - $ref: "#/components/schemas/number_column_with_table_name"
+                - $ref: "#/components/schemas/collaborator_column_with_table_name"
+                - $ref: "#/components/schemas/date_column_with_table_name"
+                - $ref: "#/components/schemas/duration_column_with_table_name"
+                - $ref: "#/components/schemas/single_select_column_with_table_name"
+                - $ref: "#/components/schemas/multiple_select_column_with_table_name"
+                - $ref: "#/components/schemas/image_column_with_table_name"
+                - $ref: "#/components/schemas/file_column_with_table_name"
+                - $ref: "#/components/schemas/email_column_with_table_name"
+                - $ref: "#/components/schemas/url_column_with_table_name"
+                - $ref: "#/components/schemas/checkbox_column_with_table_name"
+                - $ref: "#/components/schemas/rating_column_with_table_name"
+                - $ref: "#/components/schemas/formula_column_with_table_name"
+                - $ref: "#/components/schemas/link_column_with_table_name"
+                - $ref: "#/components/schemas/link_formula_column_with_table_name"
+                - $ref: "#/components/schemas/creator_column_with_table_name"
+                - $ref: "#/components/schemas/ctime_column_with_table_name"
+                - $ref: "#/components/schemas/last_modifier_column_with_table_name"
+                - $ref: "#/components/schemas/mtime_column_with_table_name"
+                - $ref: "#/components/schemas/autonumber_column_with_table_name"
+                - $ref: "#/components/schemas/button_column_with_table_name"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                key: e48W
+                type: link-formula
+                name: How many links?
+                editable: true
+                width: 200
+                resizable: true
+                draggable: true
+                data:
+                  operated_columns:
+                    - Cw35
+                  result_type: number
+                  formula: count_links
+                  link_column_key: Cw35
+                  include_condition: false
+                  condition_conjunction: And
+                  conditions: []
+                permission_type: ''
+                permitted_users: []
+    put:
+      tags:
+        - Columns
+      summary: Update Column
+      description: >-
+        Allows various changes of the column: name, column_type, freeze/unfreeze, resize, etc...
+
+        `op_type` is required. The following options are available:
+        - rename_column
+        - modify_column_type
+        - resize_column
+        - move_column
+        - freeze_column (eventuell weglassen)
+
+        `column` is the name or `key` of the target column.
+
+        `new_column_type` is the new type of the target column. For a list of
+        column type params refer to the SeaTable API Parameter.
+        There is one further source of information on column types in the
+        [SeaTable Scripts Programming
+        Manual](https://seatable.github.io/seatable-scripts/data-structure/#column).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_column"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                key: cSDV
+                type: number
+                name: New Oranges
+                editable: true
+                width: 400
+                resizable: true
+                draggable: true
+                data: null
+                permission_type: ''
+                permitted_users: []
+    delete:
+      tags:
+        - Columns
+      summary: Delete Column
+      description: |-
+        Delete a column with its name or `key`.
+        See the request body for detailed params.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_column"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-append-columns/:
+    post:
+      tags:
+        - Columns
+      summary: Append Columns
+      description: >-
+        Use this request to append multiple columns to your table at once. As
+        for the request body, refer to the previous call, [Insert Column](/reference/insert-column),
+        for a detailed list of column formats.
+
+        These requested and optional params can be used in the request body:
+
+        `table_name` is the name of your table, required.
+
+        `columns` is a list of columns you'd like to append, in each object of
+        which:
+
+        *   `column_name` is the name of your new column, required;
+        *   `column_type` is the type of your new column, required;
+        *   `data` is the format setting of a special column, required in case.
+        For details, refer to the call [Insert Column](/reference/insert-column).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                table_name:
+                  $ref: "#/components/schemas/table_name"
+                columns:
+                  type: array
+                  items:
+                    oneOf:
+                      - $ref: "#/components/schemas/text_column"
+                      - $ref: "#/components/schemas/long_text_column"
+                      - $ref: "#/components/schemas/number_column"
+                      - $ref: "#/components/schemas/collaborator_column"
+                      - $ref: "#/components/schemas/date_column"
+                      - $ref: "#/components/schemas/duration_column"
+                      - $ref: "#/components/schemas/single_select_column"
+                      - $ref: "#/components/schemas/multiple_select_column"
+                      - $ref: "#/components/schemas/image_column"
+                      - $ref: "#/components/schemas/file_column"
+                      - $ref: "#/components/schemas/email_column"
+                      - $ref: "#/components/schemas/url_column"
+                      - $ref: "#/components/schemas/checkbox_column"
+                      - $ref: "#/components/schemas/rating_column"
+                      - $ref: "#/components/schemas/formula_column"
+                      - $ref: "#/components/schemas/link_column"
+                      - $ref: "#/components/schemas/link_formula_column"
+                      - $ref: "#/components/schemas/creator_column"
+                      - $ref: "#/components/schemas/ctime_column"
+                      - $ref: "#/components/schemas/last_modifier_column"
+                      - $ref: "#/components/schemas/mtime_column"
+                      - $ref: "#/components/schemas/autonumber_column"
+                      - $ref: "#/components/schemas/button_column"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                columns:
+                  - key: quLi
+                    type: text
+                    name: Name
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data: null
+                    permission_type: ''
+                    permitted_users: []
+                    description: null
+                  - key: X16v
+                    type: number
+                    name: Amount
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      format: number
+                      decimal: dot
+                      thousands: 'no'
+                    permission_type: ''
+                    permitted_users: []
+                    description: null
+
+  /dtable-server/api/v1/dtables/{base_uuid}/column-options/:
+    post:
+      tags:
+        - Columns
+      summary: Add Single/Multiple Select Options
+      description: >-
+        Once you have created a single/multiple select column, use this request
+        to add options for it.
+
+
+        In the request body:
+
+
+        `table_name` is the name of the table;
+
+
+        `column` is the name or the `key` of the single/multiple select column;
+
+
+        `options` is an array containing the label (`name`), option color
+        (`color`) and the color of the arrow (`textColor`):
+
+
+        ![Options](https://seatable.io/wp-content/uploads/2021/11/Screenshot-2021-04-28-105719.png)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/add_single__multiple_select_options"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    put:
+      tags:
+        - Columns
+      summary: Update Single/Multiple Select Options
+      description: >-
+        Use this request to update existing single/multiple select options by
+        changing their name and/or color.
+
+
+        In the request body:
+
+
+        `table_name` is the name of your table, required;  
+
+        `column` is the name of the column, required;  
+
+        `options` is a list of option objects that you would like to update, in
+        which:
+
+
+        *   `id` is the ID of that option, which you can retrive with the call
+        "List Columns in A View in A Table", required;
+
+        *   `color` is the label's new color, optional;
+
+        *   `name` is the label's new name, optional.
+            
+
+        `return_options` gives you the possibility to get an overview of all the
+        options you just updated, optional, `false` by default.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_single__multiple_select_options"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                options:
+                  - name: Finished
+                    color: '#4ECCCB'
+                    textColor: '#FFFFFF'
+                    id: '119376'
+    delete:
+      tags:
+        - Columns
+      summary: Delete Single/Multiple Select Options
+      description: >-
+        Use this request to remove single select or multiple select options that
+        you don't need any more. Thes deleted options will be removed from the
+        entries containing them.
+
+
+        In the request body:
+
+
+        `table_name` is the name of the table;
+
+
+        `column` is the name or the `key` of the single/multiple select column;
+
+
+        `option_names` is a list of options you'd like to delete.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_select_options"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/column-cascade-settings/:
+    post:
+      tags:
+        - Columns
+      summary: Update Column Cascade Settings
+      description: >-
+        After you have added at least two single select columns and have added
+        relevant options, you can start to set the cascade relationships between
+        these single select columns.
+
+
+        ## What are cascade settings?
+
+        With cascade settings for the single select column, you can set up a
+        "parent" single select column and a "child" single select column, so
+        that when you select one option in the parent, the child column will
+        only show you the options belonging to that parent.
+
+
+        For example, if the parent column is "continent" and you've selected
+        "Europe", then the child column will only show you the countries in
+        Europe. Of course, this doesn't happen automatically - you have to set
+        up the cascade relationship with this API request first.
+
+
+        ![](https://seatable.io/wp-content/uploads/2021/11/cascade.png)
+
+
+        ## What are the preconditions?
+
+        This API request has the following preconditions:
+
+
+        - The table already exists (This API request cannot create a new table);
+
+        - The parent and child column already exist (same as above);
+
+        - The parent and child column already have options (same as above).
+
+
+        ## How to set up the cascade relationship?
+
+        It's so easy: just like demonstrated in the example request, define the
+        following parameters/objects and you'll get `success`:
+
+
+        - `table_name`: The name of the table.
+
+        - `parent_column`: The 1st level of single select column's name or
+        `key`.
+
+        - `child_column`: The 2nd level of single select column's name or `key`.
+
+        - `cascade_settings`: In this object, list all the child options for
+        each parent option, like demonstrated in the example request.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                table_name: Table2
+                parent_column: Continent
+                child_column: Country
+                cascade_settings:
+                  Europe:
+                    - Germany
+                    - France
+                  Asia:
+                    - China
+                    - Japan
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  
+  # Big Data
+  /dtable-db/api/v1/insert-rows/{base_uuid}/:
+    post:
+      tags:
+        - Big Data
+      summary: Insert Rows into Big Data
+      description: >-
+        Insert rows into the big data backend.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/insert_rows_into_big_data"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                inserted_row_count: 1
+  /dtable-db/api/v1/update-rows/{base_uuid}/:
+    put:
+      tags:
+        - Big Data
+      summary: Update Rows in Big Data
+      description: Update multipe rows in the big data backend identified by their row id.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_rows"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-db/api/v1/delete-rows/{base_uuid}/:
+    delete:
+      tags:
+        - Big Data
+      summary: Delete Rows in Big Data
+      description: Delete rows that are currently stored the big data backend identified by their row id.
+      security:
+        - BaseTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_rows"
+
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                deleted_rows: 1
+
+  /dtable-server/api/v1/dtables/{base_uuid}/archive-view/:
+    post:
+      tags: [Big Data]
+      summary: Move Rows to Big Data
+      description: Use an sql-like where clause to select the rows that should be moved into the big data backend.
+      security:
+        - BaseTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/archive-view"
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+                error_message: ""
+
+  
+  # Row Comments
+  /dtable-server/api/v1/dtables/{base_uuid}/comments/:
+    get:
+      tags:
+        - Row Comments
+      summary: List Row Comments
+      description: >-
+        List all the comments in a certain row. The returned `id` value is the
+        ID of each comment.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/row_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                - id: 1
+                  author: 28dhr6e7d1754bb4afa2c2cb7369d244@auth.local
+                  comment: This is good!
+                  dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
+                  row_id: NAu2B3OcRG6UrWagL-9naA
+                  created_at: '2021-01-15T13:35:26.000Z'
+                  updated_at: '2021-01-15T13:35:26.000Z'
+                  resolved: 0
+                - id: 2
+                  author: 28dhr6e7d1754bb4afa2c2cb7369d244@auth.local
+                  comment: Go online tomorrow?
+                  dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
+                  row_id: NAu2B3OcRG6UrWagL-9naA
+                  created_at: '2021-01-15T13:52:48.000Z'
+                  updated_at: '2021-01-15T13:52:48.000Z'
+                  resolved: 0
+                - id: 3
+                  author: 8cb2a6da1928374ba42905bf1647fd3f@auth.local
+                  comment: Agreed!
+                  dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
+                  row_id: NAu2B3OcRG6UrWagL-9naA
+                  created_at: '2021-01-15T13:53:13.000Z'
+                  updated_at: '2021-01-15T13:53:13.000Z'
+                  resolved: 1
+
+  /dtable-server/api/v1/dtables/{base_uuid}/comments/{comment_id}/:
+    delete:
+      tags:
+        - Row Comments
+      summary: Delete Comment
+      description: Delete a certain comment by its ID.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/comment_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    get:
+      tags:
+        - Row Comments
+      summary: Get Comment
+      description: Get the details of a certain comment with its ID.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/comment_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 1
+                author: 12345678d1757ey46fg3c2cb7369d244@auth.local
+                comment: Here is my email address
+                dtable_uuid: 12345678-7e27-46a8-8b18-6cc6374yf557
+                row_id: NAu2B3OcRG6UrWagL-9naA
+                created_at: '2021-01-15T13:52:48.000Z'
+                updated_at: '2021-01-15T13:52:48.000Z'
+                resolved: 0
+  /dtable-server/api/v1/dtables/{base_uuid}/comments-count/:
+    get:
+      tags:
+        - Row Comments
+      summary: Get Row Comments Count
+      description: >-
+        Get the number of comments in a certain row. This could be a useful
+        request to check if there's new comments there.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/row_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                count: 3
+  /dtable-server/api/v1/dtables/{base_uuid}/comments-within-days/:
+    get:
+      tags:
+        - Row Comments
+      summary: List Comments within Days
+      description: >-
+        List all the comments in a base within a given number of days before
+        today.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/days"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                comments:
+                  - id: 1
+                    author: 123456786569491ba42905bf1647fd3f@auth.local
+                    comment: Let's discuss this tomorrow
+                    dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
+                    row_id: Qtf7xPmoRaiFyQPO1aNTjA
+                    created_at: '2021-03-09T15:54:22.000Z'
+                    updated_at: '2021-03-09T15:54:22.000Z'
+                    resolved: 0
+
+
+  # Notifications
+  /dtable-server/api/v1/dtables/{base_uuid}/notifications/:
+    get:
+      tags:
+        - Notifications
+      summary: List Notifications
+      description: List all the notifications, read or unread, in a base.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                notification_list:
+                  - id: 200
+                    username: 123456786569491ba42905bf1647fd3f@auth.local
+                    msg_type: row_comment
+                    created_at: '2021-02-25T10:38:14.000Z'
+                    detail:
+                      author: 244b4667d1754bb4afa2c2cb7369d244@auth.local
+                      table_id: '0000'
+                      row_id: fS8qtN6FQ1uPOaNAC0Locw
+                      comment: Did you see this?
+                    seen: 1
+    put:
+      tags:
+        - Notifications
+      summary: Mark Notifications Read
+      description: Use this request to mark all the notifications as read.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                seen:
+                  type: boolean
+                  description: true or false for read or unread. Otherwise invalid.
+                  example: 'true'
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    delete:
+      tags:
+        - Notifications
+      summary: Delete Notifications
+      description: Delete all the notifications in the current base irrevocably.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/notifications/{notification_id}/:
+    put:
+      tags:
+        - Notifications
+      summary: Mark Notification Read/Unread
+      description: Mark a specific notification as read or unread.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                seen:
+                  type: boolean
+                  description: '`true` to mark as "seen" and `false` as "unseen".'
+                  example: 'false'
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/notification_id"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+              
+  # Activities & Logs
+  /dtable-server/api/v1/dtables/{base_uuid}/operations/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: Get Base Activity Log
+      description: Get the activities log in a base. With the base's `base_uuid`.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                operations:
+                  - author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    app: null
+                    op_time: 1610981745927
+                    operation: >-
+                      {"op_type":"delete_column","table_id":"0000","column_key":"iJB4","old_column":{"rowType":"header","key":"iJB4","type":null,"name":null,"editable":true,"width":200,"resizable":true,"draggable":true,"data":null,"permission_type":"","permitted_users":[],"editor":{"key":null,"ref":null,"props":{},"_owner":null},"formatter":null,"left":1058,"idx":5},"upper_column_key":"LfGJ"}
+                    op_id: 118
+                  - author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    app: null
+                    op_time: 1610981742518
+                    operation: >-
+                      {"op_type":"delete_column","table_id":"0000","column_key":"J2mq","old_column":{"rowType":"header","key":"J2mq","type":null,"name":null,"editable":true,"width":200,"resizable":true,"draggable":true,"data":null,"permission_type":"","permitted_users":[],"editor":{"key":null,"ref":null,"props":{},"_owner":null},"formatter":null,"left":280,"idx":2},"upper_column_key":"0000"}
+                    op_id: 117
+                  - author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    app: null
+                    op_time: 1610981739830
+                    operation: >-
+                      {"op_type":"delete_column","table_id":"0000","column_key":"jQyv","old_column":{"rowType":"header","key":"jQyv","type":null,"name":null,"editable":true,"width":200,"resizable":true,"draggable":true,"data":null,"permission_type":"","permitted_users":[],"editor":{"key":null,"ref":null,"props":{},"_owner":null},"formatter":null,"left":480,"idx":3},"upper_column_key":"J2mq"}
+                    op_id: 116
+  /dtable-server/api/v1/dtables/{base_uuid}/activities/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Row Activities
+      description: List all the activities done to a certain row with the row's `row_id`.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/row_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                activities:
+                  - id: 6782
+                    dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_id: YMIviMeERQCUiQhPPqo6Gw
+                    op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_type: modify_row
+                    op_time: '2021-01-14T09:01:57.000Z'
+                    detail:
+                      table_id: '0000'
+                      table_name: Table1
+                      row_name: Meng
+                      row_data:
+                        - column_key: BydO
+                          column_name: Date
+                          column_type: date
+                          column_data:
+                            format: YYYY-MM-DD
+                          value: '2020-08-19'
+                          old_value: '2020-08-16'
+                  - id: 6778
+                    dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_id: YMIviMeERQCUiQhPPqo6Gw
+                    op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_type: modify_row
+                    op_time: '2021-01-14T08:56:53.000Z'
+                    detail:
+                      table_id: '0000'
+                      table_name: Table1
+                      row_name: Meng
+                      row_data:
+                        - column_key: '0000'
+                          column_name: Name
+                          column_type: text
+                          column_data: {}
+                          value: Meng
+                          old_value: ''
+                        - column_key: BydO
+                          column_name: Date
+                          column_type: date
+                          column_data:
+                            format: YYYY-MM-DD
+                          value: '2020-08-16'
+                          old_value: ''
+                  - id: 5960
+                    dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_id: YMIviMeERQCUiQhPPqo6Gw
+                    op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_type: insert_row
+                    op_time: '2020-11-18T12:42:14.000Z'
+                    detail:
+                      table_id: '0000'
+                      table_name: Table1
+                      row_name: ''
+                      row_data:
+                        - column_key: '0000'
+                          column_name: Name
+                          column_type: text
+                          column_data: {}
+                          value: ''
+                total_count: 3
+  /api/v2.1/dtables/{base_uuid}/delete-operation-logs/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Delete Operation Logs
+      description: >-
+        Deleted rows, tables and columns are saved in SeaTable for 7 days. You
+        can list these in the operation log with this request. To restore them,
+        you'll need to log into the web UI.
+
+
+        For `op_type` notice:
+
+
+        `delete_row` returns the single operations which have deleted 1 row each
+        time.
+
+
+        `delete_rows` returns the operations in which multiple rows were
+        deleted.
+
+
+        `delete_column` returns the column that was deleted by each operation.
+
+
+        `delete_table` returns the table that was deleted by each operation.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/op_type"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /dtable-server/api/v1/dtables/{base_uuid}/deleted-rows/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Deleted Rows
+      description: >-
+        List all the deleted rows in the last 7 days.
+
+
+        If you are looking for rows deleted before that, you can view a snapshot
+        of this base.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                deleted_rows:
+                  - id: 37
+                    dtable_uuid: 12345678-187a-4d9f-b6cf-ff5e5019a6d5
+                    row_id: ZPFv2pm1SiaQpulvzkHm5Q
+                    op_user: 123456786fy54bb4afa2c2cb7369d244@auth.local
+                    op_time: '2020-03-17T10:31:35.000Z'
+                    detail:
+                      table_id: '0000'
+                      table_name: Table1
+                      row_name: Jasmin Tea
+                      row_data:
+                        - column_key: '0000'
+                          column_name: Name
+                          column_type: text
+                          column_data: {}
+                          value: test
+                        - column_key: AKLn
+                          column_name: Details
+                          column_type: file
+                          column_data: {}
+                          value:
+                            - name: example.html
+                              size: 514
+                              type: file
+                              url: >-
+                                http://cloud.seatable.io/workspace/1/asset/12345678-c8e5-49ab-8874-9d4a2dc4608c/files/2020-03/example.html
+                    op_app: null
+  
+
+  # Snapshots
+  /dtable-server/api/v1/dtables/{base_uuid}/snapshot/:
+    post:
+      tags:
+        - Snapshots
+      summary: Create Snapshot
+      description: |
+        Creates a snapshot for the current base. The pre-conditions are, that there's at least one change since the last snapshot and at least 10 minutes have passed. 
+        To get a list of already existing snapshots, use the the request [List Snapshots](/reference/list-snapshots).
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/generate_snapshot"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: created
+                snapshot:
+                  dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6f3dbvh46
+                  dtable_name: Example.dtable
+                  commit_id: 1234567813a3e0950d4d4f32bd744137929cef23
+                  ctime: 1622111992159
+ 

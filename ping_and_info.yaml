@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  title: Ping and Server Info
+  description: >-
+    The official SeaTable API Reference (OpenAPI 3.0) - Part "Ping and Server Info".
+  version: "4.0"
+servers:
+  - url: 'https://{server}'
+    variables: 
+      server:
+        default: cloud.seatable.io
+
+x-readme: 
+  explorer-enabled: true
+  metrics-enabled: false
+  proxy-enabled: false
+
+components:
+  securitySchemes:
+    AccountTokenAuth:
+      type: http
+      scheme: bearer
+      description: This is the [Account-Token](/reference/authentication).
+
+  schemas:
+    ping_response:
+      type: string
+      description: if successful, this api returns just the string `pong`
+      example: pong
+    server_info:
+      type: object
+      description: get server info like the version and the edition
+      properties:
+        version:
+          type: string
+          description: current version number of SeaTable Server
+        edition:
+          type: string
+          description: current edition of SeaTable Server
+      example:
+        version: 3.4.8
+        edition: enterprise edition
+
+paths:
+  /server-info/:
+    get:
+      tags: 
+        - Info
+      summary: Get SeaTable Server Info
+      description: >-
+        Use this anonymous call to retrieve the current SeaTable server version
+        information. The response includes the current version number and the
+        type of subscription.
+      responses:
+        '200':
+          description: Return version and edition of SeaTable Server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/server_info"
+  
+  /api2/ping/:
+    get:
+      tags: 
+        - Ping
+      summary: Ping Server
+      description: Check the server status.
+      responses:
+        '200':
+          description: Service is available and running
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ping_response"
+  
+  /api2/auth/ping/:
+    get:
+      tags: 
+        - Ping
+      summary: Ping Server (with authentication)
+      description: |
+        Executes two checks against SeaTable server:
+        - check the validity of the Account-Token 
+        - check the status of SeaTable Server
+      security: 
+      - AccountTokenAuth: []
+      responses:
+        '200':
+          description: Access granted and service is available and running
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ping_response"
+                
+  /dtable-server/ping/:
+    get:
+      tags:
+        - Ping
+      summary: Ping dtable Server
+      description: >-
+        Check the status of the dtable-server. Base related operations are
+        carried out by the dtable-server. These operations are included in the
+        section **Base Operations**.
+      responses:
+        '200':
+          description: Service is available and running
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ping_response"
+  
+  /dtable-db/ping:
+    get:
+      tags:
+        - Ping
+      summary: Ping dtable-db Server
+      description: Check the status of the dtable-db server.
+      responses:
+        '200':
+          description: Service is available and running
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ping_response"

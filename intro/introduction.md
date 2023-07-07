@@ -1,0 +1,163 @@
+---
+title: Introduction
+excerpt: This is the reference for the SeaTable API. On this page you will find everything you need to use the SeaTable API.
+category: 64464593226b5605dde1b0e2
+isReference: true
+slug: introduction
+---
+
+<style>
+.markdown-body {
+	--markdown-title-marginTop: 2em;
+}
+</style>
+
+The SeaTable API is organized around REST. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+
+Take a look at our [development quick start guide](https://seatable.io/docs/) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.io/integration/) like Zapier, Make.com to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://seatable.io/docs/).
+
+## Prerequisites
+
+Before you begin, ensure that you have a SeaTable Cloud account. If you have no account, please [register for SeaTable Cloud Free](https://seatable.io/registierung/?lang=auto).
+
+## Get started with the SeaTable API
+
+Start experimenting with SeaTable API using this website, which lets you run SeaTable API commands directly from your browser. You need no testing environment, you can start right away to work with your bases, tables and rows via the SeaTable API.
+
+> 👍 No user data leaves your browser
+>
+> Everything what you do on this website, happens solely on your browser. Every API-Request is send directly from your browser to SeaTable Cloud. Therefore you don't have to worry. You can enter and use your real credentials and tokens.
+
+<!-- ## SeaTable API within 30 seconds
+
+[SeaTable API within 30 seconds](https://youtu.be/aUcd1BzbaiA "@embed") -->
+
+## Examples of what you can do with the SeaTable API
+
+So don't let us waste time and let's start right away. The first step with every API is to think about what you want to do. Here are some examples:
+
+<details>
+  <summary><strong>Write data to a base and read it out again</strong></summary><hr>
+
+**Step 1: Create an API-Token**
+
+The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.io/docs/seatable-api/erzeugen-eines-api-tokens/?lang=auto). You only have to do this once! The `API-Token` keeps valid forever for this one base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](/reference/create-api-token).
+
+An API-Token might look like this: `1de50f1a57143bfe72873cbbd28ecb4de9eb3c61`
+
+**Step 2: Generate Base-Token**
+
+Next you need the API-Token to [generate a Base-Token](/reference/get-base-token-with-api-token). The `Base-Token` is only valid for three days and exactly for the one base for which you created the API-Token. If you want to interact with your base more frequently via API, you need to repeat this step. You need the `Base-Token` to authenticate all the following API requests. 
+
+The result of the *Get Base-Token with API-Token* request might look like this. Write down all values, you will need them in the following. The `access_token`, this long string of characters, is what we will call a `Base-Token` in all future requests. The `dtable_uuid` is equivalent to `base_uuid`.
+```json Example response with the Base-Token (access_token) and base_uuid (dtable_uuid)
+{
+  "app_name": "my first api token",
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODA0NDcxMTQsamX0YWJsVZ80dWlkIjoiZmJlMTZkNzMtYjI4Zi00YWY4LWIzOWQtZDc4YzU3YTg4YjkwIiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6InRlc3QifQ.huQz07WOQUvaJNy2bTR2iRm0-oATjaMGPAAIYtpkZjU",
+  "dtable_uuid": "fb3f1d72-b28f-3af8-a29d-d78c57a88b90",
+  "dtable_server": "https://cloud.seatable.io/dtable-server/",
+  "dtable_socket": "https://cloud.seatable.io/",
+  "dtable_db": "https://cloud.seatable.io/dtable-db/",
+  "workspace_id": 234,
+  "dtable_name": "My Base"
+}
+```
+
+**Step 3: Get to know the structure of your base**
+
+Equipped with the `Base-Token` we can start to display the current structure of the base. Use the [Get Metadata](/reference/get-metadata) request and pass the `Base-Token` and the `base_uuid` as parameters. The result will be a very long *metadata* object which contains all *tables* with all their *columns* and *views*. The *metadata* does not contain any data, it contains only the structure of your base. 
+
+Use the small arrows in the response box to fold the elements to get an overview of the complete object. The result might look like this:
+```json Example of the metadata object
+{
+  "metadata": {
+    "tables": [
+      {
+        "_id": "0000",
+        "name": "Table1",
+        "columns": [{
+            "name": "First name",
+            ..
+        },
+        {
+            "name": "Last name",
+            ..
+        }],
+        "views": [..]
+      }
+    ],
+    "version": 482,
+    "format_version": 7,
+    "settings": {..}
+  }
+}
+```
+
+Note down the name of the tables and the name of the columns. You will need these values to write a new row to this table.
+
+**Step 4: Write some data to your base**
+
+The request to [Add a row](/reference/add-row) to a base, requires the following information. You have to know ...
+- the `Base-Token` for authentication -> ok
+- the `base_uuid` to identify the base -> no problem
+- the `table_name` -> you should know this from the last request
+- and you have to define the row object, meaning that you have to tell the API what values you want to write to the table.
+
+At first it looks difficult to define the row object, but in fact it is quite easy. The row object consists of key:value pairs. The key is the name of the column and the value is that what you want to write to the base. So if you want to create a line with **John Doe**, then the row object looks like this:
+```
+{
+    "First Name": "John",
+    "Last name": "Doe",
+}
+```
+Easy, right? This documentation helps you to create the API request just by filling out all the input fields. The code that is generated in the right black box, is the API request that you can execute either via this page or with any programming language.
+
+**Step 5: Get all rows of your base**
+
+Also this last step is quite easy. Use the [List rows](/reference/list-rows) request and fill all mandatory input fields. Leave all optional fields blank and hit the **Try It!** button. You should see your previously created line with John Doe now in the result list.
+
+Congratulations! You wrote your first row to a table in a base in SeaTable via the API and then retrieved it.
+
+<hr></details>
+
+<details>
+  <summary><strong>Create a new base, a new table and add two new columns</strong></summary><hr>
+
+**Step 1: Generate an Account-Token**
+
+SeaTable requires a different authentication depending on whether you want to do something inside a base or outside. To create a Base, we need an account token, which we can generate with our credentials. Therefore you have to use the [Get Account-Token with Username and Password](/reference/get-account-token). Fill in your username and password and hit **Try It!**. The result will be your `Account-Token` which might look like this:
+```json
+{
+  "token": "25285a3da6fff1f7a6f9c9abc8da12dcd2bd4470"
+}
+```
+
+**Step 2: Find out the workspace id**
+
+To generate a base inside SeaTable you have to tell SeaTable where the base should be created. It could be in the area of `My bases` or it could be in one of your groups. To define the target where you want to create a base you have to provide the `workspace id`. The easiest way to determine the workspace id of a group or `My bases` is to open a base of that area in the browser and look at the URL. This [help article](https://seatable.io/docs/arbeiten-mit-gruppen/workspace-id-einer-gruppe-ermitteln/?lang=auto) explains this in more details. Open the base and write down the workspace id.
+
+**Step 3: Create the base**
+
+...
+
+<hr></details>
+<!-- 
+<details>
+  <summary><strong>Upload a file to a file column</strong></summary><hr>
+<hr></details>
+<details>
+  <summary><strong>Get more information about your team (as team admin)</strong></summary><hr>
+<hr></details>
+<details>
+  <summary><strong>Create a new user and enforce 2FA for this user</strong></summary><hr>
+<hr></details>
+-->
+
+
+<!-- 
+| What you want to achieve | What you should do |
+| :- | :- |
+| Read some data from a base | 1. `Create an API-Token` with read-only permission for one of your bases at SeaTable Cloud. You only have to do this once! The `API-token` keeps valid forever.<br/>2. Use this `API-Token` and [generate a Base-Token](/reference/get-base-token-with-api-token).<br/>3. Use the `Base-Token` and [read the data from your base](/reference/list-rows). |
+| Write some data to your base | 1. Create an `API-Token` with write permission for one of your bases at SeaTable Cloud. You only have to do this once! The `API-token` keeps valid forever.<br/>2. Use this `API-Token` and [generate a Base-Token](/reference/get-base-token-with-api-token).<br/>- Use the `Base-Token` and [add a new row](/reference/add-row) to your base. |
+| Get more info about your team | 1. [Create an Account-Token](/reference/get-account-token) from your username and password. You only have to do this once! The `Account-Token` keeps valid forever.<br/>2. Use this `Account-Token` and call the [Get Team Info](/reference/get-team-info) request. |   
+-->
