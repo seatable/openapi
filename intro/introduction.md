@@ -245,13 +245,51 @@ Do not be confused by the fact that the upload of a file and an image is differe
 
 <hr></details>
 
-<!-- 
 <details>
   <summary><strong>Get more information about your team (as team admin)</strong></summary><hr>
+
+### Step 0: Prerequisites
+
+The following example can only be executed as team admin. All requests require an `account-token` that you can generate with your username and password. An API-Token or a Base-Token is useless in this case because we will only execute requests from the area **Account Operations - Team Admin**.
+
+### Step 1: Get an Account-Token
+
+Start with the call [Get Account Token](https://api.seatable.io/reference/get-account-token). It requires your username and password and will return your `account-token`. Threat this token like your password, because it can be used to execute all types of account operations.
+
+```json
+{
+  "token": "25285a3da6fff1f7a6f9c9abc8da12dcd2bd4470"
+}
+```
+
+### Step 2: Get info about your team and your team members
+
+As soon as you have your `account-token` it is easy to get more information about your team and your team members. Use one of the following calls:
+
+- [Get Team Info](https://api.seatable.io/reference/get-team-info)
+- [List Team Members](https://api.seatable.io/reference/list-users-team)
+- [List Team Bases](https://api.seatable.io/reference/list-bases-team)
+
+Great. Now you can get all the information of your team via API.
+
 <hr></details>
+
 <details>
   <summary><strong>Create a new user and enforce 2FA for this user</strong></summary><hr>
+
+### Step 1: Get an Account-Token
+
+Like as in the last example, start with the call [Get Account Token](https://api.seatable.io/reference/get-account-token).
+
+### Step 2: Get the user id of the user
+
+To enforce 2-Factor-Authentification (2FA) for one of your team members, you need the `email` (sometimes also call `user_id`). Every user has a unique email adress like `123456789f1e4c8d8e1c31415867317c@auth.local`. Use [List Team Members](https://api.seatable.io/reference/list-users-team) to get this unique value of the user you want to update.
+
+### Step 3: Enforce 2FA
+
+Equipped with this `email` of the user, you can [Enforce 2FA](https://api.seatable.io/reference/team-admin-users-enforce-2fa) for this user. The next time the user opens SeaTable in his browser, he has to register for 2FA.
+
 <hr></details>
--->
+
 
 
