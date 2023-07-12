@@ -51,7 +51,7 @@ The first step is to create an `API-Token` with write permission for one of your
 
 An API-Token might look like this: `1de50f1a57143bfe72873cbbd28ecb4de9eb3c61`
 
-## Step 2: Generate Base-Token
+### Step 2: Generate Base-Token
 
 Next you need the API-Token to [generate a Base-Token](/reference/get-base-token-with-api-token). The `Base-Token` is only valid for three days and exactly for the one base for which you created the API-Token. If you want to interact with your base more frequently via API, you need to repeat this step. You need the `Base-Token` to authenticate all the following API requests. 
 

@@ -3103,7 +3103,7 @@ paths:
         > 
         > Pay attention that the return values of [upload link](/reference/get-file-image-upload-link) have slightly different names, so `parent_path` is `parent_dir` in this call.
 
-        **Attach the file/image to a file or image column
+        ## Attach the file/image to a file or image column
 
         After uploading the file/image to a base, SeaTable saves the uploaded file at non-public URL in the form: `/workspace/{workspace_id}`+`parent_dir`+`relative_path`+`name`. 
         
