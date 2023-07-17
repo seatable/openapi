@@ -3066,6 +3066,34 @@ paths:
                     host: smtp.web.de
                     success: true
                 count: 1
+  /api/v2.1/admin/login-logs/:
+    get:
+      tags:
+        - Logs
+      summary: List Login Logs
+      description: >-
+        List the logins of all users in the system.
+      security: 
+      - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                login_log_list:
+                  - login_time: '2023-07-17T10:01:13+02:00'
+                    login_ip: '24.134.152.69'
+                    log_success: true
+                    name: 'John'
+                    email: '145504ae043c438cbb45f2afb084d586@auth.local'
+                    contact_email: 'john@example.com'
+                total_count: 23
   /api/v2.1/admin/registration-logs/:
     get:
       tags:
