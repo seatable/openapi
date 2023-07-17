@@ -3066,7 +3066,7 @@ paths:
                     host: smtp.web.de
                     success: true
                 count: 1
-  /api/v2.1/admin/login-logs/:
+  /api/v2.1/admin/logs/login-logs/:
     get:
       tags:
         - Logs
