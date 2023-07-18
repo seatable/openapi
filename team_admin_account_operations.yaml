@@ -70,6 +70,7 @@ components:
       schema:
         type: string
       required: true
+      description: The ID of the base. Don't mix this up with the base_uuid!
       example: "000"
     base_uuid:
       name: base_uuid
