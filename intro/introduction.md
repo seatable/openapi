@@ -20,11 +20,11 @@ summary {
 
 The SeaTable API is organized around REST. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-Take a look at our [development quick start guide](https://seatable.io/docs/?lang=auto) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.io/integration/) like Zapier, Make.com to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://seatable.io/docs/?lang=auto).
+Take a look at our [development quick start guide](https://seatable.io/docs/?lang=auto) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.io/integrationen/?lang=auto) like Zapier, Make.com to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://seatable.io/docs/?lang=auto).
 
 ## Prerequisites
 
-Before you begin, ensure that you have a SeaTable Cloud account. If you have no account, please [register for SeaTable Cloud Free](https://seatable.io/registierung/?lang=auto).
+Before you begin, ensure that you have a SeaTable Cloud account. If you have no account, please [register for SeaTable Cloud Free](https://seatable.io/registrierung/?lang=auto).
 
 ## Get started with the SeaTable API
 
