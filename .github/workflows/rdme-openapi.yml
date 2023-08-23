@@ -8,7 +8,7 @@ on:
       # This workflow will run every time you push code to the following branch.
       # Check out GitHub's docs for more info on configuring this:
       # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
-      - v4.0
+      - v4.1
 
 # I have multiple categories in seatable.readme.io:
 # - SeaTable API (docs only)                    < intro/*.md
@@ -31,11 +31,19 @@ on:
 # You'd use the same slug that the openapi sync created, but that's about it! Keep in mind, you'd need to sync OpenAPI first then the Markdown if you're changing content within your Reference sections, as it may be possible to delete Markdown content by mistake!
 
 # Process for new version:
+# Login to https://dash.readme.com/login and fork the openapi-definition for seatable.readme.io to a newer version.
+# Switch to the latest reference page https://dash.readme.com/project/seatable/v4.1/reference and get the new IDs
+# replace the --id=... values in this rdme-openapi.yml file.
+# change all 4.0 occurances to 4.1
+# Get the categories via API: https://docs.readme.com/main/reference/getcategories. You will need only the API key as password. username stays empty
+# get the _id of title: "SeaTable API"
+# replace in all markdown files "intro" the category values
+
+## old description
 # 0. create new branch at github. Fork the openapi-definition at seatable.readme.io
 # 1. Switch the `branch` in this file at the top of this file
 # 2. Get the new IDs for all API reference categories from seatable.readme.io (available at https://dash.readme.com/project/seatable/v4.0/reference and update the `--id` values in this workflow file.
-# in the Markdown-files, the `category` has to be updated. Get the categories via API: https://docs.readme.com/main/reference/getcategories. 
-# > you will need the `_id` of title: SeaTable API
+# in the Markdown-files, the `category` has to be updated. # > you will need the `_id` of title: SeaTable API
 
 
 jobs:
@@ -49,40 +57,40 @@ jobs:
       - name: Update SeaTable API 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: docs ./intro --key=${{ secrets.README_API_KEY }} --version=4.0
+          rdme: docs ./intro --key=${{ secrets.README_API_KEY }} --version=4.1
 
       # authentication
       - name: Update authentication 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=64464593226b5605dde1b0e6 --useSpecVersion
+          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=64e5a881a6e8f4004e8bb27b --useSpecVersion
 
       # base operations
       - name: Update base operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64464593226b5605dde1b0e7 --useSpecVersion
+          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64e5a881a6e8f4004e8bb27c --useSpecVersion
 
       # Account operations: System admin
       - name: Update sys admin account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi system_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64464593226b5605dde1b0ea --useSpecVersion
+          rdme: openapi system_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64e5a881a6e8f4004e8bb27f --useSpecVersion
 
       # Account operations: Team admin
       - name: Update team admin account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi team_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64464593226b5605dde1b0e9 --useSpecVersion
+          rdme: openapi team_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64e5a881a6e8f4004e8bb27e --useSpecVersion
 
       # Account operations: User
       - name: Update user account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi user_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64464593226b5605dde1b0eb --useSpecVersion
+          rdme: openapi user_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=64e5a881a6e8f4004e8bb280 --useSpecVersion
 
       # ping & info
       - name: Update ping & info 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi ping_and_info.yaml --key=${{ secrets.README_API_KEY }} --id=64464593226b5605dde1b0e8 --useSpecVersion
+          rdme: openapi ping_and_info.yaml --key=${{ secrets.README_API_KEY }} --id=64e5a881a6e8f4004e8bb27d --useSpecVersion

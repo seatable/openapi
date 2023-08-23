@@ -1,7 +1,7 @@
 ---
 title: Changelog
 excerpt: This page lists changes made to the Web API and its documentation.
-category: 64464593226b5605dde1b0e2
+category: 64e5a881a6e8f4004e8bb277
 isReference: true
 slug: changelog
 ---
@@ -13,6 +13,24 @@ slug: changelog
 </style>
 
 Listed below are all the changes to the SeaTable API. Each date corresponds with a new version of the SeaTable Server. If you’re looking for non-API related changes, see the [changelog](https://seatable.io/docs/changelog) or the latest product releases at the [SeaTable Blog](https://seatable.io/blog).
+
+## Version 4.1 (23.08.2023)
+
+> 📘 New requests
+>
+> * Add user to multiple groups: `POST /api/v2.1/admin/users/{username}/groups/`
+
+> 👍 Other changes
+>
+> * `Add row` and `Update Row`: unknown single select or multiple-select options will be created.
+> * Improved data type and structure checks for `/rows/` endpoint.
+> * `row_id` can not be changed anymore with a row update.
+> * Permission issue with endpoint `/api/v2.1/org/<org_id>/admin/groups/<group_id>/members/` was fixed.
+> * Filter validation for sql query endpoint
+
+> 🚧 Breaking changes
+>
+> no breaking changes.
 
 ## Version 4.0 (27.06.2023)
 
@@ -35,6 +53,10 @@ Listed below are all the changes to the SeaTable API. Each date corresponds with
 > * Get File Metadata (Custom Folder)
 > * Get Upload Link (Custom Folder)
 > * Get Download Link (Custom Folder)
+
+> 👍 Other changes
+> 
+> * Bearer authentication support added.
 
 > 🚧 Breaking changes
 >
