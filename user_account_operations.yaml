@@ -7055,12 +7055,12 @@ paths:
                   created_at: '2021-02-26T16:55:09+00:00'
                   msg_format: Hello user!
   
-  # E-Mail Accounts
+  # Email Accounts
   /api/v2.1/third-party-accounts/{base_uuid}/:
     get:
       tags:
-        - E-Mail Accounts
-      summary: List E-Mail Accounts
+        - Email Accounts
+      summary: List Email Accounts
       description: List all the third party accounts bonded in a base.
       security: 
       - AccountTokenAuth: []
@@ -7085,8 +7085,8 @@ paths:
                       password: '123456'
     post:
       tags:
-        - E-Mail Accounts
-      summary: Add E-Mail Account
+        - Email Accounts
+      summary: Add Email Account
       description: >-
         Bound a third party email account in a base by using the params in the
         sample request body. The returned `id` value is the ID of this account.
@@ -7126,8 +7126,8 @@ paths:
   /api/v2.1/third-party-accounts/{base_uuid}/{3rd_party_account_id}/:
     put:
       tags:
-        - E-Mail Accounts
-      summary: Update E-Mail Account
+        - Email Accounts
+      summary: Update Email Account
       description: >-
         Change the account name, type, or detail (host, port, username or
         password) of a third party account using the account's ID in the URL.
@@ -7169,8 +7169,8 @@ paths:
                     password: '654321'
     delete:
       tags:
-        - E-Mail Accounts
-      summary: Delete E-Mail Account
+        - Email Accounts
+      summary: Delete Email Account
       description: Delete a third party account using its ID in the request URL.
       security: 
       - AccountTokenAuth: []
@@ -7189,8 +7189,8 @@ paths:
   /api/v2.1/third-party-accounts/{base_uuid}/detail/:
     get:
       tags:
-        - E-Mail Accounts
-      summary: Get E-Mail Account
+        - Email Accounts
+      summary: Get Email Account
       description: >-
         Get the details of a 3rd party email account's information by its
         `account_name` in the URL.
@@ -7219,8 +7219,8 @@ paths:
   /api/v2.1/dtable-message-status/:
     get:
       tags:
-        - E-Mail Accounts
-      summary: Get E-Mail Sending Status
+        - Email Accounts
+      summary: Get Email Sending Status
       description: >-
         Query the task status with the returned `task_id` when you **Send An
         Email via 3rd Party Account**. If you get an error message:
