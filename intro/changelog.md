@@ -34,6 +34,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds with
 
 ## Version 4.0 (27.06.2023)
 
+The SeaTable API Reference for the version 4.0 is available at https://seatable.readme.io/v4.0/reference/introduction.
+
 > 📘 New requests
 > 
 > * Search User by Org-ID: `GET api/v2.1/admin/search-user-by-org-id/`.
