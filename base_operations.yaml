@@ -2547,20 +2547,20 @@ paths:
       description: |
         Gets a list or rows contained in a table, according to the `select` SQL-query provided in the request. Also the metadata of the table is returned.
 
-        Typical SQL-statements are supported. For more details check the [supported SQL Syntax from SeaTable](https://seatable.github.io/seatable-scripts/python/sql/).
+        Typical SQL-statements are supported. For more details, check the [SQL-syntax supported by SeaTable](https://seatable.github.io/seatable-scripts/python/sql/).
 
-        Here are some basic examples how to use this request for a fictitious table *Participants* with the columns: *name*, *age*, *birthday* and *gender*:
+        Here are some basic examples how to use this request for a fictitious table *Participants* with the columns *name*, *age*, *birthday* and *gender*:
         `SELECT name, age, birthday, gender FROM Participants`<br/>
         `SELECT name, surname FROM Participants ORDER BY name`<br/>
         `SELECT * FROM Participants LIMIT 25`
 
-        > 📘 Returns also data from big data backend
+        > 📘 Returns also data from the big data backend
         > 
-        > This request is the only available endpoint that can also returns rows from the big data backend. 
+        > This request is the only available endpoint that can return rows stored in the big data backend. 
 
-        > 🚧 Returns at most 10.000 rows
+        > 🚧 Returns at most 10 000 rows
         >
-        > Even if you specify LIMIT > 10,000, this request will return a maximum of 10,000 rows.
+        > The request returns a maximum of 10 000 rows regardless of the limit specified in the SQL-statement.
       requestBody:
         description: description des requestBody
         content:
@@ -2588,7 +2588,7 @@ paths:
         Gets a list of rows contained in a table (or in a view if provided), ordered according to the filter conditions and sort criteria provided in the request. 
         The response contains a maximum of 1.000 rows regardless of the specified limit.
 
-        > 📘 No rows from big data backend
+        > 📘 Returns no data from the big data backend
         > 
         > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/list-rows-with-sql) instead.
       security:
