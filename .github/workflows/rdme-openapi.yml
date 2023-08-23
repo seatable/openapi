@@ -31,6 +31,7 @@ on:
 # You'd use the same slug that the openapi sync created, but that's about it! Keep in mind, you'd need to sync OpenAPI first then the Markdown if you're changing content within your Reference sections, as it may be possible to delete Markdown content by mistake!
 
 # Process for new version:
+# local: git checkout -b v4.1
 # Login to https://dash.readme.com/login and fork the openapi-definition for seatable.readme.io to a newer version.
 # Switch to the latest reference page https://dash.readme.com/project/seatable/v4.1/reference and get the new IDs
 # replace the --id=... values in this rdme-openapi.yml file.
@@ -38,6 +39,8 @@ on:
 # Get the categories via API: https://docs.readme.com/main/reference/getcategories. You will need only the API key as password. username stays empty
 # get the _id of title: "SeaTable API"
 # replace in all markdown files "intro" the category values
+# replace in all yaml files the version
+# local: git add . && git commit && git push --set-upstream origin v4.1
 
 ## old description
 # 0. create new branch at github. Fork the openapi-definition at seatable.readme.io
