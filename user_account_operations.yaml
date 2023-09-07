@@ -7143,7 +7143,7 @@ paths:
       tags:
         - Email Accounts
       summary: List Email Accounts
-      description: List all the third party accounts bonded in a base.
+      description: List all email accounts available in a base.
       security:
         - AccountTokenAuth: []
       parameters:
