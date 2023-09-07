@@ -2591,6 +2591,10 @@ paths:
         > 📘 Returns no data from the big data backend
         > 
         > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/list-rows-with-sql) instead.
+
+        > 🚧 Returns at most 1000 rows
+        >
+        > The request returns a maximum of 1000 rows regardless of the specified limit.
       security:
         - BaseTokenAuth: []
       parameters:
