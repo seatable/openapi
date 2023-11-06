@@ -191,6 +191,7 @@ components:
       schema:
         type: string
       example: "test"
+      description: "Search string. Substrings are allowed and capitalization does not matter."
     query_type:
       name: query_type
       in: query
@@ -7935,8 +7936,8 @@ paths:
   /api/v2.1/dtable/items-search/:
     get:
       tags: [Search]
-      summary: Search users base or apps
-      description: Search the base or apps of a user by string.
+      summary: Search base or apps
+      description: Search the base or apps of a user. Capitalization is irrelevant for the search and substrings are also allowed.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -7944,7 +7945,7 @@ paths:
         - $ref: "#/components/parameters/query_type"
       responses:
         "200":
-          description: OK (Base)
+          description: OK
           content:
             application/json:
               schema:
