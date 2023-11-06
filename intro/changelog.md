@@ -19,6 +19,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > 📘 New requests
 >
 > - Export base: `GET /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/`
+> - Search base/apps of a user: `GET /api/v2.1/dtable/items-search/`
+> - Activate/Deactivate app: `PUT /api/v2.1/external-apps/{app_token}/status/`
 
 > 🚧 Breaking changes
 >
@@ -29,6 +31,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > - Deprecated base export calls for sys admin were removed from documentation.
 
 ## Version 4.1 (23.08.2023)
+
+The SeaTable API Reference for version 4.1 is available at https://seatable.readme.io/v4.1/reference/introduction.
 
 > 📘 New requests
 >
@@ -80,7 +84,7 @@ The SeaTable API Reference for version 4.0 is available at https://seatable.read
 
 ## Version 3.5 (12.04.2023)
 
-The SeaTable API Reference for the version 3.5 is available at https://seatable.readme.io/v3.5/reference/introduction.
+The SeaTable API Reference for the version 3.5 is no longer.
 
 > 🚧 Breaking changes
 >

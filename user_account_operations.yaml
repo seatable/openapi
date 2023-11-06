@@ -185,6 +185,18 @@ components:
         pattern: "^((19|20)[0-9][0-9])[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])[T]([01][1-9]|[2][0-3])[:]([0-5][0-9])[:]([0-5][0-9])([+|-]([01][0-9]|[2][0-3])[:]([0-5][0-9])){0,1}$"
       required: true
       example: "2023-05-25T10:06:39+08:00"
+    query_str:
+      name: query_str
+      in: query
+      schema:
+        type: string
+      example: "test"
+    query_type:
+      name: query_type
+      in: query
+      schema:
+        type: string
+        enum: ["", "base", "app"]
 
     #=======================Path parameters=======================#
     user_id:
@@ -514,6 +526,14 @@ components:
     is_admin:
       type: string
       enum: ["", "true", "false"]
+    is_inactive:
+      type: object
+      properties:
+        is_inactive:
+          type: string
+          enum: ["", "true", "false"]
+      required:
+        - is_inactive
 
     ### schema Automation Rule
     ####################  Events  ####################
@@ -7794,6 +7814,48 @@ paths:
                       },
                     ],
                 }
+  /api/v2.1/external-apps/{app_token}/status/:
+    put:
+      tags:
+        - Apps
+      summary: Activate/Deactivate App
+      description: Activate or deactivate a universal app. Pay attention that `true` means the app is inactive. `false` means the app is active.
+      security:
+        - AccountTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/is_inactive"
+      parameters:
+        - $ref: "#/components/parameters/app_token"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "external_app":
+                    {
+                      "id": 296,
+                      "token": "a3ec5042d7ae47f18c2e",
+                      "dtable_uuid": "92b3bf0e4e2c4f5486a229a3cbb8e160",
+                      "app_type": "universal-app",
+                      "app_config:":
+                        {
+                          "app_type": "universal-app",
+                          "app_name": "My first universal app",
+                          "settings": { "pages": ["..."] },
+                        },
+                      "created_at": "2023-04-02T21:23:21+00:00",
+                      "external_app_url": "https://cloud.seatable.io/dtable/universal-app/links/a3ec5042d7ae47f18c2e",
+                      "visit_times": 3,
+                      "creator": "Hulk",
+                      "can_anonymous_access": false,
+                      "inactive": false,
+                    },
+                }
 
   /api/v2.1/dtable-activities/:
     get:
@@ -7869,3 +7931,21 @@ paths:
                     row_data: [...]
                     op_app: null
                     avatar_url: "https://cloud.seatable.io/media/avatars/default.png"
+
+  /api/v2.1/dtable/items-search/:
+    get:
+      tags: [Search]
+      summary: Search users base or apps
+      description: Search the base or apps of a user by string.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/query_str"
+        - $ref: "#/components/parameters/query_type"
+      responses:
+        "200":
+          description: OK (Base)
+          content:
+            application/json:
+              schema:
+                type: object
