@@ -531,8 +531,7 @@ components:
       type: object
       properties:
         is_inactive:
-          type: string
-          enum: ["", "true", "false"]
+          type: boolean
       required:
         - is_inactive
 
