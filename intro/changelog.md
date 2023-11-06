@@ -14,6 +14,20 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.io/docs/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
 
+## Version 4.2 (??.11.2023)
+
+> 📘 New requests
+>
+> - Export base: `GET /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/`
+
+> 🚧 Breaking changes
+>
+> None
+
+> 👍 Other changes
+>
+> - Deprecated base export calls for sys admin were removed from documentation.
+
 ## Version 4.1 (23.08.2023)
 
 > 📘 New requests

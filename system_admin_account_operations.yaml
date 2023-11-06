@@ -5,14 +5,14 @@ info:
     The official SeaTable API Reference (OpenAPI 3.0).
   version: "4.2"
 servers:
-  - url: 'https://{server}'
-    variables: 
+  - url: "https://{server}"
+    variables:
       server:
         default: cloud.seatable.io
 
-x-readme: 
+x-readme:
   explorer-enabled: true
-  metrics-enabled: false 
+  metrics-enabled: false
   proxy-enabled: false
 
 # why uses /api/v2.1/admin/organizations-basic-info/ query_params? Why not using a body?
@@ -31,7 +31,7 @@ components:
     #=======================Query parameters=======================#
     page:
       name: page
-      description: The page number you want to start showing the entries. If no value is provided, 1 will be used. 
+      description: The page number you want to start showing the entries. If no value is provided, 1 will be used.
       in: query
       schema:
         type: integer
@@ -58,7 +58,7 @@ components:
       in: query
       schema:
         type: string
-        pattern: '^.*@.*$'
+        pattern: "^.*@.*$"
       description: >-
         The contact email of the user you're querying. Optional if
         `username` is defined.
@@ -77,7 +77,7 @@ components:
       in: query
       schema:
         type: boolean
-      example: 'true'
+      example: "true"
     starting_time:
       name: start
       in: query
@@ -105,7 +105,7 @@ components:
         type: string
         pattern: ^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?\+(2[0-3]|[01]?[0-9])(:[0-5]?[0-9]){2}$
       description: The date in ISO format. Required.
-      example: 2020-06-19+00:00:00  
+      example: 2020-06-19+00:00:00
     is_user:
       name: is_user
       in: query
@@ -117,7 +117,7 @@ components:
         users who are not in any teams (`true`) or by teams (`false`).  The
         usage of `true` here is seldom meaningful for cloud.seatable.io as
         all the users in the SeaTable Cloud are team users.
-      example: 'false'
+      example: "false"
     month:
       name: month
       in: query
@@ -128,13 +128,13 @@ components:
         For which month you'd like to list the statistics in the format of
         YYYYMM. Statistics of automation rules before 202109 are not
         correctly summarized.
-      example: '202109'
+      example: "202109"
     owner:
       name: owner
       in: query
       schema:
         type: string
-        pattern: '^[a-f0-9]{32}(@auth.local)$'
+        pattern: "^[a-f0-9]{32}(@auth.local)$"
       description: >-
         The ID of the user you are querying. Optional. If you don't define a
         user, all the users are queried.
@@ -191,9 +191,8 @@ components:
       in: query
       schema:
         type: integer
-        enum: [0,1]
+        enum: [0, 1]
       description: Seen status, whether seen or not, 0/1, optional
-
 
     #=======================Path parameters=======================#
     base_uuid:
@@ -211,7 +210,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[a-f0-9]{32}(@auth.local)$'
+        pattern: "^[a-f0-9]{32}(@auth.local)$"
       required: true
       example: 23abc456def789ghi123jkl456mno789@auth.local
     org_id:
@@ -350,12 +349,12 @@ components:
     msg:
       type: string
       example: "Hello user!"
-    username: 
+    username:
       type: string
       example: "123abc456def789ghi123jkl456mno789@auth.local"
     force_2fa:
       type: integer
-      enum: [0,1]
+      enum: [0, 1]
     email:
       type: string
       description: Login email of the user.
@@ -371,8 +370,8 @@ components:
     is_staff:
       type: boolean
       description: >-
-          `true` or `false` if the user will be an admin. `false` by
-          default.
+        `true` or `false` if the user will be an admin. `false` by
+        default.
       default: false
     is_active:
       type: boolean
@@ -385,12 +384,12 @@ components:
       description: >-
         Update their role. For details about roles, refer to
         [SeaTable Roles and
-        Permissions](https://manual.seatable.io/config/enterprise/roles_permissions/).  
+        Permissions](https://manual.seatable.io/config/enterprise/roles_permissions/).
     login_id:
       type: string
       description: >-
         Optional login ID. Valid only if the system configuration
-        allows login ID. 
+        allows login ID.
     contact_email:
       type: string
       description: The contact email address of the user.
@@ -412,7 +411,7 @@ components:
     row_limit:
       type: integer
       description: User's total row limit in number. For example 10000.
-      example: '50000'
+      example: "50000"
     quota_total:
       type: string
       description: Update their total quota in MB.
@@ -424,7 +423,7 @@ components:
       format: binary
     org_name:
       type: string
-      description: 'Name of the team. Required. '
+      description: "Name of the team. Required. "
       example: Demo Testing
     admin_email:
       type: string
@@ -441,7 +440,7 @@ components:
       description: >-
         If a workspace should be automatically created for the user.
         Optional. `false` by default.
-      example: 'true'
+      example: "true"
     max_user_number:
       type: string
       description: The maximum user number.
@@ -461,7 +460,7 @@ components:
       description: >-
         Required. Use `true` or `false` to mark the status of the
         report.
-      example: 'true'
+      example: "true"
     plugin:
       type: string
       description: Path and file name to the plugin file.
@@ -484,11 +483,11 @@ components:
       description: >-
         If a custom CSS should be used. Optional, `0` by default. If
         set to `1`, paste your CSS into the param `CUSTOM_CSS`.
-      example: '0'
+      example: "0"
     CUSTOM_CSS:
       type: string
       description: The content of your custom CSS. Optional. Empty by default.
-      example: ' '
+      example: " "
     ACTIVATE_AFTER_REGISTRATION:
       type: integer
       description: >-
@@ -496,49 +495,49 @@ components:
         registration. Optional, `1` by default. If `0`, then the
         user need to be activated by the administrator or via the
         activation email.
-      example: '1'
+      example: "1"
     REGISTRATION_SEND_MAIL:
       type: integer
       description: >-
         If an activation email should be sent after the user has
         registered. Optional, `0` by default.
-      example: '0'
+      example: "0"
     LOGIN_REMEMBER_DAYS:
       type: integer
       description: >-
         How many default days a user could be kept signed in.
         Optional, `7` by default.
-      example: '7'
+      example: "7"
     LOGIN_ATTEMPT_LIMIT:
       type: integer
       description: >-
         The maximum number of failed login attempts before showing
         CAPTCHA. Optional, `5` by default.
-      example: '5'
+      example: "5"
     FREEZE_USER_ON_LOGIN_FAILED:
       type: integer
       description: >-
         If the user's account should be frozen when they exceed the
         login attempts limit. Optional, `0` by default.
-      example: '0'
+      example: "0"
     USER_STRONG_PASSWORD_REQUIRED:
       type: integer
       description: >-
         Force the users to use a strong password when signing up or
         changing password. Optional, `0` by default.
-      example: '0'
+      example: "0"
     FORCE_PASSWORD_CHANGE:
       type: integer
       description: >-
         Force newly added users to change their password, or when
         the admin resets their password. Optional, `1` by default.
-      example: '1'
+      example: "1"
     USER_PASSWORD_MIN_LENGTH:
       type: integer
       description: >-
         The minimum length of user passwords. Optional, `6` by
         default.
-      example: '6'
+      example: "6"
     USER_PASSWORD_STRENGTH_LEVEL:
       type: integer
       description: >-
@@ -546,19 +545,19 @@ components:
         `3` means password must have at least 3 of the following: a
         number, an upper letter, a lower letter and a special
         symbol. Optional, `3` by default.
-      example: '3'
+      example: "3"
     ENABLE_TWO_FACTOR_AUTH:
       type: integer
       description: >-
         If two factor authentication should be activated for the
         system. Optional, `0` by default.
-      example: '0'
+      example: "0"
     ENABLE_SIGNUP:
       type: integer
       description: >-
         If registration on the web interface is allowed. Optional,
         `0` by default.
-      example: '1'
+      example: "1"
     logo:
       type: string
       description: The path and filename of the image file of your logo.
@@ -573,7 +572,7 @@ components:
         Leave this param as its default (`false`) to upload your
         favicon, and use this param as `true` to upload a favicon
         with a notification sign.
-      example: 'true'
+      example: "true"
     login_bg_image:
       type: string
       description: The path and filename of the background image.
@@ -596,7 +595,6 @@ components:
             `audit_admin`. See the table above for details.
           example: default_admin
 
-
 paths:
   # Users
   /api/v2.1/admin/users/:
@@ -610,7 +608,7 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -621,22 +619,22 @@ paths:
                   - email: 1234567866874f15bd5b17afc3527754@auth.local
                     name: admin
                     contact_email: admin@example.com
-                    login_id: ''
+                    login_id: ""
                     is_staff: true
                     is_active: true
-                    create_time: '2019-11-13T11:07:24+00:00'
-                    last_login: '2020-12-04T16:10:20+00:00'
+                    create_time: "2019-11-13T11:07:24+00:00"
+                    last_login: "2020-12-04T16:10:20+00:00"
                     role: default
                     storage_usage: 2853
                     rows_count: 6
                   - email: 123456789f1e4c8d8e1c31415867317c@auth.local
                     name: Daniel
                     contact_email: daniel@example.com
-                    login_id: ''
+                    login_id: ""
                     is_staff: false
                     is_active: true
-                    create_time: '2019-11-14T02:25:39+00:00'
-                    last_login: '2020-12-03T08:21:22+00:00'
+                    create_time: "2019-11-14T02:25:39+00:00"
+                    last_login: "2020-12-03T08:21:22+00:00"
                     role: guest
                     storage_usage: 1721496
                     rows_count: 142
@@ -665,7 +663,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -675,11 +673,11 @@ paths:
                 email: 12345678219d4067816452757a850b61@auth.local
                 name: Example User
                 contact_email: example_user@example.com
-                login_id: ''
-                id_in_org: ''
+                login_id: ""
+                id_in_org: ""
                 is_staff: false
                 is_active: true
-                create_time: '2021-03-17T13:52:40+00:00'
+                create_time: "2021-03-17T13:52:40+00:00"
                 role: default
                 add_user_tip: >-
                   Successfully added user example_user@example.com. An email
@@ -694,7 +692,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/user_id"
       responses:
-        '403':
+        "403":
           description: Successful response
           content:
             application/json: {}
@@ -742,7 +740,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -752,17 +750,17 @@ paths:
                 email: 876543216569491ba42905bf1647fd3f@auth.local
                 name: Michael Jackson
                 contact_email: test013@fun-mail.net
-                unit: ''
-                login_id: ''
-                id_in_org: '013'
+                unit: ""
+                login_id: ""
+                id_in_org: "013"
                 is_staff: false
                 is_active: true
-                phone: ''
+                phone: ""
                 org_id: 176
                 org_name: SeaTable GmbH
-                create_time: '2020-11-18T12:30:31+00:00'
+                create_time: "2020-11-18T12:30:31+00:00"
                 role: default
-                update_status_tip: ''
+                update_status_tip: ""
     delete:
       tags:
         - Users
@@ -778,7 +776,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -795,7 +793,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -806,13 +804,13 @@ paths:
                   - email: 12345678bb674f15bd5b17afc3527754@auth.local
                     name: admin
                     contact_email: admin@seafile.com
-                    login_id: ''
+                    login_id: ""
                     is_staff: true
                     is_active: true
                     storage_usage: 9477804
                     rows_count: 6
-                    create_time: '2019-11-13T11:07:24+00:00'
-                    last_login: '2021-03-17T13:53:59+00:00'
+                    create_time: "2019-11-13T11:07:24+00:00"
+                    last_login: "2021-03-17T13:53:59+00:00"
                     admin_role: default_admin
   /api/v2.1/admin/admin-role/:
     put:
@@ -929,7 +927,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -949,7 +947,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -992,7 +990,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1025,7 +1023,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1051,7 +1049,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/query_user"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1069,12 +1067,12 @@ paths:
                     org_name: Team SeaTable
                     quota_usage: 0
                     quota_total: -2
-                    create_time: '2021-06-28T13:43:09+00:00'
-                    last_login: ''
+                    create_time: "2021-06-28T13:43:09+00:00"
+                    last_login: ""
                     role: default
                     storage_usage: 0
                     rows_count: 0
-                has_next_page: 'false'
+                has_next_page: "false"
   /api/v2.1/admin/search-user-by-org-id/:
     get:
       tags:
@@ -1082,39 +1080,40 @@ paths:
       summary: Search User by Org-ID
       description: >-
         Hier muss noch eine Beschreibung ergänzt werden
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/query"
         - $ref: "#/components/parameters/org_id_query"
         - $ref: "#/components/parameters/limit"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "users": [
-                    {
-                      "email": "148768b50bb44c9d9d04f101a2b34a49@auth.local",
-                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
-                      "name": "org_guest1",
-                      "contact_email": "org_guest1@qq.com"
-                    },
-                    {
-                      "email": "4919f22fa6e14a538b47428b5589ec60@auth.local",
-                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
-                      "name": "org_guest2",
-                      "contact_email": "org_guest2@qq.com"
-                    },
-                    {
-                      "email": "53f1af67b0dd492491264dd8143040b3@auth.local",
-                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
-                      "name": "org_guest",
-                      "contact_email": "org_guest@qq.com"
-                    }
-                  ]
+                  "users":
+                    [
+                      {
+                        "email": "148768b50bb44c9d9d04f101a2b34a49@auth.local",
+                        "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                        "name": "org_guest1",
+                        "contact_email": "org_guest1@qq.com",
+                      },
+                      {
+                        "email": "4919f22fa6e14a538b47428b5589ec60@auth.local",
+                        "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                        "name": "org_guest2",
+                        "contact_email": "org_guest2@qq.com",
+                      },
+                      {
+                        "email": "53f1af67b0dd492491264dd8143040b3@auth.local",
+                        "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                        "name": "org_guest",
+                        "contact_email": "org_guest@qq.com",
+                      },
+                    ],
                 }
   /api/v2.1/admin/import-users/:
     post:
@@ -1149,7 +1148,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1167,24 +1166,24 @@ paths:
                   - email: 4fbacc904e7145bba5a15d9be9f51c92@auth.local
                     name: test3
                     contact_email: test3@example.com
-                    unit: ''
-                    login_id: ''
-                    id_in_org: ''
+                    unit: ""
+                    login_id: ""
+                    id_in_org: ""
                     is_staff: false
                     is_active: true
-                    phone: ''
-                    create_time: '2022-12-18T13:18:06+00:00'
+                    phone: ""
+                    create_time: "2022-12-18T13:18:06+00:00"
                     role: default
                   - email: 2b3ac8d8a5044616bb65db1f4da95802@auth.local
                     name: test4
                     contact_email: test4@example.com
-                    unit: ''
-                    login_id: ''
-                    id_in_org: ''
+                    unit: ""
+                    login_id: ""
+                    id_in_org: ""
                     is_staff: false
                     is_active: true
-                    phone: ''
-                    create_time: '2022-12-18T13:18:07+00:00'
+                    phone: ""
+                    create_time: "2022-12-18T13:18:07+00:00"
                     role: default
   /api/v2.1/admin/users/{user_id}/shared-dtables/:
     get:
@@ -1199,7 +1198,7 @@ paths:
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1213,8 +1212,8 @@ paths:
                     name: collaborators
                     creator: Ginger Ale
                     modifier: Ginger Ale
-                    created_at: '2020-11-18T13:02:43+00:00'
-                    updated_at: '2020-11-18T13:02:43+00:00'
+                    created_at: "2020-11-18T13:02:43+00:00"
+                    updated_at: "2020-11-18T13:02:43+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -1247,7 +1246,7 @@ paths:
         - $ref: "#/components/parameters/parent_dir"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1258,13 +1257,13 @@ paths:
                   - obj_id: 8965a72a226c5190ff4693bebb3e32325dc5ca9b
                     is_file: false
                     obj_name: 4bf3c4b3-61c6-4b3c-a108-c033cfff9862
-                    file_size: ''
-                    last_update: '2021-03-11T13:36:37+00:00'
+                    file_size: ""
+                    last_update: "2021-03-11T13:36:37+00:00"
                   - obj_id: 8965a72a226c5190ff4693bebb3e32325dc5ca9b
                     is_file: false
                     obj_name: 650d8a0d-7e27-46a8-8b18-6cc6f3db2057
-                    file_size: ''
-                    last_update: '2021-03-11T13:36:37+00:00'
+                    file_size: ""
+                    last_update: "2021-03-11T13:36:37+00:00"
                 email: 123abc456def789ghi123jkl456mno789@auth.local
   /api/v2.1/admin/users/{user_id}/dtables/:
     get:
@@ -1272,14 +1271,14 @@ paths:
         - Bases
       summary: List User's Bases
       description: List all the bases of a certain user by the user's ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1293,8 +1292,8 @@ paths:
                     name: Templates Overview
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2021-01-08T15:09:03+00:00'
-                    updated_at: '2021-01-21T16:06:26+00:00'
+                    created_at: "2021-01-08T15:09:03+00:00"
+                    updated_at: "2021-01-21T16:06:26+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -1305,8 +1304,8 @@ paths:
                     name: CRM
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2021-03-02T10:15:40+00:00'
-                    updated_at: '2021-03-02T10:18:01+00:00'
+                    created_at: "2021-03-02T10:15:40+00:00"
+                    updated_at: "2021-03-02T10:18:01+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -1317,8 +1316,8 @@ paths:
                     name: Sales
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2021-02-22T16:10:44+00:00'
-                    updated_at: '2021-02-22T16:10:44+00:00'
+                    created_at: "2021-02-22T16:10:44+00:00"
+                    updated_at: "2021-02-22T16:10:44+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -1331,13 +1330,13 @@ paths:
       tags:
         - Bases
       summary: List All Bases
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/page"
       responses:
-        '403':
+        "403":
           description: Successful response
           content:
             application/json: {}
@@ -1347,12 +1346,12 @@ paths:
         - Bases
       summary: Delete Base
       description: Delete a base. This will move this base to its team's trash.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1366,13 +1365,13 @@ paths:
         - Bases
       summary: List Trashed Bases
       description: List all the trashed bases of all teams in the system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1387,13 +1386,13 @@ paths:
                     name: Test report
                     creator: Example creator
                     modifier: Example modifier
-                    created_at: '2021-01-22T09:13:12+00:00'
-                    updated_at: '2021-01-22T09:13:12+00:00'
+                    created_at: "2021-01-22T09:13:12+00:00"
+                    updated_at: "2021-01-22T09:13:12+00:00"
                     color: null
                     text_color: null
                     icon: null
                     deleted: true
-                    delete_time: '2021-03-02T13:02:32+00:00'
+                    delete_time: "2021-03-02T13:02:32+00:00"
                     owner: Example owner
                     org_id: 176
                     org_name: McDonald's
@@ -1406,12 +1405,12 @@ paths:
         Restore a deleted base from the trash bin and put it back where it was.
         If a base already exists there with the same name, the operation will
         fail and return an error.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1429,17 +1428,17 @@ paths:
         notifications inside of a certain base. To enquire these notifications,
         you'll need the base's UUID and the user's contact email or their
         username. You can also filter the result by read or unread status.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
-        - $ref: "#/components/parameters/dtable_uuid" 
+        - $ref: "#/components/parameters/dtable_uuid"
         - $ref: "#/components/parameters/username"
         - $ref: "#/components/parameters/contact_email"
         - $ref: "#/components/parameters/seen"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1451,10 +1450,10 @@ paths:
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     dtable_uuid: base_uuid
                     msg_type: notification_rules
-                    created_at: '2021-10-14T13:51:37+00:00'
+                    created_at: "2021-10-14T13:51:37+00:00"
                     detail:
-                      table_id: '0000'
-                      view_id: '0000'
+                      table_id: "0000"
+                      view_id: "0000"
                       condition: rows_added
                       rule_id: 24
                       rule_name: Untitled rule
@@ -1466,10 +1465,10 @@ paths:
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     dtable_uuid: base_uuid
                     msg_type: notification_rules
-                    created_at: '2021-10-14T13:49:21+00:00'
+                    created_at: "2021-10-14T13:49:21+00:00"
                     detail:
-                      table_id: '0000'
-                      view_id: '0000'
+                      table_id: "0000"
+                      view_id: "0000"
                       condition: filters_satisfy
                       rule_id: 40
                       rule_name: Untitled rule
@@ -1488,12 +1487,12 @@ paths:
         admin can unset the base password with this API request. The returned
         value of `is_encrypted` indicates that the base's password has been
         unset.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1505,9 +1504,9 @@ paths:
                   workspace_id: 204
                   uuid: 12345678-ba46-4c07-8116-d237bdeb35a3
                   name: Termine
-                  created_at: '2022-01-12T10:30:01+00:00'
-                  updated_at: '2022-03-11T12:02:22+00:00'
-                  color: '#972CB0'
+                  created_at: "2022-01-12T10:30:01+00:00"
+                  updated_at: "2022-03-11T12:02:22+00:00"
+                  color: "#972CB0"
                   text_color: null
                   icon: icon-leave-record
                   is_encrypted: false
@@ -1526,7 +1525,7 @@ paths:
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1541,7 +1540,7 @@ paths:
                     name: "Important Projects"
                     owner: "5c9f13dc9f37495e822d8ecdce301f8f@auth.local"
                     owner_name: "Bert"
-                    created_at: '2023-06-01T12:46:26+00:00'
+                    created_at: "2023-06-01T12:46:26+00:00"
                     quota: -1
                     parent_group_id: 0
                     size: 4073123
@@ -1549,7 +1548,7 @@ paths:
                     name: "ABC Projects"
                     owner: "5c9f13dc9f37495e822d8ecdce301f8f@auth.local"
                     owner_name: "Bert"
-                    created_at: '2023-06-01T12:36:16+00:00'
+                    created_at: "2023-06-01T12:36:16+00:00"
                     quota: -1
                     parent_group_id: 0
                     size: 3226771
@@ -1569,7 +1568,7 @@ paths:
                 group_owner:
                   $ref: "#/components/schemas/username"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1591,12 +1590,12 @@ paths:
                   $ref: "#/components/schemas/username"
                 #quota:
                 #  $ref: "#/components/schemas/group_quota"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1607,7 +1606,7 @@ paths:
                 parent_group_id: 0
                 name: Group New
                 owner: 123abc456def789ghi123jkl456mno789@auth.local
-                created_at: '2020-11-19T08:14:52+00:00'
+                created_at: "2020-11-19T08:14:52+00:00"
                 avatar_url: "http://cloud.seatable.io/media/avatars/groups/default.png"
                 admins:
                   - 2d67c225c64f4305ada3e5820ce6d660@auth.local
@@ -1615,12 +1614,12 @@ paths:
       tags: [Groups]
       summary: Delete Group
       description: Delete a group with its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1648,7 +1647,7 @@ paths:
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/role"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1658,7 +1657,7 @@ paths:
                 organizations:
                   - org_id: 1
                     org_name: Test-Admin
-                    ctime: '2020-06-01T12:46:26+00:00'
+                    ctime: "2020-06-01T12:46:26+00:00"
                     org_url_prefix: org_8hz6uh
                     role: org_default
                     creator_email: 8ca1997823b44dffbaa51e0dd0c35ac0@auth.local
@@ -1672,7 +1671,7 @@ paths:
                     row_limit: 2000
                   - org_id: 2
                     org_name: Testteam
-                    ctime: '2020-06-01T16:04:06+00:00'
+                    ctime: "2020-06-01T16:04:06+00:00"
                     org_url_prefix: org_yuvlgo
                     role: org_default
                     creator_email: 6a339c8f57e34010a63f2c46bb0d7e6c@auth.local
@@ -1725,7 +1724,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1734,7 +1733,7 @@ paths:
               example:
                 org_id: 2937
                 org_name: SeaTable Testing
-                ctime: '2021-03-17T13:32:33+00:00'
+                ctime: "2021-03-17T13:32:33+00:00"
                 org_url_prefix: org_3yz9yw0h0ze2zawb9cun
                 role: org_default
                 creator_email: 123456787839458f973104901fb22456@auth.local
@@ -1755,14 +1754,14 @@ paths:
         List all the bases of a team. As system administrator, you can see the
         information of these bases, but you do not have access to the data
         inside of them.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1776,9 +1775,9 @@ paths:
                     name: Project Tracker
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2020-10-26T14:05:53+00:00'
-                    updated_at: '2020-10-26T14:05:58+00:00'
-                    color: '#656463'
+                    created_at: "2020-10-26T14:05:53+00:00"
+                    updated_at: "2020-10-26T14:05:58+00:00"
+                    color: "#656463"
                     text_color: null
                     icon: icon-company-inventory
                     owner: Jasmin Tee
@@ -1789,9 +1788,9 @@ paths:
                     name: CRM & Sales
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2020-10-26T14:05:58+00:00'
-                    updated_at: '2020-10-26T14:06:05+00:00'
-                    color: '#4CAF50'
+                    created_at: "2020-10-26T14:05:58+00:00"
+                    updated_at: "2020-10-26T14:06:05+00:00"
+                    color: "#4CAF50"
                     text_color: null
                     icon: icon-dollar
                     owner: Jasmin Tee
@@ -1811,9 +1810,9 @@ paths:
             type: array
             items:
               type: string
-          example: '2'
+          example: "2"
       responses:
-        '200':
+        "200":
           description: ok
   /api/v2.1/admin/organizations/{org_id}/:
     put:
@@ -1846,7 +1845,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1855,7 +1854,7 @@ paths:
               example:
                 org_id: 176
                 org_name: Team SeaTable
-                ctime: '2020-11-18T12:30:31+00:00'
+                ctime: "2020-11-18T12:30:31+00:00"
                 org_url_prefix: org_d0hfk6jeupd72ab2nasd
                 role: org_enterprise
                 creator_email: 123456786569491ba42905bf1647fd3f@auth.local
@@ -1879,7 +1878,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1888,7 +1887,7 @@ paths:
               example:
                 org_id: 1
                 org_name: SeaTable
-                ctime: '2020-11-18T12:30:31+00:00'
+                ctime: "2020-11-18T12:30:31+00:00"
                 org_url_prefix: org_d0hfk6jeupd72ab2nxnh
                 role: org_enterprise
                 creator_email: 87654321569491ba42905bf1647fd3f@auth.local
@@ -1918,7 +1917,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1942,7 +1941,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1958,8 +1957,8 @@ paths:
                     is_org_admin: false
                     quota_total: -2
                     quota_usage: 0
-                    create_time: '2020-11-18T12:43:22+00:00'
-                    last_login: '2021-10-20T07:10:11.691284'
+                    create_time: "2020-11-18T12:43:22+00:00"
+                    last_login: "2021-10-20T07:10:11.691284"
                     active: true
                   - org_id: 176
                     workspace_id: 204
@@ -1969,8 +1968,8 @@ paths:
                     is_org_admin: true
                     quota_total: -2
                     quota_usage: 0
-                    create_time: '2020-11-18T12:30:31+00:00'
-                    last_login: '2021-11-03T08:29:00.310330'
+                    create_time: "2020-11-18T12:30:31+00:00"
+                    last_login: "2021-11-03T08:29:00.310330"
                     active: true
     post:
       tags:
@@ -2012,7 +2011,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2027,8 +2026,8 @@ paths:
                 is_org_admin: false
                 quota_total: -2
                 quota_usage: 0
-                create_time: '2022-03-13T10:05:52+00:00'
-                last_login: ''
+                create_time: "2022-03-13T10:05:52+00:00"
+                last_login: ""
                 active: true
   /api/v2.1/admin/organizations/{org_id}/users/{user_id}/:
     delete:
@@ -2037,12 +2036,12 @@ paths:
       summary: Delete Team User
       description: Delete a team user with this request.
       security:
-        - AccountTokenAuth: []      
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2061,7 +2060,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2072,12 +2071,12 @@ paths:
                   - group_name: testgroup
                     creator_name: Jasmin Tee
                     creator_email: 123456786569491ba42905bf1647fd3f@auth.local
-                    created_at: '2020-11-18T12:44:07+00:00'
+                    created_at: "2020-11-18T12:44:07+00:00"
                     group_id: 48
                   - group_name: Students
                     creator_name: Jasmin Tee
                     creator_email: 123456786569491ba42905bf1647fd3f@auth.local
-                    created_at: '2021-03-11T09:11:21+00:00'
+                    created_at: "2021-03-11T09:11:21+00:00"
                     group_id: 87
   /api/v2.1/admin/organizations/{org_id}/groups/{group_id}/:
     delete:
@@ -2089,12 +2088,12 @@ paths:
         delete any group in the system by their ID, no matter in which team they
         are.
       security:
-        - AccountTokenAuth: []      
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2104,85 +2103,18 @@ paths:
                 success: true
 
   # Base Export
-  /api/v2.1/admin/dtables/{base_uuid}/export-dtable/:
+  /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/:
     get:
-      deprecated: true
       tags: [Export]
-      summary: Create Export Task
+      summary: Export base
       description: |
-        Use this request to start exporting a base.
-        A `task_id` will be returned. A `task_id` doesn't mean, that the export has been completed. 
-        Large bases will need some time before they can be downloaded.
-
-        To automate your workflow, use the request Query export task status to check if the task is finished. 
-        Once it is finished, proceed with the download. 
-
-        > 📘 Deprecated due to asynchronous request
-        > 
-        > Requests with `task_id` will be replaced in the future with synchronous requests. Therefore you should be aware that this call might be removed in the future.
-      security: 
-      - AccountTokenAuth: []
+        Use this request to export a base as System Admin.
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                task_id: "5f81ae15-a818-4990-889c-e38e33f02b4a"
-  /api/v2.1/dtable-io-status/?task_id={task_id}:
-    get:
-      deprecated: true
-      tags: [Export]
-      summary: Get Export Task status
-      description: |
-        When you have sent a request to export a base/a view, a task_id is returned to you. Sometimes when the base/the view is too large, the generating of downloadable file could take a while. 
-        In this case, use this request to query the task status.
-        To automate your workflow, it is recommended to query every 10 seconds until `is_finished:true` is returned. Once it's finished, the query will return a 404 error if you query again. 
-        This means you should proceed to **Download the exported data**.
-
-        > 📘 Deprecated due to asynchronous request
-        > 
-        > Requests with `task_id` will be replaced in the future with synchronous requests. Therefore you should be aware that this call might be removed in the future.
-      security:
-      - AccountTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/task_id"
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                is_finished: true
-  /dtable-export-content/?dtable_uuid={base_uuid}&task_id={task_id}:
-    get:
-      deprecated: true
-      tags: [Export]
-      summary: Download exported data
-      description: |
-        When the export task is finished, you can download the exported file with this request.
-        Use the task_id from the previous requests and the UUID of the target base. And of course, you need authorization to download the file. See the example request for details.
-
-        > 📘 Deprecated due to asynchronous request
-        > 
-        > Requests with `task_id` will be replaced in the future with synchronous requests. Therefore you should be aware that this call might be removed in the future.
-
-        > 📘 Permission denied from command line
-        > 
-        > Currently it is only possible to download the dtable file via a browser if you are already authenticated. Sending the authentication header will always result in a *Permission denied*.
-      security:
-      - AccountTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-        - $ref: "#/components/parameters/task_id"
-      responses:
-        '200':
+        "200":
           description: OK
 
   # Common Dataset
@@ -2198,13 +2130,13 @@ paths:
         *   The source base's name,
         *   The creator's name, and
         *   The time of the creation.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2215,11 +2147,11 @@ paths:
                   - dataset_name: guest table2
                     src_dtable_name: Guest registration
                     creator: Michael Jackson
-                    created_at: '2022-01-25T15:32:47+00:00'
+                    created_at: "2022-01-25T15:32:47+00:00"
                   - dataset_name: Table3
                     src_dtable_name: All types
                     creator: Michael Jackson
-                    created_at: '2022-01-25T15:31:16+00:00'
+                    created_at: "2022-01-25T15:31:16+00:00"
   /api/v2.1/admin/common-dataset/periodical-syncs/:
     get:
       tags:
@@ -2228,13 +2160,13 @@ paths:
       description: >-
         Use this request to explicitly list off the periodically synchronized
         common datasets in the system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2246,12 +2178,12 @@ paths:
                     src_dtable_name: students
                     dst_dtable_name: Income
                     creator: Michael Jackson
-                    created_at: '2022-03-13T09:13:39+00:00'
+                    created_at: "2022-03-13T09:13:39+00:00"
                   - dataset_name: Success
                     src_dtable_name: students
                     dst_dtable_name: All types
                     creator: Michael Jackson
-                    created_at: '2022-01-10T11:03:32+00:00'
+                    created_at: "2022-01-10T11:03:32+00:00"
   /api/v2.1/admin/common-dataset/invalid-syncs/:
     get:
       tags:
@@ -2262,13 +2194,13 @@ paths:
         invalid. Such cases happen when, for example, the source or destination
         tables are deleted. Use this request to list off all the invalid common
         dataset synchronization configurations in the system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2280,12 +2212,12 @@ paths:
                     src_dtable_name: students
                     dst_dtable_name: Income
                     creator: Michael Jackson
-                    created_at: '2022-03-13T09:13:39+00:00'
+                    created_at: "2022-03-13T09:13:39+00:00"
                   - dataset_name: Success
                     src_dtable_name: students
                     dst_dtable_name: All types (1)
                     creator: Michael Jackson
-                    created_at: '2022-01-10T11:03:32+00:00'
+                    created_at: "2022-01-10T11:03:32+00:00"
     delete:
       tags:
         - Common Dataset
@@ -2293,10 +2225,10 @@ paths:
       description: >-
         Use this request to delete all invalid common dataset synchronization
         configurations at once.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: "ok"
           content:
             application/json:
@@ -2319,12 +2251,12 @@ paths:
       description: >-
         Delete an invalid common dataset synchronization configuration with its
         ID retrieved from the previous request.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/sync_id"
       responses:
-        '200':
+        "200":
           description: "ok"
           content:
             application/json:
@@ -2332,7 +2264,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Departments
   /api/v2.1/admin/address-book/groups/{parent_department_id}/:
     get:
@@ -2345,12 +2277,12 @@ paths:
         given, the default of `-1` is taken.
         In this example, the parent department has the ID of `1`, and there are
         two departments with the IDs of `2` and `3` in it.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/parent_department_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2360,20 +2292,20 @@ paths:
                 id: 1
                 name: Sys Dev
                 owner: system admin
-                created_at: '2021-02-26T11:21:19+00:00'
+                created_at: "2021-02-26T11:21:19+00:00"
                 parent_group_id: -1
                 quota: -2
                 groups:
                   - id: 2
                     name: Developers
                     owner: system admin
-                    created_at: '2021-02-26T13:53:44+00:00'
+                    created_at: "2021-02-26T13:53:44+00:00"
                     parent_group_id: 1
                     quota: -2
                   - id: 3
                     name: Test Department
                     owner: system admin
-                    created_at: '2021-02-26T14:17:06+00:00'
+                    created_at: "2021-02-26T14:17:06+00:00"
                     parent_group_id: 1
                     quota: -2
                 members: []
@@ -2396,10 +2328,10 @@ paths:
                   $ref: "#/components/schemas/group_name"
                 parent_group:
                   $ref: "#/components/schemas/parent_group"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2409,7 +2341,7 @@ paths:
                 id: 2
                 name: Test Department
                 owner: system admin
-                created_at: '2021-02-26T14:17:06+00:00'
+                created_at: "2021-02-26T14:17:06+00:00"
                 parent_group_id: 1
                 quota: -2
   /api/v2.1/admin/address-book/groups/{department_id}/:
@@ -2418,13 +2350,13 @@ paths:
         - Departments
       summary: Get Department
       description: Get the information of a certain department by its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/return_ancestors"
         - $ref: "#/components/parameters/department_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2434,7 +2366,7 @@ paths:
                 id: 2
                 name: Test department
                 owner: system admin
-                created_at: '2021-02-26T11:21:34+00:00'
+                created_at: "2021-02-26T11:21:34+00:00"
                 parent_group_id: 74
                 quota: -2
                 groups: []
@@ -2443,7 +2375,7 @@ paths:
                   - id: 1
                     name: sys-dep-1
                     owner: system admin
-                    created_at: '2021-02-26T11:20:47+00:00'
+                    created_at: "2021-02-26T11:20:47+00:00"
                     parent_group_id: -1
                     quota: -2
     delete:
@@ -2451,12 +2383,12 @@ paths:
         - Departments
       summary: Delete Department
       description: Delete a department by its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/department_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2464,7 +2396,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Sharing Links
   /api/v2.1/admin/dtable/{base_id}/external-links/:
     get:
@@ -2476,12 +2408,12 @@ paths:
         request, you'll need the base's `base_id`, which is to be distinguished
         from the base's `base_uuid`. You can retrieve a base's `base_id` with
         the API request e.g. [List User's Bases](/reference/list-users-bases).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2496,7 +2428,7 @@ paths:
                       creator_name: Jasmin Tee
                       token: fleischkaesebroetchen
                       permission: r
-                      create_at: '2021-05-18T14:28:12+00:00'
+                      create_at: "2021-05-18T14:28:12+00:00"
                       view_cnt: 0
                       url: >-
                         https://cloud.seatable.io/dtable/external-links/custom/fleischkaesebroetchen/
@@ -2506,7 +2438,7 @@ paths:
                       creator_name: Jasmin Tee
                       token: 42a42b34f97745948765
                       permission: r
-                      create_at: '2021-05-27T11:16:54+00:00'
+                      create_at: "2021-05-27T11:16:54+00:00"
                       view_cnt: 0
                       url: >-
                         https://cloud.seatable.io/dtable/external-links/42a42b34f97745948765/
@@ -2517,28 +2449,28 @@ paths:
                       creator_name: Jasmin Tee
                       token: 922008ae1f1742f788f8
                       permission: r
-                      create_at: '2021-05-18T14:21:57+00:00'
+                      create_at: "2021-05-18T14:21:57+00:00"
                       view_cnt: 0
-                      table_id: '0000'
+                      table_id: "0000"
                       view_id: Jz4d
                       url: >-
                         https://cloud.seatable.io/dtable/view-external-links/922008ae1f1742f788f8/
                       is_custom: false
-                      expire_date: ''
+                      expire_date: ""
                     - id: 13
                       from_dtable: Example
                       creator: 123abc456def789ghi123jkl456mno789@auth.local
                       creator_name: Jasmin Tee
                       token: 35967f61163848b29c44
                       permission: r
-                      create_at: '2021-05-18T14:22:52+00:00'
+                      create_at: "2021-05-18T14:22:52+00:00"
                       view_cnt: 0
-                      table_id: '0000'
+                      table_id: "0000"
                       view_id: NdFD
                       url: >-
                         https://cloud.seatable.io/dtable/view-external-links/35967f61163848b29c44/
                       is_custom: false
-                      expire_date: ''
+                      expire_date: ""
   /api/v2.1/admin/external-links/:
     get:
       tags:
@@ -2548,13 +2480,13 @@ paths:
         List all the base external links generated in the system. 
         In the returned objects, you can see the creator of the links, and how
         many times these links have been viewed.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2569,7 +2501,7 @@ paths:
                     creator_name: Michael Jackson
                     token: 12345b3bd1fe47d08cd4
                     permission: r
-                    create_at: '2021-12-08T16:04:59+00:00'
+                    create_at: "2021-12-08T16:04:59+00:00"
                     view_cnt: 1
                     url: >-
                       https://cloud.seatable.io/dtable/external-links/12345b3bd1fe47d08cd4/
@@ -2580,12 +2512,12 @@ paths:
         - Sharing Links
       summary: Delete Base External Link
       description: A base external link can be deleted by its token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/external_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2601,10 +2533,10 @@ paths:
       description: >-
         Use this request to list all the view external links generated in the
         current system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2619,26 +2551,26 @@ paths:
                     creator_name: Jason
                     token: da564e108fc04852abac
                     permission: r
-                    create_at: '2021-03-31T08:21:58+00:00'
+                    create_at: "2021-03-31T08:21:58+00:00"
                     view_cnt: 1
-                    table_id: '0000'
-                    view_id: '0000'
+                    table_id: "0000"
+                    view_id: "0000"
                     url: >-
                       https://cloud.seatable.io/dtable/view-external-links/da564e108fc04852abac/
                     is_custom: false
-                    expire_date: ''
+                    expire_date: ""
   /api/v2.1/admin/view-external-links/{view_external_link_token}/:
     delete:
       tags:
         - Sharing Links
       summary: Delete View External Link
       description: Delete a view external link with its token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/view_external_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2646,7 +2578,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Forms
   /api/v2.1/admin/forms/:
     get:
@@ -2656,10 +2588,10 @@ paths:
       description: >-
         List all the forms in the current system. The returned `id` value is the
         ID of the form, and the `token` is the form's token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2689,12 +2621,12 @@ paths:
       summary: Delete Form
       description: >-
         Delete a form with its token. Get a form's token with the call [List Forms](/reference/user-forms-list-forms).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/form_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2708,10 +2640,10 @@ paths:
         - Forms
       summary: List Data Collection Forms
       description: List all the data collection forms generated in the system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2724,13 +2656,13 @@ paths:
                     username: Christoph Dyllick-Brenzinger
                     dtable_name: Aufgaben
                     token: 12345678-4c63-4171-81cf-ddb4bfb72cba
-                    created_at: '2021-03-08T10:02:09+00:00'
+                    created_at: "2021-03-08T10:02:09+00:00"
                   - id: 2
                     table_name: data collection
                     username: Max Teamleiter
                     dtable_name: Templates
                     token: 12345678-d2fd-4c3c-a670-501a859fb02d
-                    created_at: '2021-03-08T10:51:26+00:00'
+                    created_at: "2021-03-08T10:51:26+00:00"
                 count: 9
   /api/v2.1/admin/collection-tables/{collection_table_token}/:
     delete:
@@ -2741,12 +2673,12 @@ paths:
         Delete a data collection table with its token. The token can be
         retrieved with the call [List Data Collection Tables](/reference/list-data-collection-forms), or from the
         table's URL as its suffix.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/collection_table_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2754,7 +2686,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Automations
   /api/v2.1/admin/automation-rules/:
     get:
@@ -2762,13 +2694,13 @@ paths:
         - Automations
       summary: List Automations
       description: List all the existing base automation rules in the current system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2781,8 +2713,8 @@ paths:
                     run_condition: per_day
                     trigger:
                       rule_name: Untitled rule
-                      table_id: '0000'
-                      view_id: '0000'
+                      table_id: "0000"
+                      view_id: "0000"
                       condition: run_periodically
                       date_column_name: Date
                       notify_hour: 14
@@ -2790,19 +2722,19 @@ paths:
                       - type: add_record
                         row:
                           Name: new record um 15 uhr
-                        _id: '548370'
+                        _id: "548370"
                       - type: notify
                         users:
                           - 12345667d1754bb4afa2c2cb7369d244@auth.local
                         default_msg: New record {Name} has been added.
-                        _id: '421534'
+                        _id: "421534"
                       - type: add_record
                         row:
-                          Name: ''
-                        _id: '659765'
+                          Name: ""
+                        _id: "659765"
                     creator: Michael Jackson
-                    ctime: '2021-07-15T12:48:33+00:00'
-                    last_trigger_time: '2021-08-25T14:00:00+00:00'
+                    ctime: "2021-07-15T12:48:33+00:00"
+                    last_trigger_time: "2021-08-25T14:00:00+00:00"
                     is_valid: true
                     trigger_count: 7
                 count: 5
@@ -2814,12 +2746,12 @@ paths:
       description: >-
         As system administrator, you can delete any automation rule existing in
         the current system. Attention - This operation cannot be undone!
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/automation_rule_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2836,13 +2768,13 @@ paths:
         When an automation rule's dependent base, row or column doesn't exist
         any more, it may become invalid. In this case, the system administrator
         can list all the invalid automation rules and eventually delete them.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2855,24 +2787,24 @@ paths:
                     run_condition: per_update
                     trigger:
                       rule_name: TestRules
-                      table_id: '0000'
-                      view_id: '0000'
+                      table_id: "0000"
+                      view_id: "0000"
                       condition: filters_satisfy
                       filters: []
-                      filter_conjunction: ''
+                      filter_conjunction: ""
                       column_keys: []
                       watch_all_columns: true
                     actions:
                       - type: lock_record
                         is_locked: true
-                        _id: '470594'
+                        _id: "470594"
                       - type: add_record
                         row:
-                          '0000': '11'
-                        _id: '863821'
+                          "0000": "11"
+                        _id: "863821"
                     creator: Ginger Ale
-                    ctime: '2021-08-02T15:21:52+08:00'
-                    last_trigger_time: '2021-08-02T15:22:55+08:00'
+                    ctime: "2021-08-02T15:21:52+08:00"
+                    last_trigger_time: "2021-08-02T15:22:55+08:00"
                     is_valid: false
                 count: 10
     delete:
@@ -2882,10 +2814,10 @@ paths:
       description: >-
         If you don't want to delete the invalid automation rules one by one, you
         can use this request to delete them all at once.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2893,7 +2825,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Notification Rules
   /api/v2.1/admin/notification-rules/:
     get:
@@ -2903,13 +2835,13 @@ paths:
       description: >-
         List all the existing notification rules in the system. The returned
         `id` values are the IDs of each notification rule.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2923,7 +2855,7 @@ paths:
                     trigger:
                       rule_name: Testing rule
                       table_id: 9sEa
-                      view_id: '0000'
+                      view_id: "0000"
                       condition: filters_satisfy
                       filters:
                         - column_key: hn8H
@@ -2936,8 +2868,8 @@ paths:
                       users:
                         - 1234567891754bb4afa2c2cb7369d244@auth.local
                     creator: Jasmin Tee
-                    ctime: '2020-11-18T12:45:32+00:00'
-                    last_trigger_time: '2020-11-17T12:45:32+00:00'
+                    ctime: "2020-11-18T12:45:32+00:00"
+                    last_trigger_time: "2020-11-17T12:45:32+00:00"
                 count: 8
   /api/v2.1/admin/notification-rules/{notification_rule_id}/:
     delete:
@@ -2945,12 +2877,12 @@ paths:
         - Notifications
       summary: Delete Notification
       description: Delete a notification rule by its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/notification_rule_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2966,13 +2898,13 @@ paths:
       description: >-
         The system can detect notification rules that are invalid. You can list
         all the invalid notification rules here.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2986,7 +2918,7 @@ paths:
                     trigger:
                       rule_name: wd的提醒规则
                       table_id: clk6
-                      view_id: '0000'
+                      view_id: "0000"
                       condition: rows_modified
                       column_keys: []
                       watch_all_columns: true
@@ -2995,10 +2927,10 @@ paths:
                       default_msg: 呜呜呜
                       users:
                         - 3d3ef49e927a4ff99e605763355027e2@auth.local
-                      users_column_key: ''
+                      users_column_key: ""
                     creator: admin
-                    ctime: '2021-06-03T09:51:58+00:00'
-                    last_trigger_time: ''
+                    ctime: "2021-06-03T09:51:58+00:00"
+                    last_trigger_time: ""
                     is_valid: 1
                   - id: 15
                     dtable_uuid: 88b0e65a-18f1-4b08-9e6f-fe63d6199c87
@@ -3006,7 +2938,7 @@ paths:
                     trigger:
                       rule_name: wd的提醒规则2
                       table_id: clk6
-                      view_id: '0000'
+                      view_id: "0000"
                       condition: rows_modified
                       column_keys: []
                       watch_all_columns: true
@@ -3015,10 +2947,10 @@ paths:
                       default_msg: 呜呜呜
                       users:
                         - 3d3ef49e927a4ff99e605763355027e2@auth.local
-                      users_column_key: ''
+                      users_column_key: ""
                     creator: admin
-                    ctime: '2021-06-03T09:52:24+00:00'
-                    last_trigger_time: ''
+                    ctime: "2021-06-03T09:52:24+00:00"
+                    last_trigger_time: ""
                     is_valid: 1
                 count: 6
     delete:
@@ -3026,10 +2958,10 @@ paths:
         - Notifications
       summary: Delete Invalid Notifications
       description: Delete all the notification rules that are invalid.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3047,13 +2979,13 @@ paths:
       description: >-
         List the email sending logs in the system. The emails sent via 3rd party
         email accounts are listed here.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3061,7 +2993,7 @@ paths:
                 type: object
               example:
                 email_sending_logs:
-                  - create_time: '2021-08-23T13:27:22+00:00'
+                  - create_time: "2021-08-23T13:27:22+00:00"
                     name: automation-rules
                     host: smtp.web.de
                     success: true
@@ -3073,13 +3005,13 @@ paths:
       summary: List Login Logs
       description: >-
         List the logins of all users in the system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3087,22 +3019,22 @@ paths:
                 type: object
               example:
                 login_log_list:
-                  - login_time: '2023-07-17T10:01:13+02:00'
-                    login_ip: '24.134.152.69'
+                  - login_time: "2023-07-17T10:01:13+02:00"
+                    login_ip: "24.134.152.69"
                     log_success: true
-                    name: 'John'
-                    email: '145504ae043c438cbb45f2afb084d586@auth.local'
-                    contact_email: 'john@example.com'
+                    name: "John"
+                    email: "145504ae043c438cbb45f2afb084d586@auth.local"
+                    contact_email: "john@example.com"
                 total_count: 23
   /api/v2.1/admin/registration-logs/:
     get:
       tags:
         - Logs
       summary: List Registration Logs
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '403':
+        "403":
           description: Successful response
           content:
             application/json: {}
@@ -3120,7 +3052,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3132,7 +3064,7 @@ paths:
                     dtable_uuid: 12345678-ebe8-466c-89f6-492a0f956af9
                     reporter: Jasmine
                     external_link_token: e6cf8b02a74341261234
-                    create_time: '2021-07-14T12:09:49+00:00'
+                    create_time: "2021-07-14T12:09:49+00:00"
                     abuse_type: abuse_content
                     description: This is a test
                     handled: false
@@ -3162,7 +3094,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/abuse_report_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3173,7 +3105,7 @@ paths:
                 dtable_uuid: 12345678-ebe8-466c-89f6-492a0f956af9
                 reporter: Jasmine
                 external_link_token: e6cf8b02a74341261234
-                create_time: '2021-07-14T12:09:49+00:00'
+                create_time: "2021-07-14T12:09:49+00:00"
                 abuse_type: abuse_content
                 description: This is a test
                 handled: true
@@ -3186,10 +3118,10 @@ paths:
         - Plugins
       summary: List Plugins
       description: List all the plugins currently available in the system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3213,12 +3145,12 @@ paths:
                         en: Display your records in a gallery.
                         fr: Affichez vos enregistrements dans une galerie.
                         zh-cn: 用图库的方式展示你的记录。
-                      last_modified: '2021-03-12T12:04:33+08:00'
+                      last_modified: "2021-03-12T12:04:33+08:00"
                       has_css: true
                       has_icon: true
                       has_card_image: false
                     added_by: admin
-                    added_time: '2020-07-02T06:26:48+00:00'
+                    added_time: "2020-07-02T06:26:48+00:00"
                   - id: 2
                     plugin_name: timeline
                     info:
@@ -3226,9 +3158,9 @@ paths:
                       version: 0.4.29
                       display_type: overlay
                       display_name:
-                        de: ''
+                        de: ""
                         en: Timeline
-                        fr: ''
+                        fr: ""
                         zh-cn: 时间线
                       description:
                         de: >-
@@ -3239,12 +3171,12 @@ paths:
                           Visualisez les informations enregistrées sur la
                           chronologie.
                         zh-cn: 在时间线上可视化展现记录信息。
-                      last_modified: '2021-03-08T10:29:27+08:00'
+                      last_modified: "2021-03-08T10:29:27+08:00"
                       has_css: true
                       has_icon: true
                       has_card_image: false
                     added_by: admin
-                    added_time: '2020-07-02T06:28:22+00:00'
+                    added_time: "2020-07-02T06:28:22+00:00"
                   - id: 3
                     plugin_name: map-en
                     info:
@@ -3268,12 +3200,12 @@ paths:
                           Le plugin de carte peut afficher des enregistrements
                           sur la carte
                         zh-cn: 地图插件能把记录显示到地图上
-                      last_modified: '2020-12-08T11:04:56+08:00'
+                      last_modified: "2020-12-08T11:04:56+08:00"
                       has_css: true
                       has_icon: true
                       has_card_image: false
                     added_by: admin
-                    added_time: '2020-07-07T09:32:56+00:00'
+                    added_time: "2020-07-07T09:32:56+00:00"
                   - id: 4
                     plugin_name: deduplication
                     info:
@@ -3289,12 +3221,12 @@ paths:
                         en: Remove duplicated records in a table
                         fr: Supprimer les enregistrements dupliqués dans une table
                         zh-cn: 删除表格中的重复数据
-                      last_modified: '2021-02-04T11:55:26+08:00'
+                      last_modified: "2021-02-04T11:55:26+08:00"
                       has_css: true
                       has_icon: true
                       has_card_image: false
                     added_by: admin
-                    added_time: '2021-03-08T09:07:06+00:00'
+                    added_time: "2021-03-08T09:07:06+00:00"
     post:
       tags:
         - Plugins
@@ -3311,8 +3243,8 @@ paths:
               properties:
                 plugin:
                   $ref: "#/components/schemas/plugin"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - name: Content-Type
           in: header
@@ -3320,7 +3252,7 @@ paths:
             type: string
           example: multipart/form-data;
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3342,12 +3274,12 @@ paths:
                     en: Remove duplicated records in a table
                     fr: Supprimer les enregistrements dupliqués dans une table
                     zh-cn: 删除表格中的重复数据
-                  last_modified: '2021-02-04T11:55:26+08:00'
+                  last_modified: "2021-02-04T11:55:26+08:00"
                   has_css: true
                   has_icon: true
                   has_card_image: false
                 added_by: admin
-                added_time: '2021-03-25T14:13:16+00:00'
+                added_time: "2021-03-25T14:13:16+00:00"
 
   /api/v2.1/admin/plugins-install-count/:
     get:
@@ -3358,22 +3290,23 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "plugins_install_count_list": [
-                    {
-                      "id": 1,
-                      "plugin_name": "calendar",
-                      "count": 1,
-                      "updated_at": "2023-04-26T12:48:26+00:00",
-                      "created_at": "2023-04-26T12:48:26+00:00"
-                    }
-                  ],
-                  "count": 1
+                  "plugins_install_count_list":
+                    [
+                      {
+                        "id": 1,
+                        "plugin_name": "calendar",
+                        "count": 1,
+                        "updated_at": "2023-04-26T12:48:26+00:00",
+                        "created_at": "2023-04-26T12:48:26+00:00",
+                      },
+                    ],
+                  "count": 1,
                 }
 
   /api/v2.1/admin/dtable-system-plugins/{plugin_id}/:
@@ -3391,8 +3324,8 @@ paths:
               properties:
                 plugin:
                   $ref: "#/components/schemas/plugin"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - name: Content-Type
           in: header
@@ -3401,7 +3334,7 @@ paths:
           example: multipart/form-data; boundary
         - $ref: "#/components/parameters/plugin_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3423,24 +3356,24 @@ paths:
                     en: Remove duplicated records in a table
                     fr: Supprimer les enregistrements dupliqués dans une table
                     zh-cn: 删除表格中的重复数据
-                  last_modified: '2021-02-04T11:55:26+08:00'
+                  last_modified: "2021-02-04T11:55:26+08:00"
                   has_css: true
                   has_icon: true
                   has_card_image: false
                 added_by: admin
-                added_time: '2021-03-25T14:13:16+00:00'
+                added_time: "2021-03-25T14:13:16+00:00"
     delete:
       tags:
         - Plugins
       summary: Delete Plugin
       description: >-
         Delete a plugin via its ID (retrieved from the call [List Plugins](/reference/list-plugins)).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/plugin_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3448,7 +3381,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Statistics
   /api/v2.1/admin/statistics/active-users/:
     get:
@@ -3456,13 +3389,13 @@ paths:
         - Statistics
       summary: Get Active Users (per Day)
       description: List the number of daily active users in a given period of time.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/starting_time"
         - $ref: "#/components/parameters/ending_time"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3470,13 +3403,13 @@ paths:
                 type: object
               example:
                 active_users:
-                  - datetime: '2021-02-21T00:00:00+00:00'
+                  - datetime: "2021-02-21T00:00:00+00:00"
                     count: 100
-                  - datetime: '2021-02-22T00:00:00+00:00'
+                  - datetime: "2021-02-22T00:00:00+00:00"
                     count: 86
-                  - datetime: '2021-02-23T00:00:00+00:00'
+                  - datetime: "2021-02-23T00:00:00+00:00"
                     count: 122
-                  - datetime: '2021-02-24T00:00:00+00:00'
+                  - datetime: "2021-02-24T00:00:00+00:00"
                     count: 120
   /api/v2.1/admin/daily-active-users/:
     get:
@@ -3484,14 +3417,14 @@ paths:
         - Statistics
       summary: List Active Users (one Day)
       description: List the active users' details on a given day.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/date"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3503,12 +3436,12 @@ paths:
                     email: 8765432382a244d395ff53a1ec2f3a19@auth.local
                     contact_email: lustig@example.com
                     name: Hannah Lustig
-                    reg_date: '2020-06-09T19:58:47.228413'
+                    reg_date: "2020-06-09T19:58:47.228413"
                   - avatar_url: https://cloud.seatable.io/media/avatars/default.png
                     email: kdjfhgls5f1e4c8d8e1c42d95867317c@auth.local
                     contact_email: pan@example.com
                     name: Peter Pan
-                    reg_date: '2019-11-14T02:25:39.929507'
+                    reg_date: "2019-11-14T02:25:39.929507"
                 page: 1
                 total_count: 87
   /api/v2.1/admin/statistics/auto-rules/:
@@ -3524,13 +3457,13 @@ paths:
         As this API request is developed in SeaTable 2.4.2 which came out in
         September 2021, automation rules statistics before September 2021 could
         not be correctly summarized with this call.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/is_user"
         - $ref: "#/components/parameters/month"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3540,9 +3473,9 @@ paths:
                 results:
                   - org_id: 176
                     org_name: SeaTable
-                    trigger_date: '202109'
+                    trigger_date: "202109"
                     trigger_count: 3
-                    update_at: '2021-09-27T10:08:05+00:00'
+                    update_at: "2021-09-27T10:08:05+00:00"
                 count: 1
   /api/v2.1/admin/statistics/scripts-running/:
     get:
@@ -3560,14 +3493,14 @@ paths:
         *   `total_run_count` is the total number of runs;
 
         *   `total_run_time` is the total time of runs, in seconds.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/is_user"
         - $ref: "#/components/parameters/owner"
         - $ref: "#/components/parameters/month"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3586,13 +3519,13 @@ paths:
         - Statistics
       summary: List Scripts Tasks
       description: List off all the scheduled scripts tasks in the current system.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3647,15 +3580,15 @@ paths:
 
         *   `page` and `per_page` are your controls of the returned pages and
         results per page.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/is_user"
         - $ref: "#/components/parameters/month"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3664,12 +3597,12 @@ paths:
               example:
                 results:
                   - org_id: 1
-                    visit_date: '202207'
+                    visit_date: "202207"
                     visit_count: 2
-                    latest_visit_at: '2022-07-02T14:09:37+00:00'
+                    latest_visit_at: "2022-07-02T14:09:37+00:00"
                     org_name: SeaTable GmbH
                 count: 1
-  
+
   # System Notifications
   /api/v2.1/admin/sys-user-notifications/:
     get:
@@ -3683,7 +3616,7 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3698,7 +3631,7 @@ paths:
                     contact_email: johndoe@example.com
                     seen: false
                     org_name: Team Jasmin Tee
-                    created_at: '2021-02-26T16:55:10+00:00'
+                    created_at: "2021-02-26T16:55:10+00:00"
                     msg_format: Hello user!
                 total_count: 1
     post:
@@ -3714,12 +3647,12 @@ paths:
               properties:
                 msg:
                   $ref: "#/components/schemas/msg"
-                username: 
+                username:
                   $ref: "#/components/schemas/username"
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3734,7 +3667,7 @@ paths:
                   contact_email: johndoe@example.com
                   seen: false
                   org_name: Team Jasmin Tee
-                  created_at: '2021-02-26T16:55:10+00:00'
+                  created_at: "2021-02-26T16:55:10+00:00"
                   msg_format: Hello user!
   /api/v2.1/admin/sys-user-notifications/{sys_notification_id}/:
     delete:
@@ -3747,7 +3680,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/sys_notification_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3755,7 +3688,7 @@ paths:
                 type: object
               example:
                 success: true
-   
+
   # System Info & Customizing
   /api/v2.1/admin/sysinfo/:
     get:
@@ -3768,7 +3701,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3784,7 +3717,7 @@ paths:
                 multi_tenancy_enabled: true
                 is_pro: true
                 with_license: true
-                license_expiration: '2024-12-31'
+                license_expiration: "2024-12-31"
                 license_mode: subscription
                 license_maxusers: 1000
                 license_to: table.example.com
@@ -3852,10 +3785,10 @@ paths:
                   $ref: "#/components/schemas/ENABLE_TWO_FACTOR_AUTH"
                 ENABLE_SIGNUP:
                   $ref: "#/components/schemas/ENABLE_SIGNUP"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3876,7 +3809,7 @@ paths:
                 ENABLE_BRANDING_CSS: 0
                 SITE_NAME: SeaTable
                 SITE_TITLE: SeaTable Private
-                CUSTOM_CSS: ' '
+                CUSTOM_CSS: " "
   /api/v2.1/admin/logo/:
     post:
       tags:
@@ -3893,10 +3826,10 @@ paths:
               properties:
                 logo:
                   $ref: "#/components/schemas/logo"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3928,10 +3861,10 @@ paths:
                   $ref: "#/components/schemas/favicon"
                 with_notify:
                   $ref: "#/components/schemas/with_notify"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3953,10 +3886,10 @@ paths:
               properties:
                 login_bg_image:
                   $ref: "#/components/schemas/login_bg_image"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
