@@ -3,14 +3,14 @@ info:
   title: Ping and Server Info
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0) - Part "Ping and Server Info".
-  version: "4.1"
+  version: "4.2"
 servers:
-  - url: 'https://{server}'
-    variables: 
+  - url: "https://{server}"
+    variables:
       server:
         default: cloud.seatable.io
 
-x-readme: 
+x-readme:
   explorer-enabled: true
   metrics-enabled: false
   proxy-enabled: false
@@ -44,7 +44,7 @@ components:
 paths:
   /server-info/:
     get:
-      tags: 
+      tags:
         - Info
       summary: Get SeaTable Server Info
       description: >-
@@ -52,46 +52,46 @@ paths:
         information. The response includes the current version number and the
         type of subscription.
       responses:
-        '200':
+        "200":
           description: Return version and edition of SeaTable Server
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/server_info"
-  
+
   /api2/ping/:
     get:
-      tags: 
+      tags:
         - Ping
       summary: Ping Server
       description: Check the server status.
       responses:
-        '200':
+        "200":
           description: Service is available and running
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ping_response"
-  
+
   /api2/auth/ping/:
     get:
-      tags: 
+      tags:
         - Ping
       summary: Ping Server (with authentication)
       description: |
         Executes two checks against SeaTable server:
         - check the validity of the Account-Token 
         - check the status of SeaTable Server
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: Access granted and service is available and running
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ping_response"
-                
+
   /dtable-server/ping/:
     get:
       tags:
@@ -102,13 +102,13 @@ paths:
         carried out by the dtable-server. These operations are included in the
         section **Base Operations**.
       responses:
-        '200':
+        "200":
           description: Service is available and running
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ping_response"
-  
+
   /dtable-db/ping:
     get:
       tags:
@@ -116,7 +116,7 @@ paths:
       summary: Ping dtable-db Server
       description: Check the status of the dtable-db server.
       responses:
-        '200':
+        "200":
           description: Service is available and running
           content:
             application/json:

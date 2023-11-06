@@ -1,7 +1,7 @@
 ---
 title: Limits
 excerpt: Get an overview of all rate and size limits of the SeaTable API.
-category: 64e5a881a6e8f4004e8bb277
+category: 65489cddc89ba30035c0d620
 isReference: true
 slug: limits
 ---
@@ -16,39 +16,38 @@ To ensure a consistent developer experience for all API users, the SeaTable-API 
 
 ## Rate limits
 
-All SeaTable API endpoints, except `/ping` and `/server-info` have a rate limit. The concrete limits can be found in the following tables. The accesses are counted either per base, or if not available, per IP address. 
+All SeaTable API endpoints, except `/ping` and `/server-info` have a rate limit. The concrete limits can be found in the following tables. The accesses are counted either per base, or if not available, per IP address.
 
 Meaning that if you reach the rate limit for one base, you still could make requests for other bases. If you hit the rate limit, the request will return the HTTP response status **429** without any further output.
 
-The access counter is not reset at a specific time, but the relevant period is always checked at the time of access. 
+The access counter is not reset at a specific time, but the relevant period is always checked at the time of access.
 
 > 🚧 Rate limits may change
-> 
+>
 > Currently, the same limits apply to all SeaTable Cloud customers. In the future, SeaTable might adjust the rate limits to balance for demand and reliability. SeaTable may also introduce distinct rate limits for teams with different pricing plans.
 
 ### General rate limits
 
-| Endpoints | SeaTable Cloud | SeaTable Dedicated and Server |
-| :- | :- | :- |
-| All web operations<br/>`/api/v2.1/*` | 300/min | unlimited |
-| All base operations<br/>`/dtable-server/api/v1/*` | 300/min<br/>5000/day  | 600/min<br/>5000/day |
-| All dtable-db operations<br/>`/dtable-db/api/v1/*` | 5000/day | unlimited |
+| Endpoints                                          | SeaTable Cloud       | SeaTable Dedicated and Server |
+| :------------------------------------------------- | :------------------- | :---------------------------- |
+| All web operations<br/>`/api/v2.1/*`               | 300/min              | unlimited                     |
+| All base operations<br/>`/dtable-server/api/v1/*`  | 300/min<br/>5000/day | 600/min<br/>5000/day          |
+| All dtable-db operations<br/>`/dtable-db/api/v1/*` | 5000/day             | unlimited                     |
 
 ### Authentication rate limits
 
-| Endpoints | SeaTable Cloud | SeaTable Dedicated and Server |
-| :- | :- | :- |
-| Get Account-Token<br/>`/api2/auth-token` | 60/min | unlimited |
-| Base Base-Token<br/>`/api/v2.1/dtable/app-access/token` | 60/min | unlimited |
+| Endpoints                                               | SeaTable Cloud | SeaTable Dedicated and Server |
+| :------------------------------------------------------ | :------------- | :---------------------------- |
+| Get Account-Token<br/>`/api2/auth-token`                | 60/min         | unlimited                     |
+| Base Base-Token<br/>`/api/v2.1/dtable/app-access/token` | 60/min         | unlimited                     |
 
 ### Base operations: special limits for data retrieval
 
-Retrieving records from a base is by far the most resource-intensive process, which is why it is subject to stricter limits. 
+Retrieving records from a base is by far the most resource-intensive process, which is why it is subject to stricter limits.
 
-| Endpoints | SeaTable Cloud | SeaTable Dedicated and Server |
-| :- | :- | :- |
-| `GET /dtable-server/api/v1/dtables/{...}/rows/`<br/>`POST /dtable-server/api/v1/{...}/filtered-rows/` | 60/min<br/>600/hour | 100/min<br/>6000/hour |
-
+| Endpoints                                                                                             | SeaTable Cloud      | SeaTable Dedicated and Server |
+| :---------------------------------------------------------------------------------------------------- | :------------------ | :---------------------------- |
+| `GET /dtable-server/api/v1/dtables/{...}/rows/`<br/>`POST /dtable-server/api/v1/{...}/filtered-rows/` | 60/min<br/>600/hour | 100/min<br/>6000/hour         |
 
 ## How to avoid the rate limits
 
@@ -74,12 +73,11 @@ SeaTable Dedicated customers and operators of their own SeaTable Server (Enterpr
 
 Besides the rate limits, there are size limits for how many rows you can manipulate with a **single call**. Of course, it is possible to execute multiple calls in a row as long as you stay below the rate limits.
 
-| Action and Endpoints | Max. number of rows |
-| :- | :- |
-| [List rows (with SQL)](/reference/list-rows-with-sql)<br/>`POST /dtable-db/api/v1/query/{...}/` | 10.000 |
-| [Insert, Update or Delete Rows (with SQL)](/reference/list-rows-with-sql)<br/>`POST /dtable-db/api/v1/query/{...}/` | unlimited |
-| [List rows](/reference/list-rows)<br/>`GET /dtable-server/api/v1/dtables/{...}/rows/` | 1.000 |
-| [Append rows](/reference/append-rows)<br/>`POST /dtable-server/api/v1/dtables/{...}/batch-append-rows/` | 1.000 | 
-| [Update rows](/reference/update-rows)<br/>`PUT /dtable-server/api/v1/dtables/{...}/batch-update-rows/` | 1.000 | 
-| [Delete rows](/reference/delete-rows)<br/>`DELETE /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/` | 10.000 |
-
+| Action and Endpoints                                                                                                | Max. number of rows |
+| :------------------------------------------------------------------------------------------------------------------ | :------------------ |
+| [List rows (with SQL)](/reference/list-rows-with-sql)<br/>`POST /dtable-db/api/v1/query/{...}/`                     | 10.000              |
+| [Insert, Update or Delete Rows (with SQL)](/reference/list-rows-with-sql)<br/>`POST /dtable-db/api/v1/query/{...}/` | unlimited           |
+| [List rows](/reference/list-rows)<br/>`GET /dtable-server/api/v1/dtables/{...}/rows/`                               | 1.000               |
+| [Append rows](/reference/append-rows)<br/>`POST /dtable-server/api/v1/dtables/{...}/batch-append-rows/`             | 1.000               |
+| [Update rows](/reference/update-rows)<br/>`PUT /dtable-server/api/v1/dtables/{...}/batch-update-rows/`              | 1.000               |
+| [Delete rows](/reference/delete-rows)<br/>`DELETE /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/`     | 10.000              |

@@ -3,18 +3,18 @@ info:
   title: Account Operations - Team admin
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0).
-  version: "4.1"
+  version: "4.2"
 servers:
-  - url: 'https://{server}'
-    variables: 
+  - url: "https://{server}"
+    variables:
       server:
         default: cloud.seatable.io
 
-x-readme: 
+x-readme:
   explorer-enabled: true
-  metrics-enabled: false 
+  metrics-enabled: false
   proxy-enabled: false
-  
+
 # the error messages, if query params are missing, are strange and misleading.
 
 components:
@@ -25,10 +25,10 @@ components:
       description: This is the [Account-Token](/reference/authentication).
 
   parameters:
-  #=======================Query parameters=======================#
+    #=======================Query parameters=======================#
     page:
       name: page
-      description: The page number you want to start showing the entries. If no value is provided, 1 will be used. 
+      description: The page number you want to start showing the entries. If no value is provided, 1 will be used.
       in: query
       schema:
         type: integer
@@ -52,7 +52,7 @@ components:
       description: Exact name or a part of the name of the base, case insensitive.
       example: "Example"
 
-  #=======================Path parameters=======================#
+    #=======================Path parameters=======================#
     org_id:
       name: org_id
       in: path
@@ -86,7 +86,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[0-9a-f]{20}$'
+        pattern: "^[0-9a-f]{20}$"
       required: true
       example: "d6d006b319ca4d2aa060"
     view_external_link_token:
@@ -94,15 +94,15 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[0-9a-f]{20}$'
+        pattern: "^[0-9a-f]{20}$"
       required: true
-      example: "d6d006b319ca4d2aa060"  
+      example: "d6d006b319ca4d2aa060"
     invite_link_token:
       name: invite_link_token
       in: path
       schema:
         type: string
-        pattern: '^[0-9a-f]{20}$'
+        pattern: "^[0-9a-f]{20}$"
       required: true
       example: "0366b8995d7f47d8eu3t"
     group_id:
@@ -113,7 +113,7 @@ components:
         minimum: 1
       required: true
       description: >-
-        The ID of the group to query. Can be retrieved from the call [List Groups in Your Team](/reference/list-groups-team). 
+        The ID of the group to query. Can be retrieved from the call [List Groups in Your Team](/reference/list-groups-team).
       example: "1"
     user_id:
       name: user_id
@@ -121,7 +121,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[a-f0-9]{32}(@auth.local)$'
+        pattern: "^[a-f0-9]{32}(@auth.local)$"
       required: true
       example: 123456789f1e4c8d8e1c31415867317c@auth.local
 
@@ -140,7 +140,7 @@ components:
       type: string
       description: The name of the group.
       example: "Sample Group"
-      required: 
+      required:
         - group_name
     group_owner:
       type: string
@@ -169,7 +169,7 @@ components:
       description: >-
         If a workspace should be automatically created for the user.
         Optional. `false` by default.
-      example: 'true'
+      example: "true"
     id_in_org:
       type: string
       description: >-
@@ -179,7 +179,7 @@ components:
     quota_total:
       type: integer
       description: Update their total quota in MB.
-      example: '3'
+      example: "3"
     group_id:
       type: string
       description: The ID of the group you'd like to move.
@@ -195,31 +195,31 @@ components:
       description: >-
         Whether you'd like to move your group to the bottom of the
         list (`true`). `false` by default.
-      example: 'true'
+      example: "true"
     enable_force_2fa:
       type: boolean
       description: >-
         if the 2-factor-authentication is forced (`true` or
         `false`).
-      example: 'true'
+      example: "true"
     enable_new_user_email:
       type: boolean
       description: >-
         if newly added users will get a system email (`true` or
         `false`).
-      example: 'true'
+      example: "true"
     enable_external_user_access_invite_link:
       type: boolean
       description: >-
         if external users can access bases via invite links (`true`
         or `false`).
-      example: 'false'
+      example: "false"
     enable_member_modify_name:
       type: boolean
       description: >-
         if members are allowed to change their names (`true` or
         `false`).
-      example: 'false'
+      example: "false"
     upload_file:
       type: object
       properties:
@@ -234,7 +234,7 @@ components:
       example: SeaTable GmbH
     force_2fa:
       type: integer
-      enum: [0,1]      
+      enum: [0, 1]
 
 paths:
   # Users
@@ -244,14 +244,14 @@ paths:
         - Users
       summary: List Users (Team)
       description: List all the users in the organization, or only the admins/non-admins.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -264,11 +264,11 @@ paths:
                     contact_email: jasmin@example.com
                     quota_usage: 0
                     quota_total: -2
-                    id_in_org: ''
-                    last_login: '2021-03-02T12:58:29+00:00'
+                    id_in_org: ""
+                    last_login: "2021-03-02T12:58:29+00:00"
                     id: 123
                     is_active: true
-                    ctime: '2020-11-18T12:30:31+00:00'
+                    ctime: "2020-11-18T12:30:31+00:00"
                     self_usage: 0
                     quota: -2
                     is_org_admin: true
@@ -307,12 +307,12 @@ paths:
                   $ref: "#/components/schemas/password"
                 with_workspace:
                   $ref: "#/components/schemas/with_workspace"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -321,7 +321,7 @@ paths:
               example:
                 id: 125
                 is_active: true
-                ctime: '2021-03-02T13:02:46+00:00'
+                ctime: "2021-03-02T13:02:46+00:00"
                 name: Mai Thai
                 email: 12345671bc384ab2b7adbec984948390@auth.local
                 contact_email: mai@example.com
@@ -329,7 +329,7 @@ paths:
                 self_usage: 0
                 quota: -2
                 workspace_id: 999
-    
+
   /api/v2.1/org/{org_id}/admin/users/{user_id}/:
     put:
       tags:
@@ -350,13 +350,13 @@ paths:
                   $ref: "#/components/schemas/name"
                 quota_total:
                   $ref: "#/components/schemas/quota_total"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -370,9 +370,9 @@ paths:
                 quota_total: 3000000
                 is_active: true
                 id: 253
-                ctime: '2020-11-18T12:43:22+00:00'
+                ctime: "2020-11-18T12:43:22+00:00"
                 id_in_org: Student001
-                last_login: '2022-03-26T15:38:18+00:00'
+                last_login: "2022-03-26T15:38:18+00:00"
                 self_usage: 144328135
                 quota: 3000000
     delete:
@@ -382,13 +382,13 @@ paths:
       description: >-
         Delete a user by their `user_id` permanently. When you delete a user,
         their bases are automatically moved into the organization's trash bin.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -404,13 +404,13 @@ paths:
       description: >-
         Reset the password of a user and get a new password. The new password
         will be automatically sent to the user per email.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -445,13 +445,13 @@ paths:
               properties:
                 force_2fa:
                   $ref: "#/components/schemas/force_2fa"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -472,13 +472,13 @@ paths:
         Again, this is to be distinguished from the request [Enforce 2FA for A
         User in Team](/reference/team-admin-users-enforce-2fa) when you use `force_2fa = 0`, which only cancels the
         enforcement of 2FA but doesn't necessarily disable it for them.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -500,14 +500,14 @@ paths:
         The returned `id` value is the ID of the base, to be distinguished from
         the base's `base_uuid`. Details see the **SeaTable API Parameter
         Reference**.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -521,8 +521,8 @@ paths:
                     name: Test base
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2020-11-18T12:31:29+00:00'
-                    updated_at: '2021-03-02T10:29:03+00:00'
+                    created_at: "2020-11-18T12:31:29+00:00"
+                    updated_at: "2021-03-02T10:29:03+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -534,8 +534,8 @@ paths:
                     name: Project Tracker
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2020-11-18T12:45:06+00:00'
-                    updated_at: '2020-11-18T12:45:06+00:00'
+                    created_at: "2020-11-18T12:45:06+00:00"
+                    updated_at: "2020-11-18T12:45:06+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -550,13 +550,13 @@ paths:
       description: >-
         Delete a base. This base will be put into the organization's trash bin,
         and permanently deleted automatically after 30 days.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/base_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -570,14 +570,14 @@ paths:
         - Bases
       summary: List Trash Bases
       description: List the bases in the organization's trash bin.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -591,13 +591,13 @@ paths:
                     name: Old data
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2020-12-28T18:04:05+00:00'
-                    updated_at: '2020-12-28T18:04:05+00:00'
+                    created_at: "2020-12-28T18:04:05+00:00"
+                    updated_at: "2020-12-28T18:04:05+00:00"
                     color: null
                     text_color: null
                     icon: null
                     deleted: true
-                    delete_time: '2021-03-02T10:40:44+00:00'
+                    delete_time: "2021-03-02T10:40:44+00:00"
                     owner: Jasmin Tee
                 count: 1
     delete:
@@ -607,12 +607,12 @@ paths:
       description: >-
         Clear the team trash bin. All the bases there will be removed
         permanently and cannot be restored any more.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -626,13 +626,13 @@ paths:
         - Bases
       summary: Restore Base from Trash
       description: Restore a base from the trash bin.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/base_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -649,13 +649,13 @@ paths:
         By giving the exact or fuzzy match of the name of a base, you can find a
         base or all the bases that fit to that search criteria. The search is
         case-insensitive.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/query_base_name"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -667,9 +667,9 @@ paths:
                     workspace_id: 204
                     uuid: 12345678-ba46-4c07-8116-d237bdeb35a3
                     name: Termine
-                    created_at: '2022-01-12T10:30:01+00:00'
-                    updated_at: '2022-03-11T12:02:22+00:00'
-                    color: '#972CB0'
+                    created_at: "2022-01-12T10:30:01+00:00"
+                    updated_at: "2022-03-11T12:02:22+00:00"
+                    color: "#972CB0"
                     text_color: null
                     icon: icon-leave-record
                     is_encrypted: false
@@ -679,7 +679,7 @@ paths:
                     owner: Michael Jackson
                     owner_deleted: false
                     rows_count: 23
-  
+
   # Groups
   /api/v2.1/org/{org_id}/admin/groups/:
     get:
@@ -691,14 +691,14 @@ paths:
         response, each group's ID, name, created time, name,creator etc. are
         returned. The `page_next` value indicates if there is a next page or
         not.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -708,14 +708,14 @@ paths:
                 groups:
                   - id: 51
                     group_name: Sales Group
-                    ctime: '2020-11-19T08:14:52+00:00'
+                    ctime: "2020-11-19T08:14:52+00:00"
                     creator_name: Michael Jackson
                     creator_email: 876543216569491ba42905bf1647fd3f@auth.local
                     creator_contact_email: michael@example.com
                     size: 98842
                   - id: 52
                     group_name: Marketing Group
-                    ctime: '2020-11-19T08:18:03+00:00'
+                    ctime: "2020-11-19T08:18:03+00:00"
                     creator_name: Ginger Ale
                     creator_email: 12345678d1754bb4afa2c2cb7369d244@auth.local
                     creator_contact_email: ginger@example.com
@@ -740,12 +740,12 @@ paths:
                   $ref: "#/components/schemas/group_name"
                 group_owner:
                   $ref: "#/components/schemas/group_owner"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -754,7 +754,7 @@ paths:
               example:
                 id: 3
                 group_name: Test group
-                ctime: '2021-03-02T11:10:53+00:00'
+                ctime: "2021-03-02T11:10:53+00:00"
                 creator_email: 1234567a6569491ba42905bf1647fd3f@auth.local
                 creator_name: Jasmin Tee
                 creator_contact_email: jasmin@example.com
@@ -764,13 +764,13 @@ paths:
         - Groups
       summary: Get Group
       description: Get the specific information of one group by its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -779,7 +779,7 @@ paths:
               example:
                 id: 1
                 group_name: Test Group
-                ctime: '2020-11-19T08:14:52+00:00'
+                ctime: "2020-11-19T08:14:52+00:00"
                 creator_email: 876543216569491ba42905bf1647fd3f@auth.local
                 creator_name: Michael Jackson
                 creator_contact_email: michael@example.com
@@ -812,13 +812,13 @@ paths:
                   $ref: "#/components/schemas/user_id"
                 new_group_name:
                   $ref: "#/components/schemas/group_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -827,7 +827,7 @@ paths:
               example:
                 id: 1
                 group_name: Group New
-                ctime: '2020-11-19T08:14:52+00:00'
+                ctime: "2020-11-19T08:14:52+00:00"
                 creator_email: 123abc456def789ghi123jkl456mno789@auth.local
                 creator_name: Michael Jackson
                 creator_contact_email: michael@example.com
@@ -837,13 +837,13 @@ paths:
         - Groups
       summary: Delete Group
       description: Delete a group with its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -857,13 +857,13 @@ paths:
         - Groups
       summary: List Group Bases
       description: List all the bases in a specific group in your team.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -879,8 +879,8 @@ paths:
                     owner: Group New
                     creator_email: 12345678d1754bb4afa2c2cb7369d244@auth.local
                     modifier: Ginger Ale
-                    created_at: '2021-03-08T13:04:50+00:00'
-                    updated_at: '2021-03-08T13:04:50+00:00'
+                    created_at: "2021-03-08T13:04:50+00:00"
+                    updated_at: "2021-03-08T13:04:50+00:00"
                     rows_count: 186
   /api/v2.1/groups/move-group/:
     put:
@@ -914,10 +914,10 @@ paths:
                   $ref: "#/components/schemas/anchor_group_id"
                 to_last:
                   $ref: "#/components/schemas/to_last"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -931,13 +931,13 @@ paths:
         - Groups
       summary: List Group Members
       description: List the members of a group in the current team (organization).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -951,7 +951,7 @@ paths:
                     name: Jasmin Tee
                     email: 123456786569491ba42905bf1647fd3f@auth.local
                     contact_email: jasmin@example.com
-                    login_id: ''
+                    login_id: ""
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
                     is_admin: false
                     role: Member
@@ -959,7 +959,7 @@ paths:
                     name: Ginger Ale
                     email: 87654321d1754bb4afa2c2cb7369d244@auth.local
                     contact_email: ginger@example.com
-                    login_id: ''
+                    login_id: ""
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
                     is_admin: true
                     role: Owner
@@ -976,13 +976,13 @@ paths:
               properties:
                 user_id:
                   $ref: "#/components/schemas/user_id"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -997,7 +997,7 @@ paths:
                     name: Ginger Ale
                     email: 87654321d1754bb4afa2c2cb7369d244@auth.local
                     contact_email: ginger@example.com
-                    login_id: ''
+                    login_id: ""
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
                     is_admin: false
                     role: Member
@@ -1007,14 +1007,14 @@ paths:
         - Groups
       summary: Remove Group Members
       description: Move a member out of a group. The group's owner cannot be removed.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/group_id"
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1030,17 +1030,17 @@ paths:
       description: >-
         Use this request to list all the users and groups that a base is being
         shared with.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '401':
+        "401":
           description: Successful response
           content:
             application/json: {}
-  
+
   # Sharing Links
   /api/v2.1/org/{org_id}/admin/external-links/:
     get:
@@ -1050,12 +1050,12 @@ paths:
       description: >-
         Use this request to list all the external links generated in the current
         team (organization).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1071,9 +1071,9 @@ paths:
                     creator_name: Michael Jackson
                     creator: 876543216569491ba42905bf1647fd3f@auth.local
                     view_cnt: 337
-                    create_at: '2021-08-25T07:04:02+00:00'
+                    create_at: "2021-08-25T07:04:02+00:00"
                     from_dtable: All types
-                    expire_date: ''
+                    expire_date: ""
                     is_protected: false
                     from_base_uuid: abcdefg-fd55-48e4-8c4a-5fd6f2549765
                 count: 5
@@ -1083,13 +1083,13 @@ paths:
         - Sharing Links
       summary: Delete External Link
       description: Delete an external link with its token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/external_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1105,12 +1105,12 @@ paths:
       description: >-
         Use this request to list all the view external links generated in the
         current team (organization).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1124,28 +1124,28 @@ paths:
                     creator_name: Jason
                     token: 20fcc48ea99a47459952
                     permission: r
-                    create_at: '2021-03-30T09:30:36+00:00'
+                    create_at: "2021-03-30T09:30:36+00:00"
                     view_cnt: 0
-                    table_id: '0000'
+                    table_id: "0000"
                     view_id: Dn16
                     url: >-
                       https://cloud.seatable.io/dtable/view-external-links/20fcc48ea99a47459952/
                     is_custom: false
-                    expire_date: ''
+                    expire_date: ""
                   - id: 26
                     from_dtable: Test Base
                     creator: 8e02ebc52ff0484d9f15b50904a98d2f@auth.local
                     creator_name: Jason
                     token: 6388e4fc44eb4296aa41
                     permission: r
-                    create_at: '2021-03-30T09:30:49+00:00'
+                    create_at: "2021-03-30T09:30:49+00:00"
                     view_cnt: 0
-                    table_id: '0000'
+                    table_id: "0000"
                     view_id: Dn16
                     url: >-
                       https://cloud.seatable.io/dtable/view-external-links/6388e4fc44eb4296aa41/
                     is_custom: false
-                    expire_date: ''
+                    expire_date: ""
                 count: 2
   /api/v2.1/org/{org_id}/admin/view-external-links/{view_external_link_token}/:
     delete:
@@ -1155,13 +1155,13 @@ paths:
       description: >-
         Use this request to delete an existing view external link with its
         token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/view_external_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1178,14 +1178,14 @@ paths:
         As administrator of your team, you can use this request to gain a
         overview of all the invite links currently generated in your team,
         regardless which user or group.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1197,7 +1197,7 @@ paths:
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     token: >-
                       https://cloud.seatable.io/dtable/links/9167cdbd67574226a72e
-                    ctime: '2021-12-15T13:11:54.083636'
+                    ctime: "2021-12-15T13:11:54.083636"
                     password: null
                     expire_date: null
                     permission: rw
@@ -1206,7 +1206,7 @@ paths:
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     token: >-
                       https://cloud.seatable.io/dtable/links/b7ea0a4269234565998e
-                    ctime: '2021-12-15T13:11:55.058965'
+                    ctime: "2021-12-15T13:11:55.058965"
                     password: null
                     expire_date: null
                     permission: rw
@@ -1230,13 +1230,13 @@ paths:
                   $ref: "#/components/schemas/password"
                 expire_days:
                   $ref: "#/components/schemas/expire_days"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/invite_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1250,8 +1250,8 @@ paths:
                 dtable: All types
                 dtable_id: 2
                 workspace_id: 2
-                expire_date: ''
-                ctime: '2021-12-15T13:11:54.083636'
+                expire_date: ""
+                ctime: "2021-12-15T13:11:54.083636"
     delete:
       tags:
         - Sharing Links
@@ -1260,13 +1260,13 @@ paths:
         Delete an invite link with this request. The `invite_link_token` can be
         retrieved from the previous calls, or simply from the URL of the invite
         link, which is the last part of the URL.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/invite_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1274,7 +1274,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Info & Settings
   /api/v2.1/org/admin/info/:
     get:
@@ -1284,10 +1284,10 @@ paths:
       description: >-
         Get the basic information (e.g. ID, name, storage quota etc. see example
         response for details) of your team (organization).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1322,10 +1322,10 @@ paths:
               properties:
                 new_org_name:
                   $ref: "#/components/schemas/new_org_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1359,10 +1359,10 @@ paths:
 
         `enable_member_modify_name`: if members are allowed to change their
         names (`true` or `false`).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1391,10 +1391,10 @@ paths:
                   $ref: "#/components/schemas/enable_external_user_access_invite_link"
                 enable_member_modify_name:
                   $ref: "#/components/schemas/enable_member_modify_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -1407,60 +1407,64 @@ paths:
 
   /api/v2.1/org/{org_id}/admin/admin-logs/:
     get:
-      tags: 
+      tags:
         - Activities & Logs
       summary: List Org-Admin operation logs
       description: Hier müsste denke ich noch etwas ergänzt werden
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "logs": [
-                    {
-                      "email": "145504ae043c438cbb55f2afb084d586@auth.local",
-                      "name": "Hulk",
-                      "operation": "group_delete",
-                      "detail": {
-                        "id": 98,
-                        "name": "wefwefadfadf",
-                        "owner": "145504ae043c438cbb55f2afb084d586@auth.local"
+                  "logs":
+                    [
+                      {
+                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
+                        "name": "Hulk",
+                        "operation": "group_delete",
+                        "detail":
+                          {
+                            "id": 98,
+                            "name": "wefwefadfadf",
+                            "owner": "145504ae043c438cbb55f2afb084d586@auth.local",
+                          },
+                        "datetime": "2023-03-25T22:09:51+00:00",
                       },
-                      "datetime": "2023-03-25T22:09:51+00:00"
-                    },
-                    {
-                      "email": "145504ae043c438cbb55f2afb084d586@auth.local",
-                      "name": "Hulk",
-                      "operation": "group_create",
-                      "detail": {
-                        "id": 98,
-                        "name": "efaefafe",
-                        "owner": "145504ae043c438cbb55f2afb084d586@auth.local"
+                      {
+                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
+                        "name": "Hulk",
+                        "operation": "group_create",
+                        "detail":
+                          {
+                            "id": 98,
+                            "name": "efaefafe",
+                            "owner": "145504ae043c438cbb55f2afb084d586@auth.local",
+                          },
+                        "datetime": "2023-03-25T22:09:13+00:00",
                       },
-                      "datetime": "2023-03-25T22:09:13+00:00"
-                    },
-                    {
-                      "email": "145504ae043c438cbb55f2afb084d586@auth.local",
-                      "name": "Hulk",
-                      "operation": "user_add",
-                      "detail": {
-                        "email": "wefafaef@example.local",
-                        "username": "f7477ddd49ef46aea4bb09a0bc7d0b3b@auth.local",
-                        "nickname": "Stefan"
+                      {
+                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
+                        "name": "Hulk",
+                        "operation": "user_add",
+                        "detail":
+                          {
+                            "email": "wefafaef@example.local",
+                            "username": "f7477ddd49ef46aea4bb09a0bc7d0b3b@auth.local",
+                            "nickname": "Stefan",
+                          },
+                        "datetime": "2023-03-25T21:59:51+00:00",
                       },
-                      "datetime": "2023-03-25T21:59:51+00:00"
-                    }
-                  ],
-                  "total_count": 3
-                  }
+                    ],
+                  "total_count": 3,
+                }
 
   /api/v2.1/org/{org_id}/admin/org-logo/:
     post:
@@ -1468,8 +1472,8 @@ paths:
         - Customizing
       summary: Update Team Logo
       description: Hier muss noch etwas ergänzt werden
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       requestBody:
@@ -1478,54 +1482,46 @@ paths:
             schema:
               $ref: "#/components/schemas/upload_file"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "logo_path":"avatars/org-logo/1/8b4d9bc0-96b3-4b36-bf53-2187b601dfac.png"
+                  "logo_path": "avatars/org-logo/1/8b4d9bc0-96b3-4b36-bf53-2187b601dfac.png",
                 }
-    
+
     get:
       tags:
         - Customizing
       summary: Get Team Logo
       description: Get the path to the custom team logo.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "logo_path":"avatars/org-logo/1/8b4d9bc0-96b3-4b36-bf53-2187b601dfac.png"
+                  "logo_path": "avatars/org-logo/1/8b4d9bc0-96b3-4b36-bf53-2187b601dfac.png",
                 }
-    
+
     delete:
-      tags: 
+      tags:
         - Customizing
       summary: Delete Team Logo
       description: Hier muss noch etwas ergänzt werden
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
-              example:
-                {
-                  "success": true
-                } 
-
-
-
-
-
+              example: { "success": true }
