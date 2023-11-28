@@ -70,7 +70,7 @@ paths:
         - Statistics
       summary: Script runs by user
       security:
-        - Python-Scheduler-Token: []
+        - PythonSchedulerAuth: []
       parameters:
         - $ref: "#/components/parameters/month"
         - $ref: "#/components/parameters/order_by"
