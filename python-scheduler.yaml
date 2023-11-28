@@ -28,10 +28,9 @@ components:
       in: query
       schema:
         type: integer
-        pattern: ^[0-9]{4}\-((0[1-9])|1[0-2])$
+        pattern: ^[0-9]{4}-((0[1-9])|1[0-2])$
       description: >-
-        For which month you'd like to list the statistics in the format of
-        YYYY-MM.
+        For which month you'd like to list the statistics in the format of YYYY-MM. If you leave this value empty,
       example: "2023-06"
       required: false
     order_by:
@@ -41,9 +40,19 @@ components:
         type: string
         enum: ["total_run_count", "total_run_time"]
         default: ""
-      required: true
-      description: The ...
+      required: false
+      description: "Select the parameter to order the results."
       example: "total_run_count"
+    direction:
+      name: direction
+      in: query
+      schema:
+        type: string
+        enum: ["", "asc", "desc"]
+        default: ""
+      required: false
+      description: The direction of the sort, ascending `asc` or descending `desc`. asc by default. Direction requires that `order_by` is set.
+      example: "desc"
     page:
       name: page
       description: The page number you want to start showing the entries. If no value is provided, 1 will be used.
@@ -74,6 +83,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/month"
         - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/direction"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -101,6 +111,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/month"
         - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/direction"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -122,12 +133,13 @@ paths:
     get:
       tags:
         - Statistics
-      summary: Script runs per team
+      summary: Script runs per base
       security:
         - PythonSchedulerAuth: []
       parameters:
         - $ref: "#/components/parameters/month"
         - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/direction"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
