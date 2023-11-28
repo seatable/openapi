@@ -94,12 +94,15 @@ paths:
               schema:
                 type: object
               example:
-                data:
-                  - count: 1
-                  - results:
-                    total_run_count: 37
+                month: "2023-02"
+                results:
+                  - total_run_count: 37
                     total_run_time: 153
                     username: a5adebe277e256e9e04415a28b2c9e8d@auth.local
+                  - total_run_count: 12
+                    total_run_time: 23
+                    username: 56e9e04415a28b2ca5adebe277e29e8d@auth.local
+                total_count: 2
 
   /admin/statistics/scripts-running/by-org/:
     get:
@@ -122,12 +125,15 @@ paths:
               schema:
                 type: object
               example:
-                data:
-                  - count: 1
-                  - results:
-                    total_run_count: 37
+                month: "2023-02"
+                results:
+                  - total_run_count: 37
                     total_run_time: 153
-                    username: a5adebe277e256e9e04415a28b2c9e8d@auth.local
+                    org_id: 1
+                  - total_run_count: 12
+                    total_run_time: 23
+                    org_id: 2
+                total_count: 2
 
   /admin/statistics/scripts-running/by-base/:
     get:
@@ -150,9 +156,9 @@ paths:
               schema:
                 type: object
               example:
-                data:
-                  - count: 1
-                  - results:
-                    total_run_count: 37
+                month: "2023-02"
+                results:
+                  - total_run_count: 37
                     total_run_time: 153
-                    username: a5adebe277e256e9e04415a28b2c9e8d@auth.local
+                    base_uuid: 1a9707b4-68c9-4e3f-909a-6289ccb47ad7
+                total_count: 1
