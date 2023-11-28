@@ -28,7 +28,7 @@ components:
       in: query
       schema:
         type: integer
-        pattern: ^[0-9]{4}-((0[1-9])|1[0-2])
+        pattern: ^[0-9]{4}-(0[1-9]|1[0-2])
       description: >-
         For which month you'd like to list the statistics in the format of YYYY-MM. If you leave this value empty,
       example: "2023-06"
