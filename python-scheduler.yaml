@@ -28,7 +28,7 @@ components:
       in: query
       schema:
         type: integer
-        pattern: ^[0-9]{4}-((0[1-9])|1[0-2])$
+        pattern: ^[0-9]{4}\-((0[1-9])|1[0-2])$
       description: >-
         For which month you'd like to list the statistics in the format of
         YYYY-MM.
@@ -85,6 +85,62 @@ paths:
                 type: object
               example:
                 data:
-                  - email: 1234567866874f15bd5b17afc3527754@auth.local
-                    name: admin
-                    contact_email: admin@example.com
+                  - count: 1
+                  - results:
+                    total_run_count: 37
+                    total_run_time: 153
+                    username: a5adebe277e256e9e04415a28b2c9e8d@auth.local
+
+  /admin/statistics/scripts-running/by-org/:
+    get:
+      tags:
+        - Statistics
+      summary: Script runs per team
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/month"
+        - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - count: 1
+                  - results:
+                    total_run_count: 37
+                    total_run_time: 153
+                    username: a5adebe277e256e9e04415a28b2c9e8d@auth.local
+
+  /admin/statistics/scripts-running/by-base/:
+    get:
+      tags:
+        - Statistics
+      summary: Script runs per team
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/month"
+        - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                data:
+                  - count: 1
+                  - results:
+                    total_run_count: 37
+                    total_run_time: 153
+                    username: a5adebe277e256e9e04415a28b2c9e8d@auth.local
