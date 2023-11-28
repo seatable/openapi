@@ -18,6 +18,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 > 📘 New requests
 >
+> - New Category: Python Scheduler
 > - Export base: `GET /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/`
 > - Search base/apps of a user: `GET /api/v2.1/dtable/items-search/`
 > - Activate/Deactivate app: `PUT /api/v2.1/external-apps/{app_token}/status/`

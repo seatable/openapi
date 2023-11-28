@@ -101,4 +101,4 @@ jobs:
       - name: Update python scheduler 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi python-pipeline.yaml --key=${{ secrets.README_API_KEY }} --id=6565ca0f4efdd30012d5caa5 --useSpecVersion
+          rdme: openapi python-scheduler.yaml --key=${{ secrets.README_API_KEY }} --id=6565ca0f4efdd30012d5caa5 --useSpecVersion
