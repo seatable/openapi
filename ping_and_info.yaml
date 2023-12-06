@@ -3,7 +3,7 @@ info:
   title: Ping and Server Info
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0) - Part "Ping and Server Info".
-  version: "4.2"
+  version: "4.3"
 servers:
   - url: "https://{server}"
     variables:

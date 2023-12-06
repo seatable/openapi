@@ -1,7 +1,7 @@
 ---
 title: Models
 excerpt: This page describes the different objects used in SeaTable.
-category: 65489cddc89ba30035c0d620
+category: 6570d48363242f007fc436cf
 isReference: true
 slug: models
 ---
