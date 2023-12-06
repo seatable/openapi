@@ -14,7 +14,17 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.io/docs/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
 
+## Version 4.3 (xx.12.2023)
+
+> 📘 New requests
+>
+> - [System Admin] Update Team User: `PUT /api/v2.1/admin/organizations/{org_id}/users/{user_id}/`
+> - [Team Admin] List Team Logins `/api/v2.1/org/{org_id}/admin/login-logs/`
+> - [Team Admin] List User Logins `/api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
+
 ## Version 4.2 (22.11.2023)
+
+You can access the SeaTable API Reference for version 4.1 via this link: [SeaTable API Reference - Version 4.2](https://seatable.readme.io/v4.2/reference/introduction).
 
 > 📘 New requests
 >
@@ -33,7 +43,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 4.1 (23.08.2023)
 
-The SeaTable API Reference for version 4.1 is available at https://seatable.readme.io/v4.1/reference/introduction.
+You can access the SeaTable API Reference for version 4.1 via this link: [SeaTable API Reference - Version 4.1](https://seatable.readme.io/v4.1/reference/introduction).
 
 > 📘 New requests
 >
@@ -53,7 +63,7 @@ The SeaTable API Reference for version 4.1 is available at https://seatable.read
 
 ## Version 4.0 (27.06.2023)
 
-The SeaTable API Reference for version 4.0 is available at https://seatable.readme.io/v4.0/reference/introduction.
+The SeaTable API Reference for version 4.0 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v4.0).
 
 > 📘 New requests
 >
@@ -85,7 +95,7 @@ The SeaTable API Reference for version 4.0 is available at https://seatable.read
 
 ## Version 3.5 (12.04.2023)
 
-The SeaTable API Reference for the version 3.5 is no longer.
+The SeaTable API Reference for version 3.5 is no longer available.
 
 > 🚧 Breaking changes
 >

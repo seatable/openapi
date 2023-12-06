@@ -2030,6 +2030,43 @@ paths:
                 last_login: ""
                 active: true
   /api/v2.1/admin/organizations/{org_id}/users/{user_id}/:
+    put:
+      tags:
+        - Teams
+      summary: Update Team User
+      description: The system admin can authorize a regular team member to have team admin rights.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                is_staff:
+                  $ref: "#/components/schemas/is_staff"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                org_id: 1
+                workspace_id: 357
+                email: 43211234db1e4f10bdd6d9fa4964b922@auth.local
+                name: Example User
+                contact_email: new_user@example.com
+                is_org_admin: false
+                quota_total: -2
+                quota_usage: 0
+                create_time: "2022-03-13T10:05:52+00:00"
+                last_login: ""
+                active: true
     delete:
       tags:
         - Teams
