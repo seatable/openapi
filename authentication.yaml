@@ -217,6 +217,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AccountToken"
+        "400":
+          description: Forbidden
+          content:
+            application/json:
+              example:
+                {
+                  "non_field_errors":
+                    ["Unable to login with provided credentials."],
+                }
       security: []
 
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/api-tokens/:
@@ -397,6 +406,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AccessToken"
+        "401":
+          description: "Forbidden"
+          content:
+            application/json:
+              example: { "detail": "Invalid token" }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              example: { "error_msg": "dtable <base_name> not found." }
 
   /api/v2.1/external-link-tokens/{external_link_token}/access-token/:
     get:
