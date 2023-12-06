@@ -1,7 +1,7 @@
 ---
 title: Changelog
 excerpt: This page lists changes made to the Web API and its documentation.
-category: 65489cddc89ba30035c0d620
+category: 6570d48363242f007fc436cf
 isReference: true
 slug: changelog
 ---

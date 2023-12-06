@@ -3,15 +3,15 @@ info:
   title: Base Operations
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0).
-  version: "4.2"
+  version: "4.3"
 servers:
-  - url: 'https://{server}'
-    variables: 
+  - url: "https://{server}"
+    variables:
       server:
         default: cloud.seatable.io
 
 ## Questions for later:
-# - same variables as path and query? Why? 
+# - same variables as path and query? Why?
 # - objects not uniform: table_id sometimes inside the object, sometimes outside the object (compare insert column vs append columns)
 # - File-Upload super complicated: a) "parent_dir, parent_file, parent_path"? why not using the same name for the same thing? b) why requires appending file to a base, type, name and size? Image requires only url.
 # - why is it necessary to pass the base_uuid? The base-token identifies the base already...
@@ -24,11 +24,11 @@ servers:
 # - "get row": why do I have to provide row_id as path and body?
 # - Upload File/Image: why ret-json=1 in URL?
 
-x-readme: 
+x-readme:
   explorer-enabled: true
-  metrics-enabled: false 
+  metrics-enabled: false
   proxy-enabled: false
-  
+
 components:
   # Security scheme definitions (see Authentication)
   securitySchemes:
@@ -47,7 +47,7 @@ components:
     #=======================Query parameters=======================#
     row_id:
       name: row_id
-      description: Unique id of a row. 
+      description: Unique id of a row.
       in: query
       schema:
         type: string
@@ -56,7 +56,7 @@ components:
       required: true
     page:
       name: page
-      description: The page number you want to start showing the entries. If no value is provided, 1 will be used. 
+      description: The page number you want to start showing the entries. If no value is provided, 1 will be used.
       in: query
       schema:
         type: integer
@@ -89,7 +89,7 @@ components:
       in: query
       schema:
         type: string
-        pattern: '^[A-Za-z0-9]{4}$'
+        pattern: "^[A-Za-z0-9]{4}$"
       description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. **Important: the table_id is not the table_name**."
       example: "0000"
       required: true
@@ -109,7 +109,7 @@ components:
         type: string
       required: false
       description: The name of the view.
-      example: 'Default View'
+      example: "Default View"
     convert_link_id:
       name: convert_link_id
       description: Whether the link column in the returned row is the ID (false) of the linked row or the name (true) of the linked row. If no value is provided, false is the default.
@@ -135,19 +135,19 @@ components:
         default: ""
       required: false
       description: The direction of the sort, ascending `asc` or descending `desc`. asc by default. Works only if start and limit are set, too.
-      example: 'desc'
+      example: "desc"
     start:
       name: start
       in: query
-      schema: 
+      schema:
         type: integer
       required: false
-      description: Starting position (number) of the returned rows. 0 by default. 
+      description: Starting position (number) of the returned rows. 0 by default.
       example: 0
     limit:
       name: limit
       in: query
-      schema: 
+      schema:
         type: integer
         minimum: 1
         maximum: 1000
@@ -228,7 +228,7 @@ components:
         type: string
       required: true
       description: The name of the view.
-      example: 'Default View'
+      example: "Default View"
     comment_id:
       name: comment_id
       description: The id of the comment.
@@ -270,7 +270,7 @@ components:
       properties:
         _id:
           type: string
-          pattern: '^[a-zA-Z]{4}$'
+          pattern: "^[a-zA-Z]{4}$"
         name:
           type: string
         is_header_locked:
@@ -293,7 +293,7 @@ components:
         is_header_locked: false
         summary_configs: {}
         columns:
-          - key: '0000'
+          - key: "0000"
             type: number
             name: First column
             editable: true
@@ -301,7 +301,7 @@ components:
             resizable: true
             draggable: true
             data: null
-            permission_type: ''
+            permission_type: ""
             permitted_users: []
           - key: 2w6F
             type: text
@@ -311,7 +311,7 @@ components:
             resizable: true
             draggable: true
             data: null
-            permission_type: ''
+            permission_type: ""
             permitted_users: []
           - key: 3aAf
             type: date
@@ -321,11 +321,11 @@ components:
             resizable: true
             draggable: true
             data: null
-            permission_type: ''
+            permission_type: ""
             permitted_users: []
         rows: []
         views:
-          - _id: '0000'
+          - _id: "0000"
             name: Default View
             type: table
             is_locked: false
@@ -343,7 +343,7 @@ components:
             summaries: {}
             colors: {}
         id_row_map: {}
-    
+
     sql_query:
       type: object
       properties:
@@ -360,7 +360,7 @@ components:
       required:
         - sql
         - convert_keys
-    
+
     sql_query_response:
       type: object
       properties:
@@ -380,11 +380,11 @@ components:
           description: success or error message
       example:
         metadata:
-          - key: '0000'
+          - key: "0000"
             name: Name
             type: text
             data:
-              default_value: '{creator.id}'
+              default_value: "{creator.id}"
               enable_fill_default_value: true
         results:
           - Name: Box
@@ -401,7 +401,7 @@ components:
       properties:
         key:
           type: string
-        name: 
+        name:
           type: string
         type:
           type: string
@@ -419,12 +419,12 @@ components:
       description: |
         Pass the set of column names and their values. The column names must be present in your table. Different column types require different ways to input values. For eg:
         {"Name":"Max", "Age":"21", "Birthday":"2023-02-18", "Checkbox":"true"}
-      example: 
+      example:
         Name: "Max"
         Age: 21
         Birthday: "2023-02-18"
         Checkbox: true
-    
+
     table_name:
       type: string
       description: The name of the table.
@@ -433,15 +433,15 @@ components:
     table_name_object:
       type: object
       properties:
-        table_name: 
+        table_name:
           $ref: "#/components/schemas/table_name"
       required:
         - table_name
 
     column_name:
       type: string
-      # all chars except [., {}, `´]  
-      pattern: '^[^.}{`]*$'        
+      # all chars except [., {}, `´]
+      pattern: "^[^.}{`]*$"
       description: The name of the column.
 
     append_row:
@@ -453,7 +453,7 @@ components:
           $ref: "#/components/schemas/table_name"
         row:
           $ref: "#/components/schemas/row"
-      required: 
+      required:
         - table_name
         - row
 
@@ -462,7 +462,7 @@ components:
       type: object
       description: Insert a row below or above another row your specified by his row-ID.
       properties:
-        table_name: 
+        table_name:
           $ref: "#/components/schemas/table_name"
         anchor_row_id:
           type: string
@@ -474,7 +474,7 @@ components:
           enum: ["", "insert_above", "insert_below"]
         row:
           $ref: "#/components/schemas/row"
-      required: 
+      required:
         - table_name
         - row
 
@@ -488,11 +488,11 @@ components:
           $ref: "#/components/schemas/row_id"
         row:
           $ref: "#/components/schemas/row"
-      required: 
+      required:
         - table_name
         - row
         - row_id
-        
+
     delete_row:
       type: object
       description: delete a row
@@ -501,7 +501,7 @@ components:
           $ref: "#/components/schemas/table_name"
         row_id:
           $ref: "#/components/schemas/row_id"
-      required: 
+      required:
         - table_name
         - row_id
 
@@ -533,7 +533,7 @@ components:
           title: Row Object X
           items:
             $ref: "#/components/schemas/row"
-      required: 
+      required:
         - table_name
         - rows
 
@@ -553,10 +553,10 @@ components:
                 $ref: "#/components/schemas/row_id"
               row:
                 $ref: "#/components/schemas/row"
-      required: 
+      required:
         - table_name
         - updates
-      
+
     delete_rows:
       type: object
       description: delete multiple rows
@@ -568,7 +568,7 @@ components:
           description: "Defines the rows which should be updated."
           items:
             $ref: "#/components/schemas/row_id"
-      required: 
+      required:
         - table_name
         - row_ids
 
@@ -582,23 +582,23 @@ components:
           description: ID of the rows
           items:
             $ref: "#/components/schemas/row_id"
-      example:  
-        row_ids: 
+      example:
+        row_ids:
           - "ZrFd2YOXQ0eIYJjPbQPGng"
           - "afCU_L5PQLe5AOVwCuGXVw"
       required:
         - table_name
         - row_ids
 
-    create_row_link: 
+    create_row_link:
       type: object
       description: create row link
       properties:
-        table_name: 
+        table_name:
           $ref: "#/components/schemas/table_name"
         other_table_name:
           $ref: "#/components/schemas/table_name"
-        link_id: 
+        link_id:
           $ref: "#/components/schemas/link_id"
         table_row_id:
           $ref: "#/components/schemas/row_id"
@@ -614,7 +614,7 @@ components:
     table_id:
       type: string
       description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. **Important: the table_id is not the table_name**."
-      pattern: '^[a-zA-Z0-9]{4}$'
+      pattern: "^[a-zA-Z0-9]{4}$"
       example: "0000"
 
     link_id:
@@ -631,9 +631,9 @@ components:
           $ref: "#/components/schemas/table_name"
         other_table_name:
           $ref: "#/components/schemas/table_name"
-        link_id: 
+        link_id:
           $ref: "#/components/schemas/link_id"
-        row_id: 
+        row_id:
           $ref: "#/components/schemas/row_id"
         other_rows_ids:
           type: array
@@ -647,16 +647,16 @@ components:
         - table_name
         - other_table_name
         - other_rows_id
-    
+
     update_links:
       type: object
       description: update row links (batch)
-      properties: 
+      properties:
         table_id:
           $ref: "#/components/schemas/table_id"
         other_table_id:
           $ref: "#/components/schemas/table_id"
-        link_id: 
+        link_id:
           $ref: "#/components/schemas/link_id"
         row_id_list:
           type: array
@@ -675,14 +675,14 @@ components:
         - row_id_list
         - other_rows_ids_map
 
-    delete_row_link: 
+    delete_row_link:
       type: object
       properties:
-        table_name: 
+        table_name:
           $ref: "#/components/schemas/table_name"
         other_table_name:
           $ref: "#/components/schemas/table_name"
-        link_id: 
+        link_id:
           $ref: "#/components/schemas/link_id"
         table_row_id:
           $ref: "#/components/schemas/table_id"
@@ -703,15 +703,15 @@ components:
         link_column:
           type: string
           description: This is the key of the link column. Do not use the `link_id` of the link column here.
-          minLength: 4  
-          maxLength: 4  
+          minLength: 4
+          maxLength: 4
         rows:
           type: array
           description: the rows you want to get the links for.
           items:
             type: object
             properties:
-              row_id: 
+              row_id:
                 $ref: "#/components/schemas/row_id"
               offset:
                 type: integer
@@ -729,14 +729,14 @@ components:
       type: object
       description: Rename Table
       properties:
-        table_name: 
+        table_name:
           $ref: "#/components/schemas/table_name"
         new_table_name:
           type: string
       required:
         - table_name
         - new_table_name
-      example: 
+      example:
         new_table_name: New Name
 
     delete_table:
@@ -768,21 +768,21 @@ components:
           type: string
           description: Name of the new view.
           example: "New view"
-        type: 
+        type:
           type: string
           description: Type of the view, either normal view or a big data view. The default value is *table*.
           enum: ["", "table", "archive"]
-        is_locked: 
+        is_locked:
           type: boolean
       required:
         - name
         - type
-      example: 
+      example:
         - name: Table1
         - type: table
         - is_locked: false
 
-    view_name:  
+    view_name:
       type: string
       description: "The new name of the view, if you want to give the view a new name."
       example: "Default View"
@@ -790,32 +790,80 @@ components:
     is_locked:
       type: boolean
 
-    column_key: 
+    column_key:
       type: string
 
     string_filter_predicate:
       type: string
-      enum: ["contains", "does not contain", "is", "is not", "is empty", "is not empty", "is current user's ID"]
+      enum:
+        [
+          "contains",
+          "does not contain",
+          "is",
+          "is not",
+          "is empty",
+          "is not empty",
+          "is current user's ID",
+        ]
 
     number_filter_predicate:
       type: string
-      enum: ["equal", "not_equal", "less", "greater", "less_or_equal", "greater_or_equal", "is empty", "is not empty"]
+      enum:
+        [
+          "equal",
+          "not_equal",
+          "less",
+          "greater",
+          "less_or_equal",
+          "greater_or_equal",
+          "is empty",
+          "is not empty",
+        ]
 
     collaborator_filter_predicate:
       type: string
-      enum: ["has_any_of", "has_all_of", "has_none_of", "is_exactly", "is_empty", "is_not_empty", "include_me"]
+      enum:
+        [
+          "has_any_of",
+          "has_all_of",
+          "has_none_of",
+          "is_exactly",
+          "is_empty",
+          "is_not_empty",
+          "include_me",
+        ]
 
     date_filter_predicate:
       type: string
-      enum: ["is", "is_within", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not", "is_empty", "is_not_empty"]
+      enum:
+        [
+          "is",
+          "is_within",
+          "is_before",
+          "is_after",
+          "is_on_or_before",
+          "is_on_or_after",
+          "is_not",
+          "is_empty",
+          "is_not_empty",
+        ]
 
     single-select_filter_predicate:
       type: string
-      enum: ["is", "is_not", "is_any_of", "is_none_of", "is_empty", "is_not_empty"]
+      enum:
+        ["is", "is_not", "is_any_of", "is_none_of", "is_empty", "is_not_empty"]
 
     multiple-select_filter_predicate:
       type: string
-      enum: ["has_any_of", "has_all_of", "has_none_of", "is_exactly", "is_empty", "is_not_empty"]
+      enum:
+        [
+          "has_any_of",
+          "has_all_of",
+          "has_none_of",
+          "is_exactly",
+          "is_empty",
+          "is_not_empty",
+        ]
 
     image_filter_predicate:
       type: string
@@ -823,7 +871,15 @@ components:
 
     email_filter_predicate:
       type: string
-      enum: ["contains", "does_not_contain", "is", "is_not", "is_empty", "is_not_empty"]
+      enum:
+        [
+          "contains",
+          "does_not_contain",
+          "is",
+          "is_not",
+          "is_empty",
+          "is_not_empty",
+        ]
 
     checkbox_filter_predicate:
       type: string
@@ -831,7 +887,16 @@ components:
 
     link_filter_predicate:
       type: string
-      enum: ["contains", "does_not_contain", "is", "is_not", "is_empty", "is_not_empty", "is_current_user_ID"]
+      enum:
+        [
+          "contains",
+          "does_not_contain",
+          "is",
+          "is_not",
+          "is_empty",
+          "is_not_empty",
+          "is_current_user_ID",
+        ]
 
     creator_filter_predicate:
       type: string
@@ -861,14 +926,26 @@ components:
 
     date_filter_term:
       type: string
-      pattern: '^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?$'   # --> pattern für das Datum im Format 2012-03-30
+      pattern: "^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?$" # --> pattern für das Datum im Format 2012-03-30
 
     filter_term_modifier:
       type: string
 
     date_filter_term_modifier:
       type: string
-      enum: ["today", "tomorrow", "yesterday", "one_week_ago", "one_week_from_now", "one_month_ago", "one_month_from_now", "number_of_days_ago", "number_of_days_from_now", "exact_date"]
+      enum:
+        [
+          "today",
+          "tomorrow",
+          "yesterday",
+          "one_week_ago",
+          "one_week_from_now",
+          "one_month_ago",
+          "one_month_from_now",
+          "number_of_days_ago",
+          "number_of_days_from_now",
+          "exact_date",
+        ]
 
     filter_conjunction:
       type: string
@@ -879,9 +956,9 @@ components:
       type: string
       enum: ["up", "down"]
 
-    sorts: 
+    sorts:
       type: array
-      items: 
+      items:
         type: object
         properties:
           column_key:
@@ -892,7 +969,7 @@ components:
 
     groupbys:
       type: array
-      items: 
+      items:
         type: object
         properties:
           column_key:
@@ -903,21 +980,21 @@ components:
 
     hidden_columns:
       type: array
-      items: 
+      items:
         type: string
       description: "IDs of the rows that should be hidden"
 
-    filters_text: 
+    filters_text:
       title: Text
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           $ref: "#/components/schemas/string_filter_predicate"
         filter_term:
           $ref: "#/components/schemas/filter_term"
-    filters_long_text: 
+    filters_long_text:
       title: Long Text
       type: object
       properties:
@@ -927,10 +1004,10 @@ components:
           $ref: "#/components/schemas/image_filter_predicate"
         filter_term:
           $ref: "#/components/schemas/filter_term"
-    filters_number: 
+    filters_number:
       title: Number
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -940,7 +1017,7 @@ components:
     filters_collaborator:
       title: Collaborator
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -950,7 +1027,7 @@ components:
     filters_date:
       title: Date
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -962,7 +1039,7 @@ components:
     filters_duration:
       title: Duration
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -972,7 +1049,7 @@ components:
     filters_single_select:
       title: Single-select
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -982,7 +1059,7 @@ components:
     filters_multi_select:
       title: Multiple-select
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -992,7 +1069,7 @@ components:
     filters_image:
       title: Image
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1002,7 +1079,7 @@ components:
     filters_file:
       title: File
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1012,7 +1089,7 @@ components:
     filters_email:
       title: Email
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         email_filter_predicate:
@@ -1022,7 +1099,7 @@ components:
     filters_checkbox:
       title: Checkbox
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1032,7 +1109,7 @@ components:
     filters_rating:
       title: Rating
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1042,7 +1119,7 @@ components:
     filters_formula:
       title: Formula
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1052,7 +1129,7 @@ components:
     filters_link:
       title: Link
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1062,7 +1139,7 @@ components:
     filters_link_formula:
       title: Link Formula
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1072,7 +1149,7 @@ components:
     filters_creator:
       title: Creator
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1082,7 +1159,7 @@ components:
     filters_created:
       title: Created
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1094,7 +1171,7 @@ components:
     filters_editor:
       title: Editor
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1104,7 +1181,7 @@ components:
     filters_modified:
       title: Modified
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1116,7 +1193,7 @@ components:
     filters_automatic:
       title: Automatic
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1126,7 +1203,7 @@ components:
     filters_percentage:
       title: Percentage
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1136,7 +1213,7 @@ components:
     filters_date-time:
       title: Date-time
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1148,7 +1225,7 @@ components:
     filters_url:
       title: URL
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1158,7 +1235,7 @@ components:
     filters_geolocation:
       title: Geolocation
       type: object
-      properties: 
+      properties:
         column_key:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
@@ -1169,11 +1246,11 @@ components:
     update_view:
       type: object
       properties:
-        name: 
+        name:
           $ref: "#/components/schemas/view_name"
-        is_locked: 
+        is_locked:
           $ref: "#/components/schemas/is_locked"
-        filters: 
+        filters:
           type: array
           description: filter of your view
           items:
@@ -1205,13 +1282,13 @@ components:
               - $ref: "#/components/schemas/filters_geolocation"
         filter_conjunction:
           $ref: "#/components/schemas/filter_conjunction"
-        sorts: 
+        sorts:
           $ref: "#/components/schemas/sorts"
-        groupbys: 
+        groupbys:
           $ref: "#/components/schemas/groupbys"
         hidden_columns:
           $ref: "#/components/schemas/hidden_columns"
-    
+
     update_comment:
       type: object
       properties:
@@ -1223,16 +1300,15 @@ components:
             resolved:
               type: string
               enum: ["0", "1"]
-      required: 
+      required:
         - options
         - comment
         - resolved
-    
+
     anchor_column:
       description: Give the name or the key of a column after you would like to add this new column. If you leave this empty, the new column will be created at the end.
       type: string
-    
-    
+
     # text column
     text_column:
       title: Text
@@ -1241,7 +1317,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["text"]
         anchor_column:
@@ -1254,7 +1330,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/table_name_object"
         - $ref: "#/components/schemas/text_column"
-    
+
     # long text (no column_data)
     long_text_column:
       title: Long text
@@ -1263,7 +1339,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["long-text"]
         anchor_column:
@@ -1276,7 +1352,7 @@ components:
       allOf:
         - $ref: "#/components/schemas/table_name_object"
         - $ref: "#/components/schemas/long_text_column"
-    
+
     # number column (with column_data)
     number_column:
       title: Number / Currency / Percentage
@@ -1285,7 +1361,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["number"]
         anchor_column:
@@ -1312,10 +1388,10 @@ components:
           enum: ["dot", "comma"]
           description: |
             Choose how decimals are shown: 1.00 or 1,00
-        thousands: 
+        thousands:
           type: string
           enum: ["", "no", "space", "comma"]
-          description: | 
+          description: |
             Choose how bigger numbers are displayed. Eg:
             no: 1000000
             dot: 1.000.000
@@ -1329,7 +1405,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["collaborator"]
         anchor_column:
@@ -1350,7 +1426,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["date"]
         anchor_column:
@@ -1370,7 +1446,18 @@ components:
       properties:
         format:
           type: string
-          enum: ["", "YYYY-MM-DD", "YYYY-MM-DD HH:mm", "M/D/YYYY", "M/D/YYYY HH:mm", "DD/MM/YYYY", "DD/MM/YYYY HH:mm", "DD.MM.YYYY", "DD.MM.YYYY HH:mm"]
+          enum:
+            [
+              "",
+              "YYYY-MM-DD",
+              "YYYY-MM-DD HH:mm",
+              "M/D/YYYY",
+              "M/D/YYYY HH:mm",
+              "DD/MM/YYYY",
+              "DD/MM/YYYY HH:mm",
+              "DD.MM.YYYY",
+              "DD.MM.YYYY HH:mm",
+            ]
           description: |
             Choose how date values are displayed. Eg:
             YYYY-MM-DD: ISO-Format
@@ -1387,7 +1474,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["duration"]
         anchor_column:
@@ -1424,7 +1511,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["single-select"]
         anchor_column:
@@ -1451,19 +1538,19 @@ components:
               id:
                 type: integer
                 description: Select any unique id.
-                pattern: '^([A-Za-z0-9]){4}$'
+                pattern: "^([A-Za-z0-9]){4}$"
               name:
                 type: string
                 description: The name of your option.
-              color: 
+              color:
                 type: string
                 description: select your code-code for the background.
-                pattern: '#([A-Za-z0-9]){6}'
+                pattern: "#([A-Za-z0-9]){6}"
                 example: #F4667C
               text-color:
                 type: string
                 description: select your color-code for the text.
-                pattern: '#([A-Za-z0-9]){6}'
+                pattern: "#([A-Za-z0-9]){6}"
                 example: #FFFFFF
 
     # multiple select (with column_data)
@@ -1474,7 +1561,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["multiple-select"]
         anchor_column:
@@ -1497,7 +1584,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["image"]
         anchor_column:
@@ -1518,7 +1605,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["file"]
         anchor_column:
@@ -1539,7 +1626,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["email"]
         anchor_column:
@@ -1558,7 +1645,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["url"]
         anchor_column:
@@ -1578,7 +1665,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["checkbox"]
         anchor_column:
@@ -1591,7 +1678,6 @@ components:
         - $ref: "#/components/schemas/table_name_object"
         - $ref: "#/components/schemas/checkbox_column"
 
-
     rating_column:
       title: Rating
       type: object
@@ -1599,7 +1685,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["rate"]
         anchor_column:
@@ -1621,7 +1707,7 @@ components:
         rate_max_number:
           type: integer
           minimum: 0
-          maximum: 10 
+          maximum: 10
           example: 5
         rate_style_color:
           type: string
@@ -1629,7 +1715,13 @@ components:
           example: "#EB00B1"
         rate_style_type:
           type: string
-          enum: ["dtable-icon-rate", "dtable-icon-like", "dtable-icon-praise", "dtable-icon-flag"]
+          enum:
+            [
+              "dtable-icon-rate",
+              "dtable-icon-like",
+              "dtable-icon-praise",
+              "dtable-icon-flag",
+            ]
           example: dtable-icon-rate
 
     formula_column:
@@ -1639,7 +1731,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["formula"]
         anchor_column:
@@ -1664,7 +1756,7 @@ components:
           example: dateAdd({Date}, 1, 'year'
       required:
         - formula
-    
+
     link_column:
       title: Link column
       type: object
@@ -1672,7 +1764,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["link"]
         anchor_column:
@@ -1700,8 +1792,7 @@ components:
       required:
         - table
         - other_table
-    
-    
+
     link_formula_column:
       title: Link-Formula column
       type: object
@@ -1709,7 +1800,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["link-formula"]
         anchor_column:
@@ -1736,7 +1827,7 @@ components:
       properties:
         formula:
           type: string
-          description: | 
+          description: |
             The formula of this column.
           enum: ["count_links"]
           example: lookup
@@ -1753,7 +1844,7 @@ components:
       properties:
         formula:
           type: string
-          description: | 
+          description: |
             The formula of this column.
           enum: ["lookup"]
         link_column:
@@ -1773,7 +1864,7 @@ components:
       properties:
         formula:
           type: string
-          description: | 
+          description: |
             The formula of this column.
           enum: ["rollup"]
           example: lookup
@@ -1798,7 +1889,7 @@ components:
       properties:
         formula:
           type: string
-          description: | 
+          description: |
             The formula of this column.
           enum: ["findmin"]
           example: lookup
@@ -1823,7 +1914,7 @@ components:
       properties:
         formula:
           type: string
-          description: | 
+          description: |
             The formula of this column.
           enum: ["findmax"]
           example: lookup
@@ -1849,7 +1940,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["creator"]
         anchor_column:
@@ -1869,7 +1960,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["ctime"]
         anchor_column:
@@ -1889,7 +1980,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["last-modifier"]
         anchor_column:
@@ -1909,7 +2000,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["mtime"]
         anchor_column:
@@ -1929,7 +2020,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["auto-number"]
         anchor_column:
@@ -1952,7 +2043,6 @@ components:
           example: "ID-0000"
       required:
         - format
-    
 
     button_column:
       title: Button column
@@ -1960,7 +2050,7 @@ components:
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
-        column_type: 
+        column_type:
           type: string
           enum: ["file"]
         anchor_column:
@@ -1981,7 +2071,14 @@ components:
       properties:
         button_type:
           type: string
-          enum: ["", "run_script", "send_email", "copy_row_to_another_table", "modify_row"]
+          enum:
+            [
+              "",
+              "run_script",
+              "send_email",
+              "copy_row_to_another_table",
+              "modify_row",
+            ]
         button_name:
           type: string
         button_color:
@@ -1997,7 +2094,7 @@ components:
           items:
             type: object
             properties:
-              key: 
+              key:
                 type: string
               value:
                 type: string
@@ -2005,7 +2102,7 @@ components:
         - button_type
         - button_name
         - button_color
-   
+
     rename_column:
       title: Rename Column
       type: object
@@ -2015,95 +2112,95 @@ components:
           enum: [rename_column]
         table_name:
           $ref: "#/components/schemas/table_name"
-        column: 
+        column:
           $ref: "#/components/schemas/column_name"
         new_column_name:
           type: string
           example: "New Oranges"
       required:
-          - op_type
-          - table_name
-          - column
-          - new_column_name
+        - op_type
+        - table_name
+        - column
+        - new_column_name
 
-    resize_column: 
+    resize_column:
       title: Resize Column
       type: object
       properties:
-        op_type:  
+        op_type:
           type: string
           enum: ["resize_column"]
         table_name:
           $ref: "#/components/schemas/table_name"
-        column: 
+        column:
           $ref: "#/components/schemas/column_name"
         new_column_width:
           type: integer
           example: 400
       required:
-          - op_type
-          - table_name
-          - column
-          - new_column_width
-      
+        - op_type
+        - table_name
+        - column
+        - new_column_width
+
     freeze_unfreeze_column:
       title: Freeze/Unfreeze Column
       type: object
       properties:
-        op_type:  
+        op_type:
           type: string
           enum: ["freeze_column"]
         table_name:
           $ref: "#/components/schemas/table_name"
-        column: 
+        column:
           $ref: "#/components/schemas/column_name"
         frozen:
           type: boolean
       required:
-          - op_type
-          - table_name
-          - column
-          - frozen
+        - op_type
+        - table_name
+        - column
+        - frozen
 
     move_column:
       title: Move Column
       type: object
       properties:
-        op_type:  
+        op_type:
           type: string
           enum: ["move_column"]
         table_name:
           $ref: "#/components/schemas/table_name"
-        column: 
+        column:
           $ref: "#/components/schemas/column_name"
         target_column:
           type: string
           example: "Likes"
       required:
-          - op_type
-          - table_name
-          - column
-          - target_column
+        - op_type
+        - table_name
+        - column
+        - target_column
 
     update_column_type:
       title: Update Column Type
       type: object
       properties:
-        op_type:  
+        op_type:
           type: string
           enum: ["modify_column_type"]
         table_name:
           $ref: "#/components/schemas/table_name"
-        column: 
+        column:
           $ref: "#/components/schemas/column_name"
         new_column_type:
           type: string
           example: "number"
       required:
-          - op_type
-          - table_name
-          - column
-          - new_column_type
+        - op_type
+        - table_name
+        - column
+        - new_column_type
 
     update_column:
       oneOf:
@@ -2139,13 +2236,13 @@ components:
               name:
                 type: string
                 example: "Option 1"
-              color: 
+              color:
                 type: string
                 example: "#FF8000"
               textColor:
                 type: string
                 example: "#1DDD1D"
-    
+
     update_single__multiple_select_options:
       type: object
       properties:
@@ -2161,10 +2258,10 @@ components:
               id:
                 type: string
                 example: "119376"
-              color: 
+              color:
                 type: string
                 example: "#4ECCCB"
-              textColor: 
+              textColor:
                 type: string
                 example: "#1DDD1D"
               name:
@@ -2187,7 +2284,7 @@ components:
           items:
             type: string
             description: Name of the select options
-      required: 
+      required:
         - table_name
         - column
         - option_names
@@ -2212,7 +2309,7 @@ components:
           $ref: "#/components/schemas/table_name"
         where:
           type: string
-          description: > 
+          description: >
             Use an sql-like clause to select the rows you want to archive. If not set, all rows in the table will be archived. 
             More examples are: <br/>
             \`Name\` = 'Michael' <br/>
@@ -2291,7 +2388,7 @@ components:
                 type: string
 
 paths:
-    # Base Info
+  # Base Info
   /dtable-server/dtables/{base_uuid}:
     get:
       tags:
@@ -2303,7 +2400,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2315,43 +2412,43 @@ paths:
                 statistics: []
                 links: []
                 tables:
-                  - _id: '0000'
+                  - _id: "0000"
                     name: Table1
                     rows:
                       - _id: Qtf7xPmoRaiFyQPO1aNTjA
                         _participants: []
                         _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: '2020-11-18T12:42:14.779+00:00'
+                        _ctime: "2020-11-18T12:42:14.779+00:00"
                         _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: '2021-01-14T09:01:57.357+00:00'
-                        '0000': Meng
-                        BydO: '2020-08-19'
+                        _mtime: "2021-01-14T09:01:57.357+00:00"
+                        "0000": Meng
+                        BydO: "2020-08-19"
                       - _id: V_jBEGOXQ3mC3rJkQi-DOQ
                         _participants: []
                         _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: '2021-01-14T08:56:05.666+00:00'
+                        _ctime: "2021-01-14T08:56:05.666+00:00"
                         _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: '2021-01-14T08:56:59.458+00:00'
-                        '0000': Bao
-                        BydO: '2020-09-18'
+                        _mtime: "2021-01-14T08:56:59.458+00:00"
+                        "0000": Bao
+                        BydO: "2020-09-18"
                       - _id: HtZb516CTwCZRuBlY8d7Wg
                         _participants: []
                         _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: '2021-01-14T08:56:07.135+00:00'
+                        _ctime: "2021-01-14T08:56:07.135+00:00"
                         _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: '2021-01-14T08:57:04.073+00:00'
-                        '0000': Daniel
-                        BydO: '2020-10-22'
+                        _mtime: "2021-01-14T08:57:04.073+00:00"
+                        "0000": Daniel
+                        BydO: "2020-10-22"
                       - _id: fS8qtN6FQ1uPOaNAC0Locw
                         _participants: []
                         _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: '2021-01-14T08:56:08.259+00:00'
+                        _ctime: "2021-01-14T08:56:08.259+00:00"
                         _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: '2021-01-14T08:57:06.657+00:00'
-                        '0000': Jonas
-                        BydO: '2021-01-20'
+                        _mtime: "2021-01-14T08:57:06.657+00:00"
+                        "0000": Jonas
+                        BydO: "2021-01-20"
                     columns:
-                      - key: '0000'
+                      - key: "0000"
                         name: Name
                         type: text
                         width: 200
@@ -2366,10 +2463,10 @@ paths:
                         draggable: true
                         data:
                           format: YYYY-MM-DD
-                        permission_type: ''
+                        permission_type: ""
                         permitted_users: []
                     views:
-                      - _id: '0000'
+                      - _id: "0000"
                         name: "Default\r\n> View"
                         type: table
                         is_locked: false
@@ -2394,7 +2491,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2403,10 +2500,10 @@ paths:
               example:
                 metadata:
                   tables:
-                    - _id: '0000'
+                    - _id: "0000"
                       name: Table1
                       columns:
-                        - key: '0000'
+                        - key: "0000"
                           name: Name
                           type: text
                           width: 200
@@ -2420,15 +2517,15 @@ paths:
                           resizable: true
                           draggable: true
                           data:
-                            display_column_key: '0000'
-                            table_id: '0000'
-                            other_table_id: '0000'
+                            display_column_key: "0000"
+                            table_id: "0000"
+                            other_table_id: "0000"
                             is_internal_link: true
                             is_multiple: true
                             is_row_from_view: false
-                            other_view_id: '0000'
+                            other_view_id: "0000"
                             link_id: 7V2M
-                          permission_type: ''
+                          permission_type: ""
                           permitted_users: []
                         - key: BydO
                           type: date
@@ -2439,10 +2536,10 @@ paths:
                           draggable: true
                           data:
                             format: YYYY-MM-DD
-                          permission_type: ''
+                          permission_type: ""
                           permitted_users: []
                       views:
-                        - _id: '0000'
+                        - _id: "0000"
                           name: Default View
                           type: table
                           is_locked: false
@@ -2478,7 +2575,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2521,7 +2618,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2566,19 +2663,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sql_query"              
-  
+              $ref: "#/components/schemas/sql_query"
+
       security:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/sql_query_response"              
+                $ref: "#/components/schemas/sql_query_response"
   /dtable-server/api/v1/dtables/{base_uuid}/rows/:
     get:
       tags:
@@ -2603,7 +2700,7 @@ paths:
         - $ref: "#/components/parameters/start"
         - $ref: "#/components/parameters/limit"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2613,11 +2710,11 @@ paths:
               example:
                 rows:
                   - _id: Bko1e60YT-egit2SljWSZA
-                    _mtime: '2021-03-10T16:06:48.981+00:00'
+                    _mtime: "2021-03-10T16:06:48.981+00:00"
                     Name: Second new row
                     link: []
                   - _id: RzeUwIhFSp-iNi81-bZvpA
-                    _mtime: '2021-03-10T16:11:11.176+00:00'
+                    _mtime: "2021-03-10T16:11:11.176+00:00"
                     Name: Matcha
                     link: []
     post:
@@ -2635,21 +2732,21 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: '#/components/schemas/append_row'
-                - $ref: '#/components/schemas/insert_row'
+                - $ref: "#/components/schemas/append_row"
+                - $ref: "#/components/schemas/insert_row"
       security:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
               example:
-                '0000': Second new row
+                "0000": Second new row
                 _id: Bko1e60YT-egit2SljWSZA
                 _creator: 123456786569491ba42905bf1647fd3f@auth.local
                 _last_modifier: 123456786569491ba42905bf1647fd3f@auth.local
@@ -2668,13 +2765,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/update_row"
- 
+
       security:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2698,14 +2795,14 @@ paths:
             schema:
               $ref: "#/components/schemas/delete_row"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
               example:
-                success: true               
+                success: true
   /dtable-server/api/v1/dtables/{base_uuid}/rows/{row_id}/:
     get:
       tags:
@@ -2720,7 +2817,7 @@ paths:
         - $ref: "#/components/parameters/table_name"
         - $ref: "#/components/parameters/convert"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2728,11 +2825,11 @@ paths:
                 type: object
               example:
                 _id: Qtf7xPmoRaiFyQPO1aENTjb
-                _mtime: '2021-03-10T16:19:31.761+00:00'
+                _mtime: "2021-03-10T16:19:31.761+00:00"
                 Name: NewName
-                Date: '2020-08-01'
-                Content: '111'
-                link: [] 
+                Date: "2020-08-01"
+                Content: "111"
+                link: []
   /dtable-server/api/v1/dtables/{base_uuid}/batch-append-rows/:
     post:
       tags:
@@ -2745,13 +2842,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/append_rows"
-              
+
       security:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2775,7 +2872,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2799,7 +2896,7 @@ paths:
             schema:
               $ref: "#/components/schemas/delete_rows"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2828,7 +2925,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2855,7 +2952,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2881,12 +2978,12 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/table_name"
       requestBody:
-        content: 
+        content:
           application/json:
             schema:
               $ref: "#/components/schemas/filtered-rows-filter"
       responses:
-        '200':
+        "200":
           description: OK
   # Links
   /dtable-server/api/v1/dtables/{base_uuid}/links/:
@@ -2910,7 +3007,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2934,7 +3031,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2957,7 +3054,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2970,7 +3067,7 @@ paths:
     put:
       tags: [Links]
       summary: Create Row Links (Batch)
-      description: | 
+      description: |
         Update multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
         Here is an example how the body with `row_id_list` and `other_rows_ids_map` should look like: 
         ```
@@ -2993,7 +3090,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3044,7 +3141,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3055,7 +3152,6 @@ paths:
                   - row_id: G5rbgqudTKKfAm1-cjnjbQ
                     display_value: Orson
 
-  
   # Files & Images
   /api/v2.1/dtable/app-upload-link/:
     get:
@@ -3072,7 +3168,7 @@ paths:
       security:
         - ApiTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3091,14 +3187,14 @@ paths:
       summary: Upload File/Image
       description: |
         Upload a file or an image as an attachment to a base. To execute this request you need to generate an [upload link](/reference/get-file-image-upload-link) first. 
-        
+
         > 📘 Three steps to add a file/an image to a base
         > 
         > To add an image or a file to a base, three steps are necessary: 
         > 1. [Generate an upload link](/reference/get-file-image-upload-link).
         > 2. Upload the file to the base as an attachment.
         > 3. [Update a row](/reference/update-row) and attach the file/the image to a file or image column. 
-        
+
         > 📘 Different variable names
         > 
         > Pay attention that the return values of [upload link](/reference/get-file-image-upload-link) have slightly different names, so `parent_path` is `parent_dir` in this call.
@@ -3106,7 +3202,7 @@ paths:
         ## Attach the file/image to a file or image column
 
         After uploading the file/image to a base, SeaTable saves the uploaded file at non-public URL in the form: `/workspace/{workspace_id}`+`parent_dir`+`relative_path`+`name`. 
-        
+
         Here is an example how this might look like: `https://cloud.seatable.io/workspace/24/asset/55f2f056-5da1-4095-b5f8-791bb51b991e/images/2023-07/party.png`
         If you are logged in with your browser, you can access this file. Otherwise you will see the login screen.
 
@@ -3141,7 +3237,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/upload_link"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3167,7 +3263,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/file_path"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3187,14 +3283,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/custom_folder_path"
       responses:
-        '200': 
+        "200":
           description: OK
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
               example:
-                dir: 
+                dir:
                   - name: "Invoices"
                   - name: "Requests"
                 file:
@@ -3210,14 +3306,14 @@ paths:
         - $ref: "#/components/parameters/custom_folder_path"
         - $ref: "#/components/parameters/custom_folder_file_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
               example:
-                dirent: 
+                dirent:
                   is_file: true
                   obj_name: "b347.pdf"
                   file_size: 11583
@@ -3231,15 +3327,15 @@ paths:
         - ApiTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/custom_folder_path"
-      responses: 
-        '200':
+      responses:
+        "200":
           description: OK
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
               example:
-                dirent: 
+                dirent:
                   upload_link: "https://cloud.seatable.io/seafhttp/upload-api/e943a56a-c5b3-441a-ac1d-9199819dec71"
                   parent_path: "/asset/1338f224-8482-4d71-b8be-63c8f37b896a/custom"
                   relative_path": "/"
@@ -3251,15 +3347,15 @@ paths:
         - ApiTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/custom_folder_path_with_filename"
-      responses: 
-        '200':
+      responses:
+        "200":
           description: OK
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
               example:
-                dirent: 
+                dirent:
                   download_link: "https://cloud.seatable.io/seafhttp/files/a73e26e9-0417-4d98-bb5d-92826f4af671/b347.pdf"
 
   # Tables
@@ -3317,13 +3413,13 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/base"
-                
+
     put:
       tags:
         - Tables
@@ -3339,7 +3435,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3362,7 +3458,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3391,7 +3487,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3401,7 +3497,7 @@ paths:
                 _id: oW2Q
                 name: Appointments(copy)
                 columns:
-                  - key: '0000'
+                  - key: "0000"
                     name: New Date
                     type: date
                     width: 169
@@ -3420,7 +3516,7 @@ paths:
                     data:
                       format: YYYY-MM-DD HH:mm
                       enable_fill_default_value: false
-                      default_value: ''
+                      default_value: ""
                       default_date_type: specific_date
                   - key: 004l
                     type: link
@@ -3430,15 +3526,15 @@ paths:
                     resizable: true
                     draggable: true
                     data:
-                      display_column_key: '0000'
+                      display_column_key: "0000"
                       table_id: anJ2
                       other_table_id: oW2Q
                       is_internal_link: true
                       is_multiple: true
                       is_row_from_view: false
-                      other_view_id: ''
+                      other_view_id: ""
                       link_id: EeKy
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
                     colorbys: null
                   - key: TlwL
@@ -3451,7 +3547,7 @@ paths:
                     data:
                       format: duration
                       duration_format: h:mm
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
                   - key: E5kr
                     type: formula
@@ -3461,13 +3557,13 @@ paths:
                     resizable: true
                     draggable: true
                     data:
-                      formula: '{Termine}+{dauer}'
+                      formula: "{Termine}+{dauer}"
                       operated_columns:
-                        - '0000'
+                        - "0000"
                         - TlwL
                       result_type: date
                       format: YYYY-MM-DD HH:mm
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
                   - key: quLi
                     type: text
@@ -3477,7 +3573,7 @@ paths:
                     resizable: true
                     draggable: true
                     data: null
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
                     description: null
                   - key: X16v
@@ -3493,11 +3589,11 @@ paths:
                       enable_precision: true
                       enable_fill_default_value: false
                       decimal: dot
-                      thousands: 'no'
-                    permission_type: ''
+                      thousands: "no"
+                    permission_type: ""
                     permitted_users: []
                     description: null
-                  - key: '0000'
+                  - key: "0000"
                     type: text
                     name: Name2
                     editable: true
@@ -3505,10 +3601,10 @@ paths:
                     resizable: true
                     draggable: true
                     data: null
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
                     description: null
-                  - key: '0000'
+                  - key: "0000"
                     type: text
                     name: Name3
                     editable: true
@@ -3516,13 +3612,13 @@ paths:
                     resizable: true
                     draggable: true
                     data: null
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
                     description: null
                 rows: []
                 id_row_map: {}
                 views:
-                  - _id: '0000'
+                  - _id: "0000"
                     name: Default View
                     type: table
                     is_locked: false
@@ -3546,7 +3642,7 @@ paths:
                       - column_key: 004l
                         filter_predicate: is_empty
                         filter_term_modifier: exact_date
-                        filter_term: ''
+                        filter_term: ""
                     sorts: []
                     groupbys: []
                     group_rows: []
@@ -3569,7 +3665,7 @@ paths:
                       - column_key: 004l
                         filter_predicate: is_not_empty
                         filter_term_modifier: exact_date
-                        filter_term: ''
+                        filter_term: ""
                     sorts: []
                     groupbys: []
                     group_rows: []
@@ -3581,7 +3677,7 @@ paths:
                     link_rows: {}
                     summaries: {}
                     colors: {}
-  
+
   # Views
   /dtable-server/api/v1/dtables/{base_uuid}/views/:
     get:
@@ -3595,7 +3691,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/table_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3603,7 +3699,7 @@ paths:
                 type: object
               example:
                 views:
-                  - _id: '0000'
+                  - _id: "0000"
                     name: Default View
                     type: table
                     is_locked: false
@@ -3621,7 +3717,7 @@ paths:
       tags:
         - Views
       summary: Create View
-      description: Create a new view in the current table. 
+      description: Create a new view in the current table.
 
         In the **request body**, use `name` for the name of the new view. After
         creating the new view, use the request [Update View](/reference/update-view) to further
@@ -3637,7 +3733,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/table_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3674,7 +3770,7 @@ paths:
         - $ref: "#/components/parameters/view_name_path"
         - $ref: "#/components/parameters/table_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3694,11 +3790,11 @@ paths:
                 colorbys:
                   type: by_rules
                   color_by_rules:
-                    - color: '#F4667C'
+                    - color: "#F4667C"
                       filters:
-                        - column_key: '0000'
+                        - column_key: "0000"
                           filter_predicate: contains
-                          filter_term: ''
+                          filter_term: ""
                       filter_conjunction: Or
                 hidden_columns: []
                 rows: []
@@ -3713,9 +3809,9 @@ paths:
       description: |
         Change the settings of a current view by its name. All parameters are
         optional. 
-        
+
         If you don't define a parameter, existing settings for this parameter will not be changed.
-        
+
         To remove existing filters, sortings or groups you have to send an empty object like this:
         `"sorts": [{}]`
       requestBody:
@@ -3730,7 +3826,7 @@ paths:
         - $ref: "#/components/parameters/view_name_path"
         - $ref: "#/components/parameters/table_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3750,11 +3846,11 @@ paths:
                 colorbys:
                   type: by_rules
                   color_by_rules:
-                    - color: '#F4667C'
+                    - color: "#F4667C"
                       filters:
-                        - column_key: '0000'
+                        - column_key: "0000"
                           filter_predicate: contains
-                          filter_term: ''
+                          filter_term: ""
                       filter_conjunction: Or
                 hidden_columns: []
                 rows: []
@@ -3774,7 +3870,7 @@ paths:
         - $ref: "#/components/parameters/view_name_path"
         - $ref: "#/components/parameters/table_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3798,7 +3894,7 @@ paths:
         - $ref: "#/components/parameters/view_name"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3806,7 +3902,7 @@ paths:
                 type: object
               example:
                 columns:
-                  - key: '0000'
+                  - key: "0000"
                     name: Name
                     type: text
                     width: 200
@@ -3820,7 +3916,7 @@ paths:
                     resizable: true
                     draggable: true
                     data: null
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
     post:
       tags:
@@ -3862,7 +3958,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3885,7 +3981,7 @@ paths:
                   include_condition: false
                   condition_conjunction: And
                   conditions: []
-                permission_type: ''
+                permission_type: ""
                 permitted_users: []
     put:
       tags:
@@ -3918,7 +4014,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3933,7 +4029,7 @@ paths:
                 resizable: true
                 draggable: true
                 data: null
-                permission_type: ''
+                permission_type: ""
                 permitted_users: []
     delete:
       tags:
@@ -3952,7 +4048,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4021,7 +4117,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4037,7 +4133,7 @@ paths:
                     resizable: true
                     draggable: true
                     data: null
-                    permission_type: ''
+                    permission_type: ""
                     permitted_users: []
                     description: null
                   - key: X16v
@@ -4050,8 +4146,8 @@ paths:
                     data:
                       format: number
                       decimal: dot
-                      thousands: 'no'
-                    permission_type: ''
+                      thousands: "no"
+                    permission_type: ""
                     permitted_users: []
                     description: null
 
@@ -4089,7 +4185,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4137,7 +4233,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4146,9 +4242,9 @@ paths:
               example:
                 options:
                   - name: Finished
-                    color: '#4ECCCB'
-                    textColor: '#FFFFFF'
-                    id: '119376'
+                    color: "#4ECCCB"
+                    textColor: "#FFFFFF"
+                    id: "119376"
     delete:
       tags:
         - Columns
@@ -4179,7 +4275,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4263,7 +4359,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4272,7 +4368,6 @@ paths:
               example:
                 success: true
 
-  
   # Big Data
   /dtable-db/api/v1/insert-rows/{base_uuid}/:
     post:
@@ -4291,7 +4386,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4315,7 +4410,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4340,7 +4435,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4364,7 +4459,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: Ok
           content:
             application/json:
@@ -4374,7 +4469,6 @@ paths:
                 success: true
                 error_message: ""
 
-  
   # Row Comments
   /dtable-server/api/v1/dtables/{base_uuid}/comments/:
     get:
@@ -4390,7 +4484,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/row_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4402,24 +4496,24 @@ paths:
                   comment: This is good!
                   dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
                   row_id: NAu2B3OcRG6UrWagL-9naA
-                  created_at: '2021-01-15T13:35:26.000Z'
-                  updated_at: '2021-01-15T13:35:26.000Z'
+                  created_at: "2021-01-15T13:35:26.000Z"
+                  updated_at: "2021-01-15T13:35:26.000Z"
                   resolved: 0
                 - id: 2
                   author: 28dhr6e7d1754bb4afa2c2cb7369d244@auth.local
                   comment: Go online tomorrow?
                   dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
                   row_id: NAu2B3OcRG6UrWagL-9naA
-                  created_at: '2021-01-15T13:52:48.000Z'
-                  updated_at: '2021-01-15T13:52:48.000Z'
+                  created_at: "2021-01-15T13:52:48.000Z"
+                  updated_at: "2021-01-15T13:52:48.000Z"
                   resolved: 0
                 - id: 3
                   author: 8cb2a6da1928374ba42905bf1647fd3f@auth.local
                   comment: Agreed!
                   dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
                   row_id: NAu2B3OcRG6UrWagL-9naA
-                  created_at: '2021-01-15T13:53:13.000Z'
-                  updated_at: '2021-01-15T13:53:13.000Z'
+                  created_at: "2021-01-15T13:53:13.000Z"
+                  updated_at: "2021-01-15T13:53:13.000Z"
                   resolved: 1
 
   /dtable-server/api/v1/dtables/{base_uuid}/comments/{comment_id}/:
@@ -4434,7 +4528,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/comment_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4453,7 +4547,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/comment_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4465,8 +4559,8 @@ paths:
                 comment: Here is my email address
                 dtable_uuid: 12345678-7e27-46a8-8b18-6cc6374yf557
                 row_id: NAu2B3OcRG6UrWagL-9naA
-                created_at: '2021-01-15T13:52:48.000Z'
-                updated_at: '2021-01-15T13:52:48.000Z'
+                created_at: "2021-01-15T13:52:48.000Z"
+                updated_at: "2021-01-15T13:52:48.000Z"
                 resolved: 0
   /dtable-server/api/v1/dtables/{base_uuid}/comments-count/:
     get:
@@ -4482,7 +4576,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/row_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4504,7 +4598,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/days"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4517,10 +4611,9 @@ paths:
                     comment: Let's discuss this tomorrow
                     dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                     row_id: Qtf7xPmoRaiFyQPO1aNTjA
-                    created_at: '2021-03-09T15:54:22.000Z'
-                    updated_at: '2021-03-09T15:54:22.000Z'
+                    created_at: "2021-03-09T15:54:22.000Z"
+                    updated_at: "2021-03-09T15:54:22.000Z"
                     resolved: 0
-
 
   # Notifications
   /dtable-server/api/v1/dtables/{base_uuid}/notifications/:
@@ -4534,7 +4627,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4545,10 +4638,10 @@ paths:
                   - id: 200
                     username: 123456786569491ba42905bf1647fd3f@auth.local
                     msg_type: row_comment
-                    created_at: '2021-02-25T10:38:14.000Z'
+                    created_at: "2021-02-25T10:38:14.000Z"
                     detail:
                       author: 244b4667d1754bb4afa2c2cb7369d244@auth.local
-                      table_id: '0000'
+                      table_id: "0000"
                       row_id: fS8qtN6FQ1uPOaNAC0Locw
                       comment: Did you see this?
                     seen: 1
@@ -4566,13 +4659,13 @@ paths:
                 seen:
                   type: boolean
                   description: true or false for read or unread. Otherwise invalid.
-                  example: 'true'
+                  example: "true"
       security:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4590,7 +4683,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4613,14 +4706,14 @@ paths:
                 seen:
                   type: boolean
                   description: '`true` to mark as "seen" and `false` as "unseen".'
-                  example: 'false'
+                  example: "false"
       security:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/notification_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4628,7 +4721,7 @@ paths:
                 type: object
               example:
                 success: true
-              
+
   # Activities & Logs
   /dtable-server/api/v1/dtables/{base_uuid}/operations/:
     get:
@@ -4642,7 +4735,7 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4682,7 +4775,7 @@ paths:
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4695,9 +4788,9 @@ paths:
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
                     op_type: modify_row
-                    op_time: '2021-01-14T09:01:57.000Z'
+                    op_time: "2021-01-14T09:01:57.000Z"
                     detail:
-                      table_id: '0000'
+                      table_id: "0000"
                       table_name: Table1
                       row_name: Meng
                       row_data:
@@ -4706,48 +4799,48 @@ paths:
                           column_type: date
                           column_data:
                             format: YYYY-MM-DD
-                          value: '2020-08-19'
-                          old_value: '2020-08-16'
+                          value: "2020-08-19"
+                          old_value: "2020-08-16"
                   - id: 6778
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
                     op_type: modify_row
-                    op_time: '2021-01-14T08:56:53.000Z'
+                    op_time: "2021-01-14T08:56:53.000Z"
                     detail:
-                      table_id: '0000'
+                      table_id: "0000"
                       table_name: Table1
                       row_name: Meng
                       row_data:
-                        - column_key: '0000'
+                        - column_key: "0000"
                           column_name: Name
                           column_type: text
                           column_data: {}
                           value: Meng
-                          old_value: ''
+                          old_value: ""
                         - column_key: BydO
                           column_name: Date
                           column_type: date
                           column_data:
                             format: YYYY-MM-DD
-                          value: '2020-08-16'
-                          old_value: ''
+                          value: "2020-08-16"
+                          old_value: ""
                   - id: 5960
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
                     op_type: insert_row
-                    op_time: '2020-11-18T12:42:14.000Z'
+                    op_time: "2020-11-18T12:42:14.000Z"
                     detail:
-                      table_id: '0000'
+                      table_id: "0000"
                       table_name: Table1
-                      row_name: ''
+                      row_name: ""
                       row_data:
-                        - column_key: '0000'
+                        - column_key: "0000"
                           column_name: Name
                           column_type: text
                           column_data: {}
-                          value: ''
+                          value: ""
                 total_count: 3
   /api/v2.1/dtables/{base_uuid}/delete-operation-logs/:
     get:
@@ -4783,7 +4876,7 @@ paths:
         - $ref: "#/components/parameters/op_type"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json: {}
@@ -4803,7 +4896,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4815,13 +4908,13 @@ paths:
                     dtable_uuid: 12345678-187a-4d9f-b6cf-ff5e5019a6d5
                     row_id: ZPFv2pm1SiaQpulvzkHm5Q
                     op_user: 123456786fy54bb4afa2c2cb7369d244@auth.local
-                    op_time: '2020-03-17T10:31:35.000Z'
+                    op_time: "2020-03-17T10:31:35.000Z"
                     detail:
-                      table_id: '0000'
+                      table_id: "0000"
                       table_name: Table1
                       row_name: Jasmin Tea
                       row_data:
-                        - column_key: '0000'
+                        - column_key: "0000"
                           column_name: Name
                           column_type: text
                           column_data: {}
@@ -4837,7 +4930,6 @@ paths:
                               url: >-
                                 http://cloud.seatable.io/workspace/1/asset/12345678-c8e5-49ab-8874-9d4a2dc4608c/files/2020-03/example.html
                     op_app: null
-  
 
   # Snapshots
   /dtable-server/api/v1/dtables/{base_uuid}/snapshot/:
@@ -4859,7 +4951,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4872,4 +4964,3 @@ paths:
                   dtable_name: Example.dtable
                   commit_id: 1234567813a3e0950d4d4f32bd744137929cef23
                   ctime: 1622111992159
- 

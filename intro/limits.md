@@ -1,7 +1,7 @@
 ---
 title: Limits
 excerpt: Get an overview of all rate and size limits of the SeaTable API.
-category: 65489cddc89ba30035c0d620
+category: 6570d48363242f007fc436cf
 isReference: true
 slug: limits
 ---
