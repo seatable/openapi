@@ -1,7 +1,7 @@
 ---
 title: Try It! with your own Server
 excerpt: Prerequisites to use api.seatable.io with your own self-hosted SeaTable server.
-category: 64e5a881a6e8f4004e8bb277
+category: 6570d48363242f007fc436cf
 isReference: true
 slug: requirement-self-hosted
 ---
@@ -21,7 +21,7 @@ a[href="https://seatable.io/registrierung/?lang=auto"] {
 }
 </style>
 
-The **Try It!** button allows you to run any API requests directly from the browser and view an actual response from the SeaTable API. 
+The **Try It!** button allows you to run any API requests directly from the browser and view an actual response from the SeaTable API.
 This feature makes it super easy to explore and get to know the SeaTable API with all its parameters and schemas.
 
 > 👍 No user data leaves your browser
@@ -30,14 +30,14 @@ This feature makes it super easy to explore and get to know the SeaTable API wit
 
 ## Try It! with SeaTable Cloud
 
-There are no requirements needed to use **Try It!** with cloud.seatable.io. Of course you will need an account but the registration is free and should take only some seconds. 
+There are no requirements needed to use **Try It!** with cloud.seatable.io. Of course you will need an account but the registration is free and should take only some seconds.
 After the first login you can start right away to start with your first API requests.
 
 [Register now](https://seatable.io/registrierung/?lang=auto)
 
 ## Try It! with SeaTable Server
 
-If you are running your own [SeaTable server](https://seatable.io/on-premises/?lang=auto), you will need to change your nginx configuration so that the **Try It!** function works with your server and that you can easily copy and paste the generated API requests without authorization errors. Please replace your existing nginx configuration at `/opt/seatable/seatable-data/seatable/conf/nginx.conf` with the following setup. 
+If you are running your own [SeaTable server](https://seatable.io/on-premises/?lang=auto), you will need to change your nginx configuration so that the **Try It!** function works with your server and that you can easily copy and paste the generated API requests without authorization errors. Please replace your existing nginx configuration at `/opt/seatable/seatable-data/seatable/conf/nginx.conf` with the following setup.
 
 Of course you have to replace `{your.seatable.server}` with the public URL of your server and then reload the updated nginx configuration inside the SeaTable docker container with `nginx -s reload`. For more details about this command and the SeaTable docker container, check the [admin manual](https://manual.seatable.io).
 
@@ -99,7 +99,7 @@ server {
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Host $server_name;
         proxy_read_timeout  1200s;
-        client_max_body_size 0;       
+        client_max_body_size 0;
         access_log      /opt/nginx-logs/dtable-web.access.log seatableformat;
         error_log       /opt/nginx-logs/dtable-web.error.log;
     }
@@ -165,6 +165,7 @@ server {
     }
 }
 ```
+
 ```bash nginx configuration (before 4.0)
 # rewrite "bearer token" to "Token token"
 map "$http_authorization" $authorization {
@@ -230,7 +231,7 @@ server {
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header   X-Forwarded-Host $server_name;
         proxy_read_timeout  1200s;
-        client_max_body_size 0;       
+        client_max_body_size 0;
         access_log      /opt/nginx-logs/dtable-web.access.log seatableformat;
         error_log       /opt/nginx-logs/dtable-web.error.log;
     }
@@ -306,7 +307,7 @@ CORS is the abbreviation for [Cross-origin resource sharing](https://en.wikipedi
 
 ![Try It! with CORS error](https://seatable.io/wp-content/uploads/2023/03/readme-com-cors-access-control.png)
 
-To prevent this CORS must be allowed and therefore the following code is necessary in your nginx configuration. 
+To prevent this CORS must be allowed and therefore the following code is necessary in your nginx configuration.
 
 ```bash Enable CORS
 # CORS seetings to allow API from readme.com
@@ -320,7 +321,7 @@ if ($request_method = 'OPTIONS') {
 ```
 
 > 📘 add_header does not inherit
-> 
+>
 > A common error with `add_header` is that these values are not inherited. I.e. in the `location ...` blocks no `add_header` may occur, because otherwise the previously set headers are not taken over.
 
 ## Rewrite of the authorization header (only necessary for SeaTable <4.0)
@@ -350,6 +351,4 @@ location /dtable-db/ {
 }
 ```
 
-### 
-
-
+###

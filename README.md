@@ -1,3 +1,3 @@
 # SeaTable OpenAPI
 
-SeaTable OpenAPI Definition for the version 4.1.
+SeaTable OpenAPI Definition for the version 4.3.

@@ -3,10 +3,10 @@ info:
   title: Authentication
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0).
-  version: "4.1"
+  version: "4.3"
 servers:
-  - url: 'https://{server}'
-    variables: 
+  - url: "https://{server}"
+    variables:
       server:
         default: cloud.seatable.io
 
@@ -16,9 +16,9 @@ servers:
 # - app_name is sometimes param, sometimes body, is there a reason for that?
 # - return values of auth. varies: "get base-token with api-token delivers 8 values back", "Get base-token with account-token" delivers only 5 values back. Why not the same?
 
-x-readme: 
+x-readme:
   explorer-enabled: true
-  metrics-enabled: false 
+  metrics-enabled: false
   proxy-enabled: false
 
 components:
@@ -36,21 +36,21 @@ components:
       bearerFormat: API-Token
 
   parameters:
-  #=======================Header parameters=======================#
+    #=======================Header parameters=======================#
     X-SEAFILE-OTP:
       name: X-SEAFILE-OTP
       in: header
       schema:
         type: string
         pattern: '^\d{6}$'
-      description: > 
+      description: >
         Two-factor token (usually generated with a mobile app like the
         google authenticator), optional, only needed if 2FA is activated for your account.
 
-  #=======================Query parameters=======================#
-  # there are no query params in authentication.
-      
-  #=======================Path parameters=======================#
+    #=======================Query parameters=======================#
+    # there are no query params in authentication.
+
+    #=======================Path parameters=======================#
     workspace_id:
       name: workspace_id
       description: |
@@ -69,7 +69,7 @@ components:
       schema:
         type: string
       required: true
-      example: 'My Projects'
+      example: "My Projects"
     app_name:
       name: app_name
       description: The name of your app. Every API-Token has a name to identify the purpose. The name of the app must be unique for every base.
@@ -77,7 +77,7 @@ components:
       schema:
         type: string
       required: true
-      example: 'My App'
+      example: "My App"
     external_link_token:
       name: external_link_token
       description: |
@@ -129,12 +129,12 @@ components:
         permission:
           type: string
           enum: ["", "rw", "r"]
-      example: 
+      example:
         app_name: Example
         api_token: 1234567f17157cd6c41fdb202813f8d9a9fi3yr7
         generated_by: 1234566569491ba42905bf1647fd3f@auth.local
-        generated_at: '2021-03-02T09:47:41+00:00'
-        last_access: '2021-03-02T09:47:41+00:00'
+        generated_at: "2021-03-02T09:47:41+00:00"
+        last_access: "2021-03-02T09:47:41+00:00"
         permission: rw
 
     ApiTokenTemporary:
@@ -160,12 +160,12 @@ components:
         dtable_server:
           type: string
           format: url
-        dtable_socket: 
+        dtable_socket:
           type: string
           format: url
-        workspace_id: 
+        workspace_id:
           type: integer
-        dtable_name: 
+        dtable_name:
           type: string
       example:
         app_name: My App
@@ -175,7 +175,7 @@ components:
         dtable_socket: https://cloud.seatable.io/
         workspace_id: 127
         dtable_name: Test Base
-    
+
     permission:
       type: string
       description: |
@@ -184,7 +184,7 @@ components:
       enum: ["", "rw", "r"]
       default: ""
 
-paths: 
+paths:
   /api2/auth-token/:
     post:
       tags:
@@ -206,12 +206,12 @@ paths:
                   type: string
                   description: Your password
               required:
-              - username
-              - password
+                - username
+                - password
       parameters:
         - $ref: "#/components/parameters/X-SEAFILE-OTP"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -224,15 +224,15 @@ paths:
       tags:
         - API-Token
       summary: List API-Tokens
-      description: | 
-        List all *API-Tokens* of a base with additional informations like permission, generation date and last access time.   
-      security: 
-      - AccountTokenAuth: []
+      description: |
+        List all *API-Tokens* of a base with additional informations like permission, generation date and last access time.
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -243,7 +243,7 @@ paths:
         - API-Token
       summary: Create API-Token
       description: >
-        Create an *API-Token* for a base.  
+        Create an *API-Token* for a base.
       requestBody:
         content:
           application/x-www-form-urlencoded:
@@ -259,13 +259,13 @@ paths:
               required:
                 - app_name
                 - permission
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '201':
+        "201":
           description: Ok
           content:
             application/json:
@@ -277,20 +277,20 @@ paths:
       tags:
         - API-Token
       summary: Create API-Token (temporary)
-      description: Create a *temporary API-Token* for a base that expires after one hour. 
-      security: 
-      - AccountTokenAuth: []
+      description: Create a *temporary API-Token* for a base that expires after one hour.
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiTokenTemporary"
-                
+
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/api-tokens/{app_name}/:
     put:
       tags:
@@ -308,14 +308,14 @@ paths:
               required:
                 - permission
 
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/app_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -327,14 +327,14 @@ paths:
       summary: Delete API-Token
       description: >-
         Delete one specific API token from a base. The token is identified by his *app_name*.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/app_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -350,10 +350,10 @@ paths:
       summary: Get Base-Token with API-Token
       description: >-
         Generate a Base-Token with an API-Token. The API-Token grants either read or write permission to this base, depending of the permission of the API-Token.
-      security: 
-      - ApiTokenAuth: []
+      security:
+        - ApiTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -369,7 +369,7 @@ paths:
                 dtable_db: https://cloud.seatable.io/dtable-db/
                 workspace_id: 20
                 dtable_name: Test base
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -377,7 +377,7 @@ paths:
                 type: object
               example:
                 error_msg: Permission denied.
-                
+
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/access-token/:
     get:
       tags:
@@ -385,13 +385,13 @@ paths:
       summary: Get Base-Token with Account-Token
       description: >-
         Generate a Base-Token using the user's Account-Token. The read/write permission depends on the user's access permissions to the base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -408,7 +408,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/external_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:

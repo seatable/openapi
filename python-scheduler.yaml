@@ -1,0 +1,164 @@
+openapi: 3.0.0
+info:
+  title: Python Scheduler
+  description: >-
+    The official SeaTable API Reference (OpenAPI 3.0).
+  version: "4.3"
+servers:
+  - url: "https://{server}"
+    variables:
+      server:
+        default: cloud.seatable.io
+
+x-readme:
+  explorer-enabled: true
+  metrics-enabled: false
+  proxy-enabled: false
+
+components:
+  securitySchemes:
+    PythonSchedulerAuth:
+      type: http
+      scheme: bearer
+      description: This is the [Python-Scheduler-Token](/reference/authentication).
+
+  parameters:
+    month:
+      name: month
+      in: query
+      schema:
+        type: string
+        pattern: ^[0-9]{4}-(0[1-9]|1[0-2])
+      description: >-
+        For which month you'd like to list the statistics in the format of YYYY-MM. If you leave this value empty,
+      example: "2023-06"
+      required: false
+    order_by:
+      name: order_by
+      in: query
+      schema:
+        type: string
+        enum: ["total_run_count", "total_run_time"]
+        default: ""
+      required: false
+      description: "Select the parameter to order the results."
+      example: "total_run_count"
+    direction:
+      name: direction
+      in: query
+      schema:
+        type: string
+        enum: ["", "asc", "desc"]
+        default: ""
+      required: false
+      description: The direction of the sort, ascending `asc` or descending `desc`. asc by default. Direction requires that `order_by` is set.
+      example: "desc"
+    page:
+      name: page
+      description: The page number you want to start showing the entries. If no value is provided, 1 will be used.
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+      required: false
+    per_page:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      description: The number of results that should be returned. If no value is provided, 25 results will be returned.
+      example: 25
+      required: false
+
+paths:
+  /admin/statistics/scripts-running/by-user/:
+    get:
+      tags:
+        - Statistics
+      summary: Script runs per user
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/month"
+        - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/direction"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                month: "2023-02"
+                results:
+                  - total_run_count: 37
+                    total_run_time: 153
+                    username: a5adebe277e256e9e04415a28b2c9e8d@auth.local
+                  - total_run_count: 12
+                    total_run_time: 23
+                    username: 56e9e04415a28b2ca5adebe277e29e8d@auth.local
+                total_count: 2
+
+  /admin/statistics/scripts-running/by-org/:
+    get:
+      tags:
+        - Statistics
+      summary: Script runs per team
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/month"
+        - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/direction"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                month: "2023-02"
+                results:
+                  - total_run_count: 37
+                    total_run_time: 153
+                    org_id: 1
+                  - total_run_count: 12
+                    total_run_time: 23
+                    org_id: 2
+                total_count: 2
+
+  /admin/statistics/scripts-running/by-base/:
+    get:
+      tags:
+        - Statistics
+      summary: Script runs per base
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/month"
+        - $ref: "#/components/parameters/order_by"
+        - $ref: "#/components/parameters/direction"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                month: "2023-02"
+                results:
+                  - total_run_count: 37
+                    total_run_time: 153
+                    base_uuid: 1a9707b4-68c9-4e3f-909a-6289ccb47ad7
+                total_count: 1

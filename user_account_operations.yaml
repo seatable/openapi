@@ -3,21 +3,21 @@ info:
   title: Account Operations - User
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0).
-  version: "4.1"
+  version: "4.3"
 servers:
-  - url: 'https://{server}'
-    variables: 
+  - url: "https://{server}"
+    variables:
       server:
         default: cloud.seatable.io
 
-x-readme: 
+x-readme:
   explorer-enabled: true
-  metrics-enabled: false 
+  metrics-enabled: false
   proxy-enabled: false
 
 # - why different?
 #     /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/share/  < includes GET, POST, PUT and DELETE
-#     vs 
+#     vs
 #     /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/group-shares/{group_id}/  < includes only PUT AND DELETE. GET and POST use sub-urls. Why?
 # - why is workspace_id_query a query param?
 # - why is base_name in one case a query param?
@@ -29,7 +29,7 @@ components:
       scheme: bearer
       description: This is the [Account-Token](/reference/authentication).
   parameters:
-  #=======================Query parameters=======================#
+    #=======================Query parameters=======================#
     workspace_id_query:
       name: workspace_id_query
       description: id of your workspace.
@@ -46,13 +46,13 @@ components:
       schema:
         type: string
       required: true
-      example: 'My Projects'
+      example: "My Projects"
     table_id:
       name: table_id
       in: query
       schema:
         type: string
-        pattern: '^[A-Za-z0-9]{4}$'
+        pattern: "^[A-Za-z0-9]{4}$"
       description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. **Important: the table_id is not the table_name**."
       example: "0000"
       required: true
@@ -72,12 +72,12 @@ components:
       required: true
       description: id of view, string
       example: "Jz4d"
-    view_name:    
+    view_name:
       name: view_name
       in: query
       schema:
         type: string
-        pattern: '^[a-z0-9]{4}$'
+        pattern: "^[a-z0-9]{4}$"
       required: true
       description: name of view, required, string
       example: "Default View"
@@ -100,7 +100,7 @@ components:
     page:
       name: page
       in: query
-      schema: 
+      schema:
         type: integer
         minimum: 1
       example: 1
@@ -116,7 +116,7 @@ components:
       in: query
       schema:
         type: string
-        pattern: '^+[0-9]{2}:[0-9]{2}$'
+        pattern: "^+[0-9]{2}:[0-9]{2}$"
       example: +08:00
     detail:
       name: detail
@@ -126,11 +126,11 @@ components:
       description: >-
         `true` or `false`, optional, `true` by default. When `false`, only
         the ID, name and type of each workspace is listed.
-      example: 'false'
+      example: "false"
     parent_dir:
       name: parent_dir
       in: query
-      schema: 
+      schema:
         type: string
       example: /
     path:
@@ -149,7 +149,7 @@ components:
       description: >-
         Number of months to list file upload history. Optional. 2 by
         default.
-      example: '3'
+      example: "3"
     account_name:
       name: account_name
       in: query
@@ -164,7 +164,7 @@ components:
       description: >-
         The ID of the task, returned when you **Send An Email via 3rd Party
         Email Account**.
-      example: '1616585864320'
+      example: "1616585864320"
     base_password:
       name: password
       in: query
@@ -180,19 +180,32 @@ components:
     op_date:
       name: op_date
       in: query
-      schema: 
+      schema:
         type: string
-        pattern: '^((19|20)[0-9][0-9])[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])[T]([01][1-9]|[2][0-3])[:]([0-5][0-9])[:]([0-5][0-9])([+|-]([01][0-9]|[2][0-3])[:]([0-5][0-9])){0,1}$'
+        pattern: "^((19|20)[0-9][0-9])[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])[T]([01][1-9]|[2][0-3])[:]([0-5][0-9])[:]([0-5][0-9])([+|-]([01][0-9]|[2][0-3])[:]([0-5][0-9])){0,1}$"
       required: true
-      example: '2023-05-25T10:06:39+08:00'
+      example: "2023-05-25T10:06:39+08:00"
+    query_str:
+      name: query_str
+      in: query
+      schema:
+        type: string
+      example: "test"
+      description: "Search string. Substrings are allowed and capitalization does not matter."
+    query_type:
+      name: query_type
+      in: query
+      schema:
+        type: string
+        enum: ["", "base", "app"]
 
-  #=======================Path parameters=======================#
+    #=======================Path parameters=======================#
     user_id:
       name: user_id
       in: path
       schema:
         type: string
-        pattern: '^[a-f0-9]{32}(@auth.local)$'
+        pattern: "^[a-f0-9]{32}(@auth.local)$"
       required: true
       example: 123456789f1e4c8d8e1c31415867317c@auth.local
     workspace_id:
@@ -211,7 +224,7 @@ components:
       schema:
         type: string
       required: true
-      example: 'My Projects'
+      example: "My Projects"
     base_uuid:
       name: base_uuid
       in: path
@@ -232,7 +245,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[a-f0-9]{40}$'
+        pattern: "^[a-f0-9]{40}$"
       required: true
       example: 7ee107a4eadb9561e8ce7699494939015f0d101b
     external_link_token:
@@ -247,7 +260,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$'
+        pattern: "^[0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$"
       required: true
       example: 12345678-d378-4c12-8d7a-6da0fb48ee83
     collection_token:
@@ -294,9 +307,9 @@ components:
     group_member:
       name: group_member
       in: path
-      schema: 
+      schema:
         type: string
-        pattern: '^[a-f0-9]{32}(@auth.local)$'
+        pattern: "^[a-f0-9]{32}(@auth.local)$"
       required: true
       example: 12345678-d378-4c12-8d7a-6da0fb48ee83
     webhook_id:
@@ -327,9 +340,9 @@ components:
     app_token:
       name: app_token
       in: path
-      schema: 
+      schema:
         type: string
-        pattern: '^[0-9a-f]{8}-([a-f1-9]{4}-){3}[a-f0-9]{12}$'
+        pattern: "^[0-9a-f]{8}-([a-f1-9]{4}-){3}[a-f0-9]{12}$"
       required: true
       example: 8254d58e-6a67-45ab-be37-87939d80e99f
     group_view_share_id:
@@ -353,7 +366,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[0-9a-f]{20}$'
+        pattern: "^[0-9a-f]{20}$"
       required: true
       example: f234baec8ce44028978a
     invite_link_token:
@@ -361,7 +374,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: '^[0-9a-f]{20}$'
+        pattern: "^[0-9a-f]{20}$"
       required: true
       example: 65432148a9074901923d
     dataset_id:
@@ -392,7 +405,7 @@ components:
         minimum: 1
       required: true
       example: 20
-  
+
   schemas:
     name:
       type: string
@@ -402,7 +415,7 @@ components:
       example: af57b7dda06b4928b255339d92294853@auth.local
       required:
         - user_id
-    role_id: 
+    role_id:
       type: integer
       example: 21
     old_base_name:
@@ -419,7 +432,7 @@ components:
     password:
       type: string
       example: "654321"
-    is_sync_periodically: 
+    is_sync_periodically:
       type: boolean
     dtable_uuid:
       type: string
@@ -445,7 +458,7 @@ components:
       example: Default View
     group_id:
       type: string
-      description: 'The ID of the group. '
+      description: "The ID of the group. "
       example: "1"
     group_name:
       type: string
@@ -476,7 +489,7 @@ components:
         email_port:
           type: integer
           example: 587
-        host_user: 
+        host_user:
           type: string
           example: max@example.com
         password:
@@ -500,10 +513,10 @@ components:
         view_id:
           type: string
           example: "0000"
-    action: 
+    action:
       type: object
       properties:
-        type: 
+        type:
           type: string
           example: notify
         users:
@@ -514,10 +527,16 @@ components:
     is_admin:
       type: string
       enum: ["", "true", "false"]
+    is_inactive:
+      type: object
+      properties:
+        is_inactive:
+          type: boolean
+      required:
+        - is_inactive
 
-
-### schema Automation Rule
-####################  Events  ####################
+    ### schema Automation Rule
+    ####################  Events  ####################
     records_meet_specific_conditions_after_modification:
       title: "Records meet specific conditions after modification"
       type: object
@@ -529,7 +548,7 @@ components:
           $ref: "#/components/schemas/trigger_records_meet_specific_conditions_after_modification"
         actions:
           $ref: "#/components/schemas/action_records_meet_specific_conditions_after_modification"
-    
+
     row_added:
       title: "Row added"
       type: object
@@ -555,12 +574,10 @@ components:
         - $ref: "#/components/schemas/trigger_run_periodically_on_records_meet_per_day"
         - $ref: "#/components/schemas/trigger_run_periodically_on_records_meet_per_week"
         - $ref: "#/components/schemas/trigger_run_periodically_on_records_meet_per_month"
-        
 
-####################  Events  ####################
+    ####################  Events  ####################
 
-
-#################### trigger conditions ####################    
+    #################### trigger conditions ####################
     trigger_records_meet_specific_conditions_after_modification:
       title: Trigger
       type: object
@@ -778,10 +795,9 @@ components:
         actions:
           $ref: "#/components/schemas/action_run_periodically_on_records"
 
-#################### trigger conditions ####################
+    #################### trigger conditions ####################
 
-
-#################### trigger components ####################
+    #################### trigger components ####################
     rule_name:
       type: string
     trigger_records_meet_specific_conditions_after_modification_condition:
@@ -796,7 +812,7 @@ components:
     trigger_run_periodically_by_condition:
       type: string
       enum: [run_periodically_by_condition]
-    
+
     ############### Filter components ###############
     column_key:
       type: string
@@ -814,7 +830,7 @@ components:
     filter_term_empty:
       type: string
       enum: [""]
-       
+
     contains:
       title: Contains
       type: object
@@ -1048,7 +1064,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_empty"
         filter_term_modifier:
@@ -1063,7 +1087,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_empty"
         filter_term_modifier:
@@ -1078,7 +1110,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_empty"
         filter_term_modifier:
@@ -1093,7 +1133,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_empty"
         filter_term_modifier:
@@ -1108,7 +1156,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_empty"
         filter_term_modifier:
@@ -1123,7 +1179,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_empty"
         filter_term_modifier:
@@ -1138,7 +1202,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_empty"
         filter_term_modifier:
@@ -1153,7 +1225,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_integer"
         filter_term_modifier:
@@ -1168,7 +1248,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_integer"
         filter_term_modifier:
@@ -1183,7 +1271,15 @@ components:
           $ref: "#/components/schemas/column_key"
         filter_predicate:
           type: string
-          enum: ["is", "is_before", "is_after", "is_on_or_before", "is_on_or_after", "is_not"]
+          enum:
+            [
+              "is",
+              "is_before",
+              "is_after",
+              "is_on_or_before",
+              "is_on_or_after",
+              "is_not",
+            ]
         filter_term:
           $ref: "#/components/schemas/filter_term_date"
         filter_term_modifier:
@@ -1345,7 +1441,6 @@ components:
           enum: [the_past_number_of_days]
 
     ############### Filter components ###############
-    
 
     filters:
       type: array
@@ -1391,12 +1486,11 @@ components:
           - $ref: "#/components/schemas/is_within_the_next_month"
           - $ref: "#/components/schemas/is_within_the_next_year"
           - $ref: "#/components/schemas/is_within_the_next_number_of_days"
-          - $ref: "#/components/schemas/is_within_the_past_number_of_days" 
+          - $ref: "#/components/schemas/is_within_the_past_number_of_days"
 
-#################### trigger components ####################
+    #################### trigger components ####################
 
-
-#################### Automated Actions ####################
+    #################### Automated Actions ####################
     action_records_meet_specific_conditions_after_modification:
       title: Action
       type: array
@@ -1451,18 +1545,16 @@ components:
           - $ref: "#/components/schemas/action_send_email"
           - $ref: "#/components/schemas/action_lock_record"
 
+    #################### Automated Actions ####################
 
-#################### Automated Actions ####################
-
-
-#################### Automated Action components ####################
+    #################### Automated Action components ####################
     _id:
       type: string
       description: >-
         It's an ID of the action. 
         If you have multiple actions in one rule, they should carry different IDs. 
         You can decide which ID an action should carry.
-        
+
     action_notify:
       title: "Send notification"
       type: object
@@ -1470,12 +1562,12 @@ components:
         type:
           type: string
           enum: [notify]
-        users: 
+        users:
           type: array
-          items: 
+          items:
             type: string
             description: Is a list of user's IDs
-            pattern: '^[a-f0-9]{32}(@auth.local)$'
+            pattern: "^[a-f0-9]{32}(@auth.local)$"
         default_msg:
           type: string
           description: Is the content of the message.
@@ -1486,7 +1578,7 @@ components:
           description: Is a list of keys of columns that are the types of collaborator, creator or modifier.
 
     action_send_email:
-      title: "Send Email" 
+      title: "Send Email"
       type: object
       properties:
         type:
@@ -1547,7 +1639,7 @@ components:
         updates:
           type: object
           description: Is an object including the column key and desired content of each field that you would like to modify.
-          additionalProperties: 
+          additionalProperties:
             type: string
         _id:
           $ref: "#/components/schemas/_id"
@@ -1575,13 +1667,13 @@ components:
               other_column_key:
                 type: string
 
-    ############### Add record to other table components ###############            
+    ############### Add record to other table components ###############
     add_record_to_other_table_row_text:
       title: Text
       type: object
       additionalProperties:
         type: string
-      
+
     add_record_to_other_table_row_percentage:
       title: Percentage
       type: object
@@ -1595,8 +1687,7 @@ components:
         type: array
         items:
           type: string
-          pattern: '^[a-f0-9]{32}(@auth.local)$'
-    
+          pattern: "^[a-f0-9]{32}(@auth.local)$"
 
     ############### Date components ###############
     specific_date:
@@ -1765,7 +1856,7 @@ components:
       title: "Calculate accumulated value"
       type: object
       properties:
-        type: 
+        type:
           type: string
           enum: [calculate_accumulated_value]
         _id:
@@ -1779,7 +1870,7 @@ components:
       title: "Calculate delta"
       type: object
       properties:
-        type: 
+        type:
           type: string
           enum: [calculate_delta]
         _id:
@@ -1793,7 +1884,7 @@ components:
       title: "Calculate percentage"
       type: object
       properties:
-        type: 
+        type:
           type: string
           enum: [calculate_percentage]
         _id:
@@ -1802,12 +1893,12 @@ components:
           type: string
         calculate_column:
           type: string
-          
+
     action_calculate_rank:
       title: "Calculate rank"
       type: object
       properties:
-        type: 
+        type:
           type: string
           enum: [calculate_rank]
         _id:
@@ -1821,7 +1912,7 @@ components:
       title: "Extract user name"
       type: object
       properties:
-        type: 
+        type:
           type: string
           enum: [extract_user_name]
         _id:
@@ -1829,7 +1920,7 @@ components:
         extract_column_key:
           type: string
         result_column_key:
-          type: string      
+          type: string
 
     action_lookup_and_copy:
       title: "Lookup and copy"
@@ -1886,11 +1977,8 @@ components:
         repo_id:
           type: string
 
-#################### Automated Action components ####################
-             
+    #################### Automated Action components ####################
 
-   
-    
     new_contact_email:
       type: string
       description: The new email address of the user.
@@ -1920,7 +2008,7 @@ components:
       description: >-
         The icon color of the base. Optional. Refer to ["Create A
         Base"](/reference/post_api-v2-1-dtables) for the list of available icon colors.
-      example: '#E91E63'
+      example: "#E91E63"
     folder_name:
       type: string
       description: >-
@@ -1947,16 +2035,16 @@ components:
       example: folder_id
     src_workspace_id:
       type: integer
-      description: Source workspace's ID. 
-      example: '1'
+      description: Source workspace's ID.
+      example: "1"
     base_name:
       type: string
       description: Name of the base.
       example: Projects
     dst_workspace_id:
       type: integer
-      description: Destination workspace's ID. 
-      example: '80'
+      description: Destination workspace's ID.
+      example: "80"
     link:
       type: string
       description: Source external link.
@@ -1993,7 +2081,7 @@ components:
       example: Field1
     permission:
       type: string
-      description: '`r` for read only or `rw` for read and write'
+      description: "`r` for read only or `rw` for read and write"
       example: rw
     email:
       type: string
@@ -2008,7 +2096,7 @@ components:
     expire_days:
       type: integer
       description: Add expiration period in days. Optional.
-      example: '30'
+      example: "30"
     token:
       type: string
       description: >-
@@ -2045,7 +2133,7 @@ components:
         X-SeaTable-Signature header, whose value is the result of
         SHA1 encryption of the secret key, in the webhook POST
         request. Optional.
-      example: '123456'
+      example: "123456"
     snapshot_name:
       type: string
       description: >-
@@ -2106,10 +2194,10 @@ paths:
         - User
       summary: Get Account Info
       description: Get the detailed account information with the user's Account Token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2127,9 +2215,9 @@ paths:
                 avatar_url: https://cloud.seatable.io/media/avatars/default.png
                 email: 7fhe63g949b946a3b200555db5de1d23@auth.local
                 name: Robert Teamplayer
-                login_id: ''
+                login_id: ""
                 contact_email: teamplayer@example.com
-                institution: ''
+                institution: ""
                 is_staff: false
                 enable_chargebee: true
                 enable_subscription: false
@@ -2153,10 +2241,10 @@ paths:
               properties:
                 new_contact_email:
                   $ref: "#/components/schemas/new_contact_email"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2183,10 +2271,10 @@ paths:
                   $ref: "#/components/schemas/avatar"
                 Avatar_size:
                   $ref: "#/components/schemas/Avatar_size"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2201,12 +2289,12 @@ paths:
         - User
       summary: Get Public User Info
       description: Get the common info from a user by his email address.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/user_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2232,10 +2320,10 @@ paths:
               properties:
                 user_id_list:
                   $ref: "#/components/schemas/user_id_list"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2249,7 +2337,7 @@ paths:
                   - email: 8cb2a6da656876hgf42905bf1647fd3f@auth.local
                     name: Jasmin Tee
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
-  
+
   # Bases
   /api/v2.1/user-admin-dtables/:
     get:
@@ -2263,10 +2351,10 @@ paths:
         admin.
         Each base's details are included in an object in the returned `dtables`
         array.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2280,8 +2368,8 @@ paths:
                     name: All types
                     creator: Michael Jackson
                     modifier: Michael Jackson
-                    created_at: '2021-06-21T14:52:11+00:00'
-                    updated_at: '2021-10-18T08:47:02+00:00'
+                    created_at: "2021-06-21T14:52:11+00:00"
+                    updated_at: "2021-10-18T08:47:02+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -2291,8 +2379,8 @@ paths:
                     name: API Management
                     creator: Michael Jackson
                     modifier: Michael Jackson
-                    created_at: '2021-10-22T08:57:44+00:00'
-                    updated_at: '2021-10-22T08:57:44+00:00'
+                    created_at: "2021-10-22T08:57:44+00:00"
+                    updated_at: "2021-10-22T08:57:44+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -2306,8 +2394,8 @@ paths:
                         name: CRM & Sales
                         creator: Ginger Ale
                         modifier: Ginger Ale
-                        created_at: '2021-03-08T13:04:50+00:00'
-                        updated_at: '2021-03-08T13:04:50+00:00'
+                        created_at: "2021-03-08T13:04:50+00:00"
+                        updated_at: "2021-03-08T13:04:50+00:00"
                         color: null
                         text_color: null
                         icon: null
@@ -2320,8 +2408,8 @@ paths:
                         name: All types
                         creator: Michael Jackson
                         modifier: Michael Jackson
-                        created_at: '2021-08-26T14:10:37+00:00'
-                        updated_at: '2021-08-26T14:10:37+00:00'
+                        created_at: "2021-08-26T14:10:37+00:00"
+                        updated_at: "2021-08-26T14:10:37+00:00"
                         color: null
                         text_color: null
                         icon: null
@@ -2437,10 +2525,10 @@ paths:
                   $ref: "#/components/schemas/icon"
                 color:
                   $ref: "#/components/schemas/color"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
@@ -2454,9 +2542,9 @@ paths:
                   name: Example 2
                   creator: Jasmin Tee
                   modifier: Jasmin Tee
-                  created_at: '2021-03-16T10:34:41+00:00'
-                  updated_at: '2021-03-16T10:34:41+00:00'
-                  color: '#E91E63'
+                  created_at: "2021-03-16T10:34:41+00:00"
+                  updated_at: "2021-03-16T10:34:41+00:00"
+                  color: "#E91E63"
                   text_color: null
                   icon: icon-market-analysis
   /api/v2.1/workspace/{workspace_id}/dtable/:
@@ -2479,12 +2567,12 @@ paths:
                   $ref: "#/components/schemas/icon"
                 color:
                   $ref: "#/components/schemas/color"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2498,8 +2586,8 @@ paths:
                   name: New Example
                   creator: Jasmin Tee
                   modifier: Jasmin Tee
-                  created_at: '2021-03-15T13:20:13+00:00'
-                  updated_at: '2021-03-15T13:21:56+00:00'
+                  created_at: "2021-03-15T13:20:13+00:00"
+                  updated_at: "2021-03-15T13:21:56+00:00"
                   color: null
                   text_color: null
                   icon: null
@@ -2508,12 +2596,12 @@ paths:
         - Bases
       summary: Delete Base
       description: Delete an existing base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2527,10 +2615,10 @@ paths:
         - Bases
       summary: List Favorites
       description: List all the starred (favorite) bases in my library.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2544,8 +2632,8 @@ paths:
                     name: Customers
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2020-11-20T11:57:30+00:00'
-                    updated_at: '2020-11-20T11:57:30+00:00'
+                    created_at: "2020-11-20T11:57:30+00:00"
+                    updated_at: "2020-11-20T11:57:30+00:00"
                     color: null
                     text_color: null
                     icon: null
@@ -2562,10 +2650,10 @@ paths:
               properties:
                 dtable_uuid:
                   $ref: "#/components/schemas/dtable_uuid"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2578,12 +2666,12 @@ paths:
         - Bases
       summary: Unfavorite Base
       description: Remove the star of a base and therefore removing it from "Favorites".
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dtable_uuid_query"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2612,12 +2700,12 @@ paths:
               properties:
                 name:
                   $ref: "#/components/schemas/folder_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2627,7 +2715,7 @@ paths:
                 folder:
                   id: 12
                   name: Test Folder
-                  workspace_id: '2'
+                  workspace_id: "2"
   /api/v2.1/workspace/{workspace_id}/folders/{folder_id}/:
     put:
       tags:
@@ -2642,13 +2730,13 @@ paths:
               properties:
                 name:
                   $ref: "#/components/schemas/folder_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/folder_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2666,13 +2754,13 @@ paths:
       description: >-
         You can only delete a folder when it's empty. To do so, first move your bases out of it and then
         delete it with its `folder_id` in this request.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/folder_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2708,12 +2796,12 @@ paths:
                   $ref: "#/components/schemas/from"
                 to:
                   $ref: "#/components/schemas/to"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2739,13 +2827,13 @@ paths:
                 - $ref: "#/components/schemas/add_password"
                 - $ref: "#/components/schemas/modify_password"
                 - $ref: "#/components/schemas/unset_password"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2757,9 +2845,9 @@ paths:
                   workspace_id: 204
                   uuid: 12345678-ba46-4c07-8116-d237bdeb35a3
                   name: Termine
-                  created_at: '2022-01-12T10:30:01+00:00'
-                  updated_at: '2022-03-11T11:56:47+00:00'
-                  color: '#972CB0'
+                  created_at: "2022-01-12T10:30:01+00:00"
+                  updated_at: "2022-03-11T11:56:47+00:00"
+                  color: "#972CB0"
                   text_color: null
                   icon: icon-leave-record
                   is_encrypted: false
@@ -2769,13 +2857,13 @@ paths:
         - Bases
       summary: List Trashed Bases
       description: List all the bases in the trash bin.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2790,26 +2878,26 @@ paths:
                     name: Example
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2021-03-16T09:43:25+00:00'
-                    updated_at: '2021-03-16T09:43:25+00:00'
-                    color: '#FE91E63'
+                    created_at: "2021-03-16T09:43:25+00:00"
+                    updated_at: "2021-03-16T09:43:25+00:00"
+                    color: "#FE91E63"
                     text_color: null
                     icon: icon-market-analysis
                     deleted: true
-                    delete_time: '2021-03-16T09:45:53+00:00'
+                    delete_time: "2021-03-16T09:45:53+00:00"
                   - id: 497
                     workspace_id: 1
                     uuid: 16b717d9-e910-472c-802b-0943c0b95610
                     name: Example
                     creator: Jasmin Tee
                     modifier: Jasmin Tee
-                    created_at: '2021-03-16T09:41:38+00:00'
-                    updated_at: '2021-03-16T09:41:38+00:00'
-                    color: '#FF8000'
+                    created_at: "2021-03-16T09:41:38+00:00"
+                    updated_at: "2021-03-16T09:41:38+00:00"
+                    color: "#FF8000"
                     text_color: null
                     icon: icon-market-analysis
                     deleted: true
-                    delete_time: '2021-03-16T09:42:33+00:00'
+                    delete_time: "2021-03-16T09:42:33+00:00"
     delete:
       tags:
         - Bases
@@ -2817,10 +2905,10 @@ paths:
       description: >-
         By cleaning the trash bin, all the bases there will be removed
         permanently and cannot be restored any more.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2837,8 +2925,8 @@ paths:
         Restore a trashed base from the trash bin. The base's ID can be
         retrieved from the call [List Trashed Bases](/reference/get_api-v2-1-trash-dtables-1). The base's ID is written
         directly in the URL, like in this example, `497`.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - name: trashed_base_id
           in: path
@@ -2846,9 +2934,9 @@ paths:
             type: integer
           required: true
           description: The ID of the trashed base.
-          example: '497'
+          example: "497"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2869,12 +2957,12 @@ paths:
 
         Use this API request to take a look into your group's trash bin. You'll
         get a permission error if you are not the owner or admin of this group.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2886,14 +2974,14 @@ paths:
                     workspace_id: 209
                     uuid: 5fffa876-30d9-48a2-a5d7-09cd8ffdda4b
                     name: CRM & Sales (1)
-                    created_at: '2021-03-08T13:04:50+00:00'
-                    updated_at: '2021-03-08T13:04:50+00:00'
+                    created_at: "2021-03-08T13:04:50+00:00"
+                    updated_at: "2021-03-08T13:04:50+00:00"
                     color: null
                     text_color: null
                     icon: null
                     is_encrypted: false
                     deleted: true
-                    delete_time: '2022-03-13T08:59:13+00:00'
+                    delete_time: "2022-03-13T08:59:13+00:00"
   /api/v2.1/groups/{group_id}/trash-dtables/{base_uuid}/:
     put:
       tags:
@@ -2902,13 +2990,13 @@ paths:
       description: >-
         With the UUID (retrievable with the previous call) of the trashed base,
         you can restore it with this request.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2927,7 +3015,7 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2938,8 +3026,8 @@ paths:
                   parent_group_id: 0
                   name: "Important Projects"
                   owner: "5c9f13dc9f37495e822d8ecdce301f8f@auth.local"
-                  created_at: '2023-06-01T12:46:26+00:00'
-                  admins: 
+                  created_at: "2023-06-01T12:46:26+00:00"
+                  admins:
                     - 5c9f13dc9f37495e822d8ecdce301f8f@auth.local
     post:
       tags: [Groups & Workspaces]
@@ -2955,7 +3043,7 @@ paths:
                 name:
                   $ref: "#/components/schemas/group_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2973,7 +3061,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -2984,8 +3072,8 @@ paths:
                   parent_group_id: 0
                   name: "Important Projects"
                   owner: "5c9f13dc9f37495e822d8ecdce301f8f@auth.local"
-                  created_at: '2023-06-01T12:46:26+00:00'
-                  admins: 
+                  created_at: "2023-06-01T12:46:26+00:00"
+                  admins:
                     - 5c9f13dc9f37495e822d8ecdce301f8f@auth.local
     put:
       tags: [Groups & Workspaces]
@@ -3015,12 +3103,12 @@ paths:
                   $ref: "#/components/schemas/group_name"
                 owner:
                   $ref: "#/components/schemas/user_id"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3031,7 +3119,7 @@ paths:
                 parent_group_id: 0
                 name: Group New
                 owner: 123abc456def789ghi123jkl456mno789@auth.local
-                created_at: '2020-11-19T08:14:52+00:00'
+                created_at: "2020-11-19T08:14:52+00:00"
                 avatar_url: "http://cloud.seatable.io/media/avatars/groups/default.png"
                 admins:
                   - 2d67c225c64f4305ada3e5820ce6d660@auth.local
@@ -3039,12 +3127,12 @@ paths:
       tags: [Groups & Workspaces]
       summary: Delete Group
       description: Delete a group with its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3058,8 +3146,8 @@ paths:
       summary: Search Group
       description: >
         Just give a search keyword in the `q` param.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - name: q
           in: query
@@ -3067,7 +3155,7 @@ paths:
             type: string
           example: Micha
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3083,12 +3171,12 @@ paths:
     get:
       tags: [Groups & Workspaces]
       summary: Get Group Members
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3104,8 +3192,8 @@ paths:
     post:
       tags: [Groups & Workspaces]
       summary: Add Group Member
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
       requestBody:
@@ -3116,8 +3204,8 @@ paths:
               properties:
                 email:
                   $ref: "#/components/schemas/user_id"
-      responses: 
-        '200':
+      responses:
+        "200":
           description: OK
           content:
             application/json:
@@ -3132,11 +3220,11 @@ paths:
                 is_admin: false
                 role: "Member"
   /api/v2.1/groups/{group_id}/members/{group_member}/:
-    put: 
+    put:
       tags: [Groups & Workspaces]
       summary: Update Group Role
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
         - $ref: "#/components/parameters/group_member"
@@ -3149,11 +3237,11 @@ paths:
                 is_admin:
                   $ref: "#/components/schemas/is_admin"
       responses:
-        '200': 
+        "200":
           description: Ok
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
               example:
                 success: "true"
@@ -3162,21 +3250,21 @@ paths:
       tags: [Groups & Workspaces]
       summary: Remove Group Member
       description: Group admins can remove other group members or a group member can leave the group.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/group_id"
         - $ref: "#/components/parameters/group_member"
       responses:
-        '200': 
+        "200":
           description: Ok
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
               example:
                 success: "true"
-      
+
   /api/v2.1/groups/{group_id}/search-member/:
     get:
       tags:
@@ -3194,8 +3282,8 @@ paths:
 
         A successful search will return each member's details that fit to your
         search criteria. See example.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - name: q
           in: query
@@ -3204,7 +3292,7 @@ paths:
           example: Micha
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3215,7 +3303,7 @@ paths:
                   name: Michael Jackson
                   email: 876543216569491ba42905bf1647fd3f@auth.local
                   contact_email: michael@example.com
-                  login_id: ''
+                  login_id: ""
                   avatar_url: >-
                     https://cloud.seatable.io/image-view/avatars/3/7/a0a57575a3ca0c78e8c5b6b0d0dbda/resized/80/cd7f6edd2c75afd3b7299917b3767c0f.png
                   is_admin: true
@@ -3224,11 +3312,10 @@ paths:
                   name: Michael Jackson 2
                   email: 12345678f3f145c0998cbd08c19c8bc8@auth.local
                   contact_email: michael2@example.com
-                  login_id: ''
+                  login_id: ""
                   avatar_url: https://cloud.seatable.io/media/avatars/default.png
                   is_admin: false
                   role: Member
-
 
   /api/v2.1/workspaces/:
     get:
@@ -3243,12 +3330,12 @@ paths:
         details (`true` or leave it by default) or without details (`false`).
         See the examples "with detail=false" and "with detail=true" for more
         information.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/detail"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3259,10 +3346,10 @@ paths:
                   summary: with detail=false
                   value:
                     workspace_list:
-                      - id: ''
+                      - id: ""
                         name: starred
                         type: starred
-                      - id: ''
+                      - id: ""
                         name: shared
                         type: shared
                       - id: 1
@@ -3275,7 +3362,7 @@ paths:
                   summary: with detail=true
                   value:
                     workspace_list:
-                      - id: ''
+                      - id: ""
                         name: starred
                         type: starred
                         table_list:
@@ -3285,13 +3372,13 @@ paths:
                             name: pt
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2020-11-20T11:57:30+00:00'
-                            updated_at: '2020-11-20T11:57:30+00:00'
+                            created_at: "2020-11-20T11:57:30+00:00"
+                            updated_at: "2020-11-20T11:57:30+00:00"
                             color: null
                             text_color: null
                             icon: null
                             starred: true
-                      - id: ''
+                      - id: ""
                         name: shared
                         type: shared
                         shared_table_list:
@@ -3301,8 +3388,8 @@ paths:
                             name: collaborators
                             creator: Ginger Ale
                             modifier: Ginger Ale
-                            created_at: '2020-11-18T13:02:43+00:00'
-                            updated_at: '2020-11-18T13:02:43+00:00'
+                            created_at: "2020-11-18T13:02:43+00:00"
+                            updated_at: "2020-11-18T13:02:43+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3321,7 +3408,7 @@ paths:
                             to_user_name: Jasmin Tee
                             permission: rw
                             table_id: 2YC3
-                            view_id: '0000'
+                            view_id: "0000"
                             shared_name: null
                             from_user_avatar: >-
                               https://cloud.seatable.io/media/avatars/default.png
@@ -3344,8 +3431,8 @@ paths:
                             name: Project Tracker
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2020-11-18T12:45:06+00:00'
-                            updated_at: '2020-11-18T12:45:06+00:00'
+                            created_at: "2020-11-18T12:45:06+00:00"
+                            updated_at: "2020-11-18T12:45:06+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3358,8 +3445,8 @@ paths:
                             name: pt
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2020-11-20T11:57:30+00:00'
-                            updated_at: '2020-11-20T11:57:30+00:00'
+                            created_at: "2020-11-20T11:57:30+00:00"
+                            updated_at: "2020-11-20T11:57:30+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3380,8 +3467,8 @@ paths:
                             name: CRM & Sales (1)
                             creator: Ginger Ale
                             modifier: Ginger Ale
-                            created_at: '2021-03-08T13:04:50+00:00'
-                            updated_at: '2021-03-08T13:04:50+00:00'
+                            created_at: "2021-03-08T13:04:50+00:00"
+                            updated_at: "2021-03-08T13:04:50+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3403,8 +3490,8 @@ paths:
                             name: CRM (1)
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2021-03-02T10:18:08+00:00'
-                            updated_at: '2021-03-02T10:18:08+00:00'
+                            created_at: "2021-03-02T10:18:08+00:00"
+                            updated_at: "2021-03-02T10:18:08+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3416,8 +3503,8 @@ paths:
                             name: pt
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2020-11-20T11:57:30+00:00'
-                            updated_at: '2020-11-20T11:57:30+00:00'
+                            created_at: "2020-11-20T11:57:30+00:00"
+                            updated_at: "2020-11-20T11:57:30+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3439,8 +3526,8 @@ paths:
                             name: silver
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2021-01-22T14:04:58+00:00'
-                            updated_at: '2021-01-22T14:04:58+00:00'
+                            created_at: "2021-01-22T14:04:58+00:00"
+                            updated_at: "2021-01-22T14:04:58+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3463,8 +3550,8 @@ paths:
                             name: students
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2021-03-11T09:09:38+00:00'
-                            updated_at: '2021-03-11T09:09:38+00:00'
+                            created_at: "2021-03-11T09:09:38+00:00"
+                            updated_at: "2021-03-11T09:09:38+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3480,8 +3567,8 @@ paths:
                             name: 1. Templates-Übersicht
                             creator: Jasmin Tee
                             modifier: Jasmin Tee
-                            created_at: '2021-01-08T15:09:03+00:00'
-                            updated_at: '2021-01-21T16:06:26+00:00'
+                            created_at: "2021-01-08T15:09:03+00:00"
+                            updated_at: "2021-01-21T16:06:26+00:00"
                             color: null
                             text_color: null
                             icon: null
@@ -3514,14 +3601,14 @@ paths:
                   $ref: "#/components/schemas/base_name"
                 dst_workspace_id:
                   $ref: "#/components/schemas/dst_workspace_id"
-              required: 
+              required:
                 - src_workspace_id
                 - name
                 - dst_workspace_id
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3535,8 +3622,8 @@ paths:
                   name: Projects
                   creator: Teamplayer
                   modifier: Teamplayer
-                  created_at: '2020-10-27T16:08:46+08:00'
-                  updated_at: '2020-10-27T16:08:46+08:00'
+                  created_at: "2020-10-27T16:08:46+08:00"
+                  updated_at: "2020-10-27T16:08:46+08:00"
                   color: null
                   text_color: null
                   icon: null
@@ -3556,10 +3643,10 @@ paths:
                   $ref: "#/components/schemas/link"
                 dst_workspace_id:
                   $ref: "#/components/schemas/dst_workspace_id"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
@@ -3573,12 +3660,11 @@ paths:
                   name: Projects
                   creator: Teamleader
                   modifier: Teamleader
-                  created_at: '2020-10-27T16:08:46+08:00'
-                  updated_at: '2020-10-27T16:08:46+08:00'
+                  created_at: "2020-10-27T16:08:46+08:00"
+                  updated_at: "2020-10-27T16:08:46+08:00"
                   color: null
                   text_color: null
                   icon: null
-
 
   # Attachment
   /api/v2.1/workspace/{workspace_id}/dtable-asset-upload-link/:
@@ -3590,13 +3676,13 @@ paths:
         Get the attachment upload link to a base. Images should be uploaded to
         the `img_relative_path`, all other files should be uploaded to the
         `file_relative_path`.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name_query"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3619,13 +3705,13 @@ paths:
 
         The returned `is_file` value indicates if this object is a file (`true`)
         or a folder (`false`).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/parent_dir"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3636,23 +3722,23 @@ paths:
                   - is_file: true
                     obj_name: fb_2018-03-01.csv
                     file_size: 1201
-                    last_update: '2020-03-02T03:06:16+00:00'
+                    last_update: "2020-03-02T03:06:16+00:00"
                   - is_file: true
                     obj_name: 2018-05-15.csv
                     file_size: 133
-                    last_update: '2020-03-02T03:05:08+00:00'
+                    last_update: "2020-03-02T03:05:08+00:00"
     delete:
       tags:
         - Attachment
       summary: Delete Base Asset
       description: Delete a directory, a file or an image from a base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/path"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3672,13 +3758,13 @@ paths:
 
         If there is no upload in a certain month, an empty list is returned for
         that month. See example for details.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/months"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3693,15 +3779,15 @@ paths:
                       - is_file: true
                         obj_name: Example.xlsx
                         file_size: 7326
-                        last_update: '2021-09-14T16:10:12+08:00'
+                        last_update: "2021-09-14T16:10:12+08:00"
                       - is_file: true
                         obj_name: favicon.ico
                         file_size: 67646
-                        last_update: '2021-09-14T16:10:12+08:00'
+                        last_update: "2021-09-14T16:10:12+08:00"
                       - is_file: true
                         obj_name: Report.docx
                         file_size: 17944
-                        last_update: '2021-09-14T16:10:11+08:00'
+                        last_update: "2021-09-14T16:10:11+08:00"
                   - date: 2021-07
                     file_items: []
   /api/v2.1/dtable-asset/{base_uuid}/rename/:
@@ -3720,12 +3806,12 @@ paths:
                   $ref: "#/components/schemas/path"
                 new_name:
                   $ref: "#/components/schemas/new_name_csv"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3750,12 +3836,12 @@ paths:
 
         - `asset_names` is an array of objects you'd like to delete in this
         path. You can list folders or file names here.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3771,14 +3857,14 @@ paths:
       description: >-
         Check if a certain asset exists. The returned `is_exist` value confirms
         the existence (`true`).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/path"
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3786,7 +3872,7 @@ paths:
                 type: object
               example:
                 is_exist: true
- 
+
   # Import & Export
   /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-base/:
     post:
@@ -3806,12 +3892,12 @@ paths:
                   $ref: "#/components/schemas/dtable"
                 folder:
                   $ref: "#/components/schemas/folder"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3839,12 +3925,12 @@ paths:
                   $ref: "#/components/schemas/file"
                 dtable_uuid:
                   $ref: "#/components/schemas/dtable_uuid"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3871,12 +3957,12 @@ paths:
                   $ref: "#/components/schemas/table_name"
                 selected_columns:
                   $ref: "#/components/schemas/selected_columns"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -3889,14 +3975,14 @@ paths:
       tags:
         - Import & Export
       summary: Export Base
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dtable_name_query"
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_password"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json: {}
@@ -3905,15 +3991,15 @@ paths:
       tags:
         - Import & Export
       summary: Export Table
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/table_id"
         - $ref: "#/components/parameters/table_name"
         - $ref: "#/components/parameters/dtable_name_query"
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json: {}
@@ -3922,8 +4008,8 @@ paths:
       tags:
         - Import & Export
       summary: Export View
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/table_id"
         - $ref: "#/components/parameters/table_name"
@@ -3932,7 +4018,7 @@ paths:
         - $ref: "#/components/parameters/view_name"
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json: {}
@@ -3947,7 +4033,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/external_link_token"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json: {}
@@ -3959,22 +4045,19 @@ paths:
       summary: Export Big Data View to Excel
       description: >-
         Hier muss noch eine Beschreibung ergänzt werden
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/table_id"
         - $ref: "#/components/parameters/view_id"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
-              example:
-                {
-                  "task_id": "1680694429195"
-                }
+              example: { "task_id": "1680694429195" }
 
   /api/v2.1/workspace/{workspace_id}/synchronous-import/append-excel-csv-to-table/:
     post:
@@ -3994,12 +4077,12 @@ paths:
                   $ref: "#/components/schemas/dtable_uuid"
                 table_name:
                   $ref: "#/components/schemas/table_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4007,7 +4090,6 @@ paths:
                 type: object
               example:
                 success: true
-      
 
   # Sharing
   /api/v2.1/dtables/shared/:
@@ -4020,10 +4102,10 @@ paths:
         all the bases shared explicit to YOU, not your groups.
         To see all the bases shared to your groups, use the request **List Bases
         Shared to My Groups**.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4037,8 +4119,8 @@ paths:
                     name: collaborators
                     creator: Ginger Ale
                     modifier: Ginger Ale
-                    created_at: '2020-11-18T13:02:43+00:00'
-                    updated_at: '2020-11-18T13:02:43+00:00'
+                    created_at: "2020-11-18T13:02:43+00:00"
+                    updated_at: "2020-11-18T13:02:43+00:00"
                     permission: rw
                     from_user: 87654321d1754bb4afa2c2cb7369d244@auth.local
                     from_user_name: Ginger Ale
@@ -4046,7 +4128,7 @@ paths:
     get:
       tags:
         - Sharing
-      summary: List User Shares 
+      summary: List User Shares
       description: >-
         List all the users sharing a base (except the current user). This
         request only lists off all the individual users sharing the base, which
@@ -4054,13 +4136,13 @@ paths:
 
 
         To see which groups are sharing this base, use the request [List Groups Base is Shared To](/reference/get_api-v2-1-workspace-workspace-id-dtable-base-name-group-shares-1).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4088,13 +4170,13 @@ paths:
                   $ref: "#/components/schemas/permission"
                 email:
                   $ref: "#/components/schemas/email"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
@@ -4119,13 +4201,13 @@ paths:
                   $ref: "#/components/schemas/permission"
                 email:
                   $ref: "#/components/schemas/email"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4138,13 +4220,13 @@ paths:
         - Sharing
       summary: Delete User Share
       description: Stop sharing a base to a user.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4178,10 +4260,10 @@ paths:
 
         Judging by the `workspace_id` you can determine if a base is in the
         group or shared to the group.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4189,28 +4271,28 @@ paths:
                 type: object
               example:
                 group_shared_dtables:
-                  '162':
+                  "162":
                     - id: 375
                       workspace_id: 377
                       uuid: 4b543a04-39b7-4ce7-aa08-7fe1f4dad0b5
                       name: DataBase
                       creator: Robert Teamplayer
                       modifier: Robert Teamplayer
-                      created_at: '2020-11-19T14:43:24+00:00'
-                      updated_at: '2020-11-19T14:43:24+00:00'
-                      color: '#7626FD'
-                      text_color: '#7626FD'
+                      created_at: "2020-11-19T14:43:24+00:00"
+                      updated_at: "2020-11-19T14:43:24+00:00"
+                      color: "#7626FD"
+                      text_color: "#7626FD"
                       icon: icon-software-test-management
                       starred: false
-                  '165':
+                  "165":
                     - id: 355
                       workspace_id: 377
                       uuid: 03d8b71c-84c7-4a16-b314-94c886dc170p
                       name: Surveys
                       creator: Robert Teamplayer
                       modifier: Robert Teamplayer
-                      created_at: '2020-11-17T15:39:26+00:00'
-                      updated_at: '2020-12-14T14:26:29+00:00'
+                      created_at: "2020-11-17T15:39:26+00:00"
+                      updated_at: "2020-12-14T14:26:29+00:00"
                       color: null
                       text_color: null
                       icon: null
@@ -4221,13 +4303,13 @@ paths:
         - Sharing
       summary: List Group Shares
       description: List all the groups a particular base is being shared to.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4258,13 +4340,13 @@ paths:
                   $ref: "#/components/schemas/group_id"
                 permission:
                   $ref: "#/components/schemas/permission"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4272,7 +4354,7 @@ paths:
                 type: object
               example:
                 dtable_group_share:
-                  group_id: '1'
+                  group_id: "1"
                   group_name: Sample Group
                   permission: rw
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/group-shares/{group_id}/:
@@ -4289,14 +4371,14 @@ paths:
               properties:
                 permission:
                   $ref: "#/components/schemas/permission"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4309,14 +4391,14 @@ paths:
         - Sharing
       summary: Delete Group Share
       description: Stop sharing a base to a certain group.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/group_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4336,10 +4418,10 @@ paths:
 
         In the response you can see which views you are being shared to via
         which groups.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4347,28 +4429,28 @@ paths:
                 type: object
               example:
                 group_shared_views:
-                  '4':
+                  "4":
                     - id: 37
                       workspace_id: 2
                       uuid: 12345678-3643-489b-880c-51c8ee2a9a20
                       name: Projects
                       creator: Jasmin Tee
                       modifier: Jasmin Tee
-                      created_at: '2020-11-20T11:57:30+00:00'
-                      updated_at: '2020-11-20T11:57:30+00:00'
+                      created_at: "2020-11-20T11:57:30+00:00"
+                      updated_at: "2020-11-20T11:57:30+00:00"
                       color: null
                       text_color: null
                       icon: null
                       view_share_id: 1
-                  '8':
+                  "8":
                     - id: 48
                       workspace_id: 2
                       uuid: 87654321-43f1-4f97-bced-f9a6115af51d
                       name: Students
                       creator: Jasmin Tee
                       modifier: Jasmin Tee
-                      created_at: '2021-03-11T09:09:38+00:00'
-                      updated_at: '2021-03-11T09:09:38+00:00'
+                      created_at: "2021-03-11T09:09:38+00:00"
+                      updated_at: "2021-03-11T09:09:38+00:00"
                       color: null
                       text_color: null
                       icon: null
@@ -4381,13 +4463,13 @@ paths:
       description: >-
         This request lets you, as `FromUser`, see which views you are sharing to
         the groups you are in.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4395,28 +4477,28 @@ paths:
                 type: object
               example:
                 group_shared_views:
-                  '4':
+                  "4":
                     - id: 37
                       workspace_id: 2
                       uuid: 87654321-3643-489b-880c-51c8ee2a9a20
                       name: Projects
                       creator: Jasmin Tee
                       modifier: Jasmin Tee
-                      created_at: '2020-11-20T11:57:30+00:00'
-                      updated_at: '2020-11-20T11:57:30+00:00'
+                      created_at: "2020-11-20T11:57:30+00:00"
+                      updated_at: "2020-11-20T11:57:30+00:00"
                       color: null
                       text_color: null
                       icon: null
                       view_share_id: 1
-                  '8':
+                  "8":
                     - id: 48
                       workspace_id: 2
                       uuid: 12345678-43f1-4f97-bced-f9a6115af51d
                       name: Students
                       creator: Jasmin Tee
                       modifier: Jasmin Tee
-                      created_at: '2021-03-11T09:09:38+00:00'
-                      updated_at: '2021-03-11T09:09:38+00:00'
+                      created_at: "2021-03-11T09:09:38+00:00"
+                      updated_at: "2021-03-11T09:09:38+00:00"
                       color: null
                       text_color: null
                       icon: null
@@ -4440,13 +4522,13 @@ paths:
                   $ref: "#/components/schemas/permission"
                 to_group_id:
                   $ref: "#/components/schemas/group_id"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: "ok"
           content:
             application/json:
@@ -4457,25 +4539,25 @@ paths:
                 dtable_name: Example
                 from_user: 123abc456def789ghi123jkl456mno789@auth.local
                 from_user_name: John Doe
-                to_group_id: '1'
+                to_group_id: "1"
                 to_group_name: Group One
                 permission: rw
-                table_id: '0000'
-                view_id: '0000'
+                table_id: "0000"
+                view_id: "0000"
     delete:
       tags:
         - Sharing
       summary: Delete Group View Share
       description: Stop sharing the view to all the groups.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/table_id"
         - $ref: "#/components/parameters/view_id"
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4497,14 +4579,14 @@ paths:
               properties:
                 permission:
                   $ref: "#/components/schemas/permission"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/group_view_share_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4515,11 +4597,11 @@ paths:
                 dtable_name: Example
                 from_user: 123abc456def789ghi123jkl456mno789@auth.local
                 from_user_name: John Doe
-                to_group_id: '1'
+                to_group_id: "1"
                 to_group_name: Group One
                 permission: r
-                table_id: '0000'
-                view_id: '0000'
+                table_id: "0000"
+                view_id: "0000"
     delete:
       tags:
         - Sharing
@@ -4528,14 +4610,14 @@ paths:
         Use this request to stop sharing a view to a certain group as
         `FromUser`. If you would like to stop sharing it with all of the groups
         you are in, use the next request.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/group_view_share_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4549,10 +4631,10 @@ paths:
         - Sharing
       summary: My User View Shares
       description: List all the views shared to you.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4567,8 +4649,8 @@ paths:
                     to_user: 6f46581085834012abc0ad20a5e85b8a@auth.local
                     to_user_name: Jasmin
                     permission: rw
-                    table_id: '0000'
-                    view_id: '0000'
+                    table_id: "0000"
+                    view_id: "0000"
                     workspace_id: 1
                     color: null
                     text_color: null
@@ -4580,7 +4662,7 @@ paths:
                     to_user: 6f46581085834012abc0ad20a5e85b8a@auth.local
                     to_user_name: Jasmin
                     permission: rw
-                    table_id: '0000'
+                    table_id: "0000"
                     view_id: 7NgV
                     workspace_id: 1
                     color: null
@@ -4594,13 +4676,13 @@ paths:
       description: >-
         Use this request to list all the views you are currently sharing to
         other users.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4615,7 +4697,7 @@ paths:
                     to_user: 87654321d1754bb4afa2c2cb7369d244@auth.local
                     to_user_name: Ginger Ale
                     permission: rw
-                    table_id: '0000'
+                    table_id: "0000"
                     view_id: Jz4d
                     shared_name: completed
     post:
@@ -4639,13 +4721,13 @@ paths:
                   $ref: "#/components/schemas/table_id"
                 view_id:
                   $ref: "#/components/schemas/view_id"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4659,7 +4741,7 @@ paths:
                 to_user: 87654321d1754bb4afa2c2cb7369d244@auth.local
                 to_user_name: Ginger Ale
                 permission: rw
-                table_id: '0000'
+                table_id: "0000"
                 view_id: Jz4d
                 shared_name: null
     delete:
@@ -4667,15 +4749,15 @@ paths:
         - Sharing
       summary: Delete User View Shares (??)
       description: Stop sharing a view to all users.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/table_id"
         - $ref: "#/components/parameters/view_id"
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4699,14 +4781,14 @@ paths:
               properties:
                 permission:
                   $ref: "#/components/schemas/permission"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/user_view_share_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4720,7 +4802,7 @@ paths:
                 to_user: 87654321d1754bb4afa2c2cb7369d244@auth.local
                 to_user_name: Ginger Ale
                 permission: r
-                table_id: '0000'
+                table_id: "0000"
                 view_id: Jz4d
                 shared_name: null
     delete:
@@ -4731,14 +4813,14 @@ paths:
         Stop sharing a view to a certain user. The `user_view_share_id` here is
         the value you can retrieve from the above requests when you list, add or
         update a sharing permission.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/user_view_share_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4754,12 +4836,12 @@ paths:
       description: >-
         Delete your access to a view shared to you. After executing this
         request, you won't be able to see that view as a `ToUser`.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/user_view_share_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4775,13 +4857,13 @@ paths:
       description: >-
         List all the collaborators (related users who have read&write
         permission) to a base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4802,13 +4884,13 @@ paths:
       tags:
         - Sharing Links
       summary: List Base External Links
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4822,14 +4904,14 @@ paths:
                     is_custom: false
                     permission: read-only
                     is_expired: false
-                    expire_date: '2021-06-26T11:16:54+00:00'
+                    expire_date: "2021-06-26T11:16:54+00:00"
                   - url: >-
                       https://cloud.seatable.io/dtable/external-links/custom/fleischkaesebroetchen/
                     token: fleischkaesebroetchen
                     is_custom: true
                     permission: read-only
                     is_expired: false
-                    expire_date: '2021-06-17T14:28:12+00:00'
+                    expire_date: "2021-06-17T14:28:12+00:00"
     post:
       tags:
         - Sharing Links
@@ -4847,13 +4929,13 @@ paths:
                   $ref: "#/components/schemas/expire_days"
                 token:
                   $ref: "#/components/schemas/token"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4866,21 +4948,21 @@ paths:
                 is_custom: true
                 permission: read-only
                 is_expired: false
-                expire_date: '2021-04-03T11:11:18+00:00'
+                expire_date: "2021-04-03T11:11:18+00:00"
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/external-links/{external_link_token}/:
     delete:
       tags:
         - Sharing Links
       summary: Delete External Link
       description: Delete a base external link by its token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/external_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4894,15 +4976,15 @@ paths:
         - Sharing Links
       summary: List View External Links
       description: "List all the external links generated for a specific view with the table's and the view's IDs.\r\n\r\nNormally when you open a view in the browser, you can see the `tid` and `vid` in the address line, which are indeed the `table_id` and `view_id` here."
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/table_id"
         - $ref: "#/components/parameters/view_id"
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4916,14 +4998,14 @@ paths:
                     creator_name: Jasmin Tee
                     token: 35967f61163812345678
                     permission: r
-                    create_at: '2021-05-18T14:22:52+00:00'
+                    create_at: "2021-05-18T14:22:52+00:00"
                     view_cnt: 0
-                    table_id: '0000'
+                    table_id: "0000"
                     view_id: NdFD
                     url: >-
                       https://cloud.seatable.io/dtable/view-external-links/35967f61163812345678/
                     is_custom: false
-                    expire_date: ''
+                    expire_date: ""
     post:
       tags:
         - Sharing Links
@@ -4947,13 +5029,13 @@ paths:
                   $ref: "#/components/schemas/password"
                 expire_days:
                   $ref: "#/components/schemas/expire_days"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -4966,14 +5048,14 @@ paths:
                 creator_name: Jasmin Tee
                 token: 123456788ce44028978a
                 permission: r
-                create_at: '2021-05-18T14:26:07+00:00'
+                create_at: "2021-05-18T14:26:07+00:00"
                 view_cnt: 0
-                table_id: '0000'
+                table_id: "0000"
                 view_id: NdFD
                 url: >-
                   https://cloud.seatable.io/dtable/view-external-links/123456788ce44028978a/
                 is_custom: false
-                expire_date: ''
+                expire_date: ""
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/view-external-links/{view_external_link_token}/:
     delete:
       tags:
@@ -4983,14 +5065,14 @@ paths:
         Delete a view external link by its token. This token could be a custom
         token or a random token. Include the token in the URL, in this example,
         it's `example`.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/view_external_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5034,10 +5116,10 @@ paths:
                   $ref: "#/components/schemas/password"
                 expire_days:
                   $ref: "#/components/schemas/expire_days"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5051,8 +5133,8 @@ paths:
                 dtable: Example
                 dtable_id: 562
                 workspace_id: 2
-                expire_date: '2021-12-10T15:39:34+00:00'
-                ctime: '2021-12-08T15:39:34.460559'
+                expire_date: "2021-12-10T15:39:34+00:00"
+                ctime: "2021-12-08T15:39:34.460559"
   /api/v2.1/dtables/invite-links/{invite_link_token}/:
     delete:
       tags:
@@ -5070,12 +5152,12 @@ paths:
         sharing the base to certain users, or
 
         *   use the API request to [Stop Sharing Base to a user](/reference/delete_api-v2-1-workspace-workspace-id-dtable-base-name-share-1).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/invite_link_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5114,10 +5196,10 @@ paths:
                   $ref: "#/components/schemas/table_name"
                 view_name:
                   $ref: "#/components/schemas/view_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5128,9 +5210,9 @@ paths:
                 org_id: 1
                 group_id: 48
                 dtable_uuid: 12345678-3d14-49d0-ab62-c0f050f17e79
-                table_id: '0000'
-                view_id: '0000'
-                created_at: '2021-06-02T12:58:33+00:00'
+                table_id: "0000"
+                view_id: "0000"
+                created_at: "2021-06-02T12:58:33+00:00"
                 creator: Jasmin Tee
                 dataset_name: Test Dataset
     get:
@@ -5144,13 +5226,13 @@ paths:
 
         Basically, when a common dataset is shared to a group and this base is
         in the group, it has access to the common dataset.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dtable_uuid_query"
         - $ref: "#/components/parameters/by_group"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5161,9 +5243,9 @@ paths:
                   - id: 26
                     org_id: 1
                     dtable_uuid: 32b1e77a-3a4f-45fa-b420-6c231b20d4d2
-                    table_id: '0000'
-                    view_id: '0000'
-                    created_at: '2020-07-13T09:01:20+00:00'
+                    table_id: "0000"
+                    view_id: "0000"
+                    created_at: "2020-07-13T09:01:20+00:00"
                     creator: f91a9c820b284249b3bb3396dc65bd64@auth.local
                     dataset_name: SeaTable
                     can_manage: true
@@ -5181,12 +5263,12 @@ paths:
               properties:
                 dst_dtable_uuid:
                   $ref: "#/components/schemas/dtable_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5203,12 +5285,12 @@ paths:
         List the basic information of the common dataset by the source table
         name and view name. The `dataset_id` used here is the ID you have
         retrieved from the response when you publish a common dataset.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5227,12 +5309,12 @@ paths:
         List the content of the common dataset by rows, columns and related
         users. The `dataset_id` used here is the ID you have retrieved from the
         response when you publish a common dataset.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5241,9 +5323,9 @@ paths:
               example:
                 rows:
                   - _id: Sn7svBUYTTmup7WuMsJhGw
-                    Name: '11'
+                    Name: "11"
                 columns:
-                  - key: '0000'
+                  - key: "0000"
                     name: Name
                     type: text
                     width: 200
@@ -5267,12 +5349,12 @@ paths:
               properties:
                 dataset_name:
                   $ref: "#/components/schemas/dataset_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5284,9 +5366,9 @@ paths:
                   org_id: 1
                   group_id: 7
                   dtable_uuid: 12345678-dc09-4b9a-bb60-4e04c00ea54f
-                  table_id: '0000'
+                  table_id: "0000"
                   view_id: 9vVn
-                  created_at: '2021-04-06T08:13:04+00:00'
+                  created_at: "2021-04-06T08:13:04+00:00"
                   creator: Michael Jackson
                   dataset_name: Success
                   can_manage: true
@@ -5305,12 +5387,12 @@ paths:
 
         This request doesn't delete anything in real. It just stops sharing that
         view from the original base. The data in the original base is intact.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5330,18 +5412,18 @@ paths:
             schema:
               type: object
               properties:
-                is_sync_periodically: 
+                is_sync_periodically:
                   $ref: "#/components/schemas/is_sync_periodically"
                 dst_dtable_uuid:
                   $ref: "#/components/schemas/dst_dtable_uuid"
                 dst_table_id:
                   $ref: "#/components/schemas/dst_table_id"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5370,12 +5452,12 @@ paths:
                   $ref: "#/components/schemas/table_id"
                 dst_view_id:
                   $ref: "#/components/schemas/view_id"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        '404':
+        "404":
           description: Successful response
           content:
             application/json: {}
@@ -5387,12 +5469,12 @@ paths:
       description: >-
         Use this call to list off the common datasets synchronization history of
         the current base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dtable_uuid_query"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5404,31 +5486,31 @@ paths:
                     dataset_id: 6
                     dst_dtable_uuid: 45678901-2d53-4b7f-a8d4-35ee19ccd6f7
                     dst_table_id: 1v74
-                    created_at: '2021-04-06T08:14:12+00:00'
+                    created_at: "2021-04-06T08:14:12+00:00"
                     creator: 12345667d1754bb4afa2c2cb7369d244@auth.local
-                    last_sync_time: '2021-04-06T08:15:54+00:00'
+                    last_sync_time: "2021-04-06T08:15:54+00:00"
                   - id: 6
                     dataset_id: 7
                     dst_dtable_uuid: 45678901-2d53-4b7f-a8d4-35ee19ccd6f7
                     dst_table_id: 67W0
-                    created_at: '2021-04-06T08:14:16+00:00'
+                    created_at: "2021-04-06T08:14:16+00:00"
                     creator: 12345667d1754bb4afa2c2cb7369d244@auth.local
-                    last_sync_time: '2021-04-06T08:14:16+00:00'
+                    last_sync_time: "2021-04-06T08:14:16+00:00"
                   - id: 44
                     dataset_id: 5
                     dst_dtable_uuid: 45678901-2d53-4b7f-a8d4-35ee19ccd6f7
                     dst_table_id: Axln
-                    created_at: '2021-09-23T07:12:46+00:00'
+                    created_at: "2021-09-23T07:12:46+00:00"
                     creator: 654321da6569491ba42905bf1647fd3f@auth.local
-                    last_sync_time: '2021-09-23T07:13:59+00:00'
+                    last_sync_time: "2021-09-23T07:13:59+00:00"
                   - id: 29
                     dataset_id: 19
                     dst_dtable_uuid: 45678901-2d53-4b7f-a8d4-35ee19ccd6f7
                     dst_table_id: SJd3
-                    created_at: '2021-08-26T12:29:59+00:00'
+                    created_at: "2021-08-26T12:29:59+00:00"
                     creator: 654321da6569491ba42905bf1647fd3f@auth.local
-                    last_sync_time: '2021-08-26T12:30:44+00:00'
-  
+                    last_sync_time: "2021-08-26T12:30:44+00:00"
+
   # Departments
   /api/v2.1/address-book/departments/:
     get:
@@ -5443,10 +5525,10 @@ paths:
         The returned `id` values are the IDs of each department. If the
         `parent_group_id` is `-1`, it means this department is in the root
         level.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5457,7 +5539,7 @@ paths:
                   - id: 10
                     name: Hulk's department
                     owner: Hulk
-                    created_at: '2021-08-25T08:35:52+00:00'
+                    created_at: "2021-08-25T08:35:52+00:00"
                     parent_group_id: -1
                     quota: -2
   /api/v2.1/address-book/departments/{department_id}/members/:
@@ -5466,12 +5548,12 @@ paths:
         - Departments
       summary: List Members
       description: List the members of a department in your team (organization).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/department_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5482,16 +5564,16 @@ paths:
                   - email: df0b9a4ca7f24d899a3039d082123456@auth.local
                     name: Thor
                     contact_email: thor@seatable.io
-                    avatar_url: ''
+                    avatar_url: ""
                     is_admin: false
                     role: Member
                   - email: 51a96159d5334afc9914561187654321@auth.local
                     name: Hulk
                     contact_email: hulk@seatable.io
-                    avatar_url: ''
+                    avatar_url: ""
                     is_admin: false
                     role: Member
-  
+
   # Forms
   /api/v2.1/forms/:
     get:
@@ -5502,13 +5584,13 @@ paths:
         List all the forms of a base with full details of these forms. The
         returned `form_link` value is the URL of the form page, ready to be sent
         to survey participants.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id_query"
         - $ref: "#/components/parameters/base_name_query"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5527,7 +5609,7 @@ paths:
                     form_link: >-
                       https://cloud.seatable.io/dtable/forms/12345678-d378-4c12-8d7a-6da0fb48ee83/
                     share_type: shared_groups
-                    created_at: '2021-01-18T15:01:36+00:00'
+                    created_at: "2021-01-18T15:01:36+00:00"
                     submit_count: 0
     post:
       tags:
@@ -5629,10 +5711,10 @@ paths:
                   $ref: "#/components/schemas/name"
                 form_config:
                   $ref: "#/components/schemas/form_config"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
@@ -5642,14 +5724,14 @@ paths:
                 form:
                   id: 12
                   username: 123456786569491ba42905bf1647fd3f@auth.local
-                  workspace_id: '1'
+                  workspace_id: "1"
                   dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                   form_config: '{"form_name":"Example"}'
                   token: 12345678-875f-4276-8444-85e2da2d56a0
                   form_link: >-
                     https://cloud.seatable.io/dtable/forms/12345678-875f-4276-8444-85e2da2d56a0/
                   share_type: anonymous
-                  created_at: '2021-03-17T12:52:12+00:00'
+                  created_at: "2021-03-17T12:52:12+00:00"
                   submit_count: 0
   /api/v2.1/forms/{form_token}/:
     put:
@@ -5665,12 +5747,12 @@ paths:
               properties:
                 form_config:
                   $ref: "#/components/schemas/form_config"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/form_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5680,26 +5762,26 @@ paths:
                 form:
                   id: 12
                   username: 123456786569491ba42905bf1647fd3f@auth.local
-                  workspace_id: '1'
+                  workspace_id: "1"
                   dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                   form_config: '{"form_name":"New name"}'
                   token: 12345678-875f-4276-8444-85e2da2d56a0
                   form_link: >-
                     https://cloud.seatable.io/dtable/forms/12345678-875f-4276-8444-85e2da2d56a0/
                   share_type: anonymous
-                  created_at: '2021-03-17T12:52:12+00:00'
+                  created_at: "2021-03-17T12:52:12+00:00"
                   submit_count: 0
     delete:
       tags:
         - Forms
       summary: Delete Form
       description: Delete a form with its token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/form_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5719,12 +5801,12 @@ paths:
 
         In the response, the details of the newly created duplication are
         listed.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/form_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5799,7 +5881,7 @@ paths:
                   form_link: >-
                     https://cloud.seatable.io/dtable/forms/100c127f-00ae-4781-99f0-0a5aa4a53615/
                   share_type: anonymous
-                  created_at: '2022-07-17T14:18:34+00:00'
+                  created_at: "2022-07-17T14:18:34+00:00"
                   submit_count: 0
   /api/v2.1/forms/{form_token}/logos/:
     post:
@@ -5817,12 +5899,12 @@ paths:
               properties:
                 form_logo:
                   $ref: "#/components/schemas/form_logo"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/form_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5836,10 +5918,10 @@ paths:
         - Forms
       summary: List Shared Forms
       description: List all the shared forms the user has access to.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5851,13 +5933,13 @@ paths:
                     username: 1ed53263f17645c78dd3f57314051ea0@auth.local
                     workspace_id: 377
                     dtable_uuid: 00390415-b6dc-416a-8f2a-70a3a1356a18
-                    form_id: '1884'
+                    form_id: "1884"
                     form_config: '{"form_name":"Employee Survey"}'
                     token: 8eid766e-baa8-4a75-b4ae-5dc162a62702
                     form_link: >-
                       https://cloud.seatable.io/dtable/forms/8eid766e-baa8-4a75-b4ae-5dc162a62702/
                     share_type: shared_groups
-                    created_at: '2020-11-18T14:53:15+00:00'
+                    created_at: "2020-11-18T14:53:15+00:00"
                     submit_count: 30
                     group_name: test group
                     group_id: 49
@@ -5871,10 +5953,10 @@ paths:
                     form_link: >-
                       https://cloud.seatable.io/dtable/forms/8e63h5cb-78c9-4c86-abc2-54686e43ce21/
                     share_type: shared_groups
-                    created_at: '2020-11-11T13:33:26+00:00'
+                    created_at: "2020-11-11T13:33:26+00:00"
                     submit_count: 20
                     group_name: Datamate3
-                    group_id: 62  
+                    group_id: 62
   /api/v2.1/collection-tables/:
     get:
       tags:
@@ -5884,13 +5966,13 @@ paths:
         List all the data collection tables of a base with full details of these
         tables. The returned `collection_link` value is the URL of the table
         page, ready to be sent to your collaborators.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id_query"
         - $ref: "#/components/parameters/base_name_query"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -5908,7 +5990,7 @@ paths:
                     collection_link: >-
                       https://cloud.seatable.io/dtable/collection-tables/76543219-c2b6-4b7c-bfdf-87029904b18e/
                     view_count: 6
-                    created_at: '2021-11-03T14:15:52+00:00'
+                    created_at: "2021-11-03T14:15:52+00:00"
                   - id: 25
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     workspace_id: 204
@@ -5926,7 +6008,7 @@ paths:
                     collection_link: >-
                       https://cloud.seatable.io/dtable/collection-tables/abcdefgh-6be8-4d69-ab5e-1bc19260d62b/
                     view_count: 5
-                    created_at: '2021-11-12T11:07:28+00:00'
+                    created_at: "2021-11-12T11:07:28+00:00"
     post:
       tags:
         - Forms
@@ -5955,10 +6037,10 @@ paths:
                   $ref: "#/components/schemas/name"
                 config:
                   $ref: "#/components/schemas/form_config"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
@@ -5968,14 +6050,14 @@ paths:
                 collection_table:
                   id: 41
                   username: 87654321a6569491ba42905bf1647fd3f@auth.local
-                  workspace_id: '204'
+                  workspace_id: "204"
                   dtable_uuid: 46453726-ba46-4c07-8116-d237bdeb35a3
                   config: '{"name":"Example 1", "table_id":"0000"}'
                   token: bcdefghi-7dde-4f04-86d0-404e53490164
                   collection_link: >-
                     https://cloud.seatable.io/dtable/collection-tables/bcdefghi-7dde-4f04-86d0-404e53490164/
                   view_count: 0
-                  created_at: '2022-07-24T14:39:27+00:00'
+                  created_at: "2022-07-24T14:39:27+00:00"
   /api/v2.1/collection-tables/{collection_token}/:
     put:
       tags:
@@ -6007,12 +6089,12 @@ paths:
                   $ref: "#/components/schemas/name"
                 config:
                   $ref: "#/components/schemas/form_config"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/collection_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6032,18 +6114,18 @@ paths:
                   collection_link: >-
                     https://cloud.seatable.io/dtable/collection-tables/bcdefghi-7dde-4f04-86d0-404e53490164/
                   view_count: 10
-                  created_at: '2022-07-24T14:39:27+00:00'
+                  created_at: "2022-07-24T14:39:27+00:00"
     delete:
       tags:
         - Forms
       summary: Delete Data Collection Form
       description: Delete a data collection table with its token.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/collection_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6064,12 +6146,12 @@ paths:
 
         In the response, the details of the newly created duplication are
         listed.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/collection_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6100,7 +6182,7 @@ paths:
                   collection_link: >-
                     https://cloud.seatable.io/dtable/collection-tables/34567890-7b26-4f9b-bb2b-fccd9945a25a/
                   view_count: 0
-                  created_at: '2022-07-24T14:26:34+00:00'
+                  created_at: "2022-07-24T14:26:34+00:00"
 
   # Automations
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/automation-rules/:
@@ -6109,13 +6191,13 @@ paths:
         - Automations
       summary: List Automation Rules
       description: List all the automation rules in a base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6128,13 +6210,13 @@ paths:
                     run_condition: per_update
                     trigger:
                       rule_name: Regel ohne Titel
-                      table_id: '0000'
-                      view_id: '0000'
+                      table_id: "0000"
+                      view_id: "0000"
                       condition: filters_satisfy
                       filters:
                         - column_key: 72IC
                           filter_predicate: is
-                          filter_term: '381866'
+                          filter_term: "381866"
                       filter_conjunction: And
                       column_keys:
                         - 72IC
@@ -6144,12 +6226,12 @@ paths:
                         default_msg: test
                         account_id: 19
                         subject: test
-                        send_to: '{Email}'
-                        copy_to: ''
-                        _id: '124596'
+                        send_to: "{Email}"
+                        copy_to: ""
+                        _id: "124596"
                     creator: Michael Jackson
-                    ctime: '2021-08-23T12:57:31+00:00'
-                    last_trigger_time: '2021-08-23T13:30:20+00:00'
+                    ctime: "2021-08-23T12:57:31+00:00"
+                    last_trigger_time: "2021-08-23T13:30:20+00:00"
                     is_valid: true
                     trigger_count: 6
     post:
@@ -6466,13 +6548,13 @@ paths:
                 - $ref: "#/components/schemas/row_added"
                 - $ref: "#/components/schemas/run_periodically"
                 - $ref: "#/components/schemas/run_periodically_on_records_meet_conditions"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6484,8 +6566,8 @@ paths:
                 run_condition: per_month
                 trigger:
                   rule_name: Test rule
-                  table_id: '0000'
-                  view_id: '0000'
+                  table_id: "0000"
+                  view_id: "0000"
                   condition: run_periodically
                   date_column_name: GebDat
                   notify_month_day: 12
@@ -6495,11 +6577,11 @@ paths:
                     users:
                       - 123456a6569491ba42905bf1647fd3f@auth.local
                     default_msg: Take a look at this!
-                    _id: '365729'
-                    users_column_key: ''
+                    _id: "365729"
+                    users_column_key: ""
                 creator: Michael Jackson
-                ctime: '2021-08-25T10:01:44+00:00'
-                last_trigger_time: ''
+                ctime: "2021-08-25T10:01:44+00:00"
+                last_trigger_time: ""
                 is_valid: true
                 trigger_count: 0
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/automation-rules/{automation_rule_id}/:
@@ -6522,15 +6604,15 @@ paths:
                 - $ref: "#/components/schemas/records_meet_specific_conditions_after_modification"
                 - $ref: "#/components/schemas/row_added"
                 - $ref: "#/components/schemas/run_periodically"
-                - $ref: "#/components/schemas/run_periodically_on_records_meet_conditions"  
-      security: 
-      - AccountTokenAuth: []
+                - $ref: "#/components/schemas/run_periodically_on_records_meet_conditions"
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/automation_rule_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6542,8 +6624,8 @@ paths:
                 run_condition: per_month
                 trigger:
                   rule_name: Test rule
-                  table_id: '0000'
-                  view_id: '0000'
+                  table_id: "0000"
+                  view_id: "0000"
                   condition: run_periodically
                   date_column_name: GebDat
                   notify_month_day: 12
@@ -6553,11 +6635,11 @@ paths:
                     users:
                       - 123456da6569491ba42905bf1647fd3f@auth.local
                     default_msg: Take a look at this!
-                    _id: '365729'
-                    users_column_key: ''
+                    _id: "365729"
+                    users_column_key: ""
                 creator: Michael Jackson
-                ctime: '2021-08-25T12:04:35+00:00'
-                last_trigger_time: '2021-08-25T12:35:54+00:00'
+                ctime: "2021-08-25T12:04:35+00:00"
+                last_trigger_time: "2021-08-25T12:35:54+00:00"
                 is_valid: true
                 trigger_count: 2
     delete:
@@ -6565,14 +6647,14 @@ paths:
         - Automations
       summary: Delete Automation Rule
       description: Delete an existing automation rule. This operation cannot be undone!
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/automation_rule_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6580,7 +6662,7 @@ paths:
                 type: object
               example:
                 success: true
-  
+
   # Notifications
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/notification-rules/:
     get:
@@ -6590,13 +6672,13 @@ paths:
       description: >-
         Use this request to list all the existing notification rules in the
         current base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6608,7 +6690,7 @@ paths:
                     run_condition: per_update
                     trigger:
                       rule_name: Ruling
-                      table_id: '0000'
+                      table_id: "0000"
                       view_id: Jz4d
                       condition: rows_modified
                     action:
@@ -6618,8 +6700,8 @@ paths:
                         - 123456786569491ba42905bf1647fd3f@auth.local
                       users_column_key: LfGJ
                     creator: Jasmin Tee
-                    ctime: '2021-02-22T12:15:45+00:00'
-                    last_trigger_time: ''
+                    ctime: "2021-02-22T12:15:45+00:00"
+                    last_trigger_time: ""
     post:
       tags:
         - Notifications
@@ -6851,21 +6933,21 @@ paths:
                 trigger:
                   rule_name: Test 123
                   condition: rows_modified
-                  table_id: '0000'
-                  view_id: '0000'
+                  table_id: "0000"
+                  view_id: "0000"
                   alarm_days: 58
                   notify_hour: 21
                 action:
                   type: notify
                   users:
-                    - '{{user_id}}'
-      security: 
-      - AccountTokenAuth: []
+                    - "{{user_id}}"
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6877,8 +6959,8 @@ paths:
                 trigger:
                   rule_name: Test 123
                   condition: rows_modified
-                  table_id: '0000'
-                  view_id: '0000'
+                  table_id: "0000"
+                  view_id: "0000"
                   alarm_days: 58
                   notify_hour: 21
                 action:
@@ -6886,8 +6968,8 @@ paths:
                   users:
                     - 123456786569491ba42905bf1647fd3f@auth.local
                 creator: Jasmin Tee
-                ctime: '2021-03-15T13:25:36+00:00'
-                last_trigger_time: ''
+                ctime: "2021-03-15T13:25:36+00:00"
+                last_trigger_time: ""
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/notification-rules/{notification_rule_id}/:
     put:
       tags:
@@ -6910,20 +6992,20 @@ paths:
             schema:
               type: object
               properties:
-                run_condition: 
+                run_condition:
                   $ref: "#/components/schemas/run_condition"
                 trigger:
                   $ref: "#/components/schemas/trigger"
-                action:                
+                action:
                   $ref: "#/components/schemas/action"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/notification_rule_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6935,15 +7017,15 @@ paths:
                 trigger:
                   rule_name: Test heute
                   condition: rows_modified
-                  table_id: '0000'
-                  view_id: '0000'
+                  table_id: "0000"
+                  view_id: "0000"
                 action:
                   type: notify
                   users:
                     - 1234567a6569491ba42905bf1647fd3f@auth.local
                 creator: Jasmin Tee
-                ctime: '2021-02-22T16:03:07+00:00'
-                last_trigger_time: ''
+                ctime: "2021-02-22T16:03:07+00:00"
+                last_trigger_time: ""
     delete:
       tags:
         - Notifications
@@ -6955,14 +7037,14 @@ paths:
         The `notification_rule_id` is the ID of the notification to be deleted.
         This can be retrieved by [List Notification Rules](/reference/get_api-v2-1-workspace-workspace-id-dtable-base-name-notification-rules-1) or can be
         seen when you [Add Base Notification Rule](/reference/post_api-v2-1-workspace-workspace-id-dtable-base-name-notification-rules-1).
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/notification_rule_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -6976,17 +7058,17 @@ paths:
         - Notifications
       summary: Mark Notifications As Seen
       description: Delete all notifications sent to the current user.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
               example:
-                success: true  
+                success: true
 
   # System Notifications
   /api/v2.1/sys-user-notifications/unseen/:
@@ -6997,10 +7079,10 @@ paths:
       description: >-
         List all the notifications that are unseen by the users. A user can only
         mark a system notification as seen by clicking on the "x" to close it.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7015,7 +7097,7 @@ paths:
                     contact_email: jasmin@example.com
                     seen: false
                     org_name: Team Jasmin Tee
-                    created_at: '2021-02-26T16:55:09+00:00'
+                    created_at: "2021-02-26T16:55:09+00:00"
                     msg_format: Hello user!
                   - id: 2
                     msg: Hello user!
@@ -7024,7 +7106,7 @@ paths:
                     contact_email: jasmin@example.com
                     seen: false
                     org_name: Team Jasmin Tee
-                    created_at: '2021-02-26T16:55:08+00:00'
+                    created_at: "2021-02-26T16:55:08+00:00"
                     msg_format: Hello user!
   /api/v2.1/sys-user-notifications/{sys_notification_id}/seen/:
     put:
@@ -7032,12 +7114,12 @@ paths:
         - System Notifications
       summary: Mark System Notification As Seen
       description: Mark a system notification as seen with its ID.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/sys_notification_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7052,22 +7134,22 @@ paths:
                   contact_email: jasmin@example.com
                   seen: true
                   org_name: Team Jasmin Tee
-                  created_at: '2021-02-26T16:55:09+00:00'
+                  created_at: "2021-02-26T16:55:09+00:00"
                   msg_format: Hello user!
-  
+
   # Email Accounts
   /api/v2.1/third-party-accounts/{base_uuid}/:
     get:
       tags:
         - Email Accounts
       summary: List Email Accounts
-      description: List all email accounts available in a base.
-      security: 
-      - AccountTokenAuth: []
+      description: List all the third party accounts bonded in a base.
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7082,7 +7164,7 @@ paths:
                       email_host: smtp.example.com
                       email_port: 587
                       host_user: max@example.com
-                      password: '123456'
+                      password: "123456"
     post:
       tags:
         - Email Accounts
@@ -7096,18 +7178,18 @@ paths:
             schema:
               type: object
               properties:
-                account_name: 
+                account_name:
                   $ref: "#/components/schemas/account_name"
                 account_type:
                   $ref: "#/components/schemas/account_type"
-                detail:                
+                detail:
                   $ref: "#/components/schemas/detail"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
@@ -7122,7 +7204,7 @@ paths:
                     email_host: http://smtp.example.com
                     email_port: 587
                     host_user: Max
-                    password: '123456'
+                    password: "123456"
   /api/v2.1/third-party-accounts/{base_uuid}/{3rd_party_account_id}/:
     put:
       tags:
@@ -7139,19 +7221,19 @@ paths:
             schema:
               type: object
               properties:
-                account_name: 
+                account_name:
                   $ref: "#/components/schemas/account_name"
                 account_type:
                   $ref: "#/components/schemas/account_type"
-                detail:                
+                detail:
                   $ref: "#/components/schemas/detail"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/3rd_party_account_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7166,19 +7248,19 @@ paths:
                     email_host: smtp.example.com
                     email_port: 587
                     host_user: max@example.com
-                    password: '654321'
+                    password: "654321"
     delete:
       tags:
         - Email Accounts
       summary: Delete Email Account
       description: Delete a third party account using its ID in the request URL.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/3rd_party_account_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7194,13 +7276,13 @@ paths:
       description: >-
         Get the details of a 3rd party email account's information by its
         `account_name` in the URL.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/account_name"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -7215,7 +7297,7 @@ paths:
                     email_host: smtp.example.com
                     email_port: 587
                     host_user: max@example.com
-                    password: '654321'
+                    password: "654321"
   /api/v2.1/dtable-message-status/:
     get:
       tags:
@@ -7237,12 +7319,12 @@ paths:
 
         Attention: After the task has been finished, you can only query it for
         once. A second query will also return the above error.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/task_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7250,7 +7332,7 @@ paths:
                 type: object
               example:
                 is_finished: true
-  
+
   # Webhooks
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/webhooks/:
     get:
@@ -7258,13 +7340,13 @@ paths:
         - Webhooks
       summary: List Webhooks
       description: List all the webhooks created in a base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7276,9 +7358,9 @@ paths:
                     dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                     url: https://www.google.com
                     creator: 123456786569491ba42905bf1647fd3f@auth.local
-                    created_at: '2021-03-16T14:27:58.873621'
+                    created_at: "2021-03-16T14:27:58.873621"
                     settings:
-                      secret: '123456'
+                      secret: "123456"
     post:
       tags:
         - Webhooks
@@ -7294,13 +7376,13 @@ paths:
                   $ref: "#/components/schemas/url"
                 secret:
                   $ref: "#/components/schemas/secret"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7312,9 +7394,9 @@ paths:
                   dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                   url: https://www.google.com
                   creator: 123456786569491ba42905bf1647fd3f@auth.local
-                  created_at: '2021-03-16T14:27:58.873621'
+                  created_at: "2021-03-16T14:27:58.873621"
                   settings:
-                    secret: '123456'
+                    secret: "123456"
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/webhooks/{webhook_id}/:
     put:
       tags:
@@ -7331,14 +7413,14 @@ paths:
                   $ref: "#/components/schemas/url"
                 secret:
                   $ref: "#/components/schemas/secret"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/webhook_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7350,22 +7432,22 @@ paths:
                   dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                   url: https://www.seatable.io
                   creator: 123456786569491ba42905bf1647fd3f@auth.local
-                  created_at: '2021-03-16T14:27:58.873621'
+                  created_at: "2021-03-16T14:27:58.873621"
                   settings:
-                    secret: '135246'
+                    secret: "135246"
     delete:
       tags:
         - Webhooks
       summary: Delete Webhook
       description: Remove a webhook from a base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/webhook_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7385,15 +7467,15 @@ paths:
         saved as `.dtable` files, and therefore returned as a base name with
         this suffix. The `commit_id` is the ID of the snapshot, and the `ctime`
         is the time of creation.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7403,13 +7485,13 @@ paths:
                 snapshot_list:
                   - dtable_name: Example.dtable
                     commit_id: 7ee107a4eadb9561e8ce7699494939015f0d101b
-                    ctime: '2021-03-10T16:01:12+00:00'
+                    ctime: "2021-03-10T16:01:12+00:00"
                   - dtable_name: Example.dtable
                     commit_id: 57a3b429750663ebf64d58ab4fd5e378ad85d6aa
-                    ctime: '2021-03-04T16:00:10+00:00'
+                    ctime: "2021-03-04T16:00:10+00:00"
                   - dtable_name: Example.dtable
                     commit_id: 68730615428fe8497612e5a9df90fe62f86eb219
-                    ctime: '2021-03-02T10:30:00+00:00'
+                    ctime: "2021-03-02T10:30:00+00:00"
                 page_info:
                   has_next_page: true
                   current_page: 1
@@ -7438,14 +7520,14 @@ paths:
               properties:
                 snapshot_name:
                   $ref: "#/components/schemas/snapshot_name"
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
         - $ref: "#/components/parameters/commit_id"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7459,12 +7541,12 @@ paths:
                   name: Example version last Wednesday
                   creator: Jasmin Tee
                   modifier: Jasmin Tee
-                  created_at: '2021-03-15T13:45:43+00:00'
-                  updated_at: '2021-03-15T13:45:43+00:00'
+                  created_at: "2021-03-15T13:45:43+00:00"
+                  updated_at: "2021-03-15T13:45:43+00:00"
                   color: null
                   text_color: null
                   icon: null
-  
+
   /api/v2.1/universal-apps/:
     get:
       tags:
@@ -7474,19 +7556,20 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "my_managed_apps": [
-                    {
+                  "my_managed_apps":
+                    [
+                      {
                         "app_user_id": 13,
                         "app_id": 20,
                         "app_name": "test",
                         "app_token": "5863cf72-a3fa-488a-84cd-d02d2c578660",
-                        "app_config": "{\"app_type\": \"universal-app\", \"app_name\": \"test\", \"settings\": {\"pages\": [{\"id\": \"XtTu\", \"name\": \"test\", \"type\": \"custom_page\", \"icon\": \"app-gallery\", \"content_url\": \"https://stage.seatable.io/workspace/3/asset/2d0d0c32-5e79-4437-a414-766ade7618a5/external-apps/XtTu/XtTu.json\", \"trigger_workflow_option\": {\"can_trigger_workflow\": false}}], \"navigation\": [{\"id\": \"XtTu\", \"type\": \"page\"}]}, \"use_custom_icon\": false, \"icon_class_name\": \"customer-contract-management\", \"app_icon\": \"\", \"app_theme_mode\": \"dark\", \"icon_color_index\": 0, \"app_theme_color\": \"#FF8000\"}",
+                        "app_config": '{"app_type": "universal-app", "app_name": "test", "settings": {"pages": [{"id": "XtTu", "name": "test", "type": "custom_page", "icon": "app-gallery", "content_url": "https://stage.seatable.io/workspace/3/asset/2d0d0c32-5e79-4437-a414-766ade7618a5/external-apps/XtTu/XtTu.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "XtTu", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
                         "role_name": "admin",
                         "permission": "rw",
                         "dtable_uuid": "2d0d0c325e794437a414766ade7618a5",
@@ -7494,14 +7577,14 @@ paths:
                         "workspace_id": 3,
                         "link": "https://cloud.seatable.io/external-apps/5863cf72-a3fa-488a-84cd-d02d2c578660/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/5863cf72-a3fa-488a-84cd-d02d2c578660/",
-                        "joined_at": "2023-01-05T09:30:25+00:00"
-                    },
-                    {
+                        "joined_at": "2023-01-05T09:30:25+00:00",
+                      },
+                      {
                         "app_user_id": 14,
                         "app_id": 21,
                         "app_name": "test",
                         "app_token": "4b0b7a91-c4bc-4075-88c3-88fb851d7eae",
-                        "app_config": "{\"app_type\": \"universal-app\", \"app_name\": \"test\", \"settings\": {\"pages\": [{\"id\": \"XtTu\", \"name\": \"test\", \"type\": \"custom_page\", \"icon\": \"app-gallery\", \"content_url\": \"https://stage.seatable.io/workspace/3/asset/2d0d0c32-5e79-4437-a414-766ade7618a5/external-apps/XtTu/XtTu.json\", \"trigger_workflow_option\": {\"can_trigger_workflow\": false}}], \"navigation\": [{\"id\": \"XtTu\", \"type\": \"page\"}]}, \"use_custom_icon\": false, \"icon_class_name\": \"customer-contract-management\", \"app_icon\": \"\", \"app_theme_mode\": \"dark\", \"icon_color_index\": 0, \"app_theme_color\": \"#FF8000\"}",
+                        "app_config": '{"app_type": "universal-app", "app_name": "test", "settings": {"pages": [{"id": "XtTu", "name": "test", "type": "custom_page", "icon": "app-gallery", "content_url": "https://stage.seatable.io/workspace/3/asset/2d0d0c32-5e79-4437-a414-766ade7618a5/external-apps/XtTu/XtTu.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "XtTu", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
                         "role_name": "admin",
                         "permission": "rw",
                         "dtable_uuid": "b0c53bef24e14e74a53c78a5c1231783",
@@ -7509,14 +7592,14 @@ paths:
                         "workspace_id": 2,
                         "link": "https://cloud.seatable.io/external-apps/4b0b7a91-c4bc-4075-88c3-88fb851d7eae/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/4b0b7a91-c4bc-4075-88c3-88fb851d7eae/",
-                        "joined_at": "2023-01-05T09:31:55+00:00"
-                    },
-                    {
+                        "joined_at": "2023-01-05T09:31:55+00:00",
+                      },
+                      {
                         "app_user_id": 15,
                         "app_id": 22,
                         "app_name": "app",
                         "app_token": "a2f9dcb4-a8b8-4a3e-b550-fddf18ef0ab6",
-                        "app_config": "{\"app_type\": \"universal-app\", \"app_name\": \"app\", \"settings\": {\"pages\": [{\"id\": \"IpvJ\", \"name\": \"test\", \"type\": \"custom_page\", \"icon\": \"app-form\", \"content_url\": \"https://stage.seatable.io/workspace/3/asset/a81922f3-ead6-4904-942e-4617402b8006/external-apps/IpvJ/IpvJ.json\", \"trigger_workflow_option\": {\"can_trigger_workflow\": false}}], \"navigation\": [{\"id\": \"IpvJ\", \"type\": \"page\"}]}, \"use_custom_icon\": false, \"icon_class_name\": \"customer-contract-management\", \"app_icon\": \"\", \"app_theme_mode\": \"dark\", \"icon_color_index\": 0, \"app_theme_color\": \"#FF8000\"}",
+                        "app_config": '{"app_type": "universal-app", "app_name": "app", "settings": {"pages": [{"id": "IpvJ", "name": "test", "type": "custom_page", "icon": "app-form", "content_url": "https://stage.seatable.io/workspace/3/asset/a81922f3-ead6-4904-942e-4617402b8006/external-apps/IpvJ/IpvJ.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "IpvJ", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
                         "role_name": "admin",
                         "permission": "rw",
                         "dtable_uuid": "a81922f3ead64904942e4617402b8006",
@@ -7524,14 +7607,14 @@ paths:
                         "workspace_id": 3,
                         "link": "https://cloud.seatable.io/external-apps/a2f9dcb4-a8b8-4a3e-b550-fddf18ef0ab6/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/a2f9dcb4-a8b8-4a3e-b550-fddf18ef0ab6/",
-                        "joined_at": "2023-01-05T15:32:45+00:00"
-                    },
-                    {
+                        "joined_at": "2023-01-05T15:32:45+00:00",
+                      },
+                      {
                         "app_user_id": 16,
                         "app_id": 23,
                         "app_name": "app",
                         "app_token": "00252a1e-6b47-4df6-bfe7-c69eb8a9f905",
-                        "app_config": "{\"app_type\": \"universal-app\", \"app_name\": \"app\", \"settings\": {\"pages\": [{\"id\": \"IpvJ\", \"name\": \"test\", \"type\": \"custom_page\", \"icon\": \"app-form\", \"content_url\": \"https://stage.seatable.io/workspace/3/asset/a81922f3-ead6-4904-942e-4617402b8006/external-apps/IpvJ/IpvJ.json\", \"trigger_workflow_option\": {\"can_trigger_workflow\": false}}], \"navigation\": [{\"id\": \"IpvJ\", \"type\": \"page\"}]}, \"use_custom_icon\": false, \"icon_class_name\": \"customer-contract-management\", \"app_icon\": \"\", \"app_theme_mode\": \"dark\", \"icon_color_index\": 0, \"app_theme_color\": \"#FF8000\"}",
+                        "app_config": '{"app_type": "universal-app", "app_name": "app", "settings": {"pages": [{"id": "IpvJ", "name": "test", "type": "custom_page", "icon": "app-form", "content_url": "https://stage.seatable.io/workspace/3/asset/a81922f3-ead6-4904-942e-4617402b8006/external-apps/IpvJ/IpvJ.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "IpvJ", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
                         "role_name": "admin",
                         "permission": "rw",
                         "dtable_uuid": "f80260f70ad246aca54ffa1a17bc9db6",
@@ -7539,9 +7622,9 @@ paths:
                         "workspace_id": 178,
                         "link": "https://cloud.seatable.io/external-apps/00252a1e-6b47-4df6-bfe7-c69eb8a9f905/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/00252a1e-6b47-4df6-bfe7-c69eb8a9f905/",
-                        "joined_at": "2023-01-05T15:34:46+00:00"
-                    },
-                    {
+                        "joined_at": "2023-01-05T15:34:46+00:00",
+                      },
+                      {
                         "app_user_id": 23,
                         "app_id": 32,
                         "app_name": "fdsafda",
@@ -7554,9 +7637,9 @@ paths:
                         "workspace_id": 3,
                         "link": "https://cloud.seatable.io/external-apps/d356b5ce-9c5a-41fb-afc5-582dff6d58a4/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/d356b5ce-9c5a-41fb-afc5-582dff6d58a4/",
-                        "joined_at": "2023-02-10T10:35:02+00:00"
-                    },
-                    {
+                        "joined_at": "2023-02-10T10:35:02+00:00",
+                      },
+                      {
                         "app_user_id": 53,
                         "app_id": 71,
                         "app_name": "Belehrungsdatenbank (Soldat)",
@@ -7569,14 +7652,14 @@ paths:
                         "workspace_id": 241,
                         "link": "https://cloud.seatable.io/external-apps/669c8eaf-2a28-4843-8b45-b0d4d63139eb/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/669c8eaf-2a28-4843-8b45-b0d4d63139eb/",
-                        "joined_at": "2023-03-31T14:14:34+00:00"
-                    },
-                    {
+                        "joined_at": "2023-03-31T14:14:34+00:00",
+                      },
+                      {
                         "app_user_id": 54,
                         "app_id": 72,
                         "app_name": "Dgdfh",
                         "app_token": "8254d58e-6a67-45ab-be37-87939d80e99f",
-                        "app_config": "{\"app_type\":\"universal-app\",\"app_name\":\"Dgdfh\",\"settings\":{}}",
+                        "app_config": '{"app_type":"universal-app","app_name":"Dgdfh","settings":{}}',
                         "role_name": "admin",
                         "permission": "rw",
                         "dtable_uuid": "18c9eb2637604aa782b7297432db2c55",
@@ -7584,9 +7667,9 @@ paths:
                         "workspace_id": 3,
                         "link": "https://cloud.seatable.io/external-apps/8254d58e-6a67-45ab-be37-87939d80e99f/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/8254d58e-6a67-45ab-be37-87939d80e99f/",
-                        "joined_at": "2023-04-02T20:59:23+00:00"
-                    },
-                    {
+                        "joined_at": "2023-04-02T20:59:23+00:00",
+                      },
+                      {
                         "app_user_id": 58,
                         "app_id": 76,
                         "app_name": "Eintr\u00e4ge (Soldat)",
@@ -7599,9 +7682,9 @@ paths:
                         "workspace_id": 243,
                         "link": "https://cloud.seatable.io/external-apps/a99c7b34-30f9-4473-9658-55b9bfb94dba/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/a99c7b34-30f9-4473-9658-55b9bfb94dba/",
-                        "joined_at": "2023-04-03T11:39:23+00:00"
-                    },
-                    {
+                        "joined_at": "2023-04-03T11:39:23+00:00",
+                      },
+                      {
                         "app_user_id": 69,
                         "app_id": 80,
                         "app_name": "Freigabe Belehrung und IGF (Vorg.)",
@@ -7614,12 +7697,12 @@ paths:
                         "workspace_id": 243,
                         "link": "https://cloud.seatable.io/external-apps/b7509375-a988-42f0-bf2c-cee8aaf63255/",
                         "edit_link": "https://cloud.seatable.io/dtable/external-apps-edit/b7509375-a988-42f0-bf2c-cee8aaf63255/",
-                        "joined_at": "2023-04-04T12:39:48+00:00"
-                    }
-                  ],
-                  "can_use_apps": []
+                        "joined_at": "2023-04-04T12:39:48+00:00",
+                      },
+                    ],
+                  "can_use_apps": [],
                 }
-      
+
   /api/v2.1/universal-apps/{app_token}/app-users/batch/:
     post:
       tags:
@@ -7641,23 +7724,26 @@ paths:
                   items:
                     $ref: "#/components/schemas/users_info"
       responses:
-        '200':
+        "200":
           description: Success
           content:
             application/json:
               example:
-                "success": [{
-                    "id": 73,
-                    "email": "53f1af67b0dd492491264dd8143040b3@auth.local",
-                    "created_at": "2022-08-05T16:58:33+08:00",
-                    "is_active": true,
-                    "name": "org_guest",
-                    "app_name": "\u901a\u7528\u5e94\u7528-a",
-                    "role_id": 21,
-                    "role_name": "default",
-                    "role_permission": "rw",
-                    "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png"
-                  }]
+                "success":
+                  [
+                    {
+                      "id": 73,
+                      "email": "53f1af67b0dd492491264dd8143040b3@auth.local",
+                      "created_at": "2022-08-05T16:58:33+08:00",
+                      "is_active": true,
+                      "name": "org_guest",
+                      "app_name": "\u901a\u7528\u5e94\u7528-a",
+                      "role_id": 21,
+                      "role_name": "default",
+                      "role_permission": "rw",
+                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                    },
+                  ]
 
   /api/v2.1/universal-apps/{app_token}/app-users/:
     get:
@@ -7670,14 +7756,15 @@ paths:
       parameters:
         - $ref: "#/components/parameters/app_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "app_users": [
-                    {
+                  "app_users":
+                    [
+                      {
                         "id": 54,
                         "email": "145504ae043c438cbb55f2afb084d586@auth.local",
                         "created_at": "2023-04-02T20:59:23+00:00",
@@ -7687,10 +7774,10 @@ paths:
                         "role_id": 101,
                         "role_name": "admin",
                         "role_permission": "rw",
-                        "avatar_url": "https://cloud.seatable.io/media/avatars/1/1/10f6c82c6733f96517798c7dd123a1/resized/80/96a6957d9995a2cd05039f8a1fff6e80_xUDfC2V.png"
-                    }
-                  ],
-                  "total_count": 1
+                        "avatar_url": "https://cloud.seatable.io/media/avatars/1/1/10f6c82c6733f96517798c7dd123a1/resized/80/96a6957d9995a2cd05039f8a1fff6e80_xUDfC2V.png",
+                      },
+                    ],
+                  "total_count": 1,
                 }
 
   /api/v2.1/universal-apps/{app_token}/invite-links/:
@@ -7704,14 +7791,15 @@ paths:
       parameters:
         - $ref: "#/components/parameters/app_token"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               example:
                 {
-                  "app_share_links": [
-                    {
+                  "app_share_links":
+                    [
+                      {
                         "username": "145504ae043c438cbb55f2afb084d586@auth.local",
                         "token": "a3ec5042d7ae47f18c2e",
                         "link": "https://cloud.seatable.io/dtable/universal-app/links/a3ec5042d7ae47f18c2e",
@@ -7722,24 +7810,66 @@ paths:
                         "is_protected": false,
                         "role_name": "default",
                         "role_permission": "rw",
-                        "role_id": 100
-                    }
-                  ]
+                        "role_id": 100,
+                      },
+                    ],
                 }
-  
+  /api/v2.1/external-apps/{app_token}/status/:
+    put:
+      tags:
+        - Apps
+      summary: Activate/Deactivate App
+      description: Activate or deactivate a universal app. Pay attention that `true` means the app is inactive. `false` means the app is active.
+      security:
+        - AccountTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/is_inactive"
+      parameters:
+        - $ref: "#/components/parameters/app_token"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "external_app":
+                    {
+                      "id": 296,
+                      "token": "a3ec5042d7ae47f18c2e",
+                      "dtable_uuid": "92b3bf0e4e2c4f5486a229a3cbb8e160",
+                      "app_type": "universal-app",
+                      "app_config:":
+                        {
+                          "app_type": "universal-app",
+                          "app_name": "My first universal app",
+                          "settings": { "pages": ["..."] },
+                        },
+                      "created_at": "2023-04-02T21:23:21+00:00",
+                      "external_app_url": "https://cloud.seatable.io/dtable/universal-app/links/a3ec5042d7ae47f18c2e",
+                      "visit_times": 3,
+                      "creator": "Hulk",
+                      "can_anonymous_access": false,
+                      "inactive": false,
+                    },
+                }
+
   /api/v2.1/dtable-activities/:
     get:
       tags: [Activities & Logs]
       summary: Get Base Activities
       description: List the user's base activities in the past week.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/tz"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7751,17 +7881,17 @@ paths:
                     workspace_id: 125
                     dtable_name: SeaTable API Docs
                     dtable_icon: icon-research
-                    dtable_color: '#1688FC'
-                    op_date: '2020-11-09T09:59:13+00:00'
+                    dtable_color: "#1688FC"
+                    op_date: "2020-11-09T09:59:13+00:00"
                     insert_row: 0
                     modify_row: 13
                     delete_row: 0
                   - dtable_uuid: d48c3aae-dbc1-4325-a890-1c2e79ea5319
                     workspace_id: 131
                     dtable_name: Release Date management
-                    dtable_icon: ''
-                    dtable_color: ''
-                    op_date: '2020-11-09T08:16:13+00:00'
+                    dtable_icon: ""
+                    dtable_color: ""
+                    op_date: "2020-11-09T08:16:13+00:00"
                     insert_row: 0
                     modify_row: 1
                     delete_row: 0
@@ -7770,15 +7900,15 @@ paths:
       tags: [Activities & Logs]
       summary: Get Base Activities Details
       description: List all activities of one specific base.
-      security: 
-      - AccountTokenAuth: []
+      security:
+        - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/dtable_uuid_query"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/op_date"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
@@ -7801,3 +7931,21 @@ paths:
                     row_data: [...]
                     op_app: null
                     avatar_url: "https://cloud.seatable.io/media/avatars/default.png"
+
+  /api/v2.1/dtable/items-search/:
+    get:
+      tags: [Search]
+      summary: Search base or apps
+      description: Search the base or apps of a user. Capitalization is irrelevant for the search and substrings are also allowed.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/query_str"
+        - $ref: "#/components/parameters/query_type"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object

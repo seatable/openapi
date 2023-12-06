@@ -1,7 +1,7 @@
 ---
 title: Authentication
 excerpt: Learn to master the authentication flows of SeaTable.
-category: 64e5a881a6e8f4004e8bb277
+category: 6570d48363242f007fc436cf
 isReference: true
 slug: authentication
 ---
@@ -19,11 +19,11 @@ All other API-requests require an authorization header that looks like this, whe
 `Authorization: Bearer {{Account-Token, API-Token or Base-Token}}`
 
 > 🚧 Self-hosted SeaTable need configuration change
-> 
-> The **Try It!** function of this page works out of the box with SeaTable Cloud. But if you host your own SeaTable Server you have to [change your nginx configuration](/reference/requirement-self-hosted) to use this great feature. 
+>
+> The **Try It!** function of this page works out of the box with SeaTable Cloud. But if you host your own SeaTable Server you have to [change your nginx configuration](/reference/requirement-self-hosted) to use this great feature.
 
 > 📘 Bearer or Token?
-> 
+>
 > Before version 4.0, the authentication header in SeaTable was not like `Authorization: Bearer` but `Authorization: Token`. Starting with version 4.0 both authentication headers are supported. We recommend the use of `Authorization: Bearer`, according to the official (OpenAPI 3.0 Specifiation)[https://swagger.io/docs/specification/authentication/bearer-authentication/].
 
 ## Authentication Flows in SeaTable
@@ -34,7 +34,7 @@ Initially, authentication in SeaTable can seem a bit complicated, but the follow
 
 Every account operation requires an Account-Token. Every base operation requires an Base-Token, whereby there are four different ways to generate an Base-Token.
 
-***
+---
 
 ## The three tokens
 
@@ -61,8 +61,8 @@ Here are the differences between these three tokens:
 | Base-Token    | 249 chars | 3 days     | allow executing a Base-Operation with either read or write access to a specific base |
 
 > ❗ Keep your Tokens secure!
-> 
-> An Account-Token or an API-Token replaces the combination of username & password in a SeaTable API request. Once generated, such a Token is valid permanently. 
+>
+> An Account-Token or an API-Token replaces the combination of username & password in a SeaTable API request. Once generated, such a Token is valid permanently.
 > Therefore your Tokens have the same sensibility as your username and password, so make sure keep them in a safe place!
 
 ### Token Hierarchy
