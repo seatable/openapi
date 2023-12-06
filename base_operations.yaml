@@ -2297,7 +2297,7 @@ paths:
       tags:
         - Base Info
       summary: Get Base Info
-      description: Get the basic information of a base.
+      description: Returns basic information about the specified base.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2388,7 +2388,7 @@ paths:
       tags:
         - Base Info
       summary: Get Metadata
-      description: Get the complete metadata of a base with all tables, columns and views and settings. The metadata does not contain any data.
+      description: Returns all metadata of the specified base including tables, columns, views and settings.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2472,7 +2472,7 @@ paths:
       tags:
         - Base Info
       summary: Get Big Data Status
-      description: Returns the number of rows, stored in the big data backend. It returns the total number and the number of rows per table.
+      description: Returns the total number of rows stored in the big data backend of the specified base as well as rows in the big data backend per table.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2515,7 +2515,7 @@ paths:
       tags:
         - Base Info
       summary: List Collaborators
-      description: List all collaborators of a base with name, email address and avatar.
+      description: Returns all collaborators in the specified base including name, email address and avatar.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2545,18 +2545,17 @@ paths:
         - Rows
       summary: List Rows (with SQL)
       description: |
-        Gets a list or rows contained in a table, according to the `select` SQL-query provided in the request. Also the metadata of the table is returned.
+        Lists rows in a table based on an SQL-query provided in the request. Also returns the metadata of the table.
 
-        Typical SQL-statements are supported. For more details, check the [SQL-syntax supported by SeaTable](https://seatable.github.io/seatable-scripts/python/sql/).
-
-        Here are some basic examples how to use this request for a fictitious table *Participants* with the columns *name*, *age*, *birthday* and *gender*:
+        Typical SQL-statements are supported. Below some basic examples:
         `SELECT name, age, birthday, gender FROM Participants`<br/>
         `SELECT name, surname FROM Participants ORDER BY name`<br/>
         `SELECT * FROM Participants LIMIT 25`
+        For more details, check the [SQL-syntax supported by SeaTable](https://seatable.github.io/seatable-scripts/python/sql/).
 
         > 📘 Returns also data from the big data backend
         > 
-        > This request is the only available endpoint that can return rows stored in the big data backend. 
+        > This request is the only available endpoint that returns rows stored in the big data backend. 
 
         > 🚧 Returns at most 10 000 rows
         >
@@ -2585,12 +2584,15 @@ paths:
         - Rows
       summary: List Rows
       description: |
-        Gets a list of rows contained in a table (or in a view if provided), ordered according to the filter conditions and sort criteria provided in the request. 
-        The response contains a maximum of 1.000 rows regardless of the specified limit.
+        Lists rows in a table (or in a view if provided), ordered according to the filter conditions and sort criteria provided in the request. 
 
         > 📘 Returns no data from the big data backend
         > 
         > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/list-rows-with-sql) instead.
+
+        > 🚧 Returns at most 1 000 rows
+        >
+        > The request returns a maximum of 1 000 rows regardless of the limit specified in the SQL-statement.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2625,7 +2627,7 @@ paths:
         - Rows
       summary: Add Row
       description: |
-        Either insert or append a row. If you want to insert the row at a desired position, you need to provide the id of an anchor row.
+        Appends or inserts a single row.
 
         > 📘 How to define the row object
         > 
@@ -2658,7 +2660,7 @@ paths:
         - Rows
       summary: Update Row
       description: |
-        Change the values in an existing row by defining the new values for necessary columns in the row object.
+        Updates a single row.
 
         > 📘 Structure of the row object
         > 
@@ -2686,8 +2688,7 @@ paths:
       tags:
         - Rows
       summary: Delete Row
-      description: |
-        Deletes one row from the table, identified by its row id.
+      description: Deletes a single row.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2711,7 +2712,7 @@ paths:
       tags:
         - Rows
       summary: Get Row
-      description: Get the values of one row with all columns and values, according to the row id provided. Depending of `convert` the response will contain the column names or the column keys.
+      description: Retrieves a single row.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2739,7 +2740,11 @@ paths:
         - Rows
       summary: Append Rows
       description: |-
-        Append multiple rows to a table. Define the column:values pairs of each column in the [rows object](/reference/models).
+        Appends multiple rows.
+        
+        > 🚧 Appends at most 1 000 rows
+        >
+        > A maximum of 1 000 rows can be appended with a single request.
       requestBody:
         content:
           application/json:
@@ -2764,7 +2769,11 @@ paths:
       tags:
         - Rows
       summary: Update Rows
-      description: Update the values of multiple rows in one request.
+      description: Updates multiple rows.
+      
+        > 🚧 Updates at most 1 000 rows
+        >
+        > A maximum of 1 000 rows can be updated with a single request.
       requestBody:
         content:
           application/json:
@@ -2788,7 +2797,11 @@ paths:
       tags:
         - Rows
       summary: Delete Rows
-      description: Delete multiple rows in one request.
+      description: Deletes multiple rows.
+        
+        > 🚧 Deletes at most 10 000 rows
+        >
+        > A maximum of 10 000 rows can be deleted with a single request.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2813,11 +2826,13 @@ paths:
         - Rows
       summary: Lock Rows
       description: |
-        Locks one or more rows. It is ok to include rows that were already locked.
+        Locks a single or multiple rows. 
+        
+        The request ensures that all specified rows are locked. Locked rows are ignored.
 
         > 📘 Advanced feature
         > 
-        > Lock rows is an advanced feature in SeaTable and only available for [enterprise subscriptions](https://seatable.io/preise/?lang=auto).
+        > Row locking is only available in [SeaTable Cloud Plus and Enterprise](https://seatable.io/preise/?lang=auto) as well as SeaTable Server Enterprise Edition.
       requestBody:
         content:
           application/json:
@@ -2842,9 +2857,13 @@ paths:
         - Rows
       summary: Unlock Rows
       description: |
-        Use this API request to unlock one or more locked rows. As this request
-        makes sure that all the mentioned rows are unlocked, it's OK to include
-        rows that were not locked.
+        Unlocks a single or multiple rows.
+
+        The request ensures that all specified rows are unlocked. Unlocked rows are ignored.
+
+        > 📘 Advanced feature
+        > 
+        > Row locking is only available in [SeaTable Cloud Plus and Enterprise](https://seatable.io/preise/?lang=auto) as well as SeaTable Server Enterprise Edition.
       requestBody:
         content:
           application/json:
