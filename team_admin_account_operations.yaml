@@ -1559,7 +1559,7 @@ paths:
       tags:
         - Customizing
       summary: Update Team Logo
-      description: Hier muss noch etwas ergänzt werden
+      description: Replace the current team logo by uploading a new one.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1602,7 +1602,50 @@ paths:
       tags:
         - Customizing
       summary: Delete Team Logo
-      description: Hier muss noch etwas ergänzt werden
+      description: Restore the team logo to SeaTable's original default by removing the current logo."
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example: { "success": true }
+
+  /api/v2.1/org/{org_id}/admin/saml-config/:
+    get:
+      tags:
+        - SAML
+      summary: Get SAML Config
+      description: Retrieve the current configuration details of the team's SAML (Single Sign-On) account.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "saml_config":
+                    {
+                      "id": 2,
+                      "org_id": 13,
+                      "metadata_url": "https://example.com/federationmetadata.xml",
+                      "domain": example.com,
+                      "dns_txt": "seatable-site-verification=bae21a5f9c65472c88bcd02f724065c9",
+                      "domain_verified": true,
+                    },
+                }
+    delete:
+      tags:
+        - SAML
+      summary: Delete SAML Config
+      description: Remove the existing SAML configuration for the team.
       security:
         - AccountTokenAuth: []
       parameters:
