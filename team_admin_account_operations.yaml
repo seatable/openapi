@@ -1409,8 +1409,8 @@ paths:
     get:
       tags:
         - Activities & Logs
-      summary: List Org-Admin operation logs
-      description: Hier müsste denke ich noch etwas ergänzt werden
+      summary: List Team Operations
+      description: Retrieves the operation log of all team members.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1465,7 +1465,95 @@ paths:
                     ],
                   "total_count": 3,
                 }
-
+  /api/v2.1/org/{org_id}/admin/login-logs/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Team Logins
+      description: Retrieves the login activities of all team members.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "login_list":
+                    [
+                      {
+                        "login_time": "2023-11-22T09:36:29+01:00",
+                        "login_ip": "5.34.111.3",
+                        "login_success": true,
+                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
+                        "name": "Hulk",
+                        "contact_email": "hulk@the-avengers.com",
+                      },
+                      {
+                        "login_time": "2023-11-22T09:31:22+01:00",
+                        "login_ip": "5.34.111.3",
+                        "login_success": false,
+                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
+                        "name": "Hulk",
+                        "contact_email": "hulk@the-avengers.com",
+                      },
+                      {
+                        "login_time": "2023-11-21T23:27:12+01:00",
+                        "login_ip": "99.12.23.13",
+                        "login_success": true,
+                        "email": "f2afb0145504ae0438cbb5584c43d586@auth.local",
+                        "name": "Tony Starks",
+                        "contact_email": "tony@the-avengers.com",
+                      },
+                    ],
+                  "total_count": 70,
+                }
+  /api/v2.1/org/{org_id}/admin/login-logs/{user_id}:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List User Logins
+      description: Returns the login activities of one specific team member.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "data":
+                    [
+                      {
+                        "login_time": "2023-11-22T09:36:29+01:00",
+                        "login_ip": "5.34.111.3",
+                        "login_success": true,
+                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
+                        "name": "Hulk",
+                        "contact_email": "hulk@the-avengers.com",
+                      },
+                      {
+                        "login_time": "2023-11-22T09:31:22+01:00",
+                        "login_ip": "5.34.111.3",
+                        "login_success": false,
+                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
+                        "name": "Hulk",
+                        "contact_email": "hulk@the-avengers.com",
+                      },
+                    ],
+                  "total_count": 3,
+                }
   /api/v2.1/org/{org_id}/admin/org-logo/:
     post:
       tags:
