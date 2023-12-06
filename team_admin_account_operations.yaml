@@ -1547,9 +1547,9 @@ paths:
                         "login_time": "2023-11-22T09:31:22+01:00",
                         "login_ip": "5.34.111.3",
                         "login_success": false,
-                        "email": "145504ae043c438cbb55f2afb084d586@auth.local",
-                        "name": "Hulk",
-                        "contact_email": "hulk@the-avengers.com",
+                        "email": "hulk@the-avengers.com",
+                        "name": "hulk",
+                        "contact_email": null,
                       },
                     ],
                   "total_count": 3,
@@ -1641,6 +1641,15 @@ paths:
                       "domain_verified": true,
                     },
                 }
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "detail": "You do not have permission to perform this action.",
+                }
+
     delete:
       tags:
         - SAML
@@ -1656,3 +1665,11 @@ paths:
           content:
             application/json:
               example: { "success": true }
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example:
+                {
+                  "detail": "You do not have permission to perform this action.",
+                }

@@ -18,7 +18,12 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 > 📘 New requests
 >
-> - [Update Team User](/reference/put_api-v2-1-admin-organizations-org-id-users-user-id): <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/admin/organizations/{org_id}/users/{user_id}/`
+> **Account Operations - System Admin**
+>
+> - [Update Team User](/reference/put_api-v2-1-admin-organizations-org-id-users-user-id) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/admin/organizations/{org_id}/users/{user_id}/`
+>
+> **Account Operations - Team Admin**
+>
 > - [List Team Logins](/reference/get_api-v2-1-org-org-id-admin-login-logs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/`
 > - [List User Logins](/reference/get_api-v2-1-org-org-id-admin-login-logs-user-id) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
 > - [Get SAML Config](/reference/get_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
@@ -41,7 +46,7 @@ You can access the SeaTable API Reference for version 4.1 via this link: [SeaTab
 
 > 👍 Other changes
 >
-> - Deprecated base export calls for sys admin were removed from documentation.
+> - Deprecated base export calls for sytem admins were removed from documentation.
 
 ## Version 4.1 (23.08.2023)
 
