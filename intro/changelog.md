@@ -19,8 +19,11 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > 📘 New requests
 >
 > - [System Admin] Update Team User: `PUT /api/v2.1/admin/organizations/{org_id}/users/{user_id}/`
-> - [Team Admin] List Team Logins `/api/v2.1/org/{org_id}/admin/login-logs/`
-> - [Team Admin] List User Logins `/api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
+> - [Team Admin] List Team Logins `GET /api/v2.1/org/{org_id}/admin/login-logs/`
+> - [Team Admin] List User Logins `GET /api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
+> - [Team Admin] Get SAML Config `GET /api/v2.1/org/{org_id}/admin/saml-config/`
+> - [Team Admin] Delete SAML Config `DELETE /api/v2.1/org/{org_id}/admin/saml-config/`
+> - [...] <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/api/v2.1/...`
 
 ## Version 4.2 (22.11.2023)
 
