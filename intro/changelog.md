@@ -28,6 +28,10 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > - [List User Logins](/reference/get_api-v2-1-org-org-id-admin-login-logs-user-id) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
 > - [Get SAML Config](/reference/get_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
 > - [Delete SAML Config](/reference/delete_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
+>
+> **Account Operations - User**
+>
+> - [Search User](/reference/...) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api2/search-user/?q={search_query}`
 
 ## Version 4.2 (22.11.2023)
 
