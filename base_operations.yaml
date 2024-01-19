@@ -2648,7 +2648,7 @@ paths:
         `SELECT name, age, birthday, gender FROM Participants`<br/>
         `SELECT name, surname FROM Participants ORDER BY name`<br/>
         `SELECT * FROM Participants LIMIT 25`
-        For more details, check the [SQL-syntax supported by SeaTable](https://seatable.github.io/seatable-scripts/python/sql/).
+        For more details, check the [SQL-syntax supported by SeaTable](https://developer.seatable.io/scripts/sql/reference/).
 
         > 📘 Returns also data from the big data backend
         > 
@@ -2838,7 +2838,7 @@ paths:
       summary: Append Rows
       description: |-
         Appends multiple rows.
-        
+
         > 🚧 Appends at most 1 000 rows
         >
         > A maximum of 1 000 rows can be appended with a single request.
@@ -2867,7 +2867,7 @@ paths:
         - Rows
       summary: Update Rows
       description: Updates multiple rows.
-      
+
         > 🚧 Updates at most 1 000 rows
         >
         > A maximum of 1 000 rows can be updated with a single request.
@@ -2895,7 +2895,7 @@ paths:
         - Rows
       summary: Delete Rows
       description: Deletes multiple rows.
-        
+
         > 🚧 Deletes at most 10 000 rows
         >
         > A maximum of 10 000 rows can be deleted with a single request.
@@ -2924,7 +2924,7 @@ paths:
       summary: Lock Rows
       description: |
         Locks a single or multiple rows. 
-        
+
         The request ensures that all specified rows are locked. Locked rows are ignored.
 
         > 📘 Advanced feature
@@ -4020,9 +4020,8 @@ paths:
 
         `new_column_type` is the new type of the target column. For a list of
         column type params refer to the SeaTable API Parameter.
-        There is one further source of information on column types in the
-        [SeaTable Scripts Programming
-        Manual](https://seatable.github.io/seatable-scripts/data-structure/#column).
+
+        Get more information about columns and column types in [Models](https://api.seatable.io/reference/models).
       requestBody:
         content:
           application/json:
