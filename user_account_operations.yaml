@@ -2338,6 +2338,34 @@ paths:
                     name: Jasmin Tee
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
 
+  /api2/search-user/:
+    get:
+      tags: [User]
+      summary: Search User
+      description: >
+        Just give a search keyword in the `q` param.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          example: Micha
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                users:
+                  - email: 1a8d6725c4ae40c688b40028fd62c73f@auth.local
+                    avatar_url: https://cloud.seatable.io/media/avatars/a/3/13841b0ea84f7a8c4f5e9363f4d972/resized/32/6c32b8f494d5266ca7f64727b046c8b7.png
+                    name: Michael
+                    contact_email: "michael@example.com"
+
   # Bases
   /api/v2.1/user-admin-dtables/:
     get:
@@ -2413,6 +2441,41 @@ paths:
                         color: null
                         text_color: null
                         icon: null
+
+  /api/v2.1/dtable/items-search/:
+    get:
+      tags: [Bases]
+      summary: Search base or apps
+      description: Search the base or apps of a user. Capitalization is irrelevant for the search and substrings are also allowed.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/query_str"
+        - $ref: "#/components/parameters/query_type"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                result:
+                  - id: 514
+                    workspace_id: 3
+                    uuid: f5a8bbe1-2a2e-44a4-b993-4b599fd5e837
+                    name: API-Testing
+                    created_at: "2023-04-03T08:45:59+02:00"
+                    updated_at: "2023-10-24T16:53:44+02:00"
+                    color: null
+                    text_color: null
+                    icon: null
+                    is_encrypted: false
+                    in_storage: true
+                    group_name: personal
+                    type: personal
+                    starred: false
+
   /api/v2.1/dtables/:
     post:
       tags:
@@ -2547,6 +2610,7 @@ paths:
                   color: "#E91E63"
                   text_color: null
                   icon: icon-market-analysis
+
   /api/v2.1/workspace/{workspace_id}/dtable/:
     put:
       tags:
@@ -3140,6 +3204,7 @@ paths:
                 type: object
               example:
                 success: true
+
   /api/v2.1/search-group/:
     get:
       tags: [Groups & Workspaces]
@@ -7931,21 +7996,3 @@ paths:
                     row_data: [...]
                     op_app: null
                     avatar_url: "https://cloud.seatable.io/media/avatars/default.png"
-
-  /api/v2.1/dtable/items-search/:
-    get:
-      tags: [Search]
-      summary: Search base or apps
-      description: Search the base or apps of a user. Capitalization is irrelevant for the search and substrings are also allowed.
-      security:
-        - AccountTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/query_str"
-        - $ref: "#/components/parameters/query_type"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
