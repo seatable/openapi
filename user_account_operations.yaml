@@ -2342,8 +2342,12 @@ paths:
     get:
       tags: [User]
       summary: Search User
-      description: >
-        Just give a search keyword in the `q` param.
+      description: >-
+        Just search for a user with the string or substring in the `q` param. You can search by
+        `email` (case sensitive),
+        `name` (case insensitive) or
+        `contact_email` (case insensitive). 
+        Substrings are allowed.
       security:
         - AccountTokenAuth: []
       parameters:
