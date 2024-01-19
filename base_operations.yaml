@@ -2676,7 +2676,7 @@ paths:
         `SELECT name, age, birthday, gender FROM Participants`<br/>
         `SELECT name, surname FROM Participants ORDER BY name`<br/>
         `SELECT * FROM Participants LIMIT 25`
-        For more details, check the [SQL-syntax supported by SeaTable](https://seatable.github.io/seatable-scripts/python/sql/).
+        For more details, check the [SQL-syntax supported by SeaTable](https://developer.seatable.io/scripts/sql/reference/).
 
         > 📘 Returns also data from the big data backend
         > 
@@ -4048,9 +4048,8 @@ paths:
 
         `new_column_type` is the new type of the target column. For a list of
         column type params refer to the SeaTable API Parameter.
-        There is one further source of information on column types in the
-        [SeaTable Scripts Programming
-        Manual](https://seatable.github.io/seatable-scripts/data-structure/#column).
+
+        Get more information about columns and column types in [Models](https://api.seatable.io/reference/models).
       requestBody:
         content:
           application/json:
