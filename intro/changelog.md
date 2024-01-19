@@ -31,7 +31,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 >
 > **Account Operations - User**
 >
-> - [Search User](/reference/...) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api2/search-user/?q={search_query}`
+> - [Search User](/reference/get_api2-search-user) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api2/search-user/?q={search_query}`
 
 ## Version 4.2 (22.11.2023)
 
