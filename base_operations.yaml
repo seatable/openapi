@@ -675,6 +675,27 @@ components:
         - row_id_list
         - other_rows_ids_map
 
+    archived_row_links:
+      type: object
+      description: update row links (batch)
+      properties:
+        table_id:
+          $ref: "#/components/schemas/table_id"
+        other_table_id:
+          $ref: "#/components/schemas/table_id"
+        link_id:
+          $ref: "#/components/schemas/link_id"
+        other_rows_ids_map:
+          type: object
+          description: Map of IDs of the target rows which you'd like to link your source rows to.
+          items:
+            type: string
+      required:
+        - link_id
+        - table_id
+        - other_table_id
+        - other_rows_ids_map
+
     delete_row_link: 
       type: object
       properties:
@@ -3054,6 +3075,58 @@ paths:
                 Qtf7xPmoRaiFyQPO1aENTjb:
                   - row_id: G5rbgqudTKKfAm1-cjnjbQ
                     display_value: Orson
+
+  /dtable-db/api/v1/base/{base_uuid}/links:
+    post:
+      tags:
+        - Links
+      summary: Create Row Links (Archived data)
+      description: |
+        This API can handle both archived and unarchived rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/archived_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+  /dtable-db/api/v1/base/{base_uuid}/links:
+    delete:
+      tags:
+        - Links
+      summary: Delete Row Links (Archived data)
+      description: |
+        This API can handle both archived and unarchived rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/archived_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
 
   
   # Files & Images
