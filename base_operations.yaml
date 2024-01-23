@@ -3102,7 +3102,6 @@ paths:
               example:
                 success: true
 
-  /dtable-db/api/v1/base/{base_uuid}/links:
     delete:
       tags:
         - Links
