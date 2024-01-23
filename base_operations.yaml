@@ -677,7 +677,7 @@ components:
 
     archived_row_links:
       type: object
-      description: update row links (batch)
+      description: handle row links of archived data (batch)
       properties:
         table_id:
           $ref: "#/components/schemas/table_id"
