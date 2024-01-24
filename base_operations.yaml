@@ -687,12 +687,12 @@ components:
           $ref: "#/components/schemas/link_id"
         other_rows_ids_map:
           type: object
-          description: >-
+          description: |
             Map of IDs of the target rows which you'd like to link your source rows. Use a key-to-list like:
             ```
             "other_rows_ids_map": {
               "SDRktTOjR7mCLPINvBYU6g": ["HU1eSwCiQRiqOhcXPtR7qQ", "KNsPc7TnTqqqI5glSOun7w"],
-              "SDRktTOjR7mCLPINvBYU6g": ["bcBZbuc0S_im0RPdVKRYfg"]
+              "YujPlptaTzGrGmzyJaKm0Q": ["bcBZbuc0S_im0RPdVKRYfg"]
             }
             ```
           items:
