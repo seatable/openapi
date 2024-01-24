@@ -675,34 +675,6 @@ components:
         - row_id_list
         - other_rows_ids_map
 
-    archived_row_links:
-      type: object
-      description: handle row links of archived data (batch)
-      properties:
-        table_id:
-          $ref: "#/components/schemas/table_id"
-        other_table_id:
-          $ref: "#/components/schemas/table_id"
-        link_id:
-          $ref: "#/components/schemas/link_id"
-        other_rows_ids_map:
-          type: object
-          description: |
-            Map of IDs of the target rows which you'd like to link your source rows. Use a key-to-list like:
-            ```
-            "other_rows_ids_map": {
-              "SDRktTOjR7mCLPINvBYU6g": ["HU1eSwCiQRiqOhcXPtR7qQ", "KNsPc7TnTqqqI5glSOun7w"],
-              "YujPlptaTzGrGmzyJaKm0Q": ["bcBZbuc0S_im0RPdVKRYfg"]
-            }
-            ```
-          items:
-            type: string
-      required:
-        - link_id
-        - table_id
-        - other_table_id
-        - other_rows_ids_map
-
     delete_row_link:
       type: object
       properties:
