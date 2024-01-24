@@ -3068,6 +3068,10 @@ paths:
       summary: Create Row Links
       description: |
         Creates multiple links between one column and many others (1:n relation).
+
+        > 🚧 No support for Big Data
+        >
+        > This request does not support to add links in big data rows. There is another call [supporting big data](/reference/post_dtable-db-api-v1-base-base-uuid-links).
       requestBody:
         content:
           application/json:
@@ -4514,6 +4518,55 @@ paths:
               example:
                 success: true
                 error_message: ""
+
+  /dtable-db/api/v1/base/{base_uuid}/links/:
+    post:
+      tags: [Big Data]
+      summary: Create Row Links in Big Data
+      description: |
+        This API can handle both archived and unarchived rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/archived_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
+    delete:
+      tags: [Big Data]
+      summary: Delete Row Links in Big Data
+      description: |
+        This API can handle both archived and unarchived rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/archived_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
 
   # Row Comments
   /dtable-server/api/v1/dtables/{base_uuid}/comments/:

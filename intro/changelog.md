@@ -18,6 +18,11 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 > 📘 New requests
 >
+> **Base Operations**
+>
+> [Create Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/dtable-db/api/v1/base/{base_uuid}/links/
+[Delete Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
+>
 > **Account Operations - System Admin**
 >
 > - [Update Team User](/reference/put_api-v2-1-admin-organizations-org-id-users-user-id) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/admin/organizations/{org_id}/users/{user_id}/`
