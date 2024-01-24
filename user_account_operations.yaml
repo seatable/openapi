@@ -2342,7 +2342,7 @@ paths:
     get:
       tags: [User]
       summary: Search User
-      description: >-
+      description: |
         Just search for a user with the string or substring in the `q` param. You can search by
         `email` (case sensitive),
         `name` (case insensitive) or
@@ -3345,9 +3345,8 @@ paths:
 
 
         Just give a search keyword in the `q` param. Attention: Although a
-        blurry search is allowed, unlike the web interface, the search via API
+        fussy search is allowed, unlike the web interface, the search via API
         is still case sensitive!
-
 
         A successful search will return each member's details that fit to your
         search criteria. See example.
