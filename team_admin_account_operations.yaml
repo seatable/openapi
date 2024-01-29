@@ -235,6 +235,21 @@ components:
     force_2fa:
       type: integer
       enum: [0, 1]
+    metadata_url:
+      type: string
+      description: "URL pointing to the metadata of your Identity Provider (IdP)."
+    domain:
+      type: string
+      description: "Domain that should be connected to your SeaTable Team. Only email addresses with this domain will be redirected to your Identity Provider (IdP)."
+    idp_certificate:
+      type: string
+      description: |
+        "Provide the certificate from your IdP for this service. The certificate has to look like:
+        ```-----BEGIN CERTIFICATE-----
+        xxxxxxxxxx
+        -----END CERTIFICATE-----
+        ```
+        "
 
 paths:
   # Users
@@ -1637,8 +1652,10 @@ paths:
                       "org_id": 13,
                       "metadata_url": "https://example.com/federationmetadata.xml",
                       "domain": example.com,
-                      "dns_txt": "seatable-site-verification=bae21a5f9c65472c88bcd02f724065c9",
+                      "dns_txt": "seatable-site-verification=bae21a5f9c65472c88bcd02f724065c8",
                       "domain_verified": true,
+                      "idp_certificate",
+                      "-----BEGIN CERTIFICATE-----xxxxxxxxxx-----END CERTIFICATE-----",
                     },
                 }
         "403":
@@ -1649,10 +1666,48 @@ paths:
                 {
                   "detail": "You do not have permission to perform this action.",
                 }
+    put:
+      tags: [SAML]
+      summary: Update SAML Config
+      description: Update the current team's SAML (Single Sign-On) account.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                metadata_url:
+                  $ref: "#/components/schemas/metadata_url"
+                domain:
+                  $ref: "#/components/schemas/domain"
+                idp_certificate:
+                  $ref: "#/components/schemas/idp_certificate"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "saml_config":
+                    {
+                      "id": 2,
+                      "org_id": 13,
+                      "metadata_url": "https://example.com/federationmetadata.xml",
+                      "domain": example.com,
+                      "dns_txt": "seatable-site-verification=bae21a5f9c65472c88bcd02f724065c8",
+                      "domain_verified": true,
+                      "idp_certificate",
+                      "-----BEGIN CERTIFICATE-----xxxxxxxxxx-----END CERTIFICATE-----",
+                    },
+                }
 
     delete:
-      tags:
-        - SAML
+      tags: [SAML]
       summary: Delete SAML Config
       description: Remove the existing SAML configuration for the team.
       security:
@@ -1673,3 +1728,15 @@ paths:
                 {
                   "detail": "You do not have permission to perform this action.",
                 }
+  /api/v2.1/org/{org_id}/admin/verify-domain/:
+    put:
+      tags: [SAML]
+      summary: Verify domain
+      description: Check for the "seatable-site-verification" value in the DNS entries of the selected domain.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
