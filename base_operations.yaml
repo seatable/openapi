@@ -664,10 +664,9 @@ components:
           items:
             $ref: "#/components/schemas/row_id"
         other_rows_ids_map:
-          type: object
+          type: array
+          additionalProperties: { type: array, items: { type: string } }
           description: Map of IDs of the target rows which you'd like to link your source rows to.
-          items:
-            type: string
       required:
         - link_id
         - table_id
