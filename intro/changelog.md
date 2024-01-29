@@ -32,7 +32,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > - [List Team Logins](/reference/get_api-v2-1-org-org-id-admin-login-logs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/`
 > - [List User Logins](/reference/get_api-v2-1-org-org-id-admin-login-logs-user-id) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
 > - [Get SAML Config](/reference/get_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
-> - [Delete SAML Config](/reference/delete_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
+> - [Update SAML Config](/reference/put_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
+> - [Verify SAML Domain](/reference/put_api-v2-1-org-org-id-admin-verify-domain) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/org/{org_id}/admin/verify-domain/`
 >
 > **Account Operations - User**
 >

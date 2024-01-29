@@ -369,9 +369,11 @@ components:
       example: Example User
     is_staff:
       type: boolean
-      description: >-
-        `true` or `false` if the user will be an admin. `false` by
-        default.
+      description: "`true` or `false` if the user will be an (system) admin. `false` by default."
+      default: false
+    is_admin:
+      type: boolean
+      description: "`true` or `false` if the user will be an (team) admin. `false` by default."
       default: false
     is_active:
       type: boolean
@@ -1933,7 +1935,6 @@ paths:
       description: >-
         List a team's members with their detailed information.
 
-
         The `is_org_admin` value in the response indicates if this member is the
         administrator of the team.
       security:
@@ -2048,6 +2049,32 @@ paths:
               properties:
                 is_staff:
                   $ref: "#/components/schemas/is_staff"
+                is_admin:
+                  $ref: "#/components/schemas/is_admin"
+                is_active:
+                  $ref: "#/components/schemas/is_active"
+                role:
+                  $ref: "#/components/schemas/role"
+                name:
+                  $ref: "#/components/schemas/name"
+                login_id:
+                  $ref: "#/components/schemas/login_id"
+                contact_email:
+                  $ref: "#/components/schemas/contact_email"
+                id_in_org:
+                  $ref: "#/components/schemas/id_in_org"
+                unit:
+                  $ref: "#/components/schemas/unit"
+                password:
+                  $ref: "#/components/schemas/password"
+                institution:
+                  $ref: "#/components/schemas/institution"
+                row_limit:
+                  $ref: "#/components/schemas/row_limit"
+                quota_total:
+                  $ref: "#/components/schemas/quota_total"
+                asset_quota_mb:
+                  $ref: "#/components/schemas/asset_quota_mb"
       responses:
         "200":
           description: OK

@@ -164,6 +164,16 @@ components:
       type: string
       description: User's full name.
       example: Mai Thai
+    contact_email:
+      type: string
+      description: User's contact email.
+      example: mai@example.com
+    is_active:
+      type: boolean
+      description: Determines the current status of this account. An inactive account can not login anymore.
+    is_staff:
+      type: boolean
+      description: Determines if the user account has access to the system administration area.
     with_workspace:
       type: boolean
       description: >-
@@ -356,12 +366,18 @@ paths:
             schema:
               type: object
               properties:
-                id_in_org:
-                  $ref: "#/components/schemas/id_in_org"
                 name:
                   $ref: "#/components/schemas/name"
+                contact_email:
+                  $ref: "#/components/schemas/contact_email"
+                is_staff:
+                  $ref: "#/components/schemas/is_staff"
+                is_active:
+                  $ref: "#/components/schemas/is_active"
                 quota_total:
                   $ref: "#/components/schemas/quota_total"
+                id_in_org:
+                  $ref: "#/components/schemas/id_in_org"
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1705,7 +1721,7 @@ paths:
   /api/v2.1/org/{org_id}/admin/verify-domain/:
     put:
       tags: [SAML]
-      summary: Verify domain
+      summary: Verify SAML domain
       description: Check for the "seatable-site-verification" value in the DNS entries of the selected domain.
       security:
         - AccountTokenAuth: []
