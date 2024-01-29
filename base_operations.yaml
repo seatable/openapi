@@ -664,9 +664,10 @@ components:
           items:
             $ref: "#/components/schemas/row_id"
         other_rows_ids_map:
-          type: array
-          additionalProperties: { type: array, items: { type: string } }
+          type: object
           description: Map of IDs of the target rows which you'd like to link your source rows to.
+          items:
+            type: string
       required:
         - link_id
         - table_id
@@ -685,17 +686,16 @@ components:
         link_id:
           $ref: "#/components/schemas/link_id"
         other_rows_ids_map:
-          type: object
+          type: array
+          additionalProperties: { type: array, items: { type: string } }
           description: |
-            Map of IDs of the target rows which you'd like to link your source rows. Use a key-to-list like:
+            Map of IDs of the target rows which you'd like to link/unlink your source rows. Use a key-to-list like:
             ```
             "other_rows_ids_map": {
-              "SDRktTOjR7mCLPINvBYU6g": ["HU1eSwCiQRiqOhcXPtR7qQ", "KNsPc7TnTqqqI5glSOun7w"],
-              "YujPlptaTzGrGmzyJaKm0Q": ["bcBZbuc0S_im0RPdVKRYfg"]
+              "<row1 of table>": ["<row1 of other_table>", "<row2 of other_table>"],
+              "<row2 of table>": ["<row3 of other_table>"]
             }
             ```
-          items:
-            type: string
       required:
         - link_id
         - table_id
