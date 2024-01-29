@@ -1702,28 +1702,6 @@ paths:
                     },
                 }
 
-    delete:
-      tags: [SAML]
-      summary: Delete SAML Config
-      description: Remove the existing SAML configuration for the team.
-      security:
-        - AccountTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/org_id"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              example: { "success": true }
-        "403":
-          description: "Forbidden"
-          content:
-            application/json:
-              example:
-                {
-                  "detail": "You do not have permission to perform this action.",
-                }
   /api/v2.1/org/{org_id}/admin/verify-domain/:
     put:
       tags: [SAML]
@@ -1733,6 +1711,14 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                domain:
+                  $ref: "#/components/schemas/domain"
       responses:
         "200":
           description: OK
