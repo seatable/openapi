@@ -238,18 +238,15 @@ components:
     metadata_url:
       type: string
       description: "URL pointing to the metadata of your Identity Provider (IdP)."
+      example: "https://<URL-of-your-idp>/metadata.yml"
     domain:
       type: string
       description: "Domain that should be connected to your SeaTable Team. Only email addresses with this domain will be redirected to your Identity Provider (IdP)."
+      example: "example.com"
     idp_certificate:
       type: string
-      description: |
-        "Provide the certificate from your IdP for this service. The certificate has to look like:
-        ```-----BEGIN CERTIFICATE-----
-        xxxxxxxxxx
-        -----END CERTIFICATE-----
-        ```
-        "
+      description: "Provide the certificate from your IdP for this service."
+      example: "-----BEGIN CERTIFICATE-----xxxxxxxxxxxxxxxxxxxx-----END CERTIFICATE-----"
 
 paths:
   # Users
@@ -1669,7 +1666,7 @@ paths:
     put:
       tags: [SAML]
       summary: Update SAML Config
-      description: Update the current team's SAML (Single Sign-On) account.
+      description: Update the current team's SAML (Single Sign-On) account. You have to provide at least one of the parameter `metadata_url`, `domain` or `idp_certificate`.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1701,8 +1698,7 @@ paths:
                       "domain": example.com,
                       "dns_txt": "seatable-site-verification=bae21a5f9c65472c88bcd02f724065c8",
                       "domain_verified": true,
-                      "idp_certificate",
-                      "-----BEGIN CERTIFICATE-----xxxxxxxxxx-----END CERTIFICATE-----",
+                      "idp_certificate": "-----BEGIN CERTIFICATE-----xxxxxxxxxx-----END CERTIFICATE-----",
                     },
                 }
 
@@ -1740,3 +1736,6 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              example: { "domain_verified": true }
