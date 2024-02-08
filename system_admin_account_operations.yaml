@@ -193,6 +193,13 @@ components:
         type: integer
         enum: [0, 1]
       description: Seen status, whether seen or not, 0/1, optional
+    ignore_asset:
+      name: ignore_asset
+      in: query
+      schema:
+        type: boolean
+      example: "false"
+      description: Set this to `true` to export the base without assets. Default is `false`.
 
     #=======================Path parameters=======================#
     base_uuid:
@@ -2177,6 +2184,7 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/ignore_asset"
       responses:
         "200":
           description: OK
