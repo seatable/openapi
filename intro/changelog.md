@@ -14,7 +14,7 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.io/docs/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
 
-## Version 4.3 (xx.12.2023)
+## Version 4.3 (08.02.2024)
 
 > 📘 New requests
 >
