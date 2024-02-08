@@ -39,6 +39,10 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 >
 > - [Search User](/reference/get_api2-search-user) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api2/search-user/?q={search_query}`
 
+> 👍 Other changes
+>
+> - New option to export the base with or without assets in `GET /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/`.
+
 ## Version 4.2 (22.11.2023)
 
 You can access the SeaTable API Reference for version 4.1 via this link: [SeaTable API Reference - Version 4.2](https://seatable.readme.io/v4.2/reference/introduction).
