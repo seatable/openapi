@@ -65,13 +65,13 @@ jobs:
       - name: Update authentication 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=6570d48363242f007fc436d5 --useSpecVersion
+          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=65e6ef8514da74005d339fb1 --useSpecVersion
 
       # base operations
       - name: Update base operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=65e6ef8514da74005d339fb1 --useSpecVersion
+          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=65e6ef8514da74005d339fb2 --useSpecVersion
 
       # Account operations: System admin
       - name: Update sys admin account operations 🚀
