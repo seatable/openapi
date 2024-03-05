@@ -1,7 +1,7 @@
 ---
 title: Authentication
 excerpt: Learn to master the authentication flows of SeaTable.
-category: 6570d48363242f007fc436cf
+category: 65e6ef8514da74005d339fac
 isReference: true
 slug: authentication
 ---

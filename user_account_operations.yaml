@@ -3,7 +3,7 @@ info:
   title: Account Operations - User
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0).
-  version: "4.3"
+  version: "4.4"
 servers:
   - url: "https://{server}"
     variables:

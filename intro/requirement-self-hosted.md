@@ -1,7 +1,7 @@
 ---
 title: Try It! with your own Server
 excerpt: Prerequisites to use api.seatable.io with your own self-hosted SeaTable server.
-category: 6570d48363242f007fc436cf
+category: 65e6ef8514da74005d339fac
 isReference: true
 slug: requirement-self-hosted
 ---
