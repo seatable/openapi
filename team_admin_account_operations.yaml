@@ -1310,22 +1310,22 @@ paths:
               example:
                 success: true
 
-  # Base Export
-  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/export-dtable/:
-    get:
-      tags: [Export]
-      summary: Export base
-      description: |
-        Use this request to export a base as Team Admin.
-      security:
-        - AccountTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/org_id"
-        - $ref: "#/components/parameters/base_uuid"
-        - $ref: "#/components/parameters/ignore_asset"
-      responses:
-        "200":
-          description: OK
+  # Base Export (asynchron, deshalb bieten wir das nicht mehr an.)
+  #/api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/export-dtable/:
+  #  get:
+  #    tags: [Export]
+  #    summary: Export base
+  #    description: |
+  #      Use this request to export a base as Team Admin.
+  #    security:
+  #      - AccountTokenAuth: []
+  #    parameters:
+  #      - $ref: "#/components/parameters/org_id"
+  #      - $ref: "#/components/parameters/base_uuid"
+  #      - $ref: "#/components/parameters/ignore_asset"
+  #    responses:
+  #      "200":
+  #        description: OK
 
   # Info & Settings
   /api/v2.1/org/admin/info/:
