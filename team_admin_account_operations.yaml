@@ -1320,6 +1320,7 @@ paths:
       security:
         - AccountTokenAuth: []
       parameters:
+        - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/ignore_asset"
       responses:
