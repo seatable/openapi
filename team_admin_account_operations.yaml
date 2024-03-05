@@ -1316,7 +1316,7 @@ paths:
       tags: [Export]
       summary: Export base
       description: |
-        Use this request to export a base as System Admin.
+        Use this request to export a base as Team Admin.
       security:
         - AccountTokenAuth: []
       parameters:
