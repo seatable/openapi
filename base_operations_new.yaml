@@ -2677,10 +2677,8 @@ paths:
       description: |
         Gets a list of rows contained in a table (or in a view if provided), ordered according to the filter conditions and sort criteria provided in the request. 
         The response contains a maximum of 1.000 rows regardless of the specified limit.
+        The data returns the rows from both normal stoarge and big-data storage
 
-        > 📘 Returns no data from the big data backend
-        > 
-        > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/list-rows-with-sql) instead.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2746,19 +2744,14 @@ paths:
     put:
       tags:
         - Rows
-      summary: Update Row
-      description: |
-        Change the values in an existing row by defining the new values for necessary columns in the row object.
-
-        > 📘 Structure of the row object
-        > 
-        > The row object contains key:value pairs with the column name as key and the desired values. Check the page [Models](/reference/models) to get a better understanding of the row object.
+      summary: Update Rows
+      description: |- 
+        Update the values of multiple rows in one request. It can handle the rows from both normal stoarge and big-data storage.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/update_row"
-
+              $ref: "#/components/schemas/update_rows"
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2775,9 +2768,9 @@ paths:
     delete:
       tags:
         - Rows
-      summary: Delete Row
-      description: |
-        Deletes one row from the table, identified by its row id.
+      summary: Delete Rows
+      description: |- 
+        Delete multiple rows in one request. It can handle the rows from both normal stoarge and big-data storage.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2786,7 +2779,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/delete_row"
+              $ref: "#/components/schemas/delete_rows"
       responses:
         "200":
           description: OK
@@ -2796,6 +2789,7 @@ paths:
                 type: object
               example:
                 success: true
+
   /api-gateway/api/v2/dtables/{base_uuid}/rows/{row_id}/:
     get:
       tags:
@@ -2823,6 +2817,7 @@ paths:
                 Date: "2020-08-01"
                 Content: "111"
                 link: []
+                
   /api-gateway/api/v2/dtables/{base_uuid}/batch-append-rows/:
     post:
       tags:
@@ -2849,54 +2844,7 @@ paths:
                 type: object
               example:
                 inserted_row_count: 3
-  /api-gateway/api/v2/dtables/{base_uuid}/batch-update-rows/:
-    put:
-      tags:
-        - Rows
-      summary: Update Rows
-      description: Update the values of multiple rows in one request.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/update_rows"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                success: true
-  /api-gateway/api/v2/dtables/{base_uuid}/batch-delete-rows/:
-    delete:
-      tags:
-        - Rows
-      summary: Delete Rows
-      description: Delete multiple rows in one request.
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/delete_rows"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                success: true
+  
   /api-gateway/api/v2/dtables/{base_uuid}/lock-rows/:
     put:
       tags:
@@ -2926,6 +2874,7 @@ paths:
                 type: object
               example:
                 success: true
+
   /api-gateway/api/v2/dtables/{base_uuid}/unlock-rows/:
     put:
       tags:
@@ -2963,6 +2912,7 @@ paths:
         When you have a "Link to other records" column in your table and you
         have created some links to the current or another table, you can use
         this request to query each row's linked records' IDs and display values.
+        The data returns the links from both normal stoarge and big-data storage
 
         In the request body (see example request for demonstration):
 
@@ -3008,87 +2958,11 @@ paths:
                     display_value: Orson
 
     post:
-      tags:
-        - Links
-      summary: Create Row Link
-      description: |
-        You can link a row to another row in the same table, or in another table in the same base. **Before you use this request**, you should create a
-        link column first, and retrieve its `link_id`. This value is an attribute of a link column, and can also be retrieved from the call
-        [Get Metadata](/reference/get-metadata).
-
-        Check out the [Models](/reference/models#a-link) page to get more information about the structure of a link.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/create_row_link"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                success: true
-    put:
-      tags:
-        - Links
-      summary: Create Row Links
-      description: |
-        Creates multiple links between one column and many others (1:n relation).
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/create_row_links"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                success: true
-    delete:
-      tags:
-        - Links
-      summary: Delete Row Link
-      description: Delete an existing link between two rows.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/delete_row_link"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                deleted_links_count: 1
-
-  /api-gateway/api/v2/dtables/{base_uuid}/batch-add-links/:
-    post:
       tags: [Links]
       summary: Create Row Links (Batch)
       description: |
         Add multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
+        It can handle the rows from both normal stoarge and big-data storage.
         Here is an example how the body with `other_rows_ids_map` should look like: 
         ```
         "other_rows_ids_map": {
@@ -3096,6 +2970,7 @@ paths:
               "Qtf7xPmoRaiFyQPO1aENTjc": ["Qtf7xPmoRaiFyQPO1aENTjb", "{{row3_id}}"]
           }
         ```
+        
       requestBody:
         content:
           application/json:
@@ -3114,13 +2989,12 @@ paths:
                 type: object
               example:
                 success: true
-
-  /api-gateway/api/v2/dtables/{base_uuid}/batch-update-links/:
     put:
       tags: [Links]
       summary: Update Row Links (Batch)
       description: |
         Update multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
+        It can handle the rows from both normal stoarge and big-data storage.
         Here is an example how the body with `row_id_list` and `other_rows_ids_map` should look like: 
         ```
         "row_id_list": [
@@ -3150,13 +3024,12 @@ paths:
                 type: object
               example:
                 success: true
-
-  /api-gateway/api/v2/dtables/{base_uuid}/batch-delete-links/:
     delete:
       tags: [Links]
       summary: Delete Row Links (Batch)
       description: |
         Delete multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
+        It can handle the rows from both normal stoarge and big-data storage.
         Here is an example how the body with `other_rows_ids_map` should look like: 
         ```
         
