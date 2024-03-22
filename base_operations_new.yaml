@@ -2677,7 +2677,7 @@ paths:
       description: |
         Gets a list of rows contained in a table (or in a view if provided), ordered according to the filter conditions and sort criteria provided in the request. 
         The response contains a maximum of 1.000 rows regardless of the specified limit.
-        The data returns the rows from both normal stoarge and big-data storage
+        The data returns the rows from both normal storage and big-data storage
 
       security:
         - BaseTokenAuth: []
@@ -2746,7 +2746,7 @@ paths:
         - Rows
       summary: Update Rows
       description: |- 
-        Update the values of multiple rows in one request. It can handle the rows from both normal stoarge and big-data storage.
+        Update the values of multiple rows in one request. It can handle the rows from both normal storage and big-data storage.
       requestBody:
         content:
           application/json:
@@ -2770,7 +2770,7 @@ paths:
         - Rows
       summary: Delete Rows
       description: |- 
-        Delete multiple rows in one request. It can handle the rows from both normal stoarge and big-data storage.
+        Delete multiple rows in one request. It can handle the rows from both normal storage and big-data storage.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2912,7 +2912,7 @@ paths:
         When you have a "Link to other records" column in your table and you
         have created some links to the current or another table, you can use
         this request to query each row's linked records' IDs and display values.
-        The data returns the links from both normal stoarge and big-data storage
+        The data returns the links from both normal storage and big-data storage
 
         In the request body (see example request for demonstration):
 
@@ -2962,7 +2962,7 @@ paths:
       summary: Create Row Links (Batch)
       description: |
         Add multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
-        It can handle the rows from both normal stoarge and big-data storage.
+        It can handle the rows from both normal storage and big-data storage.
         Here is an example how the body with `other_rows_ids_map` should look like: 
         ```
         "other_rows_ids_map": {
@@ -2994,7 +2994,7 @@ paths:
       summary: Update Row Links (Batch)
       description: |
         Update multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
-        It can handle the rows from both normal stoarge and big-data storage.
+        It can handle the rows from both normal storage and big-data storage.
         Here is an example how the body with `row_id_list` and `other_rows_ids_map` should look like: 
         ```
         "row_id_list": [
@@ -3029,7 +3029,7 @@ paths:
       summary: Delete Row Links (Batch)
       description: |
         Delete multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
-        It can handle the rows from both normal stoarge and big-data storage.
+        It can handle the rows from both normal storage and big-data storage.
         Here is an example how the body with `other_rows_ids_map` should look like: 
         ```
         
