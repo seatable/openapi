@@ -194,9 +194,9 @@ SeaTable offers some column types that are **filled automatically**. It is not p
 
 ### Handling of default values
 
-If you use the old [Append Rows](/reference/appendrowsdeprecated) endpoint, the **default values** of the text, number and single select column types **won't be filled** by the API request automatically. If you leave these fields blank, they'll also be blank after the new row is appended, which is different than the behavior on the web UI.
+If you use the old [Append Rows](https://api.seatable.io/reference/appendrowsdeprecated) endpoint, the **default values** of the text, number and single select column types **won't be filled** by the API request automatically. If you leave these fields blank, they'll also be blank after the new row is appended, which is different than the behavior on the web UI.
 
-If you use the new [Append Rows](/reference/appendrows) endpoint, you can set the `apply_default` body parameter to `true`, which ensures that any default values are automatically applied.
+If you use the new [Append Rows](https://api.seatable.io/reference/appendrows) endpoint, you can set the `apply_default` body parameter to `true`, which ensures that any default values are automatically applied.
 
 ---
 

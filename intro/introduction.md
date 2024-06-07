@@ -47,15 +47,15 @@ So don't let us waste time and let's start right away. The first step with every
 
 ### Step 1: Create an API-Token
 
-The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.io/docs/seatable-api/erzeugen-eines-api-tokens/?lang=auto). You only have to do this once! The `API-Token` keeps valid forever for this specific base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](/reference/create-api-token).
+The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.io/docs/seatable-api/erzeugen-eines-api-tokens/?lang=auto). You only have to do this once! The `API-Token` keeps valid forever for this specific base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](https://api.seatable.io/reference/createapitoken).
 
 An API-Token might look like this: `1de50f1a57143bfe72873cbbd28ecb4de9eb3c61`
 
 ### Step 2: Generate Base-Token
 
-Next you need the API-Token to [generate a Base-Token](/reference/get-base-token-with-api-token). The `Base-Token` is only valid for three days and exactly for the one base for which you created the API-Token. If you want to interact with your base more frequently via API, you need to repeat this step. You need the `Base-Token` to authenticate all the following API requests.
+Next you need the API-Token to [generate a Base-Token](https://api.seatable.io/reference/getbasetokenwithapitoken). The `Base-Token` is only valid for three days and exactly for the one base for which you created the API-Token. If you want to interact with your base more frequently via API, you need to repeat this step. You need the `Base-Token` to authenticate all the following API requests.
 
-The result of the [Get Base-Token with API-Token](https://api.seatable.io/reference/get-base-token-with-api-token) request might look like this. Write down all values, you will need them in the following. The `access_token`, this long string of characters, is what we will call a `Base-Token` in all future requests. The `dtable_uuid` is equivalent to `base_uuid`.
+The result of the [Get Base-Token with API-Token](https://api.seatable.io/reference/getbasetokenwithapitoken) request might look like this. Write down all values, you will need them in the following. The `access_token`, this long string of characters, is what we will call a `Base-Token` in all future requests. The `dtable_uuid` is equivalent to `base_uuid`.
 
 ```json Example response with the Base-Token (access_token) and base_uuid (dtable_uuid)
 {
@@ -72,7 +72,7 @@ The result of the [Get Base-Token with API-Token](https://api.seatable.io/refere
 
 ### Step 3: Get to know the structure of your base
 
-Equipped with the `Base-Token` we can start to display the current structure of the base. Use the [Get Metadata](/reference/get-metadata) request and pass the `Base-Token` and the `base_uuid` as parameters. The result will be a very long _metadata_ object which contains all _tables_ with all their _columns_ and _views_. The _metadata_ does not contain any data, it contains only the structure of your base.
+Equipped with the `Base-Token` we can start to display the current structure of the base. Use the [Get Metadata](https://api.seatable.io/reference/getmetadata) request and pass the `Base-Token` and the `base_uuid` as parameters. The result will be a very long _metadata_ object which contains all _tables_ with all their _columns_ and _views_. The _metadata_ does not contain any data, it contains only the structure of your base.
 
 Use the small arrows in the response box to fold the elements to get an overview of the complete object. The result might look like this:
 
@@ -105,7 +105,7 @@ Note down the name of the tables and the name of the columns. You will need thes
 
 ### Step 4: Write some data to your base
 
-The request to [Add a row](/reference/add-row) to a base, requires the following information. You have to know ...
+The request to [Add a row](https://api.seatable.io/reference/addrowdeprecated) to a base, requires the following information. You have to know ...
 
 - the `Base-Token` for authentication -> ok
 - the `base_uuid` to identify the base -> no problem
@@ -125,7 +125,7 @@ Easy, right? This documentation helps you to create the API request just by fill
 
 ### Step 5: Get all rows of your base
 
-Also this last step is quite easy. Use the [List rows](/reference/list-rows) request and fill all mandatory input fields. Leave all optional fields blank and hit the **Try It!** button. You should see your previously created line with John Doe now in the result list.
+Also this last step is quite easy. Use the [List rows](https://api.seatable.io/reference/listrows) request and fill all mandatory input fields. Leave all optional fields blank and hit the **Try It!** button. You should see your previously created line with John Doe now in the result list.
 
 Congratulations! You wrote your first row to a table in a base in SeaTable via the API and then retrieved it.
 
@@ -136,7 +136,7 @@ Congratulations! You wrote your first row to a table in a base in SeaTable via t
 
 ### Step 1: Generate an Account-Token
 
-SeaTable requires a different authentication depending on whether you want to do something inside a base or outside. To create a Base, we need an account token, which we can generate with our credentials. Therefore you have to use the [Get Account-Token with Username and Password](/reference/get-account-token). Fill in your username and password and hit **Try It!**. The result will be your `Account-Token` which might look like this:
+SeaTable requires a different authentication depending on whether you want to do something inside a base or outside. To create a Base, we need an account token, which we can generate with our credentials. Therefore you have to use the [Get Account-Token with Username and Password](https://api.seatable.io/reference/getaccounttokenfromusername). Fill in your username and password and hit **Try It!**. The result will be your `Account-Token` which might look like this:
 
 ```json
 {
@@ -150,15 +150,15 @@ To generate a base inside SeaTable you have to tell SeaTable where the base shou
 
 ### Step 3: Create the base
 
-Equiped with all these information it should be easy for you to create a new base. Use the request [Create base](https://api.seatable.io/reference/create-base) and fill out all the required values and hit
+Equiped with all these information it should be easy for you to create a new base. Use the request [Create base](https://api.seatable.io/reference/createbase) and fill out all the required values and hit
 **Try It!**. Every new base will automatically contain a first empty table with the name `Table1`.
 
 ### Step 4: Create a table and two columns (you will need a Base-Token)
 
-The following requests have to be executed inside the base. There the necessary API calls can be found in the area **Base operations** and you will need a [Base-Token](/reference/get-base-token-with-api-token) instead of an account-token. Check example no. 1 if you don't know how to create a Base-Token.
+The following requests have to be executed inside the base. There the necessary API calls can be found in the area **Base operations** and you will need a [Base-Token](https://api.seatable.io/reference/getbasetokenwithapitoken) instead of an account-token. Check example no. 1 if you don't know how to create a Base-Token.
 
-Next we [create a table](https://api.seatable.io/reference/create-new-table) and call it `Table 2`. You can already define as many columns as you want that should be created.
-But even after the initial creation you could [append new columns](https://api.seatable.io/reference/append-columns) at every time you want. Open the base with your browser and you will immediately see the new table with the new columns.
+Next we [create a table](https://api.seatable.io/reference/createtable) and call it `Table 2`. You can already define as many columns as you want that should be created.
+But even after the initial creation you could [append new columns](https://api.seatable.io/reference/appendcolumns-1) at every time you want. Open the base with your browser and you will immediately see the new table with the new columns.
 
 Congratulations! You created your first base with a seconds table and some extra columns.
 
@@ -173,15 +173,15 @@ Generate a Base-Token like in example no. 1. This will also give you the `base_u
 
 ### Step 1: Determine the row you would like to update
 
-To [update a row](https://api.seatable.io/reference/update-row) you need to know the row_id you want to update. You can either get the `row_id` just by [opening the row details in the browser](https://seatable.io/docs/haeufig-gestellte-fragen/was-ist-die-zeilen-id/?lang=auto) or you could use one of the various API requests to get the content of a base:
+To [update a row](https://api.seatable.io/reference/updaterow) you need to know the row_id you want to update. You can either get the `row_id` just by [opening the row details in the browser](https://seatable.io/docs/haeufig-gestellte-fragen/was-ist-die-zeilen-id/?lang=auto) or you could use one of the various API requests to get the content of a base:
 
-- [List Rows (with SQL)](https://api.seatable.io/reference/list-rows-with-sql)
-- [List Rows](https://api.seatable.io/reference/list-rows)
-- [Base Info](https://api.seatable.io/reference/get-base-info)
+- [List Rows (with SQL)](https://api.seatable.io/reference/querysql)
+- [List Rows](https://api.seatable.io/reference/listrows)
+- [Base Info](https://api.seatable.io/reference/getbaseinfo)
 
 ### Step 2: Update the row
 
-Next you have all the information to [update a row](https://api.seatable.io/reference/update-row). You can easily update multiple values in the row specified by the `row_id`. The `row` object contains `key:value` pairs with the column name as key and the desired values.
+Next you have all the information to [update a row](https://api.seatable.io/reference/updaterow). You can easily update multiple values in the row specified by the `row_id`. The `row` object contains `key:value` pairs with the column name as key and the desired values.
 
 <hr></details>
 
@@ -190,11 +190,11 @@ Next you have all the information to [update a row](https://api.seatable.io/refe
 
 ### Step 0: Prerequisites
 
-I assume that you already have a base with a table in which a file column exists. In addition I assume that you know how to generate a [Base-Token](/reference/get-base-token-with-api-token) from an API-Token. If not, check out the first example.
+I assume that you already have a base with a table in which a file column exists. In addition I assume that you know how to generate a [Base-Token](https://api.seatable.io/reference/getbasetokenwithapitoken) from an API-Token. If not, check out the first example.
 
 ### Step 1: Generate an upload link for this base
 
-First we have to [generate an upload link](https://api.seatable.io/reference/get-file-image-upload-link). Be aware that this requests needs the API-Token for authentification, because technically speaking it does not happen inside a base.
+First we have to [generate an upload link](https://api.seatable.io/reference/getuploadlink). Be aware that this requests needs the API-Token for authentification, because technically speaking it does not happen inside a base.
 
 The result will be look like this:
 
@@ -211,7 +211,7 @@ This is a temporary path, where SeaTable accepts new files that can be uploaded 
 
 ### Step 2: Upload the file
 
-Next you have to really upload the file to the base. The right API request is [Upload a file](https://api.seatable.io/reference/upload-file-image).
+Next you have to really upload the file to the base. The right API request is [Upload a file](https://api.seatable.io/reference/uploadfile).
 You have to provide the information you received from the last call. Don't get confused about `parent_path` and `parent_dir`. These are just the same values.
 
 Here is the input you should use: (example data)
@@ -226,7 +226,7 @@ To append the file an image or file column, you still need another API request.
 
 ### Step 3: Update an existing file/image column
 
-Now you have to [update a row](https://api.seatable.io/reference/update-row) and write the required information of the previously uploaded file to the right file/image column.
+Now you have to [update a row](https://api.seatable.io/reference/updaterow) and write the required information of the previously uploaded file to the right file/image column.
 Do not be confused by the fact that the upload of a file and an image is different. The `row` element has to be different. In case of an image you just have to provide the internal URL of the image as an array item. In cas of a file you have to provide more informations as an object.
 
 ```json Example how to add an already uploaded image to a row:
@@ -261,7 +261,7 @@ The following example can only be executed as team admin. All requests require a
 
 ### Step 1: Get an Account-Token
 
-Start with the call [Get Account Token](https://api.seatable.io/reference/get-account-token). It requires your username and password and will return your `account-token`. Threat this token like your password, because it can be used to execute all types of account operations.
+Start with the call [Get Account Token](https://api.seatable.io/reference/getaccounttokenfromusername). It requires your username and password and will return your `account-token`. Threat this token like your password, because it can be used to execute all types of account operations.
 
 ```json
 {
@@ -273,9 +273,9 @@ Start with the call [Get Account Token](https://api.seatable.io/reference/get-ac
 
 As soon as you have your `account-token` it is easy to get more information about your team and your team members. Use one of the following calls:
 
-- [Get Team Info](https://api.seatable.io/reference/get-team-info)
-- [List Team Members](https://api.seatable.io/reference/list-users-team)
-- [List Team Bases](https://api.seatable.io/reference/list-bases-team)
+- [Get Team Info](https://api.seatable.io/reference/getteaminfo)
+- [List Team Members](https://api.seatable.io/reference/listteamusers-1)
+- [List Team Bases](https://api.seatable.io/reference/listbases)
 
 Great. Now you can get all the information of your team via API.
 
@@ -286,14 +286,14 @@ Great. Now you can get all the information of your team via API.
 
 ### Step 1: Get an Account-Token
 
-Like as in the last example, start with the call [Get Account Token](https://api.seatable.io/reference/get-account-token).
+Like as in the last example, start with the call [Get Account Token](https://api.seatable.io/reference/getaccounttokenfromusername).
 
 ### Step 2: Get the user id of the user
 
-To enforce 2-Factor-Authentification (2FA) for one of your team members, you need the `email` (sometimes also call `user_id`). Every user has a unique email adress like `123456789f1e4c8d8e1c31415867317c@auth.local`. Use [List Team Members](https://api.seatable.io/reference/list-users-team) to get this unique value of the user you want to update.
+To enforce 2-Factor-Authentification (2FA) for one of your team members, you need the `email` (sometimes also call `user_id`). Every user has a unique email adress like `123456789f1e4c8d8e1c31415867317c@auth.local`. Use [List Team Members](https://api.seatable.io/reference/listteamusers-1) to get this unique value of the user you want to update.
 
 ### Step 3: Enforce 2FA
 
-Equipped with this `email` of the user, you can [Enforce 2FA](https://api.seatable.io/reference/team-admin-users-enforce-2fa) for this user. The next time the user opens SeaTable in his browser, he has to register for 2FA.
+Equipped with this `email` of the user, you can [Enforce 2FA](https://api.seatable.io/reference/enforcetwofactor-1) for this user. The next time the user opens SeaTable in his browser, he has to register for 2FA.
 
 <hr></details>

@@ -64,21 +64,21 @@ If this is the case, you should start thinking about how to reduce the number of
 
 ## Customization of limits
 
-SeaTable Dedicated customers and operators of their own SeaTable Server (Enterprise or Developer Edition) can adjust SeaTable's default limits according to their needs. These are the corresponding configuration files in the [SeaTable Admin Manual](https://manual.seatable.io):
+SeaTable Dedicated customers and operators of their own SeaTable Server (Enterprise or Developer Edition) can adjust SeaTable's default limits according to their needs. These are the corresponding configuration files in the [SeaTable Admin Manual](https://admin.seatable.io):
 
-- [dtable_server_config.conf](https://manual.seatable.io/config/dtable_server_config/)
-- [dtable_web_settings.py](https://manual.seatable.io/config/dtable_web_settings/)
-- [dtable-db.conf](https://manual.seatable.io/config/dtable_db_conf/)
+- [dtable_server_config.json](https://admin.seatable.io/configuration/dtable-server-config/)
+- [dtable_web_settings.py](https://admin.seatable.io/configuration/dtable-web-settings/)
+- [dtable-db.conf](https://admin.seatable.io/configuration/dtable-db-conf/)
 
 ## Size limits
 
 Besides the rate limits, there are size limits for how many rows you can manipulate with a **single call**. Of course, it is possible to execute multiple calls in a row as long as you stay below the rate limits.
 
-| Action and Endpoints                                                                                                | Max. number of rows |
-| :------------------------------------------------------------------------------------------------------------------ | :------------------ |
-| [List rows (with SQL)](/reference/list-rows-with-sql)<br/>`POST /dtable-db/api/v1/query/{...}/`                     | 10.000              |
-| [Insert, Update or Delete Rows (with SQL)](/reference/list-rows-with-sql)<br/>`POST /dtable-db/api/v1/query/{...}/` | unlimited           |
-| [List rows](/reference/list-rows)<br/>`GET /dtable-server/api/v1/dtables/{...}/rows/`                               | 1.000               |
-| [Append rows](/reference/append-rows)<br/>`POST /dtable-server/api/v1/dtables/{...}/batch-append-rows/`             | 1.000               |
-| [Update rows](/reference/update-rows)<br/>`PUT /dtable-server/api/v1/dtables/{...}/batch-update-rows/`              | 1.000               |
-| [Delete rows](/reference/delete-rows)<br/>`DELETE /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/`     | 10.000              |
+| Action and Endpoints                                                                                                                            | Max. number of rows |
+| :---------------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
+| [List rows (with SQL)](https://api.seatable.io/reference/querysqldeprecated)<br/>`POST /dtable-db/api/v1/query/{...}/`                          | 10.000              |
+| [Insert, Update or Delete Rows (with SQL)](https://api.seatable.io/reference/querysqldeprecated)<br/>`POST /dtable-db/api/v1/query/{...}/`      | unlimited           |
+| [List rows](https://api.seatable.io/reference/listrowsdeprecated)<br/>`GET /dtable-server/api/v1/dtables/{...}/rows/`                           | 1.000               |
+| [Append rows](https://api.seatable.io/reference/appendrowsdeprecated)<br/>`POST /dtable-server/api/v1/dtables/{...}/batch-append-rows/`         | 1.000               |
+| [Update rows](https://api.seatable.io/reference/updaterowsdeprecated)<br/>`PUT /dtable-server/api/v1/dtables/{...}/batch-update-rows/`          | 1.000               |
+| [Delete rows](https://api.seatable.io/reference/deleterowsdeprecated)<br/>`DELETE /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/` | 10.000              |
