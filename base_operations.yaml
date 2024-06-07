@@ -3214,7 +3214,7 @@ paths:
       description: >-
         Create a new column. You can only add one new column at the end of a table.
       requestBody:
-        description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/appendcolumns).
+        description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/appendcolumns-1).
         content:
           application/json:
             schema:

@@ -68,7 +68,7 @@ components:
         minimum: 1
       required: true
       description: >-
-        The ID of your team/organization. Numeric. Get it from [Get Team](/reference/get-team-info). Contact your team admin, if you
+        The ID of your team/organization. Numeric. Get it from [Get Team](/reference/getteaminfo). Contact your team admin, if you
         are not the admin.
       example: 1
     base_id:
@@ -120,7 +120,7 @@ components:
         minimum: 1
       required: true
       description: >-
-        The ID of the group to query. Can be retrieved from the call [List Groups in Your Team](/reference/list-groups-team).
+        The ID of the group to query. Can be retrieved from the call [List Groups in Your Team](/reference/listgroups-1).
       example: "1"
     user_id:
       name: user_id
@@ -477,7 +477,7 @@ paths:
 
         This request is to be distinguished from the next request, because
         cancelling the enforcement doesn't necesssarily [Disable 2FA for A User
-        in Team](/reference/team-admin-users-disable-2fa), which serves a different purpose.
+        in Team](/reference/disabletwofactor-1), which serves a different purpose.
       requestBody:
         content:
           application/json:
@@ -512,7 +512,7 @@ paths:
         disable 2FA for them.
 
         Again, this is to be distinguished from the request [Enforce 2FA for A
-        User in Team](/reference/team-admin-users-enforce-2fa) when you use `force_2fa = 0`, which only cancels the
+        User in Team](/reference/enforcetwofactor-1) when you use `force_2fa = 0`, which only cancels the
         enforcement of 2FA but doesn't necessarily disable it for them.
       security:
         - AccountTokenAuth: []

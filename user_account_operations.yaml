@@ -342,7 +342,7 @@ components:
         minimum: 1
       required: true
       description: >-
-        The ID of the common dataset. Can be retrieved by calling [List Common Datasets A Base Can Access](/reference/get_api-v2-1-dtable-common-datasets-1).
+        The ID of the common dataset. Can be retrieved by calling [List Common Datasets A Base Can Access](/reference/listcommondataset-1).
       example: 7
     app_token:
       name: app_token
@@ -2040,14 +2040,14 @@ components:
       type: string
       description: >-
         The icon of the base. Optional. Refer to ["Create A
-        Base"](/reference/post_api-v2-1-dtables)
+        Base"](/reference/createbase)
         for the list of available icons.
       example: icon-worksheet
     color:
       type: string
       description: >-
         The icon color of the base. Optional. Refer to ["Create A
-        Base"](/reference/post_api-v2-1-dtables) for the list of available icon colors.
+        Base"](/reference/createbase) for the list of available icon colors.
       example: "#E91E63"
     folder_name:
       type: string
@@ -2552,7 +2552,7 @@ paths:
         - A new text column "Name" (with the column's `key` of `0000`);
 
         - Three empty rows (The row's IDs are randomly generated. Use the call
-        [List Rows](/reference/get_dtable-server-api-v1-dtables-base-uuid-rows-1) to see their IDs).
+        [List Rows](/reference/listrows) to see their IDs).
             
 
         Optionally, you can select icons and colors from the following list to
@@ -3064,7 +3064,7 @@ paths:
       operationId: restoreTrashedBase
       description: >-
         Restore a trashed base from the trash bin. The base's ID can be
-        retrieved from the call [List Trashed Bases](/reference/get_api-v2-1-trash-dtables-1). The base's ID is written
+        retrieved from the call [List Trashed Bases](/reference/listtrashedbases-1). The base's ID is written
         directly in the URL, like in this example, `497`.
       security:
         - AccountTokenAuth: []
@@ -4309,7 +4309,7 @@ paths:
         does not includ groups and group members sharing this base.
 
 
-        To see which groups are sharing this base, use the request [List Groups Base is Shared To](/reference/get_api-v2-1-workspace-workspace-id-dtable-base-name-group-shares-1).
+        To see which groups are sharing this base, use the request [List Groups Base is Shared To](/reference/listgroupshares).
       security:
         - AccountTokenAuth: []
       parameters:
@@ -5301,8 +5301,7 @@ paths:
         set.
 
         *   The `token` returned is the invite link's token. You'd need it in
-        other requests like [Get Base-Token with Invite-Link](/reference/get_api-v2-1-dtable-share-link-access-token-1), or
-        [Delete Invite Link](/reference/delete_api-v2-1-dtables-invite-links-invite-link-token-1).
+        other requests like [Delete Invite Link](/reference/deleteinvitelink-1).
       requestBody:
         content:
           multipart/form-data:
@@ -5355,7 +5354,7 @@ paths:
         *   either use the base sharing dialogue on the web interface to stop
         sharing the base to certain users, or
 
-        *   use the API request to [Stop Sharing Base to a user](/reference/delete_api-v2-1-workspace-workspace-id-dtable-base-name-share-1).
+        *   use the API request to [Stop Sharing Base to a user](/reference/deleteusershare).
       security:
         - AccountTokenAuth: []
       parameters:
@@ -5461,7 +5460,7 @@ paths:
         - Common Dataset
       summary: Import Common Dataset
       operationId: importCommonDataset
-      description: "Import a common dataset into your destination base. This will create a new table labeled as a common dataset table.\r\n\r\nTo import a common dataset into a base, the following conditions have to be met:\r\n\r\n- The destination base is in a group, and\r\n- You are the admin or owner of this group, and\r\n- This group has access to the common dataset.\r\n\r\nThe ID of the common dataset can be retrieved via the request e.g. [List Common Datasets A Base Can Access](/reference/get_api-v2-1-dtable-common-datasets-1)."
+      description: "Import a common dataset into your destination base. This will create a new table labeled as a common dataset table.\r\n\r\nTo import a common dataset into a base, the following conditions have to be met:\r\n\r\n- The destination base is in a group, and\r\n- You are the admin or owner of this group, and\r\n- This group has access to the common dataset.\r\n\r\nThe ID of the common dataset can be retrieved via the request e.g. [List Common Datasets A Base Can Access](/reference/listcommondataset-1)."
       requestBody:
         content:
           multipart/form-data:
@@ -5593,7 +5592,7 @@ paths:
       operationId: deleteCommonDataset
       description: >-
         Delete a common dataset by its ID. This ID could be retrieved by the
-        call e.g. [List Common Datasets A Base Can Access](/reference/get_api-v2-1-dtable-common-datasets-1).
+        call e.g. [List Common Datasets A Base Can Access](/reference/listcommondataset-1).
 
 
         This request doesn't delete anything in real. It just stops sharing that
@@ -6505,7 +6504,7 @@ paths:
         - `type` should be `send_email`;
 
         - `account_id` is the ID of the third party account you added in this
-        base. Refer to [Third Party Email Accounts](/reference/third-party-email-accounts) for details;
+        base. Refer to [Third Party Email Accounts](/reference/listemailaccounts) for details;
 
         - `send_to` is the receiver's email address. If you would like to send
         to multiple receivers, separate their email addresses with comma (,)
@@ -6984,12 +6983,12 @@ paths:
 
 
         The `notification_rule_id` is the ID of the notification to be updated.
-        This can be retrieved by [List Notification Rules](/reference/get_api-v2-1-workspace-workspace-id-dtable-base-name-notification-rules-1) or can be
-        seen when you [Add Base Notification Rule](/reference/post_api-v2-1-workspace-workspace-id-dtable-base-name-notification-rules-1).
+        This can be retrieved by [List Notification Rules](/reference/listnotificationrules-1) or can be
+        seen when you [Add Base Notification Rule](/reference/addnotificationrule).
 
 
         For the exact params that you can update, refer to the params list in
-        the call [Add Base Notification Rule](/reference/post_api-v2-1-workspace-workspace-id-dtable-base-name-notification-rules-1).
+        the call [Add Base Notification Rule](/reference/addnotificationrule).
       requestBody:
         content:
           application/json:
@@ -7040,8 +7039,8 @@ paths:
 
 
         The `notification_rule_id` is the ID of the notification to be deleted.
-        This can be retrieved by [List Notification Rules](/reference/get_api-v2-1-workspace-workspace-id-dtable-base-name-notification-rules-1) or can be
-        seen when you [Add Base Notification Rule](/reference/post_api-v2-1-workspace-workspace-id-dtable-base-name-notification-rules-1).
+        This can be retrieved by [List Notification Rules](/reference/listnotificationrules-1) or can be
+        seen when you [Add Base Notification Rule](/reference/addnotificationrule).
       security:
         - AccountTokenAuth: []
       parameters:
@@ -7224,8 +7223,8 @@ paths:
       description: >-
         Change the account name, type, or detail (host, port, username or
         password) of a third party account using the account's ID in the URL.
-        This ID can be retrieved by the call [List 3rd Party Email Accounts](/reference/get_api-v2-1-third-party-accounts-base-uuid-1), or
-        by [Add 3rd Party Email Account](/reference/post_api-v2-1-third-party-accounts-base-uuid-1).
+        This ID can be retrieved by the call [List 3rd Party Email Accounts](/reference/listemailaccounts), or
+        by [Add 3rd Party Email Account](/reference/addemailaccount).
       requestBody:
         content:
           application/json:
@@ -7525,7 +7524,7 @@ paths:
 
 
         The `commit_id` is the ID of the snapshot to be restored. This can be
-        retrieved with the call [List Snapshots](/reference/get_api-v2-1-workspace-workspace-id-dtable-base-name-snapshots).
+        retrieved with the call [List Snapshots](/reference/listsnapshots).
 
 
         You can give the restored base a new name by defining the value of the

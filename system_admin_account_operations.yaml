@@ -228,7 +228,7 @@ components:
         minimum: 1
       required: true
       description: >-
-        The id of your team/organization. Get it from [Get Team](/reference/get-team-info). Contact your team admin, if you
+        The id of your team/organization. Get it from [Get Team](/reference/getteaminfo). Contact your team admin, if you
         are not the admin.
       example: 1
     base_id:
@@ -790,7 +790,7 @@ paths:
 
 
         If the user is in a team, you cannot delete them with this request, but
-        with the request [Delete Team User](/reference/delete-team-user).
+        with the request [Delete Team User](/reference/deleteteamuser).
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1000,7 +1000,7 @@ paths:
 
         This request is to be distinguished from the next request, because
         cancelling the enforcement doesn't necesssarily [Disable 2FA for A User
-        in System](/reference/disable-2fa), which serves a different purpose.
+        in System](/reference/disabletwofactor), which serves a different purpose.
       requestBody:
         content:
           application/json:
@@ -2524,7 +2524,7 @@ paths:
         List all the external links and view external links of a base. For this
         request, you'll need the base's `base_id`, which is to be distinguished
         from the base's `base_uuid`. You can retrieve a base's `base_id` with
-        the API request e.g. [List User's Bases](/reference/list-users-bases).
+        the API request e.g. [List User's Bases](/reference/listusersbases).
       security:
         - AccountTokenAuth: []
       parameters:
@@ -2743,7 +2743,7 @@ paths:
       summary: Delete Form
       operationId: deleteForm
       description: >-
-        Delete a form with its token. Get a form's token with the call [List Forms](/reference/user-forms-list-forms).
+        Delete a form with its token. Get a form's token with the call [List Forms](/reference/listforms).
       security:
         - AccountTokenAuth: []
       parameters:
@@ -2796,7 +2796,7 @@ paths:
       operationId: deleteDataCollectionForms
       description: >-
         Delete a data collection table with its token. The token can be
-        retrieved with the call [List Data Collection Tables](/reference/list-data-collection-forms), or from the
+        retrieved with the call [List Data Collection Tables](/reference/listdatacollectionforms), or from the
         table's URL as its suffix.
       security:
         - AccountTokenAuth: []
@@ -3457,7 +3457,7 @@ paths:
       summary: Update Plugin
       operationId: updatePlugin
       description: >-
-        Update a plugin via its ID (retrieved from the call [List Plugins](/reference/list-plugins)) with a .zip file.
+        Update a plugin via its ID (retrieved from the call [List Plugins](/reference/listplugins)) with a .zip file.
       requestBody:
         content:
           multipart/form-data:
@@ -3510,7 +3510,7 @@ paths:
       summary: Delete Plugin
       operationId: deletePlugin
       description: >-
-        Delete a plugin via its ID (retrieved from the call [List Plugins](/reference/list-plugins)).
+        Delete a plugin via its ID (retrieved from the call [List Plugins](/reference/listplugins)).
       security:
         - AccountTokenAuth: []
       parameters:

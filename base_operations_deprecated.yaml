@@ -557,7 +557,7 @@ components:
 
     link_id:
       type: string
-      description: Every *link column* has a `key` and `link_id` in the column object. Use [Get Metadata](/reference/get-metadata) or [Get Base Info](/reference/get-base-info) to get this `link_id`. Don't use the `key` of the link column.
+      description: Every *link column* has a `key` and `link_id` in the column object. Use [Get Metadata](/reference/getmetadatadeprecated) or [Get Base Info](/reference/getbaseinfodeprecated) to get this `link_id`. Don't use the `key` of the link column.
       minLength: 4
       maxLength: 4
       example: jYc7
@@ -2625,7 +2625,7 @@ paths:
 
         > 📘 Returns no data from the big data backend
         > 
-        > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/list-rows-with-sql) instead.
+        > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/querysqldeprecated) instead.
 
         > 🚧 Returns at most 1 000 rows
         >
@@ -2937,7 +2937,7 @@ paths:
         > 🚧 Deprecated since version 2.3
         > 
         > This request has been depricated since SeaTable 2.3. This means you can probably still use it, but it will not be maintained and will probably be removed/deactivated any time without further notice in the future.
-        > Please use [List rows (with SQL)](/reference/list-rows-with-sql) or [List rows](/reference/list-rows) instead.
+        > Please use [List rows (with SQL)](/reference/querysqldeprecated) or [List rows](/reference/listrowsdeprecated) instead.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2961,7 +2961,7 @@ paths:
       description: |
         You can link a row to another row in the same table, or in another table in the same base. **Before you use this request**, you should create a
         link column first, and retrieve its `link_id`. This value is an attribute of a link column, and can also be retrieved from the call
-        [Get Metadata](/reference/get-metadata).
+        [Get Metadata](/reference/getmetadatadeprecated).
 
         Check out the [Models](/reference/models#a-link) page to get more information about the structure of a link.
       requestBody:
@@ -2992,7 +2992,7 @@ paths:
 
         > 🚧 No support for Big Data
         >
-        > This request does not support to add links in big data rows. There is another call [supporting big data](/reference/post_dtable-db-api-v1-base-base-uuid-links).
+        > This request does not support to add links in big data rows. There is another call [supporting big data](/reference/createbigdatarowslinkdeprecated).
       requestBody:
         content:
           application/json:
@@ -3495,7 +3495,7 @@ paths:
       description: Create a new view in the current table.
 
         In the **request body**, use `name` for the name of the new view. After
-        creating the new view, use the request [Update View](/reference/update-view) to further
+        creating the new view, use the request [Update View](/reference/updateviewdeprecated) to further
         define your view.
       requestBody:
         content:
@@ -3705,7 +3705,7 @@ paths:
       description: >-
         Create a new column. You can only add one new column at the end of a table.
       requestBody:
-        description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/append-columns).
+        description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/appendcolumnsdeprecated).
         content:
           application/json:
             schema:
@@ -4792,7 +4792,7 @@ paths:
       operationId: createSnapshotDeprecated
       description: |
         Creates a snapshot for the current base. The pre-conditions are, that there's at least one change since the last snapshot and at least 10 minutes have passed. 
-        To get a list of already existing snapshots, use the the request [List Snapshots](/reference/list-snapshots).
+        To get a list of already existing snapshots, use the the request [List Snapshots](/reference/listsnapshots).
 
       requestBody:
         content:
