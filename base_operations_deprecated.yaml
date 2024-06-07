@@ -3845,7 +3845,7 @@ paths:
       operationId: appendColumnsDeprecated
       description: >-
         Use this request to append multiple columns to your table at once. As
-        for the request body, refer to the previous call, [Insert Column](/reference/insert-column),
+        for the request body, refer to the previous call, [Insert Column](/reference/insertcolumndeprecated),
         for a detailed list of column formats.
 
         These requested and optional params can be used in the request body:
@@ -3857,8 +3857,11 @@ paths:
 
         *   `column_name` is the name of your new column, required;
         *   `column_type` is the type of your new column, required;
-        *   `data` is the format setting of a special column, required in case.
-        For details, refer to the call [Insert Column](/reference/insert-column).
+        *   `column_data` is the format setting of a special column, required in case.
+        For details, refer to the call [Insert Column](/reference/insertcolumndeprecated).
+
+        Please note that you can't append `formula`, `link` or `link-formula` columns using this endpoint.
+        Use the [Insert Column](https://api.seatable.io/reference/insertcolumndeprecated) endpoint instead.
       requestBody:
         content:
           application/json:
@@ -3885,9 +3888,6 @@ paths:
                       - $ref: "#/components/schemas/url_column"
                       - $ref: "#/components/schemas/checkbox_column"
                       - $ref: "#/components/schemas/rating_column"
-                      - $ref: "#/components/schemas/formula_column"
-                      - $ref: "#/components/schemas/link_column"
-                      - $ref: "#/components/schemas/link_formula_column"
                       - $ref: "#/components/schemas/creator_column"
                       - $ref: "#/components/schemas/ctime_column"
                       - $ref: "#/components/schemas/last_modifier_column"
