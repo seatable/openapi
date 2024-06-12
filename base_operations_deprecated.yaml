@@ -763,12 +763,12 @@ components:
       enum:
         [
           "contains",
-          "does not contain",
+          "does_not_contain",
           "is",
-          "is not",
-          "is empty",
-          "is not empty",
-          "is current user's ID",
+          "is_not",
+          "is_empty",
+          "is_not_empty",
+          "is_current_user_ID",
         ]
 
     number_filter_predicate:
