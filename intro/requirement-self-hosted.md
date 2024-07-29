@@ -53,41 +53,11 @@ server {
     listen 80;
     server_name {your.seatable.server};
 
-    # rewrite to https
-    location / {
-        rewrite ^ https://$http_host$request_uri? permanent;
-    }
-    # for letsencrypt
-    location ^~ /.well-known/acme-challenge/ {
-        alias /var/www/challenges/;
-        try_files $uri =404;
-    }
-}
-
-server {
-    server_name {your.seatable.server};
-    listen 443 ssl;
-    ssl_certificate /opt/ssl/{your.seatable.server}.crt;
-    ssl_certificate_key /opt/ssl/{your.seatable.server}.key;
-
-    # SSL Hardening
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers AES256+EECDH:AES256+EDH:!aNULL;
-    ssl_prefer_server_ciphers on;
-    ssl_ecdh_curve secp384r1;
-
-    ssl_session_timeout  10m;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_tickets off;
-
-    # general proxy_settings
-    proxy_set_header X-Forwarded-For $remote_addr;
-
     # CORS seetings to allow API from readme.com
     proxy_hide_header   'Access-Control-Allow-Origin';
     add_header 'Access-Control-Allow-Origin' '*' always;
     add_header 'Access-Control-Allow-Methods' 'GET,POST,PUT,DELETE,OPTIONS' always;
-    add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, authorization, token, deviceType' always;
+    add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, authorization, token, deviceType, x-seafile-otp' always;
     if ($request_method = 'OPTIONS') {
 	    return 204;
     }
@@ -103,66 +73,7 @@ server {
         access_log      /opt/nginx-logs/dtable-web.access.log seatableformat;
         error_log       /opt/nginx-logs/dtable-web.error.log;
     }
-
-    location /seafhttp {
-        rewrite ^/seafhttp(.*)$ $1 break;
-        proxy_pass http://127.0.0.1:8082;
-        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_request_buffering off;
-        proxy_connect_timeout  36000s;
-        proxy_read_timeout     36000s;
-        proxy_send_timeout     36000s;
-        send_timeout           36000s;
-        client_max_body_size   0;
-        access_log             /opt/nginx-logs/seafhttp.access.log seatableformat;
-        error_log              /opt/nginx-logs/seafhttp.error.log;
-    }
-
-    location /media {
-        root /opt/seatable/seatable-server-latest/dtable-web;
-    }
-
-    location /socket.io {
-        proxy_pass http://dtable_servers;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_redirect   off;
-        proxy_buffers    8 32k;
-        proxy_buffer_size 64k;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $http_host;
-        proxy_set_header X-NginX-Proxy true;
-        access_log      /opt/nginx-logs/socket-io.access.log seatableformat;
-        error_log       /opt/nginx-logs/socket-io.error.log;
-    }
-
-    location /dtable-server {
-        rewrite ^/dtable-server/(.*)$ /$1 break;
-        proxy_pass         http://dtable_servers;
-        proxy_redirect     off;
-        proxy_set_header   Host              $host;
-        proxy_set_header   X-Real-IP         $remote_addr;
-        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
-        proxy_set_header   X-Forwarded-Host  $server_name;
-        proxy_set_header   X-Forwarded-Proto $scheme;
-        client_max_body_size 50m;
-        access_log         /opt/nginx-logs/dtable-server.access.log seatableformat;
-        error_log          /opt/nginx-logs/dtable-server.error.log;
-    }
-
-    location /dtable-db/ {
-        proxy_pass         http://127.0.0.1:7777/;
-        proxy_redirect     off;
-        proxy_set_header   Host              $host;
-        proxy_set_header   X-Real-IP         $remote_addr;
-        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
-        proxy_set_header   X-Forwarded-Host  $server_name;
-        proxy_set_header   X-Forwarded-Proto $scheme;
-        access_log         /opt/nginx-logs/dtable-db.access.log seatableformat;
-        error_log          /opt/nginx-logs/dtable-db.error.log;
-    }
+    ...
 }
 ```
 
@@ -218,7 +129,7 @@ server {
     proxy_hide_header   'Access-Control-Allow-Origin';
     add_header 'Access-Control-Allow-Origin' '*' always;
     add_header 'Access-Control-Allow-Methods' 'GET,POST,PUT,DELETE,OPTIONS' always;
-    add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, authorization, token, deviceType' always;
+    add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, authorization, token, deviceType, x-seafile-otp' always;
     if ($request_method = 'OPTIONS') {
 	    return 204;
     }
@@ -314,7 +225,7 @@ To prevent this CORS must be allowed and therefore the following code is necessa
 proxy_hide_header   'Access-Control-Allow-Origin';
 add_header 'Access-Control-Allow-Origin' '*' always;
 add_header 'Access-Control-Allow-Methods' 'GET,POST,PUT,DELETE,OPTIONS' always;
-add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, authorization, token, deviceType' always;
+add_header 'Access-Control-Allow-Headers' 'Content-Type, Accept, authorization, token, deviceType, x-seafile-otp' always;
 if ($request_method = 'OPTIONS') {
     return 204;
 }
