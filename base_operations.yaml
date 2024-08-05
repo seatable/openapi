@@ -1755,6 +1755,9 @@ components:
         level1_linked_column:
           type: string
           description: Name of the column in the linked table to look up.
+        level2_linked_column:
+          type: string
+          description: Name of the column in the linked table linked by level1_linked_column to look up. The type of level1_linked_column should be 'link'.
       required:
         - formula
         - link_column
