@@ -2647,7 +2647,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/delete_row"
+              $ref: "#/components/schemas/delete_rows"
       responses:
         "200":
           description: OK
