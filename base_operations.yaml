@@ -4033,6 +4033,50 @@ paths:
               example:
                 success: true
 
+  /api-gateway/api/v2/dtables/{base_uuid}/ui-toasts/:
+    post:
+      tags:
+        - Notifications
+      summary: Send toast notification
+      operationId: SendToastNotification
+      description: Send a toast notification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to_user:
+                  type: string
+                  description: 'target username'
+                  example: "244b4667d1754bb4afa2c2cb7369d244@auth.local"
+                toast_type:
+                  type: string
+                  description: 'type of toast, e.g., success, warning, error'
+                  enum: ["success", "warning", "error"]
+                  example: "success"
+                detial:
+                  type: object
+                  properties:
+                    msg:
+                      type: string
+                      description: 'message will be toasted'
+                      example: 'hello world!'
+                  
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+
   # Activities & Logs
   /api-gateway/api/v2/dtables/{base_uuid}/operations/:
     get:
