@@ -4042,7 +4042,7 @@ paths:
       description: Send a toast notification
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               type: object
               properties:
@@ -4052,14 +4052,17 @@ paths:
                   example: "244b4667d1754bb4afa2c2cb7369d244@auth.local"
                 toast_type:
                   type: string
-                  description: 'type of toast, e.g., success, warnning, error'
+                  description: 'type of toast, e.g., success, warning, error'
+                  enum: ["success", "warning", "error"]
                   example: "success"
                 detial:
                   type: object
-                  description: 'message detail with at least one properties msg'
-                  example: {
-                    'msg': 'good'
-                  }
+                  properties:
+                    msg:
+                      type: string
+                      description: 'message will be toasted'
+                      example: 'hello world!'
+                  
       security:
         - BaseTokenAuth: []
       parameters:
