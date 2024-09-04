@@ -1029,8 +1029,12 @@ paths:
             schema:
               type: object
               properties:
-                user_id:
-                  $ref: "#/components/schemas/team_admin_user_id"
+                email:
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: List of emails (xxx@auth.local)
       security:
         - AccountTokenAuth: []
       parameters:
