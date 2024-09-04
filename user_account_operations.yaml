@@ -4102,6 +4102,82 @@ paths:
                 type: object
               example:
                 success: true
+  /api/v2.1/workspace/{workspace_id}/import-dtable/:
+    post:
+      tags:
+        - Import & Export
+      summary: Import Base from dtable file
+      operationId: importBasefromDTableFiled
+      description: >-
+        With this request, you can create a base by uploading a .dtable file.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                dtable:
+                  $ref: "#/components/schemas/dtable"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_id:
+                    type: string
+                    format: uuid
+                  table:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      workspace_id:
+                        type: integer
+                      uuid:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+                      color:
+                        type: string
+                        nullable: true
+                      text_color:
+                        type: string
+                        nullable: true
+                      icon:
+                        type: string
+                        nullable: true
+                      is_encrypted:
+                        type: boolean
+                      in_storage:
+                        type: boolean
+              example:
+                task_id: "50a61dbe-7859-43ce-9998-fab221ef589e"
+                table:
+                  id: 12
+                  workspace_id: 2
+                  uuid: "ac36a16e-d2ab-410e-897d-087cba95fc71"
+                  name: "Test base for import"
+                  created_at: "2024-09-04T17:40:00+02:00"
+                  updated_at: "2024-09-04T17:40:00+02:00"
+                  color: null
+                  text_color: null
+                  icon: null
+                  is_encrypted: false
+                  in_storage: true
   /api/v2.1/workspace/{workspace_id}/synchronous-import/update-table-via-excel-csv/:
     post:
       tags:
