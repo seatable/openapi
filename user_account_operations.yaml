@@ -4107,7 +4107,7 @@ paths:
       tags:
         - Import & Export
       summary: Import Base from dtable file
-      operationId: importBasefromDTableFiled
+      operationId: importBasefromDTableFile
       description: >-
         With this request, you can create a base by uploading a .dtable file.
       requestBody:
