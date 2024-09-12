@@ -32,22 +32,22 @@ postman-combine-collections -f 'postman/*.json' --name "${COLLECTION_NAME}" -o p
 jq '{"collection": .}' < postman/collection.json > postman/collection.wrapped.json
 
 # Create Postman collection
-response=$(curl -X POST "https://api.getpostman.com/collections" \
+response=$(curl -X POST "https://api.getpostman.com/collections?workspace=80b1ca4c-1f9e-41bf-b0e1-6bde43e012fc" \
     -H "X-Api-Key: $POSTMAN_API_KEY" \
     -H 'Content-Type: application/json' \
     --data '@postman/collection.wrapped.json')
 
-echo "hier"
-echo $response
-collection_uid=$(echo "$response" | jq -r '.collection.id')
-echo $collection_uid
+#echo "hier"
+#echo $response
+#collection_uid=$(echo "$response" | jq -r '.collection.id')
+#echo $collection_uid
 
 # Set the collection to public
-curl -X PUT "https://api.getpostman.com/collections/$collection_uid" \
-    -H "X-Api-Key: $POSTMAN_API_KEY" \
-    -H 'Content-Type: application/json' \
-    --data '{
-        "collection": {
-            "visibility": "public"
-        }
-    }'
+#curl -X PUT "https://api.getpostman.com/collections/$collection_uid" \
+#    -H "X-Api-Key: $POSTMAN_API_KEY" \
+#    -H 'Content-Type: application/json' \
+#    --data '{
+#        "collection": {
+#            "visibility": "public"
+#        }
+#    }'
