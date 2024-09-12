@@ -23,7 +23,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > - [Repair Base](/reference/repairbase) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span>
 > - [List Audit Logs](/reference/listauditlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 > - [List Big Data Operation Logs](/reference/listbigdataoperationlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
-
+>
 > **Account Operations - User**
 >
 > - [List Big Data Backups](/reference/listbigdatabackups) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>

@@ -25,7 +25,8 @@ Take a look at our [development quick start guide](https://seatable.io/docs/?lan
 > 👍 New Online Course Now Available: Level One (Beginner)!
 >
 > We are excited to announce the launch of our brand-new online course, designed especially for those who want to build a solid foundation in SeaTable. At the end of the course, you’ll have the opportunity to test your knowledge with a quiz. Successfully passing the quiz will earn you a new badge on SeaTable community forum, proudly displaying your proficiency level for everyone to see!
-> Ready to get started? [Let's go](https://seatable.io/en/docs/online-kurs/level-eins-einfuehrung/?lang=auto)
+>
+> Ready to get started? **[Let's go](https://seatable.io/en/docs/online-kurs/level-eins-einfuehrung/?lang=auto)**
 
 ## Prerequisites
 
