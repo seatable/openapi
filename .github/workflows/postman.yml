@@ -3,7 +3,7 @@ name: Postman
 on:
   push:
     tags:
-      - 'postman-v*.*'
+      - "postman-v*.*"
 
 env:
   POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
@@ -21,6 +21,8 @@ jobs:
           TAG="${{ github.ref_name }}"
           COLLECTION_NAME="SeaTable ${TAG#postman-}"
           echo "COLLECTION_NAME=${COLLECTION_NAME}" >> $GITHUB_ENV
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
       - name: Sync with Postman
         run: ./sync-with-postman.sh
       - name: Upload artifacts

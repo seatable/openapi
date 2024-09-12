@@ -13,7 +13,6 @@ if [[ -z "${COLLECTION_NAME-}" ]]; then
 fi
 
 mkdir -p postman
-apt-get install jq
 
 # Convert spec files to Postman collections
 for filename in *.yaml; do
