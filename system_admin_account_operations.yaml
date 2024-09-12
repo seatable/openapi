@@ -3250,7 +3250,10 @@ paths:
                 dtable_name: Guest registration
   /api/v2.1/dtables/{base_uuid}/big-data-operation-logs/:
     get:
+      tags:
+        - Logs
       summary: List Big Data Operation Logs
+
       operationId: listBigDataOperationLogs
       description: Fetches big data operation logs for a specified base identified by its base_uuid.
       security:
@@ -3337,6 +3340,8 @@ paths:
                                 _mtime: "2024-08-19T11:53:13.103871879+08:00"
   /api/v2.1/admin/audit-logs/:
     get:
+      tags:
+        - Logs
       summary: List Audit Logs
       operationId: listAuditLogs
       description: Fetches audit logs for the system administrator.
@@ -3909,7 +3914,7 @@ paths:
     put:
       tags:
         - Maintenance
-      summary: Repair Base.
+      summary: Repair Base
       operationId: repairBase
       description: Repairs a base identified by its base_uuid. This repair scripts tries to detect errors in the json object and fix common problems.
       security:
