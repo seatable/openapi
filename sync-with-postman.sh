@@ -13,6 +13,7 @@ if [[ -z "${COLLECTION_NAME-}" ]]; then
 fi
 
 mkdir -p postman
+apt-get install jq
 
 # Convert spec files to Postman collections
 for filename in *.yaml; do
@@ -32,7 +33,12 @@ postman-combine-collections -f 'postman/*.json' --name "${COLLECTION_NAME}" -o p
 jq '{"collection": .}' < postman/collection.json > postman/collection.wrapped.json
 
 # Create Postman collection
-curl -X POST "https://api.getpostman.com/collections" \
+response=$(curl -X POST "https://api.getpostman.com/collections/seatable/seatable-api" \
     -H "X-Api-Key: $POSTMAN_API_KEY" \
     -H 'Content-Type: application/json' \
-    --data '@postman/collection.wrapped.json'
+    --data '@postman/collection.wrapped.json')
+
+echo "hier"
+echo $response
+id=$(echo "$response" | jq -r '.collection.id')
+echo $id
