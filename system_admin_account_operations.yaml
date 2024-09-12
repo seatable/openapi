@@ -3255,13 +3255,12 @@ paths:
       summary: List Big Data Operation Logs
 
       operationId: listBigDataOperationLogs
-      description: Fetches big data operation logs for a specified base identified by its base_uuid.
+      description: Fetches big data operation logs for a specified base identified by its base_uuid. Every page returns 100 entries by default.
       security:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/page"
-        #- $ref: "#/components/parameters/per_page" - TODO: clarify, if added later or on purpose?
       responses:
         "200":
           description: Successful response with the queried big data operation logs.

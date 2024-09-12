@@ -16,7 +16,18 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 5.1 (xx.09.2024) - to be released
 
-...
+> 📘 New requests
+>
+> **Account Operations - System Admin**
+>
+> - [Repair Base](/reference/repairbase) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span>
+> - [List Audit Logs](/reference/listauditlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List Big Data Operation Logs](/reference/listbigdataoperationlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+
+> **Account Operations - User**
+>
+> - [List Big Data Backups](/reference/listbigdatabackups) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get Big Data Status](/reference/getbigdatastatus) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 
 ## Version 5.0 (15.07.2024)
 
@@ -61,8 +72,8 @@ The SeaTable API Reference for version 4.3 is no longer accessible here. However
 >
 > **Base Operations**
 >
-> [Create Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/dtable-db/api/v1/base/{base_uuid}/links/
-[Delete Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
+> - [Create Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
+> - [Delete Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
 >
 > **Account Operations - System Admin**
 >
