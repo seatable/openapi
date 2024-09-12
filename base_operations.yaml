@@ -1580,6 +1580,37 @@ components:
         - $ref: "#/components/schemas/table_name_object"
         - $ref: "#/components/schemas/checkbox_column"
 
+    geo_column_format:
+      description: Specify the geolocation column.
+      type: object
+      properties:
+        geo_format:
+          type: string
+          enum: ["lng_lat", "county_region"]
+
+    geolocation_column:
+      title: Geolocation
+      type: object
+      description: Add a geolocation column.
+      properties:
+        column_name:
+          $ref: "#/components/schemas/column_name"
+        column_type:
+          type: string
+          enum: ["checkbox"]
+        anchor_column:
+          $ref: "#/components/schemas/anchor_column"
+        column_data:
+          $ref: "#/components/schemas/geo_column_format"
+      required:
+        - column_name
+        - column_type
+
+    geolocation_column_with_table_name:
+      allOf:
+        - $ref: "#/components/schemas/table_name_object"
+        - $ref: "#/components/schemas/geolocation_column"
+
     rating_column:
       title: Rating
       type: object
@@ -3261,6 +3292,7 @@ paths:
                 - $ref: "#/components/schemas/email_column_with_table_name"
                 - $ref: "#/components/schemas/url_column_with_table_name"
                 - $ref: "#/components/schemas/checkbox_column_with_table_name"
+                - $ref: "#/components/schemas/geolocation_column_with_table_name"
                 - $ref: "#/components/schemas/rating_column_with_table_name"
                 - $ref: "#/components/schemas/formula_column_with_table_name"
                 - $ref: "#/components/schemas/link_column_with_table_name"
