@@ -1,0 +1,33 @@
+name: Postman
+
+on:
+  push:
+    tags:
+      - 'postman-v*.*'
+
+env:
+  POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+
+jobs:
+  postman:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install openapi-to-postmanv2 (v4) + postman-combine-collections
+        run: npm i -g openapi-to-postmanv2@4 postman-combine-collections
+      - name: Set COLLECTON_NAME variable
+        run: |
+          TAG="${{ github.ref_name }}"
+          COLLECTION_NAME="SeaTable ${TAG#postman-}"
+          echo "COLLECTION_NAME=${COLLECTION_NAME}" >> $GITHUB_ENV
+      - name: Sync with Postman
+        run: ./sync-with-postman.sh
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        # Always upload artifacts, even on failed runs
+        if: always()
+        with:
+          name: postman-collections
+          path: postman/
+          retention-days: 7
