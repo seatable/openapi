@@ -3261,7 +3261,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/per_page"
+        #- $ref: "#/components/parameters/per_page" - TODO: clarify, if added later or on purpose?
       responses:
         "200":
           description: Successful response with the queried big data operation logs.
