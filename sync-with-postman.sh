@@ -32,7 +32,7 @@ postman-combine-collections -f 'postman/*.json' --name "${COLLECTION_NAME}" -o p
 jq '{"collection": .}' < postman/collection.json > postman/collection.wrapped.json
 
 # Create Postman collection
-response=$(curl -X POST "https://api.getpostman.com/collections/seatable/seatable-api" \
+response=$(curl -X POST "https://api.getpostman.com/collections/seatable-api" \
     -H "X-Api-Key: $POSTMAN_API_KEY" \
     -H 'Content-Type: application/json' \
     --data '@postman/collection.wrapped.json')
