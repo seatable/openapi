@@ -3752,6 +3752,29 @@ paths:
                     org_name: SeaTable GmbH
                 count: 1
 
+  # Maintenance
+  /api/v2.1/admin/dtable/{base_uuid}/repair/:
+    put:
+      tags:
+        - Maintenance
+      summary: Repair a base.
+      description: Repairs a base identified by its base_uuid. This repair scripts tries to detect errors in the json object and fix common problems.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: Successful response indicating that the dtable was repaired.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
   # System Notifications
   /api/v2.1/admin/sys-user-notifications/:
     get:
