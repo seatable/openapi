@@ -7589,6 +7589,27 @@ paths:
                   - dtable_name: "Example"
                     version: "16"
                     ctime: "2021-03-10T16:01:12+00:00"
+  /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/big-data-state/:
+    get:
+      tags:
+        - Snapshots
+      summary: Get Big Data Status
+      operationId: getBigDataStatus
+      description: Verifies if Big Data is activated in the base.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/workspace_id"
+        - $ref: "#/components/parameters/base_name"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                big_data_enabled: true
 
   /api/v2.1/universal-apps/:
     get:
