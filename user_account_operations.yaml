@@ -7912,3 +7912,91 @@ paths:
                     row_data: [...]
                     op_app: null
                     avatar_url: "https://cloud.seatable.io/media/avatars/default.png"
+  /api/v2.1/dtables/{base_uuid}/big-data-operation-logs/:
+    get:
+      tags: [Activities & Logs]
+      summary: Get Big Data Operation Logs
+
+      operationId: getBigDataOperationLogs
+      description: Fetches big data operation logs for a specified base identified by its base_uuid. Every page returns 100 entries by default.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Successful response with the queried big data operation logs.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operations:
+                    type: array
+                    description: A list of big data operation logs.
+                    items:
+                      type: object
+                      properties:
+                        dtable_uuid:
+                          type: string
+                          format: uuid
+                          description: The UUID of the dtable where the operation occurred.
+                          example: "36b5bf9994054ef2bc33ba762deaecb7"
+                        id:
+                          type: integer
+                          description: The ID of the operation.
+                          example: 8
+                        op_time:
+                          type: integer
+                          description: The Unix timestamp of when the operation occurred.
+                          example: 1724039595
+                        author:
+                          type: string
+                          description: The username of the person who performed the operation.
+                          example: "509fe338ed4f44099158d7143e4e4de3@auth.local"
+                        operation:
+                          type: object
+                          description: Details of the specific operation.
+                          properties:
+                            row_id:
+                              type: string
+                              description: The ID of the row affected by the operation.
+                              example: "SQNJkddjSDGBdWBtdLZC6g"
+                            table_id:
+                              type: string
+                              description: The ID of the table affected by the operation.
+                              example: "plBR"
+                            op_type:
+                              type: string
+                              description: The type of operation (e.g., `update_row`, `add_row`).
+                              example: "update_row"
+                            updated:
+                              type: object
+                              description: The updated values in the row after the operation.
+                              additionalProperties:
+                                type: string
+                              example:
+                                _last_modifier: "509fe338ed4f44099158d7143e4e4de3@auth.local"
+                                _mtime: "2024-08-19T11:53:15.971162964+08:00"
+                                h1Xs: "wwww"
+                            old_row:
+                              type: object
+                              description: The original values in the row before the operation.
+                              additionalProperties:
+                                type: string
+                              example:
+                                _last_modifier: "509fe338ed4f44099158d7143e4e4de3@auth.local"
+                                _mtime: "2024-08-19T11:53:14.969+08:00"
+                                h1Xs: null
+                            row_data:
+                              type: object
+                              description: Data of the row being added (for `add_row` operation).
+                              additionalProperties:
+                                type: string
+                              example:
+                                _creator: "509fe338ed4f44099158d7143e4e4de3@auth.local"
+                                _ctime: "2024-08-19T11:53:13.103871879+08:00"
+                                _id: "SQNJkddjSDGBdWBtdLZC6g"
+                                _last_modifier: "509fe338ed4f44099158d7143e4e4de3@auth.local"
+                                _mtime: "2024-08-19T11:53:13.103871879+08:00"
