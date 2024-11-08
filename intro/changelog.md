@@ -14,7 +14,7 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.io/docs/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
 
-## Version 5.1 (xx.09.2024) - to be released
+## Version 5.1 (08.11.2024)
 
 > 📘 New requests
 >
@@ -22,14 +22,16 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 >
 > - [Repair Base](/reference/repairbase) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span>
 > - [List Audit Logs](/reference/listauditlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
-> - [List Big Data Operation Logs](/reference/listbigdataoperationlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 >
 > **Account Operations - User**
 >
 > - [List Big Data Backups](/reference/listbigdatabackups) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 > - [Get Big Data Status](/reference/getbigdatastatus) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List Big Data Operation Logs](/reference/getBigDataOperationLogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 
 ## Version 5.0 (15.07.2024)
+
+[View API Documentation for v5.0](https://api.seatable.io/v5.0)
 
 We recommend using the new `/api-gateway/` endpoints. These endpoints are faster because they check if the base has remained unchanged since the last request, allowing for quicker responses.
 
@@ -47,6 +49,8 @@ We recommend using the new `/api-gateway/` endpoints. These endpoints are faster
 For more details about the changes, please refer to [this post on the SeaTable Forum](https://forum.seatable.io/t/important-changes-to-api-and-seatable-cloud-with-version-5-0/4887).
 
 ## Version 4.4 (15.05.2024)
+
+[View API Documentation for v4.4](https://api.seatable.io/v4.4)
 
 > 📘 New requests
 >
