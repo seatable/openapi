@@ -27,7 +27,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 >
 > - [List Big Data Backups](/reference/listbigdatabackups) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 > - [Get Big Data Status](/reference/getbigdatastatus) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
-> - [List Big Data Operation Logs](/reference/getBigDataOperationLogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List Big Data Operation Logs](/reference/getbigdataoperationlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 
 ## Version 5.0 (15.07.2024)
 
