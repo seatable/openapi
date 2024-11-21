@@ -622,6 +622,26 @@ components:
         - link_column_name
         - rows
 
+    match_link_columns:
+      type: object
+      description: update multiple rows
+      properties:
+        link_id:
+          $ref: "#/components/schemas/link_id"
+        matching_keys:
+          type: array
+          description: "Defines the matching column keys in two tables."
+          items:
+            type: object
+            properties:
+              table1_key:
+                $ref: "#/components/schemas/column_key"
+              table2_key:
+                $ref: "#/components/schemas/column_key"
+      required:
+        - link_id
+        - matching_keys
+
     rename_table:
       type: object
       description: Rename Table
@@ -689,6 +709,11 @@ components:
 
     column_key:
       type: string
+    
+    auto_link_task_id:
+      type: string
+      description: "The ID returned by auto add link task"
+      example: 5c264e76-0e5a-448a-9f34-580b551364ca
 
     string_filter_predicate:
       type: string
@@ -2909,6 +2934,76 @@ paths:
               example:
                 deleted_links_count: 1
 
+  /api-gateway/api/v2/dtables/{base_uuid}/auto-links/:
+    # getestet: ok.
+    post:
+      tags:
+        - Links
+      summary: Auto Links
+      operationId: autoLinks
+      description: |
+        Automatically create link relationships. 
+        The caller needs to create a link column before calling the API, 
+        supporting both archived and unarchived data.
+        It will return a task ID, by quering which you can get the status of the
+        link creation in the backend wihtin 5 minutes.
+        The matched data in the link column in the 2 tables must have the similar 
+        data structure (not same column type). For example, the text column can match
+        email, auto-number or url type column, and so on.
+        Currently, there are a few restrictions:
+        - Formula and link-formula columns are not supported as matching columns
+        - Single-select columns cannot be matched with text columns.
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/match_link_columns"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                task_id: 19b3c803-051e-4c16-bf4d-682d24f7981e
+  
+  /api-gateway/api/v2/dtables/{base_uuid}/auto-link-task/:
+    # getestet: ok.
+    get:
+      tags:
+        - Links
+      summary: Auto Link task
+      operationId: autoLinkTask
+      description: |
+        Query the status of auto add links task.There are 3 different status:
+        - success
+        - failed
+        - running
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/auto_link_task_id"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+  
   # Tables
   /api-gateway/api/v2/dtables/{base_uuid}/tables/:
     post:
