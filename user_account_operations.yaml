@@ -5832,7 +5832,7 @@ paths:
         - Forms
       summary: Create Form
       operationId: createForm
-      description: >-
+      description: |
         Create a form in the base.
 
         To customize this form, you can use the following request body in the
