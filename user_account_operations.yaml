@@ -69,7 +69,7 @@ components:
       in: query
       schema:
         type: string
-        pattern: "^[a-z0-9]{4}$"
+        pattern: "^[A-Za-z0-9]{4}$"
       required: true
       description: id of view, string
       example: "Jz4d"
