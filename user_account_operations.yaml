@@ -5835,33 +5835,20 @@ paths:
       description: >-
         Create a form in the base.
 
-
         To customize this form, you can use the following request body in the
         `form_config` parameter and:
 
-
         * Define the name of the form;
-
         * Choose which columns to include in it;
-
         * Set required fields;
-
         * Add descriptions;
-
         * Add remarks;
-
         * Send notifications;
-
         * Add a notice on the top of the form;
-
         * Add a notice on the bottom of the form;
-
         * Show a notice after submission;
-
         * Add a redirect link after submission;
-
         * Set a submission deadline.
-
 
         ```
             {
@@ -5916,6 +5903,11 @@ paths:
                     }
             }
         ```
+
+        > 🚧 Resolving the White Page Issue in Edit Mode
+        >
+        > If you cannot open the newly generated form in edit mode, please check the browser console for error messages. Typically, the page remains blank if a configuration option is missing.
+
       requestBody:
         content:
           multipart/form-data:
