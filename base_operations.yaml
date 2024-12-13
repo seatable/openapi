@@ -709,7 +709,7 @@ components:
 
     column_key:
       type: string
-    
+
     auto_link_task_id:
       type: string
       description: "The ID returned by auto add link task"
@@ -2550,9 +2550,10 @@ paths:
         > 
         > If you use `?` in your SQL-statement, you have to provide values to replace the placeholders with parameters. This protects against SQL injections. 
 
-        > 🚧 Max return limit
+        > 🚧 Max and default return limit
         >
-        > The request returns a maximum of 10 000 rows, even if you specify a higher limit in your SQL-statement.
+        > - The request returns a maximum of 10 000 rows, even if you specify a higher limit in your SQL-statement. 
+        > - If you don't specify a limit, max 100 rows are returned.
       requestBody:
         content:
           application/json:
@@ -2972,7 +2973,7 @@ paths:
                 type: object
               example:
                 task_id: 19b3c803-051e-4c16-bf4d-682d24f7981e
-  
+
   /api-gateway/api/v2/dtables/{base_uuid}/auto-link-task/:
     # getestet: ok.
     get:
@@ -3003,7 +3004,7 @@ paths:
                 type: object
               example:
                 status: success
-  
+
   # Tables
   /api-gateway/api/v2/dtables/{base_uuid}/tables/:
     post:
