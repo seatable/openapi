@@ -2300,7 +2300,6 @@ paths:
   # Base Info
   # question: super powerful call. extension of metadata?!? Contains all links (even more than 10?), statistics
   # it does not contain apps, forms. Collaborators are always empty. What is the purpose of this call?
-  # question: collaborators always empty?
   # question: why does this call contains data? But it is difficult to get the full picture => link formula columns are not shown
   /api-gateway/api/v2/dtables/{base_uuid}:
     get:
@@ -2308,7 +2307,7 @@ paths:
       summary: Get Base Info
       operationId: getBaseInfo
       description: |
-        Get various information of a base like the tables, (normal and big data) views, links, data statistics and collaborators (currently always empty).
+        Get various information of a base like the tables, (normal and big data) views, links, data statistics and collaborators.
       security:
         - BaseTokenAuth: []
       parameters:
