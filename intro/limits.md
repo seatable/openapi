@@ -20,45 +20,36 @@ All SeaTable API endpoints, except `/ping` and `/server-info` have a rate limit.
 
 Meaning that if you reach the rate limit for one base, you still could make requests for other bases. If you hit the rate limit, the request will return the HTTP response status **429** without any further output.
 
-The access counter is not reset at a specific time, but the relevant period is always checked at the time of access.
-
 > 🚧 Rate limits may change
 >
 > Currently, the same limits apply to all SeaTable Cloud customers. In the future, SeaTable might adjust the rate limits to balance for demand and reliability. SeaTable may also introduce distinct rate limits for teams with different pricing plans.
 
+> ❗ Important Update: API Endpoint Changes
+>
+> In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 6.0. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
+
 ### Retrieve current rate limit usage
 
-The new `/api-gateway` endpoints return the current API rate limit usage through `x-ratelimit` headers. These headers provide the daily limit, the current usage, and the next reset time as a Unix timestamp in seconds. Below is an example of the returned headers:
+The new `/api-gateway` endpoints return the current API rate limit usage through `x-ratelimit` headers. These headers provide the minute limit, the current usage, and the next reset time as a Unix timestamp in seconds. Below is an example of the returned headers:
 
 ```
-x-ratelimit-limit: 5000
-x-ratelimit-remaining: 4936
+x-ratelimit-limit: 500
+x-ratelimit-remaining: 493
 x-ratelimit-reset: 1720710405
 ```
 
 ### General rate limits
 
-| Endpoints                                              | SeaTable Cloud       | SeaTable Dedicated and Server |
-| :----------------------------------------------------- | :------------------- | :---------------------------- |
-| All web operations<br/>`/api/v2.1/*`                   | 300/min              | unlimited                     |
-| All base operations<br/>`/dtable-server/api/v1/*`      | 300/min<br/>5000/day | 600/min<br/>5000/day          |
-| All dtable-db operations<br/>`/dtable-db/api/v1/*`     | 300/min<br/>5000/day | unlimited                     |
-| All api-gateway operations<br/>`/api-gateway/api/v2/*` | 300/min<br/>5000/day | unlimited                     |
+| Endpoints                                       | SeaTable Cloud | SeaTable Dedicated and Server |
+| :---------------------------------------------- | :------------- | :---------------------------- |
+| All account operations<br/>`/api/v2.1/*`        | 1000/min       | 3000/min                      |
+| All base operations<br/>`/api-gateway/api/v2/*` | 200/min        | 500/min                       |
 
 ### Authentication rate limits
 
-| Endpoints                                               | SeaTable Cloud | SeaTable Dedicated and Server |
-| :------------------------------------------------------ | :------------- | :---------------------------- |
-| Get Account-Token<br/>`/api2/auth-token`                | 60/min         | unlimited                     |
-| Base Base-Token<br/>`/api/v2.1/dtable/app-access/token` | 60/min         | unlimited                     |
-
-### Base operations: special limits for data retrieval
-
-Retrieving records from a base is by far the most resource-intensive process, which is why it is subject to stricter limits.
-
-| Endpoints                                                                                             | SeaTable Cloud      | SeaTable Dedicated and Server |
-| :---------------------------------------------------------------------------------------------------- | :------------------ | :---------------------------- |
-| `GET /dtable-server/api/v1/dtables/{...}/rows/`<br/>`POST /dtable-server/api/v1/{...}/filtered-rows/` | 60/min<br/>600/hour | 100/min<br/>6000/hour         |
+| Endpoints                                | SeaTable Cloud | SeaTable Dedicated and Server |
+| :--------------------------------------- | :------------- | :---------------------------- |
+| Get Account-Token<br/>`/api2/auth-token` | 60/min         | unlimited                     |
 
 ## How to avoid the rate limits
 
@@ -76,19 +67,20 @@ If this is the case, you should start thinking about how to reduce the number of
 
 SeaTable Dedicated customers and operators of their own SeaTable Server (Enterprise or Developer Edition) can adjust SeaTable's default limits according to their needs. These are the corresponding configuration files in the [SeaTable Admin Manual](https://admin.seatable.io):
 
-- [dtable_server_config.json](https://admin.seatable.io/configuration/dtable-server-config/)
-- [dtable_web_settings.py](https://admin.seatable.io/configuration/dtable-web-settings/)
-- [dtable-db.conf](https://admin.seatable.io/configuration/dtable-db-conf/)
+- [dtable-api-gateway.conf](https://admin.seatable.io/configuration/dtable-api-gateway-conf)
+- [dtable_server_config.json](https://admin.seatable.io/configuration/dtable-server-config/) - deprecated
+- [dtable-db.conf](https://admin.seatable.io/configuration/dtable-db-conf/) - deprecated
+- [dtable_web_settings.py](https://admin.seatable.io/configuration/dtable-web-settings/) - deprecated
 
 ## Size limits
 
 Besides the rate limits, there are size limits for how many rows you can manipulate with a **single call**. Of course, it is possible to execute multiple calls in a row as long as you stay below the rate limits.
 
-| Action and Endpoints                                                                                                                            | Max. number of rows |
-| :---------------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
-| [List rows (with SQL)](https://api.seatable.io/reference/querysqldeprecated)<br/>`POST /dtable-db/api/v1/query/{...}/`                          | 10.000              |
-| [Insert, Update or Delete Rows (with SQL)](https://api.seatable.io/reference/querysqldeprecated)<br/>`POST /dtable-db/api/v1/query/{...}/`      | unlimited           |
-| [List rows](https://api.seatable.io/reference/listrowsdeprecated)<br/>`GET /dtable-server/api/v1/dtables/{...}/rows/`                           | 1.000               |
-| [Append rows](https://api.seatable.io/reference/appendrowsdeprecated)<br/>`POST /dtable-server/api/v1/dtables/{...}/batch-append-rows/`         | 1.000               |
-| [Update rows](https://api.seatable.io/reference/updaterowsdeprecated)<br/>`PUT /dtable-server/api/v1/dtables/{...}/batch-update-rows/`          | 1.000               |
-| [Delete rows](https://api.seatable.io/reference/deleterowsdeprecated)<br/>`DELETE /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/` | 10.000              |
+| Action and Endpoints                                                                                                                     | Max. number of rows |
+| :--------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
+| [List rows (with SQL)](https://api.seatable.io/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/`                     | 10.000              |
+| [Insert, Update or Delete Rows (with SQL)](https://api.seatable.io/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/` | unlimited           |
+| [List rows](https://api.seatable.io/reference/listrows)<br/>`GET /api-gateway/api/v2/dtables/{...}/rows/`                                | 1.000               |
+| [Append rows](https://api.seatable.io/reference/appendrows)<br/>`POST /api-gateway/api/v2/dtables/{...}/rows/`                           | 1.000               |
+| [Update rows](https://api.seatable.io/reference/updaterows)<br/>`PUT /api-gateway/api/v2/dtables/{...}/rows/`                            | 1.000               |
+| [Delete rows](https://api.seatable.io/reference/deleterows)<br/>`DELETE /api-gateway/api/v2/dtables/{base_uuid}/rows/`                   | 10.000              |
