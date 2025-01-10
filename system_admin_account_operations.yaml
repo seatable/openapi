@@ -1368,35 +1368,35 @@ paths:
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/page"
       responses:
-        "202":
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
               example:
-                page_info":
-                  has_next_page": false
+                page_info:
+                  has_next_page: false
                   current_page: 1
-                dtables":
+                dtables:
                   - id: 6
                     workspace_id: 1
                     uuid: "0558d382-ef80-4d5d-9eb4-e682a2eaa99d"
-                    name": "invoices"
-                    created_at": "2024-09-03T23:50:50+02:00"
-                    updated_at": "2024-12-09T16:30:14+01:00"
-                    color": "#4CAF50"
-                    text_color": null
-                    icon": null
-                    is_encrypted": false
-                    in_storage": true
-                    org_id": -1
-                    email": "1bd28d36f01840f7a4db3d813851b951@auth.local"
-                    group_id": -1
-                    owner": "admin"
-                    owner_deleted": false
-                    file_size": 4239
-                    rows_count": 23
+                    name: "invoices"
+                    created_at: "2024-09-03T23:50:50+02:00"
+                    updated_at: "2024-12-09T16:30:14+01:00"
+                    color: "#4CAF50"
+                    text_color: null
+                    icon: null
+                    is_encrypted: false
+                    in_storage: true
+                    org_id: -1
+                    email: "1bd28d36f01840f7a4db3d813851b951@auth.local"
+                    group_id: -1
+                    owner: "admin"
+                    owner_deleted: false
+                    file_size: 4239
+                    rows_count: 23
   /api/v2.1/admin/dtable/{base_uuid}/:
     delete:
       tags:
