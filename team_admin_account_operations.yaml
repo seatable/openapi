@@ -1646,7 +1646,7 @@ paths:
     get:
       tags:
         - Activities & Logs
-      summary: List file access logs
+      summary: List File Access Logs
       operationId: listFileAccessLogs
       description: Returns a list of accessed files inside a specific team.
       security:
