@@ -1642,6 +1642,58 @@ paths:
                     ],
                   "total_count": 3,
                 }
+  /api/v2.1/org/{org_id}/admin/file-access-logs/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List file access logs
+      operationId: listFileAccessLogs
+      description: Returns a list of accessed files inside a specific team.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "file_access_log_list": [
+                    {
+                      "timestamp": "2024-10-08T17:54:52+08:00",
+                      "etype": "download",
+                      "device": "",
+                      "user": "af57b7dda06b4928b255339d92294853@auth.local",
+                      "name": "org_admin1",
+                      "contact_email": "org_admin1@qq.com",
+                      "ip": "172.18.0.1",
+                      "org_id": 1,
+                      "dtable_uuid": "8e7ad4a8-73dc-4be4-abae-057fd5203a0e",
+                      "file_path": "custom/aaa (1) (1).md",
+                      "dtable_name": "1\u5bfc\u5165\u534f\u4f5c\u4eba",
+                      "file_or_dir_name": "aaa (1) (1).md"
+                    },
+                    {
+                      "timestamp": "2024-09-29T07:25:17+08:00",
+                      "etype": "view",
+                      "device": "",
+                      "user": "af57b7dda06b4928b255339d92294853@auth.local",
+                      "name": "org_admin1",
+                      "contact_email": "org_admin1@qq.com",
+                      "ip": "172.18.0.1",
+                      "org_id": 1,
+                      "dtable_uuid": "8e7ad4a8-73dc-4be4-abae-057fd5203a0e",
+                      "file_path": "/custom/aaa (1) (1).md",
+                      "dtable_name": "1\u5bfc\u5165\u534f\u4f5c\u4eba",
+                      "file_or_dir_name": "aaa (1) (1).md"
+                    }
+                  ],
+                  "count": 2
+                }
   /api/v2.1/org/{org_id}/admin/org-logo/:
     post:
       tags:

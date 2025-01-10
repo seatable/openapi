@@ -3340,6 +3340,59 @@ paths:
                     type: integer
                     description: The total number of logs available.
                     example: 15
+  /api/v2.1/admin/file-access-logs/:
+    get:
+      tags:
+        - Logs
+      summary: List file access logs
+      operationId: listFileAccessLogs
+      description: Returns a list of accessed files.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                {
+                  "file_access_log_list": [
+                    {
+                      "timestamp": "2024-09-27T09:17:38+08:00",
+                      "etype": "download",
+                      "device": "",
+                      "user": "af57b7dda06b4928b255339d92294853@auth.local",
+                      "name": "org_admin1",
+                      "contact_email": "org_admin1@qq.com",
+                      "ip": "172.18.0.1",
+                      "org_id": 1,
+                      "dtable_uuid": "8e7ad4a8-73dc-4be4-abae-057fd5203a0e",
+                      "file_path": "/custom/aaa (1) (1).md",
+                      "dtable_name": "1\u5bfc\u5165\u534f\u4f5c\u4eba",
+                      "org_name": "org1",
+                      "file_or_dir_name": "aaa (1) (1).md"
+                    },
+                    {
+                      "timestamp": "2024-09-27T03:07:59+08:00",
+                      "etype": "web",
+                      "device": "",
+                      "user": "fc7043070b1d40878570f666de8d3481@auth.local",
+                      "name": "view",
+                      "contact_email": "yangtong1009@163.com",
+                      "ip": "172.18.0.1",
+                      "org_id": -1,
+                      "dtable_uuid": "96908687-8713-4b81-9856-77f9d96af4b3",
+                      "file_path": "/custom/aaa.md",
+                      "dtable_name": "\u5bfc\u5165\u4f18\u5316",
+                      "org_name": "",
+                      "file_or_dir_name": "aaa.md"
+                    }
+                  ],
+                  "count": 2
+                }
 
   # Plugins
   /api/v2.1/admin/dtable-system-plugins/:
