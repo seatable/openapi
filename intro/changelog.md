@@ -1,7 +1,7 @@
 ---
 title: Changelog
 excerpt: This page lists changes made to the Web API and its documentation.
-category: 66e2a322281410004601ba34
+category: 67812a09e88eab0a898188f9
 isReference: true
 slug: changelog
 ---
@@ -13,6 +13,16 @@ slug: changelog
 </style>
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.io/docs/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
+
+## Version 5.2 (xx.01.2025)
+
+> 📘 New requests
+>
+> ...
+
+> 🚧 Breaking changes
+>
+> ...
 
 ## Version 5.1 (08.11.2024)
 

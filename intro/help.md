@@ -1,7 +1,7 @@
 ---
 title: Help & Support
 excerpt: Have you found a bug or need help? Here you can get it.
-category: 66e2a322281410004601ba34
+category: 67812a09e88eab0a898188f9
 isReference: true
 slug: help
 ---

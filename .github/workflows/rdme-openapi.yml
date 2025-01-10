@@ -8,7 +8,7 @@ on:
       # This workflow will run every time you push code to the following branch.
       # Check out GitHub's docs for more info on configuring this:
       # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
-      - v5.1
+      - v5.2
 
 # I have multiple categories in seatable.readme.io:
 # - SeaTable API (docs only)                    < intro/*.md
@@ -60,58 +60,58 @@ jobs:
       - name: Update SeaTable API 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: docs ./intro --key=${{ secrets.README_API_KEY }} --version=5.1
+          rdme: docs ./intro --key=${{ secrets.README_API_KEY }} --version=5.2
 
       # authentication
       - name: Update authentication 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba3c --useSpecVersion
+          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818901 --useSpecVersion
 
       # base operations (from 4.4)
       - name: Update base operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba44 --useSpecVersion
+          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818909 --useSpecVersion
 
       # base operations (before 4.4)
       - name: Update base operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi base_operations_deprecated.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba3d --useSpecVersion
+          rdme: openapi base_operations_deprecated.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818902 --useSpecVersion
 
       # file operations
       - name: Update file operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi file_operations.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba43 --useSpecVersion
+          rdme: openapi file_operations.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818908 --useSpecVersion
 
       # Account operations: System admin
       - name: Update sys admin account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi system_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba40 --useSpecVersion
+          rdme: openapi system_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818905 --useSpecVersion
 
       # Account operations: Team admin
       - name: Update team admin account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi team_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba3f --useSpecVersion
+          rdme: openapi team_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818904 --useSpecVersion
 
       # Account operations: User
       - name: Update user account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi user_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba41 --useSpecVersion
+          rdme: openapi user_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818906 --useSpecVersion
 
       # ping & info
       - name: Update ping & info 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi ping_and_info.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba3e --useSpecVersion
+          rdme: openapi ping_and_info.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818903 --useSpecVersion
 
       # Python
       - name: Update python scheduler 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi python-scheduler.yaml --key=${{ secrets.README_API_KEY }} --id=66e2a322281410004601ba42 --useSpecVersion
+          rdme: openapi python-scheduler.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818907 --useSpecVersion
