@@ -2328,6 +2328,7 @@ paths:
   # Base Info
   /dtable-server/dtables/{base_uuid}:
     get:
+      deprecated: true
       tags:
         - Base Info
       summary: Get Base Info
@@ -2420,6 +2421,7 @@ paths:
                     id_row_map: {}
   /dtable-server/api/v1/dtables/{base_uuid}/metadata/:
     get:
+      deprecated: true
       tags:
         - Base Info
       summary: Get Metadata
@@ -2505,6 +2507,7 @@ paths:
                         can_print: false
   /dtable-db/api/v1/base-info/{base_uuid}/:
     get:
+      deprecated: true
       tags:
         - Base Info
       summary: Get Big Data Status
@@ -2549,6 +2552,7 @@ paths:
                 rows: 101031
   /dtable-server/api/v1/dtables/{base_uuid}/related-users/:
     get:
+      deprecated: true
       tags:
         - Base Info
       summary: List Collaborators
@@ -2579,6 +2583,7 @@ paths:
   # Rows
   /dtable-db/api/v1/query/{base_uuid}/:
     post:
+      deprecated: true
       tags:
         - Rows
       summary: List Rows (with SQL)
@@ -2626,6 +2631,7 @@ paths:
 
   /dtable-server/api/v1/dtables/{base_uuid}/rows/:
     get:
+      deprecated: true
       tags:
         - Rows
       summary: List Rows
@@ -2673,6 +2679,7 @@ paths:
                     Name: Matcha
                     link: []
     post:
+      deprecated: true
       tags:
         - Rows
       summary: Add Row
@@ -2707,6 +2714,7 @@ paths:
                 _creator: 123456786569491ba42905bf1647fd3f@auth.local
                 _last_modifier: 123456786569491ba42905bf1647fd3f@auth.local
     put:
+      deprecated: true
       tags:
         - Rows
       summary: Update Row
@@ -2737,6 +2745,7 @@ paths:
               example:
                 success: true
     delete:
+      deprecated: true
       tags:
         - Rows
       summary: Delete Row
@@ -2762,6 +2771,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/rows/{row_id}/:
     get:
+      deprecated: true
       tags:
         - Rows
       summary: Get Row
@@ -2796,6 +2806,7 @@ paths:
                 link: []
   /dtable-server/api/v1/dtables/{base_uuid}/batch-append-rows/:
     post:
+      deprecated: true
       tags:
         - Rows
       summary: Append Rows
@@ -2827,6 +2838,7 @@ paths:
                 inserted_row_count: 3
   /dtable-server/api/v1/dtables/{base_uuid}/batch-update-rows/:
     put:
+      deprecated: true
       tags:
         - Rows
       summary: Update Rows
@@ -2856,6 +2868,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/:
     delete:
+      deprecated: true
       tags:
         - Rows
       summary: Delete Rows
@@ -2885,6 +2898,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/lock-rows/:
     put:
+      deprecated: true
       tags:
         - Rows
       summary: Lock Rows
@@ -2917,6 +2931,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/unlock-rows/:
     put:
+      deprecated: true
       tags:
         - Rows
       summary: Unlock Rows
@@ -2947,35 +2962,10 @@ paths:
                 type: object
               example:
                 success: true
-  /dtable-server/api/v1/dtables/{base_uuid}/filtered-rows/:
-    get:
-      deprecated: true
-      tags:
-        - Rows
-      summary: List Filtered Rows
-      operationId: listFilteredRowsDeprecated
-      description: |
-        List rows by filter conditions. This is especially useful when you want to filter out records and only see those records.
-        > 🚧 Deprecated since version 2.3
-        > 
-        > This request has been depricated since SeaTable 2.3. This means you can probably still use it, but it will not be maintained and will probably be removed/deactivated any time without further notice in the future.
-        > Please use [List rows (with SQL)](/reference/querysqldeprecated) or [List rows](/reference/listrowsdeprecated) instead.
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-        - $ref: "#/components/parameters/table_name"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/filtered-rows-filter"
-      responses:
-        "200":
-          description: OK
   # Links
   /dtable-server/api/v1/dtables/{base_uuid}/links/:
     post:
+      deprecated: true
       tags:
         - Links
       summary: Create Row Link
@@ -3005,6 +2995,7 @@ paths:
               example:
                 success: true
     put:
+      deprecated: true
       tags:
         - Links
       summary: Create Row Links
@@ -3034,6 +3025,7 @@ paths:
               example:
                 success: true
     delete:
+      deprecated: true
       tags:
         - Links
       summary: Delete Row Link
@@ -3060,6 +3052,7 @@ paths:
 
   /dtable-server/api/v1/dtables/{base_uuid}/batch-update-links/:
     put:
+      deprecated: true
       tags: [Links]
       summary: Update Row Links (Batch)
       operationId: updateRowLinksDeprecated
@@ -3097,6 +3090,7 @@ paths:
 
   /dtable-db/api/v1/linked-records/{base_uuid}:
     post:
+      deprecated: true
       tags:
         - Links
       summary: List Row Links
@@ -3152,6 +3146,7 @@ paths:
   # Tables
   /dtable-server/api/v1/dtables/{base_uuid}/tables/:
     post:
+      deprecated: true
       tags:
         - Tables
       summary: Create Table
@@ -3213,6 +3208,7 @@ paths:
                 $ref: "#/components/schemas/base"
 
     put:
+      deprecated: true
       tags:
         - Tables
       summary: Rename Table
@@ -3237,6 +3233,7 @@ paths:
               example:
                 success: true
     delete:
+      deprecated: true
       tags:
         - Tables
       summary: Delete Table
@@ -3262,6 +3259,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/tables/duplicate-table/:
     post:
+      deprecated: true
       tags:
         - Tables
       summary: Duplicate Table
@@ -3476,6 +3474,7 @@ paths:
   # Views
   /dtable-server/api/v1/dtables/{base_uuid}/views/:
     get:
+      deprecated: true
       tags:
         - Views
       summary: List Views
@@ -3510,6 +3509,7 @@ paths:
                     group_rows: []
                     groups: []
     post:
+      deprecated: true
       tags:
         - Views
       summary: Create View
@@ -3556,6 +3556,7 @@ paths:
                 colors: {}
   /dtable-server/api/v1/dtables/{base_uuid}/views/{view_name}/:
     get:
+      deprecated: true
       tags:
         - Views
       summary: Get View
@@ -3601,6 +3602,7 @@ paths:
                 summaries: {}
                 colors: {}
     put:
+      deprecated: true
       tags:
         - Views
       summary: Update View
@@ -3658,6 +3660,7 @@ paths:
                 summaries: {}
                 colors: {}
     delete:
+      deprecated: true
       tags:
         - Views
       summary: Delete View
@@ -3682,6 +3685,7 @@ paths:
   # Columns
   /dtable-server/api/v1/dtables/{base_uuid}/columns/:
     get:
+      deprecated: true
       tags:
         - Columns
       summary: List Columns
@@ -3720,6 +3724,7 @@ paths:
                     permission_type: ""
                     permitted_users: []
     post:
+      deprecated: true
       tags:
         - Columns
       summary: Insert Column
@@ -3786,6 +3791,7 @@ paths:
                 permission_type: ""
                 permitted_users: []
     put:
+      deprecated: true
       tags:
         - Columns
       summary: Update Column
@@ -3834,6 +3840,7 @@ paths:
                 permission_type: ""
                 permitted_users: []
     delete:
+      deprecated: true
       tags:
         - Columns
       summary: Delete Column
@@ -3861,6 +3868,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/batch-append-columns/:
     post:
+      deprecated: true
       tags:
         - Columns
       summary: Append Columns
@@ -3957,6 +3965,7 @@ paths:
 
   /dtable-server/api/v1/dtables/{base_uuid}/column-options/:
     post:
+      deprecated: true
       tags:
         - Columns
       summary: Add Single/Multiple Select Options
@@ -3999,6 +4008,7 @@ paths:
               example:
                 success: true
     put:
+      deprecated: true
       tags:
         - Columns
       summary: Update Single/Multiple Select Options
@@ -4052,6 +4062,7 @@ paths:
                     textColor: "#FFFFFF"
                     id: "119376"
     delete:
+      deprecated: true
       tags:
         - Columns
       summary: Delete Single/Multiple Select Options
@@ -4092,6 +4103,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/column-cascade-settings/:
     post:
+      deprecated: true
       tags:
         - Columns
       summary: Update Column Cascade
@@ -4178,6 +4190,7 @@ paths:
   # Big Data
   /dtable-db/api/v1/insert-rows/{base_uuid}/:
     post:
+      deprecated: true
       tags:
         - Big Data
       summary: Insert Rows into Big Data
@@ -4204,6 +4217,7 @@ paths:
                 inserted_row_count: 1
   /dtable-db/api/v1/update-rows/{base_uuid}/:
     put:
+      deprecated: true
       tags:
         - Big Data
       summary: Update Rows in Big Data
@@ -4229,6 +4243,7 @@ paths:
                 success: true
   /dtable-db/api/v1/delete-rows/{base_uuid}/:
     delete:
+      deprecated: true
       tags:
         - Big Data
       summary: Delete Rows in Big Data
@@ -4256,6 +4271,7 @@ paths:
 
   /dtable-server/api/v1/dtables/{base_uuid}/archive-view/:
     post:
+      deprecated: true
       tags: [Big Data]
       summary: Move Rows to Big Data
       operationId: moveRowsToBigDataDeprecated
@@ -4282,6 +4298,7 @@ paths:
 
   /dtable-db/api/v1/base/{base_uuid}/links/:
     post:
+      deprecated: true
       tags: [Big Data]
       summary: Create Row Links in Big Data
       operationId: createBigDataRowsLinkDeprecated
@@ -4306,6 +4323,7 @@ paths:
               example:
                 success: true
     delete:
+      deprecated: true
       tags: [Big Data]
       summary: Delete Row Links in Big Data
       operationId: deleteBigDataRowLinksDeprecated
@@ -4333,6 +4351,7 @@ paths:
   # Row Comments
   /dtable-server/api/v1/dtables/{base_uuid}/comments/:
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: List Row Comments
@@ -4380,6 +4399,7 @@ paths:
 
   /dtable-server/api/v1/dtables/{base_uuid}/comments/{comment_id}/:
     delete:
+      deprecated: true
       tags:
         - Row Comments
       summary: Delete Comment
@@ -4400,6 +4420,7 @@ paths:
               example:
                 success: true
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: Get Comment
@@ -4428,6 +4449,7 @@ paths:
                 resolved: 0
   /dtable-server/api/v1/dtables/{base_uuid}/comments-count/:
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: Get Row Comments Count
@@ -4451,6 +4473,7 @@ paths:
                 count: 3
   /dtable-server/api/v1/dtables/{base_uuid}/comments-within-days/:
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: List Comments within Days
@@ -4484,6 +4507,7 @@ paths:
   # Notifications
   /dtable-server/api/v1/dtables/{base_uuid}/notifications/:
     get:
+      deprecated: true
       tags:
         - Notifications
       summary: List Base Notifications
@@ -4513,6 +4537,7 @@ paths:
                       comment: Did you see this?
                     seen: 1
     put:
+      deprecated: true
       tags:
         - Notifications
       summary: Mark Base Notifications as seen
@@ -4542,6 +4567,7 @@ paths:
               example:
                 success: true
     delete:
+      deprecated: true
       tags:
         - Notifications
       summary: Delete Base Notifications
@@ -4562,6 +4588,7 @@ paths:
                 success: true
   /dtable-server/api/v1/dtables/{base_uuid}/notifications/{notification_id}/:
     put:
+      deprecated: true
       tags:
         - Notifications
       summary: Mark Notification Read/Unread
@@ -4595,6 +4622,7 @@ paths:
   # Activities & Logs
   /dtable-server/api/v1/dtables/{base_uuid}/operations/:
     get:
+      deprecated: true
       tags:
         - Activities & Logs
       summary: Get Base Activity Log
@@ -4634,6 +4662,7 @@ paths:
                     op_id: 116
   /dtable-server/api/v1/dtables/{base_uuid}/activities/:
     get:
+      deprecated: true
       tags:
         - Activities & Logs
       summary: List Row Activities
@@ -4716,6 +4745,7 @@ paths:
                 total_count: 3
   /api/v2.1/dtables/{base_uuid}/delete-operation-logs/:
     get:
+      deprecated: true
       tags:
         - Activities & Logs
       summary: List Delete Operations
@@ -4755,6 +4785,7 @@ paths:
             application/json: {}
   /dtable-server/api/v1/dtables/{base_uuid}/deleted-rows/:
     get:
+      deprecated: true
       tags:
         - Activities & Logs
       summary: List Deleted Rows
@@ -4808,6 +4839,7 @@ paths:
   # Snapshots
   /dtable-server/api/v1/dtables/{base_uuid}/snapshot/:
     post:
+      deprecated: true
       tags:
         - Snapshots
       summary: Create Snapshot
