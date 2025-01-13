@@ -215,7 +215,12 @@ paths:
       summary: Get File Download Link
       operationId: getFileDownloadLink
       description: |
-        Get the file download link of a base's attachment.
+        Get the file download link of a base's attachment. 
+
+        > 📘 The download link is only valid for a short time
+        > 
+        > The download link is only valid for some hours. After that the download link must be created again. We recommend
+        to store images on public hosting services like AWS S3 and saving only the links in SeaTable, allowing direct use of image links in web pages.
 
       security:
         - ApiTokenAuth: []
