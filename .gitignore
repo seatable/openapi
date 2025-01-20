@@ -2,7 +2,6 @@
 /generator
 /tests/.env
 /tests/.venv
-/tests/__snapshots__/test*
 /tests/diff*
 /tests/.hypothesis
 /tests/__pycache__

@@ -1,0 +1,118 @@
+{
+  "rows": [
+    {
+      "_ctime": "str",
+      "_id": "str",
+      "_mtime": "str",
+      "auto-number-date-prefix": "str",
+      "auto-number-integer": "0001",
+      "auto-number-string-prefix": "row-0001",
+      "checkbox": true,
+      "date-european": "2024-06-05",
+      "date-german": "2030-06-20",
+      "date-german-hours-minutes": "2030-06-20 23:55",
+      "date-iso": "2030-06-20",
+      "date-iso-hours-minutes": "2030-06-20 23:55",
+      "date-us": "2024-06-05",
+      "date-us-hours-minutes": "2024-06-05 23:55",
+      "digital-sign": {
+        "sign_image_url": "https://admin.seatable.io/assets/SeaTable256-256.png",
+        "sign_time": "2024-06-05T13:28:56.090+00:00",
+        "username": "some-user@auth.local"
+      },
+      "duration-hours-minutes": 5400,
+      "duration-hours-minutes-seconds": 5430,
+      "email": "example@seatable.io",
+      "formula": "2031-06-20",
+      "formula-boolean-return-value": "false",
+      "formula-float-return-value": 3.9000000000000004,
+      "formula-integer-return-value": 3,
+      "geolocation-country-region": {
+        "country_region": "Germany"
+      },
+      "geolocation-lat-lon": {
+        "lat": 50,
+        "lng": 8.23
+      },
+      "long-text": "## Heading\n- Item 1\n- Item 2",
+      "multiple-select": [
+        "option-1",
+        "option-2"
+      ],
+      "number": 499.99,
+      "number-decimal-dot-thousands-comma": 1000000.123,
+      "number-euro": 5.23,
+      "number-percent": 5,
+      "rate": 7,
+      "single-select": "option-1",
+      "text": "ABC",
+      "url": "https://seatable.io"
+    },
+    {
+      "_ctime": "str",
+      "_id": "str",
+      "_mtime": "str",
+      "auto-number-date-prefix": "str",
+      "auto-number-integer": "0002",
+      "auto-number-string-prefix": "row-0002",
+      "checkbox": false,
+      "date-german": "2030-06-20",
+      "date-german-hours-minutes": "2030-06-20 23:55",
+      "date-iso": "2030-06-20",
+      "date-iso-hours-minutes": "2030-06-20 23:55",
+      "formula": "2031-06-20",
+      "formula-boolean-return-value": "false",
+      "formula-float-return-value": 3.9000000000000004,
+      "formula-integer-return-value": 3,
+      "long-text": "## Heading\n- Item 1\n- Item 2",
+      "multiple-select": [
+        "option-2",
+        "option-3"
+      ],
+      "number": 500,
+      "number-euro": 10.2345,
+      "number-percent": 5.12345,
+      "single-select": "option-2",
+      "text": "D"
+    },
+    {
+      "_ctime": "str",
+      "_id": "str",
+      "_mtime": "str",
+      "auto-number-date-prefix": "str",
+      "auto-number-integer": "0003",
+      "auto-number-string-prefix": "row-0003",
+      "checkbox": true,
+      "date-german": "2030-06-20",
+      "date-german-hours-minutes": "2030-06-20 23:55",
+      "date-iso": "2030-06-20",
+      "date-iso-hours-minutes": "2030-06-20 23:55",
+      "formula": "2031-06-20",
+      "formula-boolean-return-value": "false",
+      "formula-float-return-value": 3.9000000000000004,
+      "formula-integer-return-value": 3,
+      "long-text": "## Heading\n- Item 1\n- Item 2",
+      "multiple-select": [
+        "option-1",
+        "option-2",
+        "option-3"
+      ],
+      "number": -10,
+      "single-select": "option-3",
+      "text": "E"
+    },
+    {
+      "_ctime": "str",
+      "_id": "str",
+      "_mtime": "str",
+      "auto-number-date-prefix": "str",
+      "auto-number-integer": "0004",
+      "auto-number-string-prefix": "row-0004",
+      "formula": "#VALUE!",
+      "formula-boolean-return-value": "false",
+      "formula-float-return-value": 3.9000000000000004,
+      "formula-integer-return-value": 3,
+      "text": "row-with-empty-values"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "table": {
+    "color": null,
+    "created_at": "str",
+    "icon": null,
+    "id": "int",
+    "in_storage": true,
+    "is_encrypted": false,
+    "name": "automated-testing-ahSh2sot",
+    "text_color": null,
+    "updated_at": "str",
+    "uuid": "str",
+    "workspace_id": "int"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "rows": [
+    {
+      "_ctime": "str",
+      "_id": "str",
+      "_mtime": "str",
+      "files": [
+        {
+          "name": "test.txt",
+          "size": 12,
+          "type": "file",
+          "url": "str"
+        }
+      ],
+      "images": [
+        "str"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "_id": "str",
+  "columns": "list",
+  "header_settings": {},
+  "id_row_map": {},
+  "is_header_locked": false,
+  "name": "test_createTableDeprecated",
+  "rows": [],
+  "summary_configs": {},
+  "view_structure": {
+    "folders": [],
+    "view_ids": [
+      "0000"
+    ]
+  },
+  "views": [
+    {
+      "_id": "0000",
+      "colorbys": {},
+      "colors": {},
+      "column_colors": {},
+      "filter_conjunction": "And",
+      "filters": [],
+      "formula_rows": {},
+      "groupbys": [],
+      "groups": [],
+      "hidden_columns": [],
+      "is_locked": false,
+      "link_rows": {},
+      "name": "Default View",
+      "private_for": null,
+      "row_height": "default",
+      "rows": [],
+      "sorts": [],
+      "summaries": {},
+      "type": "table"
+    }
+  ]
+}
