@@ -14,7 +14,7 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.io/docs/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
 
-## Version 5.2 (xx.01.2025)
+## Version 5.2 (25.02.2025)
 
 > ❗ Important Update: API Endpoint Changes
 >
@@ -35,6 +35,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > - [List File Access Logs](/reference/listfileaccesslogs-1)
 
 ## Version 5.1 (08.11.2024)
+
+[View API Documentation for v5.1](https://api.seatable.io/v5.1)
 
 > 📘 New requests
 >
@@ -70,7 +72,7 @@ For more details about the changes, please refer to [this post on the SeaTable F
 
 ## Version 4.4 (15.05.2024)
 
-[View API Documentation for v4.4](https://api.seatable.io/v4.4)
+The SeaTable API Reference for version 4.4 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v4.4).
 
 > 📘 New requests
 >
