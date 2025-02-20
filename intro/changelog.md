@@ -16,13 +16,23 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 5.2 (xx.01.2025)
 
+> ❗ Important Update: API Endpoint Changes
+>
+> In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 6.0. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
+
 > 📘 New requests
 >
-> ...
-
-> 🚧 Breaking changes
+> **Base Operations**
 >
-> ...
+> [Duplicate Table](/reference/duplicatetable) span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span>
+>
+> **Account Operations - System Admin**
+>
+> [List File Access Logs](/reference/listfileaccesslogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+>
+> **Account Operations - Team Admin**
+>
+> [List File Access Logs](/reference/listfileaccesslogs-1)
 
 ## Version 5.1 (08.11.2024)
 

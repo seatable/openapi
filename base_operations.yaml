@@ -3144,118 +3144,11 @@ paths:
                 type: object
               example:
                 _id: oW2Q
-                name: Appointments(copy)
+                name: Appointments
                 columns:
                   - key: "0000"
-                    name: New Date
-                    type: date
-                    width: 169
-                    editable: true
-                    resizable: true
-                    editor:
-                      key: null
-                      ref: null
-                      props: {}
-                      _owner: null
-                    formatter:
-                      key: null
-                      ref: null
-                      props: {}
-                      _owner: null
-                    data:
-                      format: YYYY-MM-DD HH:mm
-                      enable_fill_default_value: false
-                      default_value: ""
-                      default_date_type: specific_date
-                  - key: 004l
-                    type: link
-                    name: Pax
-                    editable: true
-                    width: 200
-                    resizable: true
-                    draggable: true
-                    data:
-                      display_column_key: "0000"
-                      table_id: anJ2
-                      other_table_id: oW2Q
-                      is_internal_link: true
-                      is_multiple: true
-                      is_row_from_view: false
-                      other_view_id: ""
-                      link_id: EeKy
-                    permission_type: ""
-                    permitted_users: []
-                    colorbys: null
-                  - key: TlwL
-                    type: duration
-                    name: dauer
-                    editable: true
-                    width: 200
-                    resizable: true
-                    draggable: true
-                    data:
-                      format: duration
-                      duration_format: h:mm
-                    permission_type: ""
-                    permitted_users: []
-                  - key: E5kr
-                    type: formula
-                    name: Ende
-                    editable: true
-                    width: 200
-                    resizable: true
-                    draggable: true
-                    data:
-                      formula: "{Termine}+{dauer}"
-                      operated_columns:
-                        - "0000"
-                        - TlwL
-                      result_type: date
-                      format: YYYY-MM-DD HH:mm
-                    permission_type: ""
-                    permitted_users: []
-                  - key: quLi
                     type: text
                     name: Name
-                    editable: true
-                    width: 200
-                    resizable: true
-                    draggable: true
-                    data: null
-                    permission_type: ""
-                    permitted_users: []
-                    description: null
-                  - key: X16v
-                    type: number
-                    name: Amount
-                    editable: true
-                    width: 200
-                    resizable: true
-                    draggable: true
-                    data:
-                      format: number
-                      precision: 3
-                      enable_precision: true
-                      enable_fill_default_value: false
-                      decimal: dot
-                      thousands: "no"
-                    permission_type: ""
-                    permitted_users: []
-                    description: null
-                  - key: "0000"
-                    type: text
-                    name: Name2
-                    editable: true
-                    width: 200
-                    resizable: true
-                    draggable: true
-                    data: null
-                    permission_type: ""
-                    permitted_users: []
-                    description: null
-                  - key: "0000"
-                    type: text
-                    name: Name3
                     editable: true
                     width: 200
                     resizable: true
@@ -3280,52 +3173,6 @@ paths:
                     hidden_columns: []
                     groupbys: []
                     groups: []
-                  - _id: kIZQ
-                    name: Frei
-                    type: table
-                    private_for: null
-                    is_locked: false
-                    row_height: default
-                    filter_conjunction: And
-                    filters:
-                      - column_key: 004l
-                        filter_predicate: is_empty
-                        filter_term_modifier: exact_date
-                        filter_term: ""
-                    sorts: []
-                    groupbys: []
-                    group_rows: []
-                    groups: []
-                    colorbys: {}
-                    hidden_columns: []
-                    rows: []
-                    formula_rows: {}
-                    link_rows: {}
-                    summaries: {}
-                    colors: {}
-                  - _id: 0Uz1
-                    name: Besetzt
-                    type: table
-                    private_for: null
-                    is_locked: false
-                    row_height: default
-                    filter_conjunction: And
-                    filters:
-                      - column_key: 004l
-                        filter_predicate: is_not_empty
-                        filter_term_modifier: exact_date
-                        filter_term: ""
-                    sorts: []
-                    groupbys: []
-                    group_rows: []
-                    groups: []
-                    colorbys: {}
-                    hidden_columns: []
-                    rows: []
-                    formula_rows: {}
-                    link_rows: {}
-                    summaries: {}
-                    colors: {}
 
   # Views
   /api-gateway/api/v2/dtables/{base_uuid}/views/:
@@ -4538,8 +4385,8 @@ paths:
                           column_data: {}
                           value: ""
                 total_count: 3
-  
-  /api/v2.1/dtables/{base_uuid}/delete-operation-logs/:
+
+  /api-gateway/api/v2/dtables/{base_uuid}/deleted-rows/:
     get:
       tags:
         - Activities & Logs
@@ -4578,7 +4425,7 @@ paths:
           description: Successful response
           content:
             application/json: {}
-  
+
   # Snapshots
   # tested create: ok
   /api-gateway/api/v2/dtables/{base_uuid}/snapshot/:
