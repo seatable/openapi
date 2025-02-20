@@ -24,15 +24,15 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 >
 > **Base Operations**
 >
-> [Duplicate Table](/reference/duplicatetable) span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span>
+> - [Duplicate Table](/reference/duplicatetable) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span>
 >
 > **Account Operations - System Admin**
 >
-> [List File Access Logs](/reference/listfileaccesslogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List File Access Logs](/reference/listfileaccesslogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 >
 > **Account Operations - Team Admin**
 >
-> [List File Access Logs](/reference/listfileaccesslogs-1)
+> - [List File Access Logs](/reference/listfileaccesslogs-1)
 
 ## Version 5.1 (08.11.2024)
 
