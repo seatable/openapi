@@ -218,6 +218,15 @@ components:
         minimum: 1
       required: true
       example: 1
+    op_id_big_data_path:
+      name: op_id
+      description: The id of the big data operation logs.
+      in: path
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      example: 1
 
   # Reusable schemas (data models)
   schemas:
@@ -4459,3 +4468,69 @@ paths:
                   dtable_name: Example.dtable
                   commit_id: 1234567813a3e0950d4d4f32bd744137929cef23
                   ctime: 1622111992159
+
+  /api-gateway/api/v2/dtables/{base_uuid}/db-operations/:
+    get:
+      tags:
+        - Big data operations
+      summary: Get Base Big Data Operations
+      operationId: getBaseBigDataOperations
+      description: Get the operation logs of big data in a base. With the base's `base_uuid`.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                operations:
+                  - dtable_uuid: 91a377f36bce4e80a894b421b2801fce
+                    id: 77
+                    op_time: 1721009252
+                    op_type: update_links
+                    author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    operation: >-
+                      {"count":2, "link_id":"3847", "table_id": "0000 ", "other_table_id ": "jCoR"}
+                  - dtable_uuid: 91a377f36bce4e80a894b421b2801fce
+                    id: 76
+                    op_time: 1721009225
+                    op_type: add_row
+                    author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    operation: >-
+                      {"row_id":"171jHKAXRP69hD_NRApaRg", "table_id":"0000", "row_data":{"0000":"aaa", "_creator":"c6580a35560244bb9678c70bcdb55df5@auth.local", "_ctime": "2024-07-15T10:07:05.046579+08:00", "_id": "171jHKAXRP69hD_NRApaRg", "_last_modifier":"c6580a35560244bb9678c70bcdb55df5@auth.local","_mtime":"2024-07-15T10:07:05.046579+08:00"}}
+                  - dtable_uuid: 91a377f36bce4e80a894b421b2801fce
+                    id: 73
+                    op_time: 1721009225
+                    op_type: delete_links
+                    author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                    operation: >-
+                      {"count":2, "link_id":"3847", "table_id": "0000 ", "other_table_id ": "jCoR"}
+                  
+  /api-gateway/api/v2/dtables/{base_uuid}/restore-operations/{op_id}/:
+    put:
+      tags:
+        - Big data operations
+      summary: Restore Big Data Operations
+      operationId: restoreBigDataOperations
+      description: Restore the operations by `op_id` of big data operation logs in a base. With the base's `base_uuid`.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/op_id_big_data_path"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success:true
