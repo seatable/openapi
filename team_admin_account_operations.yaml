@@ -160,9 +160,6 @@ components:
       type: string
       description: The unique `user_id` in the form ...@auth.local. This is not the email address of the user.
       example: "123abc456def789ghi123jkl456mno789@auth.local"
-    team_admin_user_ids:
-      type: string
-      example: "123abc456def789ghi123jkl456mno789@auth.local, mno789ghi123jkl456mno789pqr123stu@auth.local"
     team_admin_email:
       type: string
       description: User's contact email to login.
@@ -1030,7 +1027,11 @@ paths:
               type: object
               properties:
                 email:
-                  $ref: "#/components/schemas/team_admin_user_id"
+                  type: array
+                  items:
+                    type: string
+                    format: email
+                  description: List of `user_ids` (xxx@auth.local).
       security:
         - AccountTokenAuth: []
       parameters:

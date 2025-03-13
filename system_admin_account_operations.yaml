@@ -3530,12 +3530,6 @@ paths:
                   $ref: "#/components/schemas/plugin"
       security:
         - AccountTokenAuth: []
-      parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: multipart/form-data;
       responses:
         "200":
           description: OK
@@ -3614,11 +3608,6 @@ paths:
       security:
         - AccountTokenAuth: []
       parameters:
-        - name: Content-Type
-          in: header
-          schema:
-            type: string
-          example: multipart/form-data; boundary
         - $ref: "#/components/parameters/plugin_id"
       responses:
         "200":
