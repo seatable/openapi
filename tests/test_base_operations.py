@@ -523,10 +523,11 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
         'table_name': table_name_2,
         'other_table_name': table_name_1,
         'link_id': link_id,
-        'row_id': table_2_row_id,
-        'other_rows_ids': table_1_row_ids,
+        'other_rows_ids_map': {
+            table_2_row_id: table_1_row_ids,
+        },
     }
-    case: Case = base_operations_schema.get_operation_by_id('createRowLinksDeprecated') \
+    case: Case = base_operations_schema.get_operation_by_id('createRowLink') \
         .make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
 
