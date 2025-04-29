@@ -26,7 +26,7 @@ Meaning that if you reach the rate limit for one base, you still could make requ
 
 > ❗ Important Update: API Endpoint Changes
 >
-> In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 6.0. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
+> In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 5.3. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
 
 ### Retrieve current rate limit usage
 
