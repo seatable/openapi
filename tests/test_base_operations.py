@@ -408,7 +408,7 @@ def test_getRow(base: Base, snapshot_json, operation_id: str):
         'url': 'https://cloud.seatable.io',
         'email': 'demo@example.com'
     }
-    row_id = add_row(base, table_name, row)
+    row_id = append_rows(base, table_name, [row])[0]
 
     path_parameters = {'base_uuid': base.uuid, 'row_id': row_id}
     query = {'table_name': table_name}
@@ -497,7 +497,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
         {'number': 1.4},
     ]
     table_1_row_ids = append_rows(base, table_name_1, table_1_rows)
-    table_2_row_id = add_row(base, table_name_2, {'number': 2.1})
+    table_2_row_id = append_rows(base, table_name_2, [{'number': 2.1}])[0]
 
     # Insert link column
     path_parameters = {'base_uuid': base.uuid}
@@ -702,7 +702,7 @@ def test_listRows_files_images(base: Base,  snapshot_json: SnapshotAssertion, op
             }
         ],
     }
-    add_row(base, table_name, row)
+    append_rows(base, table_name, [row])
 
     # List rows
     path_parameters = {'base_uuid': base.uuid}
@@ -770,20 +770,6 @@ def create_table(base: Base, table_name: str, columns: list[dict]):
     response = case.call_and_validate()
 
     assert response.status_code == 200
-
-def add_row(base: Base, table_name: str, row: dict) -> str:
-    path_parameters = {'base_uuid': base.uuid}
-    body = {'table_name': table_name, 'row': row}
-    headers = {'Authorization': f'Bearer {base.token}'}
-
-    operation = base_operations_schema.get_operation_by_id('addRow')
-    case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
-
-    row_id = response.json()['_id']
-    assert isinstance(row_id, str)
-
-    return row_id
 
 def append_rows(base: Base, table_name: str, rows: list[dict]) -> list[str]:
     path_parameters = {'base_uuid': base.uuid}
