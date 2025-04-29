@@ -335,11 +335,7 @@ def test_createTable(base: Base, snapshot_json: SnapshotAssertion, operation_id:
     path_parameters = {'base_uuid': base.uuid}
     body = {'table_name': table_name, 'columns': COLUMNS}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'createTable':
-        operation = base_operations_schema.get_operation_by_id('createTable')
-    elif operation_id == 'createTableDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id('createTableDeprecated')
+    operation = base_operations_schema.get_operation_by_id('createTable')
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
@@ -364,11 +360,7 @@ def test_appendRows(base: Base, snapshot_json: SnapshotAssertion, operation_id: 
     path_parameters = {'base_uuid': base.uuid}
     body = {'table_name': table_name, 'rows': ROWS}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'appendRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'appendRows':
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
@@ -411,14 +403,9 @@ def test_getRow(base: Base, snapshot_json, operation_id: str):
     row_id = append_rows(base, table_name, [row])[0]
 
     path_parameters = {'base_uuid': base.uuid, 'row_id': row_id}
-    query = {'table_name': table_name}
+    query = {'table_name': table_name, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'getRowDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'getRow':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
 
@@ -446,14 +433,9 @@ def test_listRows(base: Base, snapshot_json, operation_id: str):
     append_rows(base, table_name, ROWS)
 
     path_parameters = {'base_uuid': base.uuid}
-    query = {'table_name': table_name}
+    query = {'table_name': table_name, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'listRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'listRows':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
 
@@ -620,26 +602,15 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
         assert response.status_code == 200
 
     # List rows
-    query = {'table_name': table_name_2}
-    if operation_id == 'listRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-        matcher = path_type(
-            {
-                r"rows\..*\.(_id|_ctime|_mtime|_creator|_last_modifier)": (str,),
-                r"rows\..*\.link.\d": (str,),
-            },
-            regex=True,
-        )
-    elif operation_id == 'listRows':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
-        matcher = path_type(
-            {
-                r"rows\..*\.(_id|_ctime|_mtime|_creator|_last_modifier)": (str,),
-                r"rows\..*\.link.*\.row_id": (str,),
-            },
-            regex=True,
-        )
+    query = {'table_name': table_name_2, 'convert_keys': True}
+    operation = base_operations_schema.get_operation_by_id(operation_id)
+    matcher = path_type(
+        {
+            r"rows\..*\.(_id|_ctime|_mtime|_creator|_last_modifier)": (str,),
+            r"rows\..*\.link.*\.row_id": (str,),
+        },
+        regex=True,
+    )
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call_and_validate()
@@ -707,13 +678,9 @@ def test_listRows_files_images(base: Base,  snapshot_json: SnapshotAssertion, op
 
     # List rows
     path_parameters = {'base_uuid': base.uuid}
-    query = {'table_name': table_name}
+    query = {'table_name': table_name, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-    if operation_id == 'listRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'listRows':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call_and_validate()
 
@@ -738,11 +705,7 @@ def test_querySQL(base: Base, snapshot_json: SnapshotAssertion, operation_id: st
     path_parameters = {'base_uuid': base.uuid}
     body = {'sql': f'SELECT * FROM {table_name}', 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'querySQLDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'querySQL':
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
