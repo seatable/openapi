@@ -111,14 +111,14 @@ Note down the name of the tables and the name of the columns. You will need thes
 
 ### Step 4: Write some data to your base
 
-The request to [Add a row](https://api.seatable.io/reference/addrowdeprecated) to a base, requires the following information. You have to know ...
+The request to [Append Rows](https://api.seatable.io/reference/appendrows) to a base, requires the following information. You have to know ...
 
 - the `Base-Token` for authentication -> ok
 - the `base_uuid` to identify the base -> no problem
 - the `table_name` -> you should know this from the last request
-- and you have to define the row object, meaning that you have to tell the API what values you want to write to the table.
+- and you have to define the row object(s), meaning that you have to tell the API what values you want to write to the table.
 
-At first it looks difficult to define the row object, but in fact it is quite easy. The row object consists of key:value pairs. The key is the name of the column and the value is that what you want to write to the base. So if you want to create a line with **John Doe**, then the row object looks like this:
+At first it looks difficult to define the row objects, but in fact it is quite easy. The row objects consist of key:value pairs. The key is the name of the column and the value is that what you want to write to the base. So if you want to create a row with **John Doe**, then the row object looks like this:
 
 ```json Row object, writing some values to the columns with the name First name and Last name.
 {
