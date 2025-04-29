@@ -74,12 +74,6 @@ jobs:
         with:
           rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818909 --useSpecVersion
 
-      # base operations (before 4.4)
-      - name: Update base operations 🚀
-        uses: readmeio/rdme@v8
-        with:
-          rdme: openapi base_operations_deprecated.yaml --key=${{ secrets.README_API_KEY }} --id=67812a09e88eab0a89818902 --useSpecVersion
-
       # file operations
       - name: Update file operations 🚀
         uses: readmeio/rdme@v8
