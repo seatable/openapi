@@ -399,7 +399,7 @@ components:
       description: >-
         Update their role. For details about roles, refer to
         [SeaTable Roles and
-        Permissions](https://manual.seatable.io/config/enterprise/roles_permissions/).
+        Permissions](https://admin.seatable.io/configuration/roles-and-permissions/).
     login_id:
       type: string
       description: >-
@@ -4060,7 +4060,7 @@ paths:
         have a higher priority over the settings in the config files.
         However, in the `dtable_web_settings` you'll find more setting options.
         For details, visit the [SeaTable Admin
-        Manual](https://manual.seatable.io/config/dtable_web_settings/#user-management-options).
+        Manual](https://admin.seatable.io/configuration/dtable-web-settings/#user-management-options).
       requestBody:
         content:
           application/json:
