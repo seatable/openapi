@@ -2591,6 +2591,10 @@ paths:
         >
         > If no view is selected, all columns (even hidden one) are returned. If a view is selected, only the visible columns of that view are returned with the request.
 
+        > 📘 Link Columns
+        >
+        > Before version 5.3, the link column of a row returns a maximum of 10 records. From version 5.3 onward, it returns a maximum of 50 records.
+
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2814,6 +2818,9 @@ paths:
         When you have a "Link to other records" column in your table and you
         have created some links to the current or another table, you can use
         this request to query each row's linked records' IDs and display values.
+
+        By default, it returns 10 records per row. To query more records, please
+        set the "offset" and "limit" values for a row in the rows parameter.
 
         > 📘 id or name
         > 
