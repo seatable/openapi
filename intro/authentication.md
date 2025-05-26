@@ -60,7 +60,7 @@ Here are the differences between these three tokens:
 | :------------ | :-------- | :--------- | :----------------------------------------------------------------------------------- |
 | Account-Token | 40 chars  | never      | account privileges (user, team-admin, system admin)                                  |
 | API-Token     | 40 chars  | never      | allows generating a Base-Token for a specific base with either read or write access  |
-| Base-Token    | 492 chars | 3 days     | allow executing a Base-Operation with either read or write access to a specific base |
+| Base-Token    | >400 chars | 3 days     | allow executing a Base-Operation with either read or write access to a specific base |
 
 > ❗ Keep your Tokens secure!
 >
