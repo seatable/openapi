@@ -2593,7 +2593,7 @@ paths:
 
         > 📘 Link Columns
         >
-        > Before version 5.3, the link column of a row returns a maximum of 10 records. From version 5.3 onward, it returns a maximum of 50 records.
+        > From version 5.3 onward, the link column of a row returns a maximum of 50 records.
 
       security:
         - BaseTokenAuth: []
