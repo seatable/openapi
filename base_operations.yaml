@@ -2553,6 +2553,10 @@ paths:
         >
         > - The request returns a maximum of 10 000 rows, even if you specify a higher limit in your SQL-statement. 
         > - If you don't specify a limit, max 100 rows are returned.
+
+        > 📘 Link Columns
+        >
+        > Link columns return a maximum of 50 records per row.
       requestBody:
         content:
           application/json:
