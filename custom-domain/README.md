@@ -68,6 +68,15 @@ Disallow: /edit/
 Disallow: /suggested-edits/
 Disallow: /login
 Disallow: /logout
+Disallow: /v9
+Disallow: /v8
+Disallow: /v7
+Disallow: /v6
+Disallow: /v5
+Disallow: /v4
+Disallow: /v3
+Disallow: /v2
+Disallow: /v1
 ```
 
 ### Cronjob to create a sitemap.xml
@@ -78,11 +87,11 @@ The following script runs every day one via cronjob in the directory `/var/www/a
 #!/bin/bash
 
 SOURCE_URL="https://api.seatable.io/reference/introduction"
-OUTPUT_FILE_NAME="sitemap.xml"
+OUTPUT_FILE_NAME="/var/www/api.seatable.io/sitemap.xml"
 
 echo "Generate a new sitemap for ${SOURCE_URL}"
 curl ${SOURCE_URL} | grep -o 'href="/reference/[^"]*">' | cut -c7- | rev | cut -c3- | rev > ./found_links.txt
-sort ./found_links.txt | uniq > found_links_cleaned.txt
+sort /tmp/found_links.txt | uniq > /tmp/found_links_cleaned.txt
 
 # Create the XML header
 echo '<?xml version="1.0" encoding="UTF-8"?>' > ${OUTPUT_FILE_NAME}
@@ -101,6 +110,6 @@ done < found_links_cleaned.txt
 # Close the XML
 echo '</urlset>' >> ${OUTPUT_FILE_NAME}
 
-rm ./found_links.txt
-rm ./found_links_cleaned.txt
+rm /tmp/found_links.txt
+rm /tmp/found_links_cleaned.txt
 ```
