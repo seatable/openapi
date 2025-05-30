@@ -82,6 +82,7 @@ Disallow: /v1
 ### Cronjob to create a sitemap.xml
 
 The following script runs every day one via cronjob in the directory `/var/www/api.seatable.io` and generates a `sitemap.xml`.
+The cronjob could be: `1 1 * * * /var/www/api.seatable.io/create-sitemap.sh`
 
 ```bash
 #!/bin/bash
