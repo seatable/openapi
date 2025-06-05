@@ -2120,7 +2120,7 @@ components:
     selected_columns:
       type: string
       description: >-
-        The columns to update. Use comma (,) to separate column
+        Column for matching chosen when updating. Use comma (,) to separate column
         names. Required.
       example: Field1
     permission:
