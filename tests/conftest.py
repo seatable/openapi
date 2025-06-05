@@ -38,7 +38,7 @@ user_account_operations = schemathesis.from_path('../user_account_operations.yam
 
 @schemathesis.hook
 def after_call(context, case, response: Response):
-    # TODO: Disable redirects for all tests? (to prevent issues like https://forum.seatable.io/t/seatable-4-4-out-now/4237/4)
+    # TODO: Disable redirects for all tests? (to prevent issues like https://forum.seatable.com/t/seatable-4-4-out-now/4237/4)
 
     # Log all request URLs. You have to run pytest with '-rA' in order to see these for successful tests.
     print(f'{response.request.method} {response.request.url}')
