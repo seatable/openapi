@@ -2533,7 +2533,7 @@ paths:
         > 
         > New rows (INSERT statement) are always added to the **big data backend**. An error message will be returned, if the big data backend is not activated for the target base.
 
-        The complete [SQL Reference](https://developer.seatable.io/scripts/sql/reference/) can be found documentation in the developer manual. 
+        The complete [SQL Reference](https://developer.seatable.com/scripts/sql/reference/) can be found documentation in the developer manual. 
 
         Here are some example requests for a fictitious table *Family* with the columns *name*, *age* and *birthday*:
 
@@ -3517,7 +3517,7 @@ paths:
 
         `new_column_type` is the new type of the target column. For a list of
         column type params refer to the SeaTable API Parameter.
-        For further information on column types, check the page [Models](https://api.seatable.io/reference/models).
+        For further information on column types, check the page [Models](https://api.seatable.com/reference/models).
       requestBody:
         content:
           application/json:
@@ -3595,7 +3595,7 @@ paths:
         For details, refer to the call [Insert Column](/reference/insertcolumn-1).
 
         Please note that you can't append `formula`, `link` or `link-formula` columns using this endpoint.
-        Use the [Insert Column](https://api.seatable.io/reference/insertcolumn-1) endpoint instead.
+        Use the [Insert Column](https://api.seatable.com/reference/insertcolumn-1) endpoint instead.
       requestBody:
         content:
           application/json:

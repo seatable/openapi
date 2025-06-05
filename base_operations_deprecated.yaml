@@ -2595,7 +2595,7 @@ paths:
         `SELECT name, age, birthday, gender FROM Participants`<br/>
         `SELECT name, surname FROM Participants ORDER BY name`<br/>
         `SELECT * FROM Participants LIMIT 25`
-        For more details, check the [SQL-syntax supported by SeaTable](https://developer.seatable.io/scripts/sql/reference/).
+        For more details, check the [SQL-syntax supported by SeaTable](https://developer.seatable.com/scripts/sql/reference/).
 
         > 📘 Returns also data from the big data backend
         > 
@@ -3811,7 +3811,7 @@ paths:
         `new_column_type` is the new type of the target column. For a list of
         column type params refer to the SeaTable API Parameter.
 
-        Get more information about columns and column types in [Models](https://api.seatable.io/reference/models).
+        Get more information about columns and column types in [Models](https://api.seatable.com/reference/models).
       requestBody:
         content:
           application/json:
@@ -3891,7 +3891,7 @@ paths:
         For details, refer to the call [Insert Column](/reference/insertcolumndeprecated).
 
         Please note that you can't append `formula`, `link` or `link-formula` columns using this endpoint.
-        Use the [Insert Column](https://api.seatable.io/reference/insertcolumndeprecated) endpoint instead.
+        Use the [Insert Column](https://api.seatable.com/reference/insertcolumndeprecated) endpoint instead.
       requestBody:
         content:
           application/json:

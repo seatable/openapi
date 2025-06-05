@@ -8,7 +8,7 @@ The following setup allows to reach api documentation via custom subdomain. A ng
 - MAIN URL: https://seatable.io
 - Robots.txt: [x] Indexing by robots is allowed
 - SITEMAP: [ ] The sitemap.xml is disabled
-- CANONICAL URL: https://api.seatable.io
+- CANONICAL URL: https://api.seatable.com
 
 ## Server configuration
 
@@ -20,10 +20,10 @@ It is important to add any header in the nginx configuration, otherwise the goog
 ```bash
 server {
     listen 443 ssl;
-    server_name api.seatable.io;
+    server_name api.seatable.com;
 
-    ssl_certificate /etc/letsencrypt/live/api.seatable.io/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/api.seatable.io/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/api.seatable.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/api.seatable.com/privkey.pem;
     ssl_session_timeout 5m;
 
     ssl_protocols TLSv1.2;
@@ -46,12 +46,12 @@ server {
     }
 
     location /sitemap.xml {
-        root /var/www/api.seatable.io/;
+        root /var/www/api.seatable.com/;
         access_log off;
     }
 
     location /robots.txt {
-        root /var/www/api.seatable.io/;
+        root /var/www/api.seatable.com/;
         access_log off;
     }
 }
@@ -59,7 +59,7 @@ server {
 
 ### robots.txt
 
-The `/var/www/api.seatable.io/robots.txt` looks like this:
+The `/var/www/api.seatable.com/robots.txt` looks like this:
 
 ```bash
 User-agent: *
@@ -81,14 +81,14 @@ Disallow: /v1
 
 ### Cronjob to create a sitemap.xml
 
-The following script runs every day one via cronjob in the directory `/var/www/api.seatable.io` and generates a `sitemap.xml`.
-The cronjob could be: `1 1 * * * /var/www/api.seatable.io/create-sitemap.sh`
+The following script runs every day one via cronjob in the directory `/var/www/api.seatable.com` and generates a `sitemap.xml`.
+The cronjob could be: `1 1 * * * /var/www/api.seatable.com/create-sitemap.sh`
 
 ```bash
 #!/bin/bash
 
-SOURCE_URL="https://api.seatable.io/reference/introduction"
-OUTPUT_FILE_NAME="/var/www/api.seatable.io/sitemap.xml"
+SOURCE_URL="https://api.seatable.com/reference/introduction"
+OUTPUT_FILE_NAME="/var/www/api.seatable.com/sitemap.xml"
 
 echo "Generate a new sitemap for ${SOURCE_URL}"
 curl ${SOURCE_URL} | grep -o 'href="/reference/[^"]*">' | cut -c7- | rev | cut -c3- | rev > ./found_links.txt
@@ -102,7 +102,7 @@ echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> ${OUTPUT_
 while IFS= read -r line; do
     line=$(echo "$line" | sed 's/^\///')  # Remove leading /
     echo "  <url>" >> ${OUTPUT_FILE_NAME}
-    echo "    <loc>https://api.seatable.io/$line</loc>" >> ${OUTPUT_FILE_NAME}
+    echo "    <loc>https://api.seatable.com/$line</loc>" >> ${OUTPUT_FILE_NAME}
     echo "    <changefreq>daily</changefreq>" >> ${OUTPUT_FILE_NAME}
     echo "    <priority>0.3</priority>" >> ${OUTPUT_FILE_NAME}
     echo "  </url>" >> ${OUTPUT_FILE_NAME}

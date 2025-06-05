@@ -399,7 +399,7 @@ components:
       description: >-
         Update their role. For details about roles, refer to
         [SeaTable Roles and
-        Permissions](https://manual.seatable.io/config/enterprise/roles_permissions/).
+        Permissions](https://admin.seatable.com/configuration/roles-and-permissions/).
     login_id:
       type: string
       description: >-
@@ -851,7 +851,7 @@ paths:
         another superuser and change your role back with that account. If
         there's no further superuser available, you can create one. Don't
         remember how to create a superuser? Read the
-        [Manual](https://manual.seatable.io/).
+        [Manual](https://admin.seatable.com/).
 
 
         ### There are 4 types of system administrators:
@@ -939,7 +939,7 @@ paths:
         Add another super user, login as that super user and change your role
         back. Unfortunately, you cannot do this with the API. Refer to [SeaTable
         Admin Manual - Starting SeaTable
-        Server](https://manual.seatable.io/docker/Developer-Edition/Deploy%20SeaTable-DE%20with%20Docker/#starting-seatable-server)
+        Server](https://admin.seatable.com/maintenance/password-reset/)
         for details.
       requestBody:
         content:
@@ -4060,7 +4060,7 @@ paths:
         have a higher priority over the settings in the config files.
         However, in the `dtable_web_settings` you'll find more setting options.
         For details, visit the [SeaTable Admin
-        Manual](https://manual.seatable.io/config/dtable_web_settings/#user-management-options).
+        Manual](https://admin.seatable.com).
       requestBody:
         content:
           application/json:
