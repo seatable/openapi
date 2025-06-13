@@ -1,6 +1,6 @@
 ---
 title: Try It! with your own Server
-excerpt: Prerequisites to use api.seatable.io with your own self-hosted SeaTable server.
+excerpt: Prerequisites to use api.seatable.com with your own self-hosted SeaTable server.
 category: 67812a09e88eab0a898188f9
 isReference: true
 slug: requirement-self-hosted
@@ -10,7 +10,7 @@ slug: requirement-self-hosted
 .markdown-body {
 	--markdown-title-marginTop: 2em;
 }
-a[href="https://seatable.io/registrierung/?lang=auto"] {
+a[href="https://seatable.com/registration/"] {
     color: #ffffff !important;
     font-size: 1.2rem;
     font-weight: 600;
@@ -33,13 +33,13 @@ This feature makes it super easy to explore and get to know the SeaTable API wit
 There are no requirements needed to use **Try It!** with cloud.seatable.io. Of course you will need an account but the registration is free and should take only some seconds.
 After the first login you can start right away to start with your first API requests.
 
-[Register now](https://seatable.io/registrierung/?lang=auto)
+[Register now](https://seatable.com/registration/)
 
 ## Try It! with SeaTable Server
 
-If you are running your own [SeaTable server](https://seatable.io/on-premises/?lang=auto), you will need to change your nginx configuration so that the **Try It!** function works with your server and that you can easily copy and paste the generated API requests without authorization errors. Please replace your existing nginx configuration at `/opt/seatable/seatable-data/seatable/conf/nginx.conf` with the following setup.
+If you are running your own [SeaTable server](https://seatable.com/on-premises/), you will need to change your nginx configuration so that the **Try It!** function works with your server and that you can easily copy and paste the generated API requests without authorization errors. Please replace your existing nginx configuration at `/opt/seatable/seatable-data/seatable/conf/nginx.conf` with the following setup.
 
-Of course you have to replace `{your.seatable.server}` with the public URL of your server and then reload the updated nginx configuration inside the SeaTable docker container with `nginx -s reload`. For more details about this command and the SeaTable docker container, check the [admin manual](https://manual.seatable.io).
+Of course you have to replace `{your.seatable.server}` with the public URL of your server and then reload the updated nginx configuration inside the SeaTable docker container with `nginx -s reload`. For more details about this command and the SeaTable docker container, check the [admin manual](https://admin.seatable.com).
 
 ```bash nginx configuration (4.0 and newer)
 log_format seatableformat '\$http_x_forwarded_for \$remote_addr [\$time_local] "\$request" \$status \$body_bytes_sent "\$http_referer" "\$http_user_agent" \$upstream_response_time';
@@ -212,9 +212,9 @@ server {
 }
 ```
 
-### Enable CORS to allow requests from api.seatable.io
+### Enable CORS to allow requests from api.seatable.com
 
-CORS is the abbreviation for [Cross-origin resource sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), which is a security mechanism to prevent request from another domain to your server. If you don't allow CORS request for api.seatable.io, the **Try It!** button will not work. After the click you will see a rotating circle on the button and error messages in your browser console.
+CORS is the abbreviation for [Cross-origin resource sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), which is a security mechanism to prevent request from another domain to your server. If you don't allow CORS request for api.seatable.com, the **Try It!** button will not work. After the click you will see a rotating circle on the button and error messages in your browser console.
 
 ![Try It! with CORS error](https://seatable.io/wp-content/uploads/2023/03/readme-com-cors-access-control.png)
 

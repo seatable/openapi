@@ -2542,7 +2542,7 @@ paths:
         > 
         > New rows (INSERT statement) are always added to the **big data backend**. An error message will be returned, if the big data backend is not activated for the target base.
 
-        The complete [SQL Reference](https://developer.seatable.io/scripts/sql/reference/) can be found documentation in the developer manual. 
+        The complete [SQL Reference](https://developer.seatable.com/scripts/sql/reference/) can be found documentation in the developer manual. 
 
         Here are some example requests for a fictitious table *Family* with the columns *name*, *age* and *birthday*:
 
@@ -2562,6 +2562,10 @@ paths:
         >
         > - The request returns a maximum of 10 000 rows, even if you specify a higher limit in your SQL-statement. 
         > - If you don't specify a limit, max 100 rows are returned.
+
+        > 📘 Link Columns
+        >
+        > Link columns return a maximum of 50 records per row.
       requestBody:
         content:
           application/json:
@@ -2602,7 +2606,7 @@ paths:
 
         > 📘 Link Columns
         >
-        > Before version 5.3, the link column of a row returns a maximum of 10 records. From version 5.3 onward, it returns a maximum of 50 records.
+        > From version 5.3 onward, the link column of a row returns a maximum of 50 records.
 
       security:
         - BaseTokenAuth: []
@@ -3522,7 +3526,7 @@ paths:
 
         `new_column_type` is the new type of the target column. For a list of
         column type params refer to the SeaTable API Parameter.
-        For further information on column types, check the page [Models](https://api.seatable.io/reference/models).
+        For further information on column types, check the page [Models](https://api.seatable.com/reference/models).
       requestBody:
         content:
           application/json:
@@ -3600,7 +3604,7 @@ paths:
         For details, refer to the call [Insert Column](/reference/insertcolumn-1).
 
         Please note that you can't append `formula`, `link` or `link-formula` columns using this endpoint.
-        Use the [Insert Column](https://api.seatable.io/reference/insertcolumn-1) endpoint instead.
+        Use the [Insert Column](https://api.seatable.com/reference/insertcolumn-1) endpoint instead.
       requestBody:
         content:
           application/json:

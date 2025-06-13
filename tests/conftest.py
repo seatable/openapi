@@ -32,13 +32,12 @@ assert CLEANUP_AFTER_TESTS in ["True", "False"], "CLEANUP_AFTER_TESTS environmen
 schema = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
 system_admin_account_operations = schemathesis.from_path('../system_admin_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
 authentication_schema = schemathesis.from_path('../authentication.yaml', base_url=BASE_URL, validate_schema=True)
-base_operations_deprecated_schema= schemathesis.from_path('../base_operations_deprecated.yaml', base_url=BASE_URL, validate_schema=True)
 base_operations_schema = schemathesis.from_path('../base_operations.yaml', base_url=BASE_URL, validate_schema=True)
 user_account_operations = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
 
 @schemathesis.hook
 def after_call(context, case, response: Response):
-    # TODO: Disable redirects for all tests? (to prevent issues like https://forum.seatable.io/t/seatable-4-4-out-now/4237/4)
+    # TODO: Disable redirects for all tests? (to prevent issues like https://forum.seatable.com/t/seatable-4-4-out-now/4237/4)
 
     # Log all request URLs. You have to run pytest with '-rA' in order to see these for successful tests.
     print(f'{response.request.method} {response.request.url}')

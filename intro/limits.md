@@ -26,7 +26,7 @@ Meaning that if you reach the rate limit for one base, you still could make requ
 
 > ❗ Important Update: API Endpoint Changes
 >
-> In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 6.0. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
+> In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 5.3. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
 
 ### Retrieve current rate limit usage
 
@@ -65,12 +65,12 @@ If this is the case, you should start thinking about how to reduce the number of
 
 ## Customization of limits
 
-SeaTable Dedicated customers and operators of their own SeaTable Server (Enterprise or Developer Edition) can adjust SeaTable's default limits according to their needs. These are the corresponding configuration files in the [SeaTable Admin Manual](https://admin.seatable.io):
+SeaTable Dedicated customers and operators of their own SeaTable Server (Enterprise or Developer Edition) can adjust SeaTable's default limits according to their needs. These are the corresponding configuration files in the [SeaTable Admin Manual](https://admin.seatable.com):
 
-- [dtable-api-gateway.conf](https://admin.seatable.io/configuration/dtable-api-gateway-conf)
-- [dtable_server_config.json](https://admin.seatable.io/configuration/dtable-server-config/) - deprecated
-- [dtable-db.conf](https://admin.seatable.io/configuration/dtable-db-conf/) - deprecated
-- [dtable_web_settings.py](https://admin.seatable.io/configuration/dtable-web-settings/) - deprecated
+- [dtable-api-gateway.conf](https://admin.seatable.com/configuration/dtable-api-gateway-conf)
+- [dtable_server_config.json](https://admin.seatable.com/configuration/dtable-server-config/) - deprecated
+- [dtable-db.conf](https://admin.seatable.com/configuration/dtable-db-conf/) - deprecated
+- [dtable_web_settings.py](https://admin.seatable.com/configuration/dtable-web-settings/) - deprecated
 
 ## Size limits
 
@@ -78,9 +78,9 @@ Besides the rate limits, there are size limits for how many rows you can manipul
 
 | Action and Endpoints                                                                                                                     | Max. number of rows |
 | :--------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
-| [List rows (with SQL)](https://api.seatable.io/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/`                     | 10.000              |
-| [Insert, Update or Delete Rows (with SQL)](https://api.seatable.io/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/` | unlimited           |
-| [List rows](https://api.seatable.io/reference/listrows)<br/>`GET /api-gateway/api/v2/dtables/{...}/rows/`                                | 1.000               |
-| [Append rows](https://api.seatable.io/reference/appendrows)<br/>`POST /api-gateway/api/v2/dtables/{...}/rows/`                           | 1.000               |
-| [Update rows](https://api.seatable.io/reference/updaterow)<br/>`PUT /api-gateway/api/v2/dtables/{...}/rows/`                             | 1.000               |
-| [Delete rows](https://api.seatable.io/reference/deleterow)<br/>`DELETE /api-gateway/api/v2/dtables/{base_uuid}/rows/`                    | 10.000              |
+| [List rows (with SQL)](https://api.seatable.com/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/`                     | 10.000              |
+| [Insert, Update or Delete Rows (with SQL)](https://api.seatable.com/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/` | unlimited           |
+| [List rows](https://api.seatable.com/reference/listrows)<br/>`GET /api-gateway/api/v2/dtables/{...}/rows/`                                | 1.000               |
+| [Append rows](https://api.seatable.com/reference/appendrows)<br/>`POST /api-gateway/api/v2/dtables/{...}/rows/`                           | 1.000               |
+| [Update rows](https://api.seatable.com/reference/updaterows)<br/>`PUT /api-gateway/api/v2/dtables/{...}/rows/`                            | 1.000               |
+| [Delete rows](https://api.seatable.com/reference/deleterows)<br/>`DELETE /api-gateway/api/v2/dtables/{base_uuid}/rows/`                   | 10.000              |
