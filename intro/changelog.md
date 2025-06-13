@@ -22,7 +22,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > 
 > You can get more information from this [blog article](https://seatable.com/api-gateway-version-5-3/).
 
-No further changes were made to the API documentation.
+No further changes were made to the API documentation with v5.3.
 
 ## Version 5.2 (25.02.2025)
 

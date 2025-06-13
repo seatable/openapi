@@ -24,13 +24,9 @@ Meaning that if you reach the rate limit for one base, you still could make requ
 >
 > Currently, the same limits apply to all SeaTable Cloud customers. In the future, SeaTable might adjust the rate limits to balance for demand and reliability. SeaTable may also introduce distinct rate limits for teams with different pricing plans.
 
-> ❗ Important Update: API Endpoint Changes
->
-> In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 5.3. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
-
 ### Retrieve current rate limit usage
 
-The new `/api-gateway` endpoints return the current API rate limit usage through `x-ratelimit` headers. These headers provide the minute limit, the current usage, and the next reset time as a Unix timestamp in seconds. Below is an example of the returned headers:
+The `/api-gateway` endpoints return the current API rate limit usage through `x-ratelimit` headers. These headers provide the minute limit, the current usage, and the next reset time as a Unix timestamp in seconds. Below is an example of the returned headers:
 
 ```
 x-ratelimit-limit: 500
