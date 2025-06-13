@@ -4397,58 +4397,6 @@ paths:
                           value: ""
                 total_count: 3
 
-  /api-gateway/api/v2/dtables/{base_uuid}/deleted-rows/:
-    get:
-      tags:
-        - Activities & Logs
-      summary: List Deleted Rows
-      operationId: listDeletedRows
-      description: >-
-        List all the deleted rows in the last 7 days.
-
-
-        If you are looking for rows deleted before that, you can view a snapshot
-        of this base.
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                deleted_rows:
-                  - id: 37
-                    dtable_uuid: 12345678-187a-4d9f-b6cf-ff5e5019a6d5
-                    row_id: ZPFv2pm1SiaQpulvzkHm5Q
-                    op_user: 123456786fy54bb4afa2c2cb7369d244@auth.local
-                    op_time: "2020-03-17T10:31:35.000Z"
-                    detail:
-                      table_id: "0000"
-                      table_name: Table1
-                      row_name: Jasmin Tea
-                      row_data:
-                        - column_key: "0000"
-                          column_name: Name
-                          column_type: text
-                          column_data: {}
-                          value: test
-                        - column_key: AKLn
-                          column_name: Details
-                          column_type: file
-                          column_data: {}
-                          value:
-                            - name: example.html
-                              size: 514
-                              type: file
-                              url: >-
-                                http://cloud.seatable.io/workspace/1/asset/12345678-c8e5-49ab-8874-9d4a2dc4608c/files/2020-03/example.html
-                    op_app: null
-
   # Snapshots
   # tested create: ok
   /api-gateway/api/v2/dtables/{base_uuid}/snapshot/:
