@@ -398,8 +398,7 @@ components:
       type: string
       description: >-
         Update their role. For details about roles, refer to
-        [SeaTable Roles and
-        Permissions](https://admin.seatable.com/configuration/roles-and-permissions/).
+        [SeaTable Roles and Permissions](https://admin.seatable.com/configuration/roles-and-permissions/).
     login_id:
       type: string
       description: >-
@@ -4059,8 +4058,7 @@ paths:
         are also saved in the database table (dtable-db/constance_config). They
         have a higher priority over the settings in the config files.
         However, in the `dtable_web_settings` you'll find more setting options.
-        For details, visit the [SeaTable Admin
-        Manual](https://admin.seatable.com).
+        For details, visit the [SeaTable Admin Manual](https://admin.seatable.com).
       requestBody:
         content:
           application/json:
