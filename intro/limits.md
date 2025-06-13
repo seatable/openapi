@@ -82,5 +82,5 @@ Besides the rate limits, there are size limits for how many rows you can manipul
 | [Insert, Update or Delete Rows (with SQL)](https://api.seatable.io/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/` | unlimited           |
 | [List rows](https://api.seatable.io/reference/listrows)<br/>`GET /api-gateway/api/v2/dtables/{...}/rows/`                                | 1.000               |
 | [Append rows](https://api.seatable.io/reference/appendrows)<br/>`POST /api-gateway/api/v2/dtables/{...}/rows/`                           | 1.000               |
-| [Update rows](https://api.seatable.io/reference/updaterows)<br/>`PUT /api-gateway/api/v2/dtables/{...}/rows/`                            | 1.000               |
-| [Delete rows](https://api.seatable.io/reference/deleterows)<br/>`DELETE /api-gateway/api/v2/dtables/{base_uuid}/rows/`                   | 10.000              |
+| [Update rows](https://api.seatable.io/reference/updaterow)<br/>`PUT /api-gateway/api/v2/dtables/{...}/rows/`                             | 1.000               |
+| [Delete rows](https://api.seatable.io/reference/deleterow)<br/>`DELETE /api-gateway/api/v2/dtables/{base_uuid}/rows/`                    | 10.000              |

@@ -53,7 +53,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 5.0 (15.07.2024)
 
-[View API Documentation for v5.0](https://api.seatable.io/v5.0)
+The SeaTable API Reference for version 5.0 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v5.0).
 
 We recommend using the new `/api-gateway/` endpoints. These endpoints are faster because they check if the base has remained unchanged since the last request, allowing for quicker responses.
 
@@ -98,24 +98,24 @@ The SeaTable API Reference for version 4.3 is no longer accessible here. However
 >
 > **Base Operations**
 >
-> - [Create Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
-> - [Delete Row Links in Big Data](/reference/post_dtable-db-api-v1-base-base-uuid-links) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
+> - [Create Row Links in Big Data](/reference/createbigdatarowslinkdeprecated) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
+> - [Delete Row Links in Big Data](/reference/deletebigdatarowlinksdeprecated) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
 >
 > **Account Operations - System Admin**
 >
-> - [Update Team User](/reference/put_api-v2-1-admin-organizations-org-id-users-user-id) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/admin/organizations/{org_id}/users/{user_id}/`
+> - [Update Team User](/reference/updateteamuser) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/admin/organizations/{org_id}/users/{user_id}/`
 >
 > **Account Operations - Team Admin**
 >
-> - [List Team Logins](/reference/get_api-v2-1-org-org-id-admin-login-logs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/`
-> - [List User Logins](/reference/get_api-v2-1-org-org-id-admin-login-logs-user-id) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
-> - [Get SAML Config](/reference/get_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
-> - [Update SAML Config](/reference/put_api-v2-1-org-org-id-admin-saml-config) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
-> - [Verify SAML Domain](/reference/put_api-v2-1-org-org-id-admin-verify-domain) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/org/{org_id}/admin/verify-domain/`
+> - [List Team Logins](/reference/listteamlogins) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/`
+> - [List User Logins](/reference/listuserlogins) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/login-logs/{user_id}`
+> - [Get SAML Config](/reference/getsamlconfig) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
+> - [Update SAML Config](/reference/updatesamlconfig) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/org/{org_id}/admin/saml-config/`
+> - [Verify SAML Domain](/reference/verifysamldomain) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span> `/api/v2.1/org/{org_id}/admin/verify-domain/`
 >
 > **Account Operations - User**
 >
-> - [Search User](/reference/get_api2-search-user) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api2/search-user/?q={search_query}`
+> - [Search User](/reference/searchuser-1) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span> `/api2/search-user/?q={search_query}`
 
 > 👍 Other changes
 >
@@ -198,7 +198,7 @@ The SeaTable API Reference for version 3.5 is no longer available.
 
 > 🚧 Breaking changes
 >
-> - Import from CSV `POST dtable-server/api/v1/dtables/{base_uuid}/import-csv/` was replaced with this [new call](/reference/import-base-from-xlsx-or-csv)
-> - Append from CSV `POST dtable-server/api/v1/dtables/{base_uuid}/append-csv/` was replaced with this [new call](/reference/import-base-from-xlsx-or-csv)
+> - Import from CSV `POST dtable-server/api/v1/dtables/{base_uuid}/import-csv/` was replaced with this [new call](/reference/importbasefromfile)
+> - Append from CSV `POST dtable-server/api/v1/dtables/{base_uuid}/append-csv/` was replaced with this [new call](/reference/appendtotablefromfile)
 > - Create Row Comment `POST dtable-server/api/v1/dtables/{base_uuid}/comments/` was removed
 > - Update Row Comment `PUT dtable-server/api/v1/dtables/{base_uuid}/comments/` was removed
