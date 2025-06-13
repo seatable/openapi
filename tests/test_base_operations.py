@@ -7,7 +7,6 @@ from syrupy.assertion import SnapshotAssertion
 from syrupy.matchers import path_type
 
 schema = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
-base_operations_deprecated_schema= schemathesis.from_path('../base_operations_deprecated.yaml', base_url=BASE_URL, validate_schema=True)
 base_operations_schema = schemathesis.from_path('../base_operations.yaml', base_url=BASE_URL, validate_schema=True)
 file_operations = schemathesis.from_path('../file_operations.yaml', base_url=BASE_URL, validate_schema=True)
 
@@ -329,18 +328,14 @@ def test_createBase(workspace_id: int, account_token: Secret, snapshot_json: Sna
 
     assert snapshot_json(matcher=matcher) == response.json()
 
-@pytest.mark.parametrize('operation_id', ['createTable', 'createTableDeprecated'])
+@pytest.mark.parametrize('operation_id', ['createTable'])
 def test_createTable(base: Base, snapshot_json: SnapshotAssertion, operation_id: str):
     table_name = f'test_{operation_id}'
 
     path_parameters = {'base_uuid': base.uuid}
     body = {'table_name': table_name, 'columns': COLUMNS}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'createTable':
-        operation = base_operations_schema.get_operation_by_id('createTable')
-    elif operation_id == 'createTableDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id('createTableDeprecated')
+    operation = base_operations_schema.get_operation_by_id('createTable')
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
@@ -356,7 +351,7 @@ def test_createTable(base: Base, snapshot_json: SnapshotAssertion, operation_id:
 
     assert snapshot_json(matcher=matcher) == response.json()
 
-@pytest.mark.parametrize('operation_id', ['appendRowsDeprecated', 'appendRows'])
+@pytest.mark.parametrize('operation_id', ['appendRows'])
 def test_appendRows(base: Base, snapshot_json: SnapshotAssertion, operation_id: str):
     table_name = f'test_{operation_id}'
 
@@ -365,11 +360,7 @@ def test_appendRows(base: Base, snapshot_json: SnapshotAssertion, operation_id: 
     path_parameters = {'base_uuid': base.uuid}
     body = {'table_name': table_name, 'rows': ROWS}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'appendRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'appendRows':
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
@@ -388,7 +379,7 @@ def test_appendRows(base: Base, snapshot_json: SnapshotAssertion, operation_id: 
 
     assert snapshot_json(matcher=matcher) == data
 
-@pytest.mark.parametrize('operation_id', ['getRowDeprecated', 'getRow'])
+@pytest.mark.parametrize('operation_id', ['getRow'])
 def test_getRow(base: Base, snapshot_json, operation_id: str):
     table_name = f'test_{operation_id}'
 
@@ -409,17 +400,12 @@ def test_getRow(base: Base, snapshot_json, operation_id: str):
         'url': 'https://cloud.seatable.io',
         'email': 'demo@example.com'
     }
-    row_id = add_row(base, table_name, row)
+    row_id = append_rows(base, table_name, [row])[0]
 
     path_parameters = {'base_uuid': base.uuid, 'row_id': row_id}
-    query = {'table_name': table_name}
+    query = {'table_name': table_name, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'getRowDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'getRow':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
 
@@ -439,7 +425,7 @@ def test_getRow(base: Base, snapshot_json, operation_id: str):
 
     assert snapshot_json(matcher=matcher) == response.json()
 
-@pytest.mark.parametrize('operation_id', ['listRowsDeprecated', 'listRows'])
+@pytest.mark.parametrize('operation_id', ['listRows'])
 def test_listRows(base: Base, snapshot_json, operation_id: str):
     table_name = f'test_{operation_id}'
 
@@ -447,14 +433,9 @@ def test_listRows(base: Base, snapshot_json, operation_id: str):
     append_rows(base, table_name, ROWS)
 
     path_parameters = {'base_uuid': base.uuid}
-    query = {'table_name': table_name}
+    query = {'table_name': table_name, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'listRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'listRows':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
 
@@ -474,7 +455,7 @@ def test_listRows(base: Base, snapshot_json, operation_id: str):
     # Verify that response matches snapshot
     assert snapshot_json(matcher=matcher) == response.json()
 
-@pytest.mark.parametrize('operation_id', ['listRowsDeprecated', 'listRows'])
+@pytest.mark.parametrize('operation_id', ['listRows'])
 def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation_id: str):
     table_name_1 = f'test_{operation_id}_links-1'
     columns_1 = [
@@ -498,7 +479,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
         {'number': 1.4},
     ]
     table_1_row_ids = append_rows(base, table_name_1, table_1_rows)
-    table_2_row_id = add_row(base, table_name_2, {'number': 2.1})
+    table_2_row_id = append_rows(base, table_name_2, [{'number': 2.1}])[0]
 
     # Insert link column
     path_parameters = {'base_uuid': base.uuid}
@@ -512,7 +493,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
         },
     }
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_deprecated_schema.get_operation_by_id('insertColumnDeprecated') \
+    case: Case = base_operations_schema.get_operation_by_id('insertColumn') \
         .make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
 
@@ -524,10 +505,11 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
         'table_name': table_name_2,
         'other_table_name': table_name_1,
         'link_id': link_id,
-        'row_id': table_2_row_id,
-        'other_rows_ids': table_1_row_ids,
+        'other_rows_ids_map': {
+            table_2_row_id: table_1_row_ids,
+        },
     }
-    case: Case = base_operations_deprecated_schema.get_operation_by_id('createRowLinksDeprecated') \
+    case: Case = base_operations_schema.get_operation_by_id('createRowLink') \
         .make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
 
@@ -614,32 +596,21 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
     # Insert link-formula columns to table 2
     for column in link_formula_columns:
         path_parameters = {'base_uuid': base.uuid}
-        case: Case = base_operations_deprecated_schema.get_operation_by_id('insertColumnDeprecated') \
+        case: Case = base_operations_schema.get_operation_by_id('insertColumn') \
             .make_case(path_parameters=path_parameters, body=column, headers=headers)
         response = case.call_and_validate()
         assert response.status_code == 200
 
     # List rows
-    query = {'table_name': table_name_2}
-    if operation_id == 'listRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-        matcher = path_type(
-            {
-                r"rows\..*\.(_id|_ctime|_mtime|_creator|_last_modifier)": (str,),
-                r"rows\..*\.link.\d": (str,),
-            },
-            regex=True,
-        )
-    elif operation_id == 'listRows':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
-        matcher = path_type(
-            {
-                r"rows\..*\.(_id|_ctime|_mtime|_creator|_last_modifier)": (str,),
-                r"rows\..*\.link.*\.row_id": (str,),
-            },
-            regex=True,
-        )
+    query = {'table_name': table_name_2, 'convert_keys': True}
+    operation = base_operations_schema.get_operation_by_id(operation_id)
+    matcher = path_type(
+        {
+            r"rows\..*\.(_id|_ctime|_mtime|_creator|_last_modifier)": (str,),
+            r"rows\..*\.link.*\.row_id": (str,),
+        },
+        regex=True,
+    )
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call_and_validate()
@@ -647,7 +618,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
     # Verify that response matches snapshot
     assert snapshot_json(matcher=matcher) == response.json()
 
-@pytest.mark.parametrize('operation_id', ['listRowsDeprecated', 'listRows'])
+@pytest.mark.parametrize('operation_id', ['listRows'])
 def test_listRows_files_images(base: Base,  snapshot_json: SnapshotAssertion, operation_id: str):
     table_name = f'test_{operation_id}_files_images'
     columns = [
@@ -703,17 +674,13 @@ def test_listRows_files_images(base: Base,  snapshot_json: SnapshotAssertion, op
             }
         ],
     }
-    add_row(base, table_name, row)
+    append_rows(base, table_name, [row])
 
     # List rows
     path_parameters = {'base_uuid': base.uuid}
-    query = {'table_name': table_name}
+    query = {'table_name': table_name, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-    if operation_id == 'listRowsDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'listRows':
-        query["convert_keys"] = True
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call_and_validate()
 
@@ -728,7 +695,7 @@ def test_listRows_files_images(base: Base,  snapshot_json: SnapshotAssertion, op
         )
     assert snapshot_json(matcher=matcher) == response.json()
 
-@pytest.mark.parametrize('operation_id', ['querySQLDeprecated', 'querySQL'])
+@pytest.mark.parametrize('operation_id', ['querySQL'])
 def test_querySQL(base: Base, snapshot_json: SnapshotAssertion, operation_id: str):
     table_name = f'test_{operation_id}'
 
@@ -738,11 +705,7 @@ def test_querySQL(base: Base, snapshot_json: SnapshotAssertion, operation_id: st
     path_parameters = {'base_uuid': base.uuid}
     body = {'sql': f'SELECT * FROM {table_name}', 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-
-    if operation_id == 'querySQLDeprecated':
-        operation = base_operations_deprecated_schema.get_operation_by_id(operation_id)
-    elif operation_id == 'querySQL':
-        operation = base_operations_schema.get_operation_by_id(operation_id)
+    operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call_and_validate()
@@ -765,26 +728,12 @@ def create_table(base: Base, table_name: str, columns: list[dict]):
     body = {'table_name': table_name, 'columns': columns}
     headers = {'Authorization': f'Bearer {base.token}'}
 
-    operation = base_operations_deprecated_schema.get_operation_by_id('createTableDeprecated')
+    operation = base_operations_schema.get_operation_by_id('createTable')
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
 
     response = case.call_and_validate()
 
     assert response.status_code == 200
-
-def add_row(base: Base, table_name: str, row: dict) -> str:
-    path_parameters = {'base_uuid': base.uuid}
-    body = {'table_name': table_name, 'row': row}
-    headers = {'Authorization': f'Bearer {base.token}'}
-
-    operation = base_operations_deprecated_schema.get_operation_by_id('addRowDeprecated')
-    case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
-
-    row_id = response.json()['_id']
-    assert isinstance(row_id, str)
-
-    return row_id
 
 def append_rows(base: Base, table_name: str, rows: list[dict]) -> list[str]:
     path_parameters = {'base_uuid': base.uuid}
