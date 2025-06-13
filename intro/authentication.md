@@ -30,7 +30,7 @@ All other API-requests require an authorization header that looks like this, whe
 
 Initially, authentication in SeaTable can seem a bit complicated, but the following graphic should make it clearer.
 
-![Authentication Flow in SeaTable](https://seatable.io/wp-content/uploads/2023/03/authentication-flow-in-seatable2.png)
+![Authentication Flow in SeaTable](https://seatable.com/openapi/authentication-flow-in-seatable2.png)
 
 - Every **account operation** (Uuser, Team Admin or System Admin) requires an **Account-Token**.
 - Every **base operation** requires a **Base-Token**.

@@ -12,13 +12,15 @@ slug: changelog
 }
 </style>
 
-Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
+Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.com/blog) for detailed release notes.
 
 ## Version 5.3 (16.06.2025)
 
 > 🚧 Breaking change: API-Gateway
 >
-> In version 5.3, the `/dtable-server` and `/dtable-db` endpoints were removed and all functions were be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. You can get more information from this [blog article](https://seatable.com/api-gateway-version-5-3/).
+> In version 5.3, the `/dtable-server` and `/dtable-db` endpoints were removed and all functions were be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. 
+> 
+> You can get more information from this [blog article](https://seatable.com/api-gateway-version-5-3/).
 
 No further changes were made to the API documentation.
 

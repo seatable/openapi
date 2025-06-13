@@ -5,7 +5,7 @@ The following setup allows to reach api documentation via custom subdomain. A ng
 ## Project settings at readme.com
 
 - PROJECT NAME: SeaTable API Reference
-- MAIN URL: https://seatable.io
+- MAIN URL: https://seatable.com
 - Robots.txt: [x] Indexing by robots is allowed
 - SITEMAP: [ ] The sitemap.xml is disabled
 - CANONICAL URL: https://api.seatable.com

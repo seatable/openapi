@@ -2771,7 +2771,7 @@ paths:
 
         > 📘 Advanced feature
         > 
-        > Lock rows is an advanced feature in SeaTable and only available for [enterprise subscriptions](https://seatable.io/preise/?lang=auto).
+        > Lock rows is an advanced feature in SeaTable and only available for [enterprise subscriptions](https://seatable.com/prices/).
       requestBody:
         content:
           application/json:
@@ -3699,7 +3699,7 @@ paths:
         (`color`) and the color of the arrow (`textColor`):
 
 
-        ![Options](https://seatable.io/wp-content/uploads/2021/11/Screenshot-2021-04-28-105719.png)
+        ![Options](https://seatable.com/openapi/selectoptioncolor.png)
       requestBody:
         content:
           application/json:
@@ -3836,7 +3836,7 @@ paths:
         up the cascade relationship with this API request first.
 
 
-        ![](https://seatable.io/wp-content/uploads/2021/11/cascade.png)
+        ![](https://seatable.com/openapi/cascade.png)
 
 
         ## What are the preconditions?

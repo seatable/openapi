@@ -1163,7 +1163,7 @@ paths:
         An example user list Excel file looks like this:
 
 
-        <img src="https://seatable.io/wp-content/uploads/2022/12/example.png">
+        <img src="https://seatable.com/openapi/excel.png">
       requestBody:
         content:
           multipart/form-data:
@@ -4162,7 +4162,7 @@ paths:
         - one is the "normal" favicon（leave `with_nofity` blank).
         - the other one is the "notifying" favicon which should have something
         like a "notifying" red dot on it (set `with_notify` to `true`).
-        ![Image](https://seatable.io/wp-content/uploads/2021/11/favicon.png)
+        ![Image](https://seatable.com/openapi/favicon.png)
       requestBody:
         content:
           multipart/form-data:

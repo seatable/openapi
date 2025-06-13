@@ -216,7 +216,7 @@ server {
 
 CORS is the abbreviation for [Cross-origin resource sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), which is a security mechanism to prevent request from another domain to your server. If you don't allow CORS request for api.seatable.com, the **Try It!** button will not work. After the click you will see a rotating circle on the button and error messages in your browser console.
 
-![Try It! with CORS error](https://seatable.io/wp-content/uploads/2023/03/readme-com-cors-access-control.png)
+![Try It! with CORS error](https://seatable.com/openapi/readme-com-cors-access-control.png)
 
 To prevent this CORS must be allowed and therefore the following code is necessary in your nginx configuration.
 
