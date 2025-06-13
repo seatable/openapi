@@ -12,7 +12,7 @@ slug: changelog
 }
 </style>
 
-Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.io/docs/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
+Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.io/blog) for detailed release notes.
 
 ## Version 5.2 (25.02.2025)
 
@@ -36,7 +36,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 5.1 (08.11.2024)
 
-[View API Documentation for v5.1](https://api.seatable.io/v5.1)
+[View API Documentation for v5.1](https://api.seatable.com/v5.1)
 
 > 📘 New requests
 >
@@ -53,7 +53,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 5.0 (15.07.2024)
 
-[View API Documentation for v5.0](https://api.seatable.io/v5.0)
+[View API Documentation for v5.0](https://api.seatable.com/v5.0)
 
 We recommend using the new `/api-gateway/` endpoints. These endpoints are faster because they check if the base has remained unchanged since the last request, allowing for quicker responses.
 
@@ -68,7 +68,7 @@ We recommend using the new `/api-gateway/` endpoints. These endpoints are faster
 > - [List Rows](/reference/listrowsdeprecated): All column values are now consistently returned. If a value is not defined, `null` is returned instead of omitting the value.
 > - [Query SeaTable with SQL](/reference/querysql): Now supports `parameters` to protect against SQL injection.
 
-For more details about the changes, please refer to [this post on the SeaTable Forum](https://forum.seatable.io/t/important-changes-to-api-and-seatable-cloud-with-version-5-0/4887).
+For more details about the changes, please refer to [this post on the SeaTable Forum](https://forum.seatable.com/t/important-changes-to-api-and-seatable-cloud-with-version-5-0/4887).
 
 ## Version 4.4 (15.05.2024)
 

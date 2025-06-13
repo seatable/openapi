@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Base Operations (from 4.4)
+  title: Base Operations (before 4.4)
   description: >-
     The official SeaTable API Reference (OpenAPI 3.0).
   version: "5.2"
@@ -9,6 +9,20 @@ servers:
     variables:
       server:
         default: cloud.seatable.io
+
+## Questions for later:
+# - same variables as path and query? Why?
+# - objects not uniform: table_id sometimes inside the object, sometimes outside the object (compare insert column vs append columns)
+# - File-Upload super complicated: a) "parent_dir, parent_file, parent_path"? why not using the same name for the same thing? b) why requires appending file to a base, type, name and size? Image requires only url.
+# - why is it necessary to pass the base_uuid? The base-token identifies the base already...
+# - sometimes column_key, sometimes column_name. Why?
+# - why column_key and not column_id?
+# - sometimes base_uuid, sometimes dtable_uuid. Why?
+# - some calls allow table_name or table_id. "lock rows" requires table_name. "links" requires table_id. Confusing!
+# - sometimes "convert", sometimes "convert_keys"
+# - create row link and create row links => one time table names, one time table_ids
+# - "get row": why do I have to provide row_id as path and body?
+# - Upload File/Image: why ret-json=1 in URL?
 
 x-readme:
   explorer-enabled: true
@@ -32,7 +46,7 @@ components:
       in: query
       schema:
         type: string
-        pattern: ^[A-Za-z0-9\-\_]{22}$
+        pattern: ^[A-Za-z0-9]{22}$
       example: YMIviMeERQCUiQhPPqo6Gw
       required: true
     page:
@@ -71,29 +85,25 @@ components:
       schema:
         type: string
         pattern: "^[A-Za-z0-9]{4}$"
-      description: |
-        The id of the table. The id of a table is unique inside a base and is often used to identify a table.
+      description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. **Important: the table_id is not the table_name**."
       example: "0000"
       required: true
     table_name:
       name: table_name
-      description: |
-        The name of the table to perform the operation on. Alternatively, you can use the `table_id` instead of `table_name`. If using `table_id`, ensure that the key in the request body is replaced accordingly.
-        **Example:** Instead of `table_name: Table1` you can use `table_id: 0000`.
+      description: The name of the table.
       in: query
       schema:
         type: string
       example: Table1
       required: true
+
     view_name:
       name: view_name
       in: query
       schema:
         type: string
       required: false
-      description: |
-        The name of the view to perform the operation on. Alternatively, you can use the `view_id` instead of `view_name`. If using `view_id`, ensure that the key in the request body is replaced accordingly.
-        **Example:** Instead of `view_name: Default View` you an use `view_id: 0000`.
+      description: The name of the view.
       example: "Default View"
     order_by:
       name: order_by
@@ -111,7 +121,7 @@ components:
         enum: ["", "asc", "desc"]
         default: ""
       required: false
-      description: The direction of the sort, ascending `asc` or descending `desc`. asc by default. **Works only if start and limit are set, too**.
+      description: The direction of the sort, ascending `asc` or descending `desc`. asc by default. Works only if start and limit are set, too.
       example: "desc"
     start:
       name: start
@@ -131,24 +141,6 @@ components:
       required: false
       description: Number of rows that should be returned. 1000 by default.
       example: 100
-    listRowLinkLimit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-      required: false
-      description: Limit the number of links you want to receive. 10 by default.
-      example: 10
-    listRowLinkOffset:
-      name: offset
-      in: query
-      schema:
-        type: integer
-      description: |
-        offset is the beginning number of your query. 0 by default. If your record is linked to multiple records, use e.g. 0 to start quering from the 1st element or e.g. 5 to start querying from the 6th element, etc. **Attention:** The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime).
-      example: 0
     days:
       name: days
       in: query
@@ -156,22 +148,13 @@ components:
         type: integer
         minimum: 1
       example: 7
-    convert_keys:
-      name: convert_keys
+    convert:
+      name: convert
       in: query
       schema:
         type: boolean
-      description: Determines if the columns are returned as their keys (false by default) or their names (true).
+      description: If 'true', the column's id will be converted to column names.
       example: true
-    link_column_key:
-      name: link_column_key
-      in: query
-      schema:
-        type: string
-        minLength: 4
-        maxLength: 4
-      required: true
-      description: This is the key of the link column. **Do not** use the `link_id` of the link column here.
 
     #=======================Path parameters=======================#
     base_uuid:
@@ -223,7 +206,7 @@ components:
   schemas:
     row_id:
       type: string
-      pattern: '^[a-zA-Z0-9\-\_]{22}$'
+      pattern: '^[a-zA-Z0-9\-]{22}$'
       description: The id of the row. The id of a row is unique inside a base and is often used to identify one specific row.
       example: "Qtf7xPmoRaiFyQPO1aENTjb"
     base:
@@ -241,16 +224,12 @@ components:
           type: object
         columns:
           type: array
-          items:
-            type: object
         rows:
           type: array
           items:
             $ref: "#/components/schemas/row_id"
         views:
           type: array
-          items:
-            type: object
         id_row_map:
           type: object
       example:
@@ -316,27 +295,13 @@ components:
         sql:
           type: string
           format: SQL-Query
-          description: SQL-Query to get rows from base.
+          description: SQL-Query to get rows from base
         convert_keys:
           type: boolean
           description: Determines if the columns are returned as their keys (false by default) or their names (true).
-        parameters:
-          type: array
-          description: Parameters in SQL clause to avoid sql injection. Only needed, if you use `?` in the SQL statement. The parameters will replace the `?` according to their order in the array.
-          items:
-            oneOf:
-              - title: Add a String
-                type: string
-              - title: Add an integer
-                type: integer
-          example: ["Max", 12]
-        server_only:
-          type: boolean
-          description: Show rows from normal and Big Data backend (false by default) or limit the output only to the normal backend (true).
       example:
         sql: "SELECT Name, Status FROM Table1 LIMIT 3"
         convert_keys: true
-        server_only: false
       required:
         - sql
 
@@ -345,12 +310,9 @@ components:
       properties:
         metadata:
           type: array
-          items:
-            type: object
+          # $ref: "#/components/schemas/base_metadata"
         results:
           type: array
-          items:
-            type: object
         success:
           type: boolean
       example:
@@ -370,6 +332,24 @@ components:
             _id: ZrFd2YOXQ0eIYJjPbQPGng
         success: true
 
+    base_metadata:
+      type: object
+      description: Metadata object of the base
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        data:
+          type: object
+          properties:
+            default_value:
+              type: string
+            enable_fill_default_value:
+              type: string
+
     row:
       type: object
       title: Row
@@ -382,14 +362,9 @@ components:
         Birthday: "2023-02-18"
         Checkbox: true
 
-    apply_default:
-      type: boolean
-      description: Use the column default values to populate new rows during creation. False by default.
-      example: false
-
     table_name:
       type: string
-      description: The name of the table to perform the operation on. Alternatively, you can use the `table_id` instead of `table_name`. If using `table_id`, ensure that the key in the request body is replaced accordingly.
+      description: The name of the table.
       example: "Table1"
 
     table_name_object:
@@ -415,8 +390,6 @@ components:
           $ref: "#/components/schemas/table_name"
         row:
           $ref: "#/components/schemas/row"
-        apply_default:
-          $ref: "#/components/schemas/apply_default"
       required:
         - table_name
         - row
@@ -438,8 +411,6 @@ components:
           enum: ["", "insert_above", "insert_below"]
         row:
           $ref: "#/components/schemas/row"
-        apply_default:
-          $ref: "#/components/schemas/apply_default"
       required:
         - table_name
         - row
@@ -499,8 +470,6 @@ components:
           title: Row Object X
           items:
             $ref: "#/components/schemas/row"
-        apply_default:
-          $ref: "#/components/schemas/apply_default"
       required:
         - table_name
         - rows
@@ -547,7 +516,7 @@ components:
           $ref: "#/components/schemas/table_name"
         row_ids:
           type: array
-          description: ID of the rows to perform the requested operation.
+          description: ID of the rows
           items:
             $ref: "#/components/schemas/row_id"
       example:
@@ -558,21 +527,94 @@ components:
         - table_name
         - row_ids
 
+    create_row_link:
+      type: object
+      description: create row link
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        other_table_name:
+          $ref: "#/components/schemas/table_name"
+        link_id:
+          $ref: "#/components/schemas/link_id"
+        table_row_id:
+          $ref: "#/components/schemas/row_id"
+        other_table_row_id:
+          $ref: "#/components/schemas/row_id"
+      required:
+        - table_name
+        - other_table_name
+        - link_id
+        - table_row_id
+        - other_table_row_id
+
     table_id:
       type: string
-      description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. In most calls it is possible to replace the `table_id` with the `table_name`."
+      description: "The id of the table. The id of a table is unique inside a base and is often used to identify a table. **Important: the table_id is not the table_name**."
       pattern: "^[a-zA-Z0-9]{4}$"
       example: "0000"
 
     link_id:
       type: string
-      description: Every *link column* has a `key` and `link_id` in the column object. Use [Get Metadata](/reference/getmetadata) or [Get Base Info](/reference/getbaseinfo) to get this `link_id`. Don't use the `key` of the link column.
+      description: Every *link column* has a `key` and `link_id` in the column object. Use [Get Metadata](/reference/getmetadatadeprecated) or [Get Base Info](/reference/getbaseinfodeprecated) to get this `link_id`. Don't use the `key` of the link column.
       minLength: 4
       maxLength: 4
       example: jYc7
 
-    row_link_create_update_delete:
+    create_row_links:
       type: object
+      properties:
+        table_name:
+          $ref: "#/components/schemas/table_name"
+        other_table_name:
+          $ref: "#/components/schemas/table_name"
+        link_id:
+          $ref: "#/components/schemas/link_id"
+        row_id:
+          $ref: "#/components/schemas/row_id"
+        other_rows_ids:
+          type: array
+          description: ID of the rows
+          items:
+            type: string
+            example: "GconSYtETlWLyRs5xqkHLQ"
+      required:
+        - row_id
+        - link_id
+        - table_name
+        - other_table_name
+        - other_rows_id
+
+    update_links:
+      type: object
+      description: update row links (batch)
+      properties:
+        table_id:
+          $ref: "#/components/schemas/table_id"
+        other_table_id:
+          $ref: "#/components/schemas/table_id"
+        link_id:
+          $ref: "#/components/schemas/link_id"
+        row_id_list:
+          type: array
+          description: List of the source rows IDs whose links you'd like to update.
+          items:
+            $ref: "#/components/schemas/row_id"
+        other_rows_ids_map:
+          type: object
+          description: Map of IDs of the target rows which you'd like to link your source rows to.
+          items:
+            type: string
+      required:
+        - link_id
+        - table_id
+        - other_table_id
+        - row_id_list
+        - other_rows_ids_map
+
+    archived_row_links:
+      type: object
+      description: handle row links of archived data (batch)
       properties:
         table_id:
           $ref: "#/components/schemas/table_id"
@@ -581,29 +623,55 @@ components:
         link_id:
           $ref: "#/components/schemas/link_id"
         other_rows_ids_map:
-          type: object
-          description: Provide an object where each key is a `row_id` and each value is an array of other row_ids.
-          additionalProperties:
-            type: array
-            items:
-              $ref: "#/components/schemas/row_id"
+          type: array
+          additionalProperties: { type: array, items: { type: string } }
+          description: |
+            Map of IDs of the target rows which you'd like to link/unlink your source rows. Use a key-to-list like:
+            ```
+            "other_rows_ids_map": {
+              "<row1 of table>": ["<row1 of other_table>", "<row2 of other_table>"],
+              "<row2 of table>": ["<row3 of other_table>"]
+            }
+            ```
       required:
         - link_id
         - table_id
         - other_table_id
         - other_rows_ids_map
 
-    list_row_links:
+    delete_row_link:
       type: object
       properties:
         table_name:
           $ref: "#/components/schemas/table_name"
-        link_column_name:
+        other_table_name:
+          $ref: "#/components/schemas/table_name"
+        link_id:
+          $ref: "#/components/schemas/link_id"
+        table_row_id:
+          $ref: "#/components/schemas/table_id"
+        other_table_row_id:
+          $ref: "#/components/schemas/table_id"
+      required:
+        - table_name
+        - other_table_name
+        - link_id
+        - table_row_id
+        - other_table_row_id
+
+    list_row_links:
+      type: object
+      properties:
+        table_id:
+          $ref: "#/components/schemas/table_id"
+        link_column:
           type: string
-          description: The name of the link-column. Alternatively, you can use `link_column_key` instead. Do not use the `link_id` of the link column here.
+          description: This is the key of the link column. Do not use the `link_id` of the link column here.
+          minLength: 4
+          maxLength: 4
         rows:
           type: array
-          description: The rows (identified by their ids) you want to get the links for.
+          description: the rows you want to get the links for.
           items:
             type: object
             properties:
@@ -611,36 +679,15 @@ components:
                 $ref: "#/components/schemas/row_id"
               offset:
                 type: integer
-                description: "Offset is the beginning number of your query. If your record is linked to multiple records, use e.g. 0 to start quering from the 1st element or e.g. 5 to start querying from the 6th element, etc. Attention: The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime). Default is 0."
+                description: "offset is the beginning number of your query. If your record is linked to multiple records, use e.g. 0 to start quering from the 1st element or e.g. 5 to start querying from the 6th element, etc. Attention: The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime)."
               limit:
                 type: integer
-                description: "Specify the maximum number of records to be returned. For example, use 20 to retrieve more than the default 10 records."
-            required:
-              - row_id
+                description: "limit lets you to set a limit to the number of records returned. Use e.g. 10 to return no more than 10 records."
       required:
-        - table_name
-        - link_column_name
-        - rows
-
-    match_link_columns:
-      type: object
-      description: update multiple rows
-      properties:
-        link_id:
-          $ref: "#/components/schemas/link_id"
-        matching_keys:
-          type: array
-          description: "Defines the matching column keys in two tables."
-          items:
-            type: object
-            properties:
-              table1_key:
-                $ref: "#/components/schemas/column_key"
-              table2_key:
-                $ref: "#/components/schemas/column_key"
-      required:
-        - link_id
-        - matching_keys
+        - table_id
+        - link_column
+        - row_id
+        - rows_id
 
     rename_table:
       type: object
@@ -709,11 +756,6 @@ components:
 
     column_key:
       type: string
-
-    auto_link_task_id:
-      type: string
-      description: "The ID returned by auto add link task"
-      example: 5c264e76-0e5a-448a-9f34-580b551364ca
 
     string_filter_predicate:
       type: string
@@ -1605,37 +1647,6 @@ components:
         - $ref: "#/components/schemas/table_name_object"
         - $ref: "#/components/schemas/checkbox_column"
 
-    geo_column_format:
-      description: Specify the geolocation column.
-      type: object
-      properties:
-        geo_format:
-          type: string
-          enum: ["lng_lat", "county_region"]
-
-    geolocation_column:
-      title: Geolocation
-      type: object
-      description: Add a geolocation column.
-      properties:
-        column_name:
-          $ref: "#/components/schemas/column_name"
-        column_type:
-          type: string
-          enum: ["checkbox"]
-        anchor_column:
-          $ref: "#/components/schemas/anchor_column"
-        column_data:
-          $ref: "#/components/schemas/geo_column_format"
-      required:
-        - column_name
-        - column_type
-
-    geolocation_column_with_table_name:
-      allOf:
-        - $ref: "#/components/schemas/table_name_object"
-        - $ref: "#/components/schemas/geolocation_column"
-
     rating_column:
       title: Rating
       type: object
@@ -2296,18 +2307,33 @@ components:
           type: string
           example: Example
 
+    filtered-rows-filter:
+      type: object
+      properties:
+        filters:
+          type: array
+          items:
+            type: object
+            properties:
+              column_name:
+                type: string
+              filter_predicate:
+                type: string
+              filter_term:
+                type: string
+              filter_term_modifier:
+                type: string
+
 paths:
   # Base Info
-  # question: super powerful call. extension of metadata?!? Contains all links (even more than 10?), statistics
-  # it does not contain apps, forms. Collaborators are always empty. What is the purpose of this call?
-  # question: why does this call contains data? But it is difficult to get the full picture => link formula columns are not shown
-  /api-gateway/api/v2/dtables/{base_uuid}:
+  /dtable-server/dtables/{base_uuid}:
     get:
-      tags: [Base Info]
+      deprecated: true
+      tags:
+        - Base Info
       summary: Get Base Info
-      operationId: getBaseInfo
-      description: |
-        Get various information of a base like the tables, (normal and big data) views, links, data statistics and collaborators.
+      operationId: getBaseInfoDeprecated
+      description: Returns basic information about the specified base.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2320,12 +2346,10 @@ paths:
               schema:
                 type: object
               example:
-                version: 33
-                format_version: 9
+                version: 20
+                format_version: 7
                 statistics: []
                 links: []
-                settings:
-                  enable_archive: true
                 tables:
                   - _id: "0000"
                     name: Table1
@@ -2380,9 +2404,6 @@ paths:
                           format: YYYY-MM-DD
                         permission_type: ""
                         permitted_users: []
-                    view_structure:
-                      - folders: []
-                      - view_ids: ["0000"]
                     views:
                       - _id: "0000"
                         name: "Default\r\n> View"
@@ -2398,14 +2419,14 @@ paths:
                         groupbys: []
                         groups: []
                     id_row_map: {}
-                collaborators: []
-  /api-gateway/api/v2/dtables/{base_uuid}/metadata/:
+  /dtable-server/api/v1/dtables/{base_uuid}/metadata/:
     get:
+      deprecated: true
       tags:
         - Base Info
       summary: Get Metadata
-      operationId: getMetadata
-      description: Get the complete metadata of a base with all tables, columns and views and settings. The metadata does not contain any data.
+      operationId: getMetadataDeprecated
+      description: Returns all metadata of the specified base including tables, columns, views and settings.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2484,14 +2505,59 @@ paths:
                         can_copy: false
                         can_export: false
                         can_print: false
-  # question: internal server error??
-  /api-gateway/api/v2/dtables/{base_uuid}/related-users/:
+  /dtable-db/api/v1/base-info/{base_uuid}/:
     get:
+      deprecated: true
+      tags:
+        - Base Info
+      summary: Get Big Data Status
+      operationId: getBigDataStatusDeprecated
+      description: Returns the total number of rows stored in the big data backend of the specified base as well as rows in the big data backend per table.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: abcdefgh-fd55-48e4-8c4a-5fd6f2549765
+                tables:
+                  - id: Z7dm
+                    name: Table1
+                    rows: 9
+                  - id: QoSF
+                    name: Table2
+                    rows: 0
+                  - id: 0bqQ
+                    name: Table3
+                    rows: 0
+                  - id: 1kjR
+                    name: Table4
+                    rows: 4
+                  - id: wB7j
+                    name: Table5
+                    rows: 71011
+                  - id: 8h4H
+                    name: Table7
+                    rows: 0
+                  - id: l9x9
+                    name: Table8
+                    rows: 0
+                storage: 309620017
+                rows: 101031
+  /dtable-server/api/v1/dtables/{base_uuid}/related-users/:
+    get:
+      deprecated: true
       tags:
         - Base Info
       summary: List Collaborators
-      operationId: listCollaborators
-      description: List all collaborators of a base with name, email address and avatar.
+      operationId: listCollaboratorsDeprecated
+      description: Returns all collaborators in the specified base including name, email address and avatar.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2515,49 +2581,37 @@ paths:
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
 
   # Rows
-  # question: shows only up to 10 linked records. Base Info shows all. Is there any reason?
-  /api-gateway/api/v2/dtables/{base_uuid}/sql:
+  /dtable-db/api/v1/query/{base_uuid}/:
     post:
+      deprecated: true
       tags:
         - Rows
-      summary: Query SeaTable with SQL
-      operationId: querySQL
+      summary: List Rows (with SQL)
+      operationId: querySQLDeprecated
       description: |
-        SeaTable offers a SQL like interface that supports `SELECT`, `INSERT`, `UPDATE` and `DELETE` statements. 
+        Lists rows in a table based on an SQL-query provided in the request. Also returns the metadata of the table.
 
-        If you are familiar with SQL, you will have no difficulties to use this endpoint because typical SQL-statements are supported.
-                
-        This endpoint is the **most powerful** one that SeaTable can offer and it does not differentiate between the two SeaTable backend (normal and big data). Also the metadata of the table is returned. 
+        Typical SQL-statements are supported. Below some basic examples:
+        `SELECT name, age, birthday, gender FROM Participants`<br/>
+        `SELECT name, surname FROM Participants ORDER BY name`<br/>
+        `SELECT * FROM Participants LIMIT 25`
+        For more details, check the [SQL-syntax supported by SeaTable](https://developer.seatable.com/scripts/sql/reference/).
 
-        > 📘 `INSERT` and big data
+        > 📘 Returns also data from the big data backend
         > 
-        > New rows (INSERT statement) are always added to the **big data backend**. An error message will be returned, if the big data backend is not activated for the target base.
+        > This request is the only available endpoint that returns rows stored in the big data backend. 
 
-        The complete [SQL Reference](https://developer.seatable.com/scripts/sql/reference/) can be found documentation in the developer manual. 
-
-        Here are some example requests for a fictitious table *Family* with the columns *name*, *age* and *birthday*:
-
-        - `SELECT * FROM Family LIMIT 3`
-        - `SELECT name, age, birthday FROM Family`
-        - `SELECT name, age FROM Family ORDER BY name`
-        - `INSERT INTO Family (Name,Age) VALUES ('Name', 23)`
-        - `SELECT * FROM Family WHERE Name=? AND Age=?`
-
-        SELECT does not support column keys. You can only limit the output by column names.
-
-        > 📘 Avoid SQL injection
-        > 
-        > If you use `?` in your SQL-statement, you have to provide values to replace the placeholders with parameters. This protects against SQL injections. 
-
-        > 🚧 Max and default return limit
+        > 🚧 Returns at most 10 000 rows
         >
-        > - The request returns a maximum of 10 000 rows, even if you specify a higher limit in your SQL-statement. 
-        > - If you don't specify a limit, max 100 rows are returned.
+        > The request returns a maximum of 10 000 rows regardless of the limit specified in the SQL-statement.
 
-        > 📘 Link Columns
+        > ❗️ CURL does not follow redirects by default (relevant especially for SeaTable Cloud)
         >
-        > Link columns return a maximum of 50 records per row.
+        > SeaTable Cloud (version 5.0 and newer) redirects this endpoint to the [new API gateway endpoint](/reference/getrow) using a 302 header redirect.
+        > If you `curl` command does not return any result, you need to add the `-L` parameter to follow these redirects. Most other clients handle redirects automatically.
+
       requestBody:
+        description: description des requestBody
         content:
           application/json:
             schema:
@@ -2574,30 +2628,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/sql_query_response"
-  /api-gateway/api/v2/dtables/{base_uuid}/rows/:
+
+  /dtable-server/api/v1/dtables/{base_uuid}/rows/:
     get:
+      deprecated: true
       tags:
         - Rows
       summary: List Rows
-      operationId: listRows
+      operationId: listRowsDeprecated
       description: |
-        Returns a list of rows contained in a table (or in a view if provided).
+        Lists rows in a table (or in a view if provided). If no view is selected, all columns (even hidden one) are returned. If a view is selected, only visible columns of that view are returned.
 
-        The usage of a view in SeaTable could be much more convenient then the usage of the complex SQL-syntax of the [SQL query endpoint](/reference/querysql).
-
-        > 👍 Big Data support added 
+        > 📘 Returns no data from the big data backend
         > 
-        > Since Version 4.4 this endpoint also supports the big data backend.
+        > This request does not return rows stored in the big data backend. To query the big data backend, use the request [List Rows (with SQL)](/reference/querysqldeprecated) instead.
 
-        Every row consists of the columns, you defined in your base but also *hidden* informations like `_id`, `_mtime`, `_ctime`, `_creator` and so on. Get more details about these information in the [Models](/reference/models) area.
-
-        > 📘 Hidden Columns 
+        > 🚧 Returns at most 1 000 rows
         >
-        > If no view is selected, all columns (even hidden one) are returned. If a view is selected, only the visible columns of that view are returned with the request.
+        > The request returns a maximum of 1 000 rows regardless of the specified limit.
 
-        > 📘 Link Columns
+        > ❗️ CURL does not follow redirects by default (relevant especially for SeaTable Cloud)
         >
-        > From version 5.3 onward, the link column of a row returns a maximum of 50 records.
+        > SeaTable Cloud (version 5.0 and newer) redirects this endpoint to the [new API gateway endpoint](/reference/getrow) using a 302 header redirect.
+        > If you `curl` command does not return any result, you need to add the `-L` parameter to follow these redirects. Most other clients handle redirects automatically.
 
       security:
         - BaseTokenAuth: []
@@ -2607,7 +2660,47 @@ paths:
         - $ref: "#/components/parameters/view_name"
         - $ref: "#/components/parameters/start"
         - $ref: "#/components/parameters/limit"
-        - $ref: "#/components/parameters/convert_keys"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                #$ref: "#/components/schema/rows"
+                type: object
+              example:
+                rows:
+                  - _id: Bko1e60YT-egit2SljWSZA
+                    _mtime: "2021-03-10T16:06:48.981+00:00"
+                    Name: Second new row
+                    link: []
+                  - _id: RzeUwIhFSp-iNi81-bZvpA
+                    _mtime: "2021-03-10T16:11:11.176+00:00"
+                    Name: Matcha
+                    link: []
+    post:
+      deprecated: true
+      tags:
+        - Rows
+      summary: Add Row
+      operationId: addRowDeprecated
+      description: |
+        Appends or inserts a single row.
+
+        > 📘 How to define the row object
+        > 
+        > The row object contains key:value pairs with the column name as key and the desired values. Check the page [Models](/reference/models) to get a better understanding of the row object.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/append_row"
+                - $ref: "#/components/schemas/insert_row"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
       responses:
         "200":
           description: OK
@@ -2616,29 +2709,114 @@ paths:
               schema:
                 type: object
               example:
-                rows:
-                  - _id: Bko1e60YT-egit2SljWSZA
-                    _mtime: "2021-03-10T16:06:48.981+00:00"
-                    Name: Second new row
-                    link:
-                      [
-                        {
-                          "display_value": "1",
-                          "row_id": "XzdZfL2oS-aILnhfagTWEg",
-                        },
-                      ]
-                  - _id: RzeUwIhFSp-iNi81-bZvpA
-                    _mtime: "2021-03-10T16:11:11.176+00:00"
-                    Name: Matcha
-                    link: []
-    # question: how to add multiple rows????
-    post:
+                "0000": Second new row
+                _id: Bko1e60YT-egit2SljWSZA
+                _creator: 123456786569491ba42905bf1647fd3f@auth.local
+                _last_modifier: 123456786569491ba42905bf1647fd3f@auth.local
+    put:
+      deprecated: true
       tags:
         - Rows
-      summary: Append Row(s)
-      operationId: appendRows
+      summary: Update Row
+      operationId: updateRowDeprecated
+      description: |
+        Updates a single row.
+
+        > 📘 Structure of the row object
+        > 
+        > The row object contains key:value pairs with the column name as key and the desired values. Check the page [Models](/reference/models) to get a better understanding of the row object.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_row"
+
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    delete:
+      deprecated: true
+      tags:
+        - Rows
+      summary: Delete Row
+      operationId: deleteRowDeprecated
+      description: Deletes a single row.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_row"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/rows/{row_id}/:
+    get:
+      deprecated: true
+      tags:
+        - Rows
+      summary: Get Row
+      operationId: getRowDeprecated
       description: |-
-        Append multiple rows to a table. Define the column:values pairs of each column in the [rows object](/reference/models).
+        Retrieves a single row from a base. By default the column names are returned, but you can also decide to get the column ids back.
+
+        > ❗️ CURL does not follow redirects by default (relevant especially for SeaTable Cloud)
+        >
+        > SeaTable Cloud (version 5.0 and newer) redirects this endpoint to the [new API gateway endpoint](/reference/getrow) using a 302 header redirect.
+        > If you `curl` command does not return any result, you need to add the `-L` parameter to follow these redirects. Most other clients handle redirects automatically.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/row_id_path"
+        - $ref: "#/components/parameters/table_name"
+        - $ref: "#/components/parameters/convert"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                _id: Qtf7xPmoRaiFyQPO1aENTjb
+                _mtime: "2021-03-10T16:19:31.761+00:00"
+                Name: NewName
+                Date: "2020-08-01"
+                Content: "111"
+                link: []
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-append-rows/:
+    post:
+      deprecated: true
+      tags:
+        - Rows
+      summary: Append Rows
+      operationId: appendRowsDeprecated
+      description: |-
+        Appends multiple rows.
+
+        > 🚧 Appends at most 1 000 rows
+        >
+        > A maximum of 1 000 rows can be appended with a single request.
       requestBody:
         content:
           application/json:
@@ -2658,26 +2836,18 @@ paths:
                 type: object
               example:
                 inserted_row_count: 3
-                row_ids:
-                  - _id: Bko1e60YT-egit2SljWSZA
-                  - _id: RzeUwIhFSp-iNi81-bZvpA
-                first_row:
-                  "0000": Second new row
-                  _id: Bko1e60YT-egit2SljWSZA
-                  _creator: 123456786569491ba42905bf1647fd3f@auth.local
-                  _last_modifier: 123456786569491ba42905bf1647fd3f@auth.local
-
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-update-rows/:
     put:
+      deprecated: true
       tags:
         - Rows
-      summary: Update Row(s)
-      operationId: updateRow
-      description: |
-        Change the values in one or multiple existing row(s) by defining the new values for necessary columns in the row object. Both SeaTable backends are supported.
+      summary: Update Rows
+      operationId: updateRowsDeprecated
+      description: Updates multiple rows.
 
-        > 📘 Structure of the row object
-        > 
-        > The row object contains key:value pairs with the column name as key and the desired values. Check the page [Models](/reference/models) to get a better understanding of the row object.
+        > 🚧 Updates at most 1 000 rows
+        >
+        > A maximum of 1 000 rows can be updated with a single request.
       requestBody:
         content:
           application/json:
@@ -2696,13 +2866,18 @@ paths:
                 type: object
               example:
                 success: true
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-delete-rows/:
     delete:
+      deprecated: true
       tags:
         - Rows
-      summary: Delete Row(s)
-      operationId: deleteRow
-      description: |
-        Deletes one or multiple rows from the table, identified by its row id no matter if the row is stored in big data or normal backend.
+      summary: Delete Rows
+      operationId: deleteRowsDeprecated
+      description: Deletes multiple rows.
+
+        > 🚧 Deletes at most 10 000 rows
+        >
+        > A maximum of 10 000 rows can be deleted with a single request.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2721,48 +2896,21 @@ paths:
                 type: object
               example:
                 success: true
-
-  /api-gateway/api/v2/dtables/{base_uuid}/rows/{row_id}/:
-    get:
-      tags:
-        - Rows
-      summary: Get Row
-      operationId: getRow
-      description: Get the values of one row with all columns and values, according to the row id provided. Depending of `convert` the response will contain the column names or the column keys.
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-        - $ref: "#/components/parameters/row_id_path"
-        - $ref: "#/components/parameters/table_name"
-        - $ref: "#/components/parameters/convert_keys"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                _id: Qtf7xPmoRaiFyQPO1aENTjb
-                _mtime: "2021-03-10T16:19:31.761+00:00"
-                Name: NewName
-                Date: "2020-08-01"
-                Content: "111"
-                link: []
-
-  /api-gateway/api/v2/dtables/{base_uuid}/lock-rows/:
+  /dtable-server/api/v1/dtables/{base_uuid}/lock-rows/:
     put:
+      deprecated: true
       tags:
         - Rows
       summary: Lock Rows
-      operationId: lockRows
+      operationId: lockRowsDeprecated
       description: |
-        Locks one or more rows. It is ok to include rows that were already locked. Rows in big data backend can not be locked.
+        Locks a single or multiple rows. 
+
+        The request ensures that all specified rows are locked. Locked rows are ignored.
 
         > 📘 Advanced feature
         > 
-        > Lock rows is an advanced feature in SeaTable and only available for [enterprise subscriptions](https://seatable.io/preise/?lang=auto).
+        > Row locking is only available in [SeaTable Cloud Plus and Enterprise](https://seatable.io/preise/?lang=auto) as well as SeaTable Server Enterprise Edition.
       requestBody:
         content:
           application/json:
@@ -2781,21 +2929,151 @@ paths:
                 type: object
               example:
                 success: true
-  /api-gateway/api/v2/dtables/{base_uuid}/unlock-rows/:
+  /dtable-server/api/v1/dtables/{base_uuid}/unlock-rows/:
     put:
+      deprecated: true
       tags:
         - Rows
       summary: Unlock Rows
-      operationId: unlockRows
+      operationId: unlockRowsDeprecated
       description: |
-        Use this API request to unlock one or more locked rows. As this request
-        makes sure that all the mentioned rows are unlocked, it's OK to include
-        rows that were not locked.
+        Unlocks a single or multiple rows.
+
+        The request ensures that all specified rows are unlocked. Unlocked rows are ignored.
+
+        > 📘 Advanced feature
+        > 
+        > Row locking is only available in [SeaTable Cloud Plus and Enterprise](https://seatable.io/preise/?lang=auto) as well as SeaTable Server Enterprise Edition.
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/table_with_row_ids"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  # Links
+  /dtable-server/api/v1/dtables/{base_uuid}/links/:
+    post:
+      deprecated: true
+      tags:
+        - Links
+      summary: Create Row Link
+      operationId: createRowLinkDeprecated
+      description: |
+        You can link a row to another row in the same table, or in another table in the same base. **Before you use this request**, you should create a
+        link column first, and retrieve its `link_id`. This value is an attribute of a link column, and can also be retrieved from the call
+        [Get Metadata](/reference/getmetadatadeprecated).
+
+        Check out the [Models](/reference/models#a-link) page to get more information about the structure of a link.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create_row_link"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    put:
+      deprecated: true
+      tags:
+        - Links
+      summary: Create Row Links
+      operationId: createRowLinksDeprecated
+      description: |
+        Creates multiple links between one column and many others (1:n relation).
+
+        > 🚧 No support for Big Data
+        >
+        > This request does not support to add links in big data rows. There is another call [supporting big data](/reference/createbigdatarowslinkdeprecated).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    delete:
+      deprecated: true
+      tags:
+        - Links
+      summary: Delete Row Link
+      operationId: deleteRowLinkDeprecated
+      description: Delete an existing link between two rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_row_link"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                deleted_links_count: 1
+
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-update-links/:
+    put:
+      deprecated: true
+      tags: [Links]
+      summary: Update Row Links (Batch)
+      operationId: updateRowLinksDeprecated
+      description: |
+        Update multiple links in batch in one table for one link column. It is possible to create multiple links with a n:m relation.
+        Here is an example how the body with `row_id_list` and `other_rows_ids_map` should look like: 
+        ```
+        "row_id_list": [
+                "Qtf7xPmoRaiFyQPO1aENTjb",
+                "Qtf7xPmoRaiFyQPO1aENTjc"
+            ],
+            "other_rows_ids_map": {
+                "Qtf7xPmoRaiFyQPO1aENTjb": ["Qtf7xPmoRaiFyQPO1aENTjc", "{{row3_id}}"],
+                "Qtf7xPmoRaiFyQPO1aENTjc": ["Qtf7xPmoRaiFyQPO1aENTjb", "{{row3_id}}"]
+            }
+        ```
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_links"
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2810,33 +3088,39 @@ paths:
               example:
                 success: true
 
-  # Links
-  /api-gateway/api/v2/dtables/{base_uuid}/query-links/:
-    # getestet: ok.
+  /dtable-db/api/v1/linked-records/{base_uuid}:
     post:
+      deprecated: true
       tags:
         - Links
       summary: List Row Links
-      operationId: listRowLinks
-      description: |
+      operationId: listRowLinksDeprecated
+      description: >-
         When you have a "Link to other records" column in your table and you
         have created some links to the current or another table, you can use
         this request to query each row's linked records' IDs and display values.
 
-        By default, it returns 10 records per row. To query more records, please
-        set the "offset" and "limit" values for a row in the rows parameter.
+        In the request body (see example request for demonstration):
 
-        > 📘 id or name
-        > 
-        > In the request body you can as keys either:
-        > - `table_id` or `table_name`
-        > - `link_column_key` or `link_column_name`
+        - `table_id` is the ID of the table you are querying;
+
+        - `link_column` is the `key` of the "Link to other records" column.
+        **Attention**: do not use the `link_id` of the link column here.
+
+        - `rows` is an array. Include the following details of each row you are
+        querying in every object:
+            - `row_id` is the ID of the row you are querying;
+            - `offset` is the beginning number of your query. If your record is linked to multiple records, use e.g. `0` to start quering from the 1st element or e.g. `5` to start querying from the 6th element, etc. **Attention**: The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (`ctime`).
+            - `limit` lets you to set a limit to the number of records returned. Use e.g. `10` to return no more than 10 records.
+
+        In the response:
+        - `row_id` is the ID of each linked record;
+        - `display_value` is how this record is displayed on the web interface.
             
         To get more information about each linked record, retrieve their
-        `row_id` and use the [Query SeaTable with SQL](/reference/querysql) request, for example:
-
+        `row_id` and use the **Query with SQL** request, for example:
         ```
-        SELECT * FROM Table1 WHERE _id IN (row_id1, row_id2, ...);
+        SELECT * FROM Table2 WHERE _id IN (row_id1, row_id2, ...);
         ```
       requestBody:
         content:
@@ -2859,169 +3143,14 @@ paths:
                   - row_id: G5rbgqudTKKfAm1-cjnjbQ
                     display_value: Orson
 
-  /api-gateway/api/v2/dtables/{base_uuid}/links/:
-    # getestet: ok. (big data???) -> Eingabe ???
-    post:
-      tags:
-        - Links
-      summary: Create Row Link(s)
-      operationId: createRowLink
-      description: |
-        Creates multiple links between one column and many others (1:n relation). It is not possible to create a link twice. This will result in an error.
-
-        Here is an example, how the body with `other_rows_ids_map` can look like: 
-        ```
-        "other_rows_ids_map": {
-          "ZEZuAL_8QS6p0tJ2vyKgKw": ["Qtf7xPmoRaiFyQPO1aENTj", "PSnPPXD6SranQwA4_MhN8A"],
-          "PCFS8gY9R8yok5ZZOSqbHg": ["WO2IlomAQVeACVVg8liOMA", "PSnPPXD6SranQwA4_MhN8A"]
-        }
-        ```
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/row_link_create_update_delete"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                success: true
-    # getestet: ok
-    put:
-      tags:
-        - Links
-      summary: Update Row Link(s)
-      operationId: updateRowLink
-      description: |
-        Updates the link(s) between one column and many others (1:n relation). Existings links will be removed and replaced with this new mapping.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/row_link_create_update_delete"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                success: true
-    delete:
-      tags:
-        - Links
-      summary: Delete Row Link(s)
-      operationId: deleteRowLink
-      description: Deletes one or multiple links between two rows. Only the links between the row_ids mentioned in the mapping, will be removed. Other links will stay and not touched.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/row_link_create_update_delete"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                deleted_links_count: 1
-
-  /api-gateway/api/v2/dtables/{base_uuid}/auto-links/:
-    # getestet: ok.
-    post:
-      tags:
-        - Links
-      summary: Auto Links
-      operationId: autoLinks
-      description: |
-        Automatically create link relationships. 
-        The caller needs to create a link column before calling the API, 
-        supporting both archived and unarchived data.
-        It will return a task ID, by quering which you can get the status of the
-        link creation in the backend wihtin 5 minutes.
-        The matched data in the link column in the 2 tables must have the similar 
-        data structure (not same column type). For example, the text column can match
-        email, auto-number or url type column, and so on.
-        Currently, there are a few restrictions:
-        - Formula and link-formula columns are not supported as matching columns
-        - Single-select columns cannot be matched with text columns.
-
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/match_link_columns"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                task_id: 19b3c803-051e-4c16-bf4d-682d24f7981e
-
-  /api-gateway/api/v2/dtables/{base_uuid}/auto-link-task/:
-    # getestet: ok.
-    get:
-      tags:
-        - Links
-      summary: Auto Link task
-      operationId: autoLinkTask
-      description: |
-        Query the status of auto add links task.There are 3 different status:
-        - success
-        - failed
-        - running
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/auto_link_task_id"
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                status: success
-
   # Tables
-  /api-gateway/api/v2/dtables/{base_uuid}/tables/:
+  /dtable-server/api/v1/dtables/{base_uuid}/tables/:
     post:
+      deprecated: true
       tags:
         - Tables
       summary: Create Table
-      operationId: createTable
+      operationId: createTableDeprecated
       description: |
         Creates a new table in a base. Optionally, you can already add some columns to the base.
 
@@ -3077,11 +3206,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/base"
+
     put:
+      deprecated: true
       tags:
         - Tables
       summary: Rename Table
-      operationId: renameTable
+      operationId: renameTableDeprecated
       description: Rename a table by providing it's original `table_name` and the desired `new_table_name`.
       requestBody:
         content:
@@ -3102,10 +3233,11 @@ paths:
               example:
                 success: true
     delete:
+      deprecated: true
       tags:
         - Tables
       summary: Delete Table
-      operationId: deleteTable
+      operationId: deleteTableDeprecated
       description: Delete an existing table identified by its name.
       requestBody:
         content:
@@ -3125,12 +3257,13 @@ paths:
                 type: object
               example:
                 success: true
-  /api-gateway/api/v2/dtables/{base_uuid}/tables/duplicate-table/:
+  /dtable-server/api/v1/dtables/{base_uuid}/tables/duplicate-table/:
     post:
+      deprecated: true
       tags:
         - Tables
       summary: Duplicate Table
-      operationId: duplicateTable
+      operationId: duplicateTableDeprecated
       description: |
         Duplicate an existing table in your base with or without the existing data in it.
 
@@ -3155,11 +3288,118 @@ paths:
                 type: object
               example:
                 _id: oW2Q
-                name: Appointments
+                name: Appointments(copy)
                 columns:
                   - key: "0000"
+                    name: New Date
+                    type: date
+                    width: 169
+                    editable: true
+                    resizable: true
+                    editor:
+                      key: null
+                      ref: null
+                      props: {}
+                      _owner: null
+                    formatter:
+                      key: null
+                      ref: null
+                      props: {}
+                      _owner: null
+                    data:
+                      format: YYYY-MM-DD HH:mm
+                      enable_fill_default_value: false
+                      default_value: ""
+                      default_date_type: specific_date
+                  - key: 004l
+                    type: link
+                    name: Pax
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      display_column_key: "0000"
+                      table_id: anJ2
+                      other_table_id: oW2Q
+                      is_internal_link: true
+                      is_multiple: true
+                      is_row_from_view: false
+                      other_view_id: ""
+                      link_id: EeKy
+                    permission_type: ""
+                    permitted_users: []
+                    colorbys: null
+                  - key: TlwL
+                    type: duration
+                    name: dauer
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      format: duration
+                      duration_format: h:mm
+                    permission_type: ""
+                    permitted_users: []
+                  - key: E5kr
+                    type: formula
+                    name: Ende
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      formula: "{Termine}+{dauer}"
+                      operated_columns:
+                        - "0000"
+                        - TlwL
+                      result_type: date
+                      format: YYYY-MM-DD HH:mm
+                    permission_type: ""
+                    permitted_users: []
+                  - key: quLi
                     type: text
                     name: Name
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data: null
+                    permission_type: ""
+                    permitted_users: []
+                    description: null
+                  - key: X16v
+                    type: number
+                    name: Amount
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data:
+                      format: number
+                      precision: 3
+                      enable_precision: true
+                      enable_fill_default_value: false
+                      decimal: dot
+                      thousands: "no"
+                    permission_type: ""
+                    permitted_users: []
+                    description: null
+                  - key: "0000"
+                    type: text
+                    name: Name2
+                    editable: true
+                    width: 200
+                    resizable: true
+                    draggable: true
+                    data: null
+                    permission_type: ""
+                    permitted_users: []
+                    description: null
+                  - key: "0000"
+                    type: text
+                    name: Name3
                     editable: true
                     width: 200
                     resizable: true
@@ -3184,14 +3424,61 @@ paths:
                     hidden_columns: []
                     groupbys: []
                     groups: []
+                  - _id: kIZQ
+                    name: Frei
+                    type: table
+                    private_for: null
+                    is_locked: false
+                    row_height: default
+                    filter_conjunction: And
+                    filters:
+                      - column_key: 004l
+                        filter_predicate: is_empty
+                        filter_term_modifier: exact_date
+                        filter_term: ""
+                    sorts: []
+                    groupbys: []
+                    group_rows: []
+                    groups: []
+                    colorbys: {}
+                    hidden_columns: []
+                    rows: []
+                    formula_rows: {}
+                    link_rows: {}
+                    summaries: {}
+                    colors: {}
+                  - _id: 0Uz1
+                    name: Besetzt
+                    type: table
+                    private_for: null
+                    is_locked: false
+                    row_height: default
+                    filter_conjunction: And
+                    filters:
+                      - column_key: 004l
+                        filter_predicate: is_not_empty
+                        filter_term_modifier: exact_date
+                        filter_term: ""
+                    sorts: []
+                    groupbys: []
+                    group_rows: []
+                    groups: []
+                    colorbys: {}
+                    hidden_columns: []
+                    rows: []
+                    formula_rows: {}
+                    link_rows: {}
+                    summaries: {}
+                    colors: {}
 
   # Views
-  /api-gateway/api/v2/dtables/{base_uuid}/views/:
+  /dtable-server/api/v1/dtables/{base_uuid}/views/:
     get:
+      deprecated: true
       tags:
         - Views
       summary: List Views
-      operationId: listViews
+      operationId: listViewsDeprecated
       description: List all the views and their settings in a table.
       security:
         - BaseTokenAuth: []
@@ -3222,14 +3509,15 @@ paths:
                     group_rows: []
                     groups: []
     post:
+      deprecated: true
       tags:
         - Views
       summary: Create View
-      operationId: createView
+      operationId: createViewDeprecated
       description: Create a new view in the current table.
 
         In the **request body**, use `name` for the name of the new view. After
-        creating the new view, use the request [Update View](/reference/updateview) to further
+        creating the new view, use the request [Update View](/reference/updateviewdeprecated) to further
         define your view.
       requestBody:
         content:
@@ -3266,12 +3554,13 @@ paths:
                 link_rows: {}
                 summaries: {}
                 colors: {}
-  /api-gateway/api/v2/dtables/{base_uuid}/views/{view_name}/:
+  /dtable-server/api/v1/dtables/{base_uuid}/views/{view_name}/:
     get:
+      deprecated: true
       tags:
         - Views
       summary: Get View
-      operationId: getView
+      operationId: getViewDeprecated
       description: Get the detailed settings of a view by its name.
       security:
         - BaseTokenAuth: []
@@ -3313,10 +3602,11 @@ paths:
                 summaries: {}
                 colors: {}
     put:
+      deprecated: true
       tags:
         - Views
       summary: Update View
-      operationId: updateView
+      operationId: updateViewDeprecated
       description: |
         Change the settings of a current view by its name. All parameters are
         optional. 
@@ -3370,10 +3660,11 @@ paths:
                 summaries: {}
                 colors: {}
     delete:
+      deprecated: true
       tags:
         - Views
       summary: Delete View
-      operationId: deleteView
+      operationId: deleteViewDeprecated
       description: Delete a view by its name.
       security:
         - BaseTokenAuth: []
@@ -3392,12 +3683,13 @@ paths:
                 success: true
 
   # Columns
-  /api-gateway/api/v2/dtables/{base_uuid}/columns/:
+  /dtable-server/api/v1/dtables/{base_uuid}/columns/:
     get:
+      deprecated: true
       tags:
         - Columns
       summary: List Columns
-      operationId: listColumns
+      operationId: listColumnsDeprecated
       description: >-
         List all the visible columns in a certain view in a table.
       security:
@@ -3432,14 +3724,15 @@ paths:
                     permission_type: ""
                     permitted_users: []
     post:
+      deprecated: true
       tags:
         - Columns
       summary: Insert Column
-      operationId: insertColumn
+      operationId: insertColumnDeprecated
       description: >-
         Create a new column. You can only add one new column at the end of a table.
       requestBody:
-        description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/appendcolumns-1).
+        description: Choose which column type you want to add. If you want to add multiple columns, use the request [Append Columns](/reference/appendcolumnsdeprecated).
         content:
           application/json:
             schema:
@@ -3457,7 +3750,6 @@ paths:
                 - $ref: "#/components/schemas/email_column_with_table_name"
                 - $ref: "#/components/schemas/url_column_with_table_name"
                 - $ref: "#/components/schemas/checkbox_column_with_table_name"
-                - $ref: "#/components/schemas/geolocation_column_with_table_name"
                 - $ref: "#/components/schemas/rating_column_with_table_name"
                 - $ref: "#/components/schemas/formula_column_with_table_name"
                 - $ref: "#/components/schemas/link_column_with_table_name"
@@ -3499,10 +3791,11 @@ paths:
                 permission_type: ""
                 permitted_users: []
     put:
+      deprecated: true
       tags:
         - Columns
       summary: Update Column
-      operationId: updateColumn
+      operationId: updateColumnDeprecated
       description: >-
         Allows various changes of the column: name, column_type, freeze/unfreeze, resize, etc...
 
@@ -3517,7 +3810,8 @@ paths:
 
         `new_column_type` is the new type of the target column. For a list of
         column type params refer to the SeaTable API Parameter.
-        For further information on column types, check the page [Models](https://api.seatable.com/reference/models).
+
+        Get more information about columns and column types in [Models](https://api.seatable.com/reference/models).
       requestBody:
         content:
           application/json:
@@ -3546,10 +3840,11 @@ paths:
                 permission_type: ""
                 permitted_users: []
     delete:
+      deprecated: true
       tags:
         - Columns
       summary: Delete Column
-      operationId: deleteColumn
+      operationId: deleteColumnDeprecated
       description: |-
         Delete a column with its name or `key`.
         See the request body for detailed params.
@@ -3571,15 +3866,16 @@ paths:
                 type: object
               example:
                 success: true
-  /api-gateway/api/v2/dtables/{base_uuid}/batch-append-columns/:
+  /dtable-server/api/v1/dtables/{base_uuid}/batch-append-columns/:
     post:
+      deprecated: true
       tags:
         - Columns
       summary: Append Columns
-      operationId: appendColumns
+      operationId: appendColumnsDeprecated
       description: >-
         Use this request to append multiple columns to your table at once. As
-        for the request body, refer to the previous call, [Insert Column](/reference/insertcolumn-1),
+        for the request body, refer to the previous call, [Insert Column](/reference/insertcolumndeprecated),
         for a detailed list of column formats.
 
         These requested and optional params can be used in the request body:
@@ -3592,10 +3888,10 @@ paths:
         *   `column_name` is the name of your new column, required;
         *   `column_type` is the type of your new column, required;
         *   `column_data` is the format setting of a special column, required in case.
-        For details, refer to the call [Insert Column](/reference/insertcolumn-1).
+        For details, refer to the call [Insert Column](/reference/insertcolumndeprecated).
 
         Please note that you can't append `formula`, `link` or `link-formula` columns using this endpoint.
-        Use the [Insert Column](https://api.seatable.com/reference/insertcolumn-1) endpoint instead.
+        Use the [Insert Column](https://api.seatable.com/reference/insertcolumndeprecated) endpoint instead.
       requestBody:
         content:
           application/json:
@@ -3666,12 +3962,14 @@ paths:
                     permission_type: ""
                     permitted_users: []
                     description: null
-  /api-gateway/api/v2/dtables/{base_uuid}/column-options/:
+
+  /dtable-server/api/v1/dtables/{base_uuid}/column-options/:
     post:
+      deprecated: true
       tags:
         - Columns
       summary: Add Single/Multiple Select Options
-      operationId: addSelectOption
+      operationId: addSelectOptionDeprecated
       description: >-
         Once you have created a single/multiple select column, use this request
         to add options for it.
@@ -3710,10 +4008,11 @@ paths:
               example:
                 success: true
     put:
+      deprecated: true
       tags:
         - Columns
       summary: Update Single/Multiple Select Options
-      operationId: updateSelectOption
+      operationId: updateSelectOptionDeprecated
       description: >-
         Use this request to update existing single/multiple select options by
         changing their name and/or color.
@@ -3763,10 +4062,11 @@ paths:
                     textColor: "#FFFFFF"
                     id: "119376"
     delete:
+      deprecated: true
       tags:
         - Columns
       summary: Delete Single/Multiple Select Options
-      operationId: deleteSelectOption
+      operationId: deleteSelectOptionDeprecated
       description: >-
         Use this request to remove single select or multiple select options that
         you don't need any more. Thes deleted options will be removed from the
@@ -3801,17 +4101,17 @@ paths:
                 type: object
               example:
                 success: true
-  /api-gateway/api/v2/dtables/{base_uuid}/column-cascade-settings/:
+  /dtable-server/api/v1/dtables/{base_uuid}/column-cascade-settings/:
     post:
+      deprecated: true
       tags:
         - Columns
-      summary: Update Column Cascade Settings
-      operationId: updateColumnCascade
+      summary: Update Column Cascade
+      operationId: updateColumnCascadeDeprecated
       description: >-
         After you have added at least two single select columns and have added
         relevant options, you can start to set the cascade relationships between
         these single select columns.
-
 
         ## What are cascade settings?
 
@@ -3888,13 +4188,15 @@ paths:
                 success: true
 
   # Big Data
-  /api-gateway/api/v2/dtables/{base_uuid}/add-archived-rows/:
+  /dtable-db/api/v1/insert-rows/{base_uuid}/:
     post:
-      tags: [Big Data]
-      summary: Add Rows into Big Data Backend
-      operationId: addBigDataRows
+      deprecated: true
+      tags:
+        - Big Data
+      summary: Insert Rows into Big Data
+      operationId: insertBigDataRowsDeprecated
       description: >-
-        Insert rows directly into the big data backend.
+        Insert rows into the big data backend.
       requestBody:
         content:
           application/json:
@@ -3913,12 +4215,67 @@ paths:
                 type: object
               example:
                 inserted_row_count: 1
-  /api-gateway/api/v2/dtables/{base_uuid}/archive-view/:
+  /dtable-db/api/v1/update-rows/{base_uuid}/:
+    put:
+      deprecated: true
+      tags:
+        - Big Data
+      summary: Update Rows in Big Data
+      operationId: updateBigDataRowsDeprecated
+      description: Update multipe rows in the big data backend identified by their row id.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/update_rows"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /dtable-db/api/v1/delete-rows/{base_uuid}/:
+    delete:
+      deprecated: true
+      tags:
+        - Big Data
+      summary: Delete Rows in Big Data
+      operationId: deleteBigDataRowsDeprecated
+      description: Delete rows that are currently stored the big data backend identified by their row id.
+      security:
+        - BaseTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/delete_rows"
+
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                deleted_rows: 1
+
+  /dtable-server/api/v1/dtables/{base_uuid}/archive-view/:
     post:
+      deprecated: true
       tags: [Big Data]
-      summary: Move Rows to Big Data Backend
-      operationId: moveRowsToBigData
-      description: Use an sql-like where clause to select the rows that should be moved into the big data backend. Big data backend has to be activated in this base.
+      summary: Move Rows to Big Data
+      operationId: moveRowsToBigDataDeprecated
+      description: Use an sql-like where clause to select the rows that should be moved into the big data backend.
       security:
         - BaseTokenAuth: []
       requestBody:
@@ -3938,29 +4295,20 @@ paths:
               example:
                 success: true
                 error_message: ""
-  /api-gateway/api/v2/dtables/{base_uuid}/unarchive/:
+
+  /dtable-db/api/v1/base/{base_uuid}/links/:
     post:
+      deprecated: true
       tags: [Big Data]
-      summary: Move Rows to Normal Backend
-      operationId: moveRowsToNormalBackend
-      description: Moves the seleted rows into the big data backend.
+      summary: Create Row Links in Big Data
+      operationId: createBigDataRowsLinkDeprecated
+      description: |
+        This API can handle both archived and unarchived rows.
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                table_id:
-                  type: string
-                  description: The unique identifier of the table.
-                  example: "0000"
-                row_ids:
-                  type: array
-                  items:
-                    type: string
-                  description: An array containing the row_ids of the rows you want to move from big data backend to normal.
-                  example:
-                    - "m-AlR40gSTGSxZvJN6ktaA"
+              $ref: "#/components/schemas/archived_row_links"
       security:
         - BaseTokenAuth: []
       parameters:
@@ -3968,14 +4316,46 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+    delete:
+      deprecated: true
+      tags: [Big Data]
+      summary: Delete Row Links in Big Data
+      operationId: deleteBigDataRowLinksDeprecated
+      description: |
+        This API can handle both archived and unarchived rows.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/archived_row_links"
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
 
   # Row Comments
-  /api-gateway/api/v2/dtables/{base_uuid}/comments/:
+  /dtable-server/api/v1/dtables/{base_uuid}/comments/:
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: List Row Comments
-      operationId: listRowComments
+      operationId: listRowCommentsDeprecated
       description: >-
         List all the comments in a certain row. The returned `id` value is the
         ID of each comment.
@@ -4016,12 +4396,14 @@ paths:
                   created_at: "2021-01-15T13:53:13.000Z"
                   updated_at: "2021-01-15T13:53:13.000Z"
                   resolved: 1
-  /api-gateway/api/v2/dtables/{base_uuid}/comments/{comment_id}/:
+
+  /dtable-server/api/v1/dtables/{base_uuid}/comments/{comment_id}/:
     delete:
+      deprecated: true
       tags:
         - Row Comments
       summary: Delete Comment
-      operationId: deleteComment
+      operationId: deleteCommentDeprecated
       description: Delete a certain comment by its ID.
       security:
         - BaseTokenAuth: []
@@ -4038,10 +4420,11 @@ paths:
               example:
                 success: true
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: Get Comment
-      operationId: getComment
+      operationId: getCommentDeprecated
       description: Get the details of a certain comment with its ID.
       security:
         - BaseTokenAuth: []
@@ -4064,12 +4447,13 @@ paths:
                 created_at: "2021-01-15T13:52:48.000Z"
                 updated_at: "2021-01-15T13:52:48.000Z"
                 resolved: 0
-  /api-gateway/api/v2/dtables/{base_uuid}/comments-count/:
+  /dtable-server/api/v1/dtables/{base_uuid}/comments-count/:
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: Get Row Comments Count
-      operationId: getRowCommentsCount
+      operationId: getRowCommentsCountDeprecated
       description: >-
         Get the number of comments in a certain row. This could be a useful
         request to check if there's new comments there.
@@ -4087,12 +4471,13 @@ paths:
                 type: object
               example:
                 count: 3
-  /api-gateway/api/v2/dtables/{base_uuid}/comments-within-days/:
+  /dtable-server/api/v1/dtables/{base_uuid}/comments-within-days/:
     get:
+      deprecated: true
       tags:
         - Row Comments
       summary: List Comments within Days
-      operationId: listCommentsWithinDays
+      operationId: listCommentsWithinDaysDeprecated
       description: >-
         List all the comments in a base within a given number of days before
         today.
@@ -4119,13 +4504,14 @@ paths:
                     updated_at: "2021-03-09T15:54:22.000Z"
                     resolved: 0
 
-  # Notifications (Base)
-  /api-gateway/api/v2/dtables/{base_uuid}/notifications/:
+  # Notifications
+  /dtable-server/api/v1/dtables/{base_uuid}/notifications/:
     get:
+      deprecated: true
       tags:
         - Notifications
       summary: List Base Notifications
-      operationId: listBaseNotifications
+      operationId: listBaseNotificationsDeprecated
       description: List all the notifications, read or unread, in a base.
       security:
         - BaseTokenAuth: []
@@ -4151,10 +4537,11 @@ paths:
                       comment: Did you see this?
                     seen: 1
     put:
+      deprecated: true
       tags:
         - Notifications
       summary: Mark Base Notifications as seen
-      operationId: markBaseNotificationsAsSeen
+      operationId: markBaseNotificationsAsSeenDeprecated
       description: Use this request to mark all the notifications as read.
       requestBody:
         content:
@@ -4180,10 +4567,11 @@ paths:
               example:
                 success: true
     delete:
+      deprecated: true
       tags:
         - Notifications
       summary: Delete Base Notifications
-      operationId: deleteBaseNotifications
+      operationId: deleteBaseNotificationsDeprecated
       description: Delete all the notifications in the current base irrevocably.
       security:
         - BaseTokenAuth: []
@@ -4198,12 +4586,13 @@ paths:
                 type: object
               example:
                 success: true
-  /api-gateway/api/v2/dtables/{base_uuid}/notifications/{notification_id}/:
+  /dtable-server/api/v1/dtables/{base_uuid}/notifications/{notification_id}/:
     put:
+      deprecated: true
       tags:
         - Notifications
       summary: Mark Notification Read/Unread
-      operationId: markBaseNotificationAsSeen
+      operationId: markBaseNotificationAsSeenDeprecated
       description: Mark a specific notification as read or unread.
       requestBody:
         content:
@@ -4230,57 +4619,14 @@ paths:
               example:
                 success: true
 
-  /api-gateway/api/v2/dtables/{base_uuid}/ui-toasts/:
-    post:
-      tags:
-        - Notifications
-      summary: Send toast notification
-      operationId: SendToastNotification
-      description: Send a toast notification
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                to_user:
-                  type: string
-                  description: "target username"
-                  example: "244b4667d1754bb4afa2c2cb7369d244@auth.local"
-                toast_type:
-                  type: string
-                  description: "type of toast, e.g., success, warning, error"
-                  enum: ["success", "warning", "error"]
-                  example: "success"
-                detial:
-                  type: object
-                  properties:
-                    msg:
-                      type: string
-                      description: "message will be toasted"
-                      example: "hello world!"
-
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                success: true
-
   # Activities & Logs
-  /api-gateway/api/v2/dtables/{base_uuid}/operations/:
+  /dtable-server/api/v1/dtables/{base_uuid}/operations/:
     get:
+      deprecated: true
       tags:
         - Activities & Logs
       summary: Get Base Activity Log
-      operationId: getBaseActivityLog
+      operationId: getBaseActivityLogDeprecated
       description: Get the activities log in a base. With the base's `base_uuid`.
       security:
         - BaseTokenAuth: []
@@ -4314,12 +4660,13 @@ paths:
                     operation: >-
                       {"op_type":"delete_column","table_id":"0000","column_key":"jQyv","old_column":{"rowType":"header","key":"jQyv","type":null,"name":null,"editable":true,"width":200,"resizable":true,"draggable":true,"data":null,"permission_type":"","permitted_users":[],"editor":{"key":null,"ref":null,"props":{},"_owner":null},"formatter":null,"left":480,"idx":3},"upper_column_key":"J2mq"}
                     op_id: 116
-  /api-gateway/api/v2/dtables/{base_uuid}/activities/:
+  /dtable-server/api/v1/dtables/{base_uuid}/activities/:
     get:
+      deprecated: true
       tags:
         - Activities & Logs
       summary: List Row Activities
-      operationId: listRowActivities
+      operationId: listRowActivitiesDeprecated
       description: List all the activities done to a certain row with the row's `row_id`.
       security:
         - BaseTokenAuth: []
@@ -4396,17 +4743,111 @@ paths:
                           column_data: {}
                           value: ""
                 total_count: 3
+  /api/v2.1/dtables/{base_uuid}/delete-operation-logs/:
+    get:
+      deprecated: true
+      tags:
+        - Activities & Logs
+      summary: List Delete Operations
+      operationId: listDeleteOperationsDeprecated
+      description: >-
+        Deleted rows, tables and columns are saved in SeaTable for 7 days. You
+        can list these in the operation log with this request. To restore them,
+        you'll need to log into the web UI.
+
+
+        For `op_type` notice:
+
+
+        `delete_row` returns the single operations which have deleted 1 row each
+        time.
+
+
+        `delete_rows` returns the operations in which multiple rows were
+        deleted.
+
+
+        `delete_column` returns the column that was deleted by each operation.
+
+
+        `delete_table` returns the table that was deleted by each operation.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/op_type"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json: {}
+  /dtable-server/api/v1/dtables/{base_uuid}/deleted-rows/:
+    get:
+      deprecated: true
+      tags:
+        - Activities & Logs
+      summary: List Deleted Rows
+      operationId: listDeletedRowsDeprecated
+      description: >-
+        List all the deleted rows in the last 7 days.
+
+
+        If you are looking for rows deleted before that, you can view a snapshot
+        of this base.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                deleted_rows:
+                  - id: 37
+                    dtable_uuid: 12345678-187a-4d9f-b6cf-ff5e5019a6d5
+                    row_id: ZPFv2pm1SiaQpulvzkHm5Q
+                    op_user: 123456786fy54bb4afa2c2cb7369d244@auth.local
+                    op_time: "2020-03-17T10:31:35.000Z"
+                    detail:
+                      table_id: "0000"
+                      table_name: Table1
+                      row_name: Jasmin Tea
+                      row_data:
+                        - column_key: "0000"
+                          column_name: Name
+                          column_type: text
+                          column_data: {}
+                          value: test
+                        - column_key: AKLn
+                          column_name: Details
+                          column_type: file
+                          column_data: {}
+                          value:
+                            - name: example.html
+                              size: 514
+                              type: file
+                              url: >-
+                                http://cloud.seatable.io/workspace/1/asset/12345678-c8e5-49ab-8874-9d4a2dc4608c/files/2020-03/example.html
+                    op_app: null
 
   # Snapshots
-  # tested create: ok
-  /api-gateway/api/v2/dtables/{base_uuid}/snapshot/:
+  /dtable-server/api/v1/dtables/{base_uuid}/snapshot/:
     post:
-      tags: [Snapshots]
+      deprecated: true
+      tags:
+        - Snapshots
       summary: Create Snapshot
-      operationId: createSnapshot
+      operationId: createSnapshotDeprecated
       description: |
         Creates a snapshot for the current base. The pre-conditions are, that there's at least one change since the last snapshot and at least 10 minutes have passed. 
         To get a list of already existing snapshots, use the the request [List Snapshots](/reference/listsnapshots).
+
       requestBody:
         content:
           application/json:

@@ -14,7 +14,7 @@ slug: help
 
 ## Problems with an API request?
 
-We make every effort to keep this API documentation complete and error-free. If you still have a problem with one of the API requests, please open a ticket in our [support forum](https://forum.seatable.io).
+We make every effort to keep this API documentation complete and error-free. If you still have a problem with one of the API requests, please open a ticket in our [support forum](https://forum.seatable.com).
 
 In order to help you quickly, please add the following information in your ticket:
 
@@ -29,7 +29,7 @@ In order to help you quickly, please add the following information in your ticke
 
 ## Developer Manual
 
-Please have a look at the [SeaTable Developer Manual](https://developer.seatable.io). There you can find more information about custom API clients or code examples.
+Please have a look at the [SeaTable Developer Manual](https://developer.seatable.com). There you can find more information about custom API clients or code examples.
 
 ## Expert support
 

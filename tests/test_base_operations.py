@@ -90,7 +90,7 @@ COLUMNS = [
         }
     },
     # FIXME: Fix this
-    # Also fails with insertColumn operation on api.seatable.io: {"error_type": "column_data_error", "error_message": "column_data: {\"format\":\"DD/MM/YYYY HH:mm\"} do not meet specifications."}
+    # Also fails with insertColumn operation on api.seatable.com: {"error_type": "column_data_error", "error_message": "column_data: {\"format\":\"DD/MM/YYYY HH:mm\"} do not meet specifications."}
     #{
     #     'column_name': 'date-european-hours-minutes',
     #     'column_type': 'date',
@@ -267,7 +267,7 @@ ROWS = [
         'single-select': 'option-1',
         'multiple-select': ['option-1', 'option-2'],
         'email': 'example@seatable.io',
-        'url': 'https://seatable.io',
+        'url': 'https://seatable.com',
         'checkbox': True,
         'rate': 7,
         'geolocation-country-region': {'country_region': 'Germany'},
@@ -275,7 +275,7 @@ ROWS = [
         'digital-sign': {
             'username': 'some-user@auth.local',
             # Using an external image is a shortcut, but seems to work :)
-            'sign_image_url': 'https://admin.seatable.io/assets/SeaTable256-256.png',
+            'sign_image_url': 'https://admin.seatable.com/assets/SeaTable256-256.png',
             'sign_time': '2024-06-05T13:28:56.090+00:00',
         },
     },
@@ -306,7 +306,7 @@ ROWS = [
         'checkbox': True,
     },
     {
-        # Regression test for https://forum.seatable.io/t/python-modification-in-rows-data-since-4-4/4254
+        # Regression test for https://forum.seatable.com/t/python-modification-in-rows-data-since-4-4/4254
         'text': 'row-with-empty-values'
     }
 ]

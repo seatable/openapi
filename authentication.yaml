@@ -54,7 +54,7 @@ components:
     workspace_id:
       name: workspace_id
       description: |
-        The id of the workspace. For an explanation how to get the *workspace_id*, check out this [help-article](https://seatable.io/docs/arbeiten-mit-gruppen/workspace-id-einer-gruppe-ermitteln/?lang=auto). 
+        The id of the workspace. For an explanation how to get the *workspace_id*, check out this [help-article](https://seatable.com/help/workspace-id-einer-gruppe-ermitteln/). 
         Alternatively the API endpoint [get metadata](/reference/getmetadata) can be used.
       in: path
       schema:

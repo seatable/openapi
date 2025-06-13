@@ -84,4 +84,4 @@ Treat your tokens like passwords, so be sure to keep them secure! Do not share y
 
 Account-Operations differentiate between User, Team Admin and System Admin. These are the three possible roles a user can have within SeaTable. Each user always has the User permission. The Team Admin or System Admin role must also be assigned to a user, and Team Admins only exist if teams/organizations are enabled in SeaTable. This is the case with <https://cloud.seatable.io>, but is typically not the case with self-hosted SeaTable instances.
 
-More details on SeaTable's team/organization structure and admin management can be found at <https://seatable.io/docs/>.
+More details on SeaTable's team/organization structure and admin management can be found at <https://help.seatable.com>.
