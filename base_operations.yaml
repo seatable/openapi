@@ -575,7 +575,7 @@ components:
 
     link_id:
       type: string
-      description: Every *link column* has a `key` and `link_id` in the column object. Use [Get Metadata](/reference/getmetadata) or [Get Base Info](/reference/getbaseinfo) to get this `link_id`. Don't use the `key` of the link column.
+      description: Every *link column* has a `key` and `link_id` in the column object. Use [Get Metadata](/reference/getmetadata) to get this `link_id`. Don't use the `key` of the link column.
       minLength: 4
       maxLength: 4
       example: jYc7
@@ -2306,108 +2306,6 @@ components:
           example: Example
 
 paths:
-  # Base Info
-  # question: super powerful call. extension of metadata?!? Contains all links (even more than 10?), statistics
-  # it does not contain apps, forms. Collaborators are always empty. What is the purpose of this call?
-  # question: why does this call contains data? But it is difficult to get the full picture => link formula columns are not shown
-  /api-gateway/api/v2/dtables/{base_uuid}:
-    get:
-      tags: [Base Info]
-      summary: Get Base Info
-      operationId: getBaseInfo
-      description: |
-        Get various information of a base like the tables, (normal and big data) views, links, data statistics and collaborators.
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                version: 33
-                format_version: 9
-                statistics: []
-                links: []
-                settings:
-                  enable_archive: true
-                tables:
-                  - _id: "0000"
-                    name: Table1
-                    rows:
-                      - _id: Qtf7xPmoRaiFyQPO1aNTjA
-                        _participants: []
-                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: "2020-11-18T12:42:14.779+00:00"
-                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: "2021-01-14T09:01:57.357+00:00"
-                        "0000": Meng
-                        BydO: "2020-08-19"
-                      - _id: V_jBEGOXQ3mC3rJkQi-DOQ
-                        _participants: []
-                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: "2021-01-14T08:56:05.666+00:00"
-                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: "2021-01-14T08:56:59.458+00:00"
-                        "0000": Bao
-                        BydO: "2020-09-18"
-                      - _id: HtZb516CTwCZRuBlY8d7Wg
-                        _participants: []
-                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: "2021-01-14T08:56:07.135+00:00"
-                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: "2021-01-14T08:57:04.073+00:00"
-                        "0000": Daniel
-                        BydO: "2020-10-22"
-                      - _id: fS8qtN6FQ1uPOaNAC0Locw
-                        _participants: []
-                        _creator: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _ctime: "2021-01-14T08:56:08.259+00:00"
-                        _last_modifier: 8ch7ft46r69491ba42905bf1647fd3f@auth.local
-                        _mtime: "2021-01-14T08:57:06.657+00:00"
-                        "0000": Jonas
-                        BydO: "2021-01-20"
-                    columns:
-                      - key: "0000"
-                        name: Name
-                        type: text
-                        width: 200
-                        editable: true
-                        resizable: true
-                      - key: BydO
-                        type: date
-                        name: Date
-                        editable: true
-                        width: 200
-                        resizable: true
-                        draggable: true
-                        data:
-                          format: YYYY-MM-DD
-                        permission_type: ""
-                        permitted_users: []
-                    view_structure:
-                      - folders: []
-                      - view_ids: ["0000"]
-                    views:
-                      - _id: "0000"
-                        name: "Default\r\n> View"
-                        type: table
-                        is_locked: false
-                        rows: []
-                        formula_rows: {}
-                        summaries: []
-                        filter_conjunction: And
-                        filters: []
-                        sorts: []
-                        hidden_columns: []
-                        groupbys: []
-                        groups: []
-                    id_row_map: {}
-                collaborators: []
   /api-gateway/api/v2/dtables/{base_uuid}/metadata/:
     get:
       tags:
@@ -2524,7 +2422,6 @@ paths:
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
 
   # Rows
-  # question: shows only up to 10 linked records. Base Info shows all. Is there any reason?
   /api-gateway/api/v2/dtables/{base_uuid}/sql:
     post:
       tags:
