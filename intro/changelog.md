@@ -30,6 +30,8 @@ No further changes were made to the API documentation with v5.3.
 >
 > In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 5.3. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
 
+[View API Documentation for v5.2](https://api.seatable.com/v5.2)
+
 > 📘 New requests
 >
 > **Base Operations**
