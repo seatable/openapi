@@ -1736,6 +1736,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "logo_path": "avatars/org-logo/1/8b4d9bc0-96b3-4b36-bf53-2187b601dfac.png",
