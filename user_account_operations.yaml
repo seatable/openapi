@@ -7693,6 +7693,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "my_managed_apps":
