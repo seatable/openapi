@@ -559,30 +559,75 @@ paths:
                     workspace_id: 304
                     uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                     name: Test base
-                    creator: Jasmin Tee
-                    modifier: Jasmin Tee
                     created_at: "2020-11-18T12:31:29+00:00"
                     updated_at: "2021-03-02T10:29:03+00:00"
                     color: null
                     text_color: null
-                    icon: null
-                    owner: Jasmin Tee
-                    rows_count: 72
-                  - id: 160
-                    workspace_id: 305
+                    icon: null,
+                    is_encrypted: false,
+                    in_storage: true,
+                    org_id: 1,
+                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
+                    group_id: -1,
+                    owner: Jasmin Tee,
+                    owner_deleted: false,
+                    rows_count: 2
+                  - id: 159
+                    workspace_id: 304
                     uuid: 87654321-d895-402f-9718-a85f26c65d99
                     name: Project Tracker
-                    creator: Jasmin Tee
-                    modifier: Jasmin Tee
-                    created_at: "2020-11-18T12:45:06+00:00"
-                    updated_at: "2020-11-18T12:45:06+00:00"
+                    created_at: "2020-11-18T12:31:29+00:00"
+                    updated_at: "2021-03-02T10:29:03+00:00"
                     color: null
                     text_color: null
-                    icon: null
-                    owner: testgroup (group)
-                    rows_count: 46
+                    icon: null,
+                    is_encrypted: false,
+                    in_storage: true,
+                    org_id: 1,
+                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
+                    group_id: -1,
+                    owner: TeamAdmin,
+                    owner_deleted: false,
+                    rows_count: 20
                 count: 16
-  /api/v2.1/org/{org_id}/admin/dtables/{base_id}/:
+  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/:
+    get:
+      tags:
+        - Bases
+      summary: Get Base
+      operationId: getBase
+      description: >-
+        Get the details of a base in a team
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 158
+                workspace_id: 304
+                uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
+                name: Test base
+                created_at: "2020-11-18T12:31:29+00:00"
+                updated_at: "2021-03-02T10:29:03+00:00"
+                color: null
+                text_color: null
+                icon: null,
+                is_encrypted: false,
+                in_storage: true,
+                org_id: 1,
+                owner: JiweRan
+                email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
+                group_id: -1,
+                owner_deleted: false,
+                rows_count: 2
     delete:
       tags:
         - Bases
@@ -595,7 +640,7 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
-        - $ref: "#/components/parameters/base_id"
+        - $ref: "#/components/parameters/base_uuid"
       responses:
         "200":
           description: OK
@@ -663,7 +708,7 @@ paths:
                 type: object
               example:
                 success: true
-  /api/v2.1/org/{org_id}/admin/trash-dtables/{base_id}/:
+  /api/v2.1/org/{org_id}/admin/trash-dtables/{base_uuid}/:
     put:
       tags:
         - Bases
@@ -674,7 +719,7 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
-        - $ref: "#/components/parameters/base_id"
+        - $ref: "#/components/parameters/base_uuid"
       responses:
         "200":
           description: OK
@@ -1193,6 +1238,7 @@ paths:
                       https://cloud.seatable.io/dtable/view-external-links/20fcc48ea99a47459952/
                     is_custom: false
                     expire_date: ""
+                    is_protected: false
                   - id: 26
                     from_dtable: Test Base
                     creator: 8e02ebc52ff0484d9f15b50904a98d2f@auth.local
@@ -1207,6 +1253,7 @@ paths:
                       https://cloud.seatable.io/dtable/view-external-links/6388e4fc44eb4296aa41/
                     is_custom: false
                     expire_date: ""
+                    is_protected: false
                 count: 2
   /api/v2.1/org/{org_id}/admin/view-external-links/{view_external_link_token}/:
     delete:
@@ -1265,6 +1312,8 @@ paths:
                     expire_date: null
                     permission: rw
                     workspace_id: 204
+                    is_protected: false
+                    dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6f3dbvh46
                   - dtable_name: All types
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     token: >-
@@ -1274,6 +1323,8 @@ paths:
                     expire_date: null
                     permission: rw
                     workspace_id: 204
+                    is_protected: false
+                    dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
                 count: 17
   /api/v2.1/org/{org_id}/admin/invite-links/{invite_link_token}/:
     put:
