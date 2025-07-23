@@ -559,30 +559,75 @@ paths:
                     workspace_id: 304
                     uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                     name: Test base
-                    creator: Jasmin Tee
-                    modifier: Jasmin Tee
                     created_at: "2020-11-18T12:31:29+00:00"
                     updated_at: "2021-03-02T10:29:03+00:00"
                     color: null
                     text_color: null
-                    icon: null
-                    owner: Jasmin Tee
-                    rows_count: 72
-                  - id: 160
-                    workspace_id: 305
+                    icon: null,
+                    is_encrypted: false,
+                    in_storage: true,
+                    org_id: 1,
+                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
+                    group_id: -1,
+                    owner: Jasmin Tee,
+                    owner_deleted: false,
+                    rows_count: 2
+                  - id: 159
+                    workspace_id: 304
                     uuid: 87654321-d895-402f-9718-a85f26c65d99
                     name: Project Tracker
-                    creator: Jasmin Tee
-                    modifier: Jasmin Tee
-                    created_at: "2020-11-18T12:45:06+00:00"
-                    updated_at: "2020-11-18T12:45:06+00:00"
+                    created_at: "2020-11-18T12:31:29+00:00"
+                    updated_at: "2021-03-02T10:29:03+00:00"
                     color: null
                     text_color: null
-                    icon: null
-                    owner: testgroup (group)
-                    rows_count: 46
+                    icon: null,
+                    is_encrypted: false,
+                    in_storage: true,
+                    org_id: 1,
+                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
+                    group_id: -1,
+                    owner: TeamAdmin,
+                    owner_deleted: false,
+                    rows_count: 20
                 count: 16
   /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/:
+    get:
+      tags:
+        - Bases
+      summary: Get Base
+      operationId: getBase
+      description: >-
+        Get the details of a base in a team
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 158
+                workspace_id: 304
+                uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
+                name: Test base
+                created_at: "2020-11-18T12:31:29+00:00"
+                updated_at: "2021-03-02T10:29:03+00:00"
+                color: null
+                text_color: null
+                icon: null,
+                is_encrypted: false,
+                in_storage: true,
+                org_id: 1,
+                owner: JiweRan
+                email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
+                group_id: -1,
+                owner_deleted: false,
+                rows_count: 2
     delete:
       tags:
         - Bases
