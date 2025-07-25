@@ -1094,10 +1094,12 @@ paths:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        "401":
-          description: Successful response
+        "200":
+          description: OK
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
 
   # Sharing Links
   /api/v2.1/org/{org_id}/admin/external-links/:
