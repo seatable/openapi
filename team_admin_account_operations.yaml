@@ -1058,6 +1058,36 @@ paths:
                     is_admin: false
                     role: Member
   /api/v2.1/org/{org_id}/admin/groups/{group_id}/members/{user_id}/:
+    put:
+      tags:
+        - Groups
+      summary: Update Group Member Role
+      operationId: updateGroupMemberRole
+      description: Update a member's role.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/group_id"
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [is_admin]
+              properties:
+                is_admin:
+                  # FIXME: The API should accept a boolean...
+                  type: string
+                  example: "true"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
     delete:
       tags:
         - Groups
