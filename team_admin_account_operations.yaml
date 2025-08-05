@@ -1109,7 +1109,7 @@ paths:
                 type: object
               example:
                 success: true
-  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/shares:
+  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/shares/:
     get:
       tags:
         - Bases
