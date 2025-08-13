@@ -1633,7 +1633,7 @@ paths:
                     ],
                   "total_count": 70,
                 }
-  /api/v2.1/org/{org_id}/admin/login-logs/{user_id}:
+  /api/v2.1/org/{org_id}/admin/login-logs/{user_id}/:
     get:
       tags:
         - Activities & Logs

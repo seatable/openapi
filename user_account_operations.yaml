@@ -7945,7 +7945,7 @@ paths:
                     insert_row: 0
                     modify_row: 1
                     delete_row: 0
-  /api/v2.1/dtable-activities/detail:
+  /api/v2.1/dtable-activities/detail/:
     get:
       tags: [Activities & Logs]
       summary: Get Base Activity Details

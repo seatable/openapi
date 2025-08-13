@@ -348,7 +348,7 @@ paths:
                   upload_link: "https://cloud.seatable.io/seafhttp/upload-api/e943a56a-c5b3-441a-ac1d-9199819dec71"
                   parent_path: "/asset/1338f224-8482-4d71-b8be-63c8f37b896a/custom"
                   relative_path": "/"
-  /api/v2.1/dtable/custom/app-download-link:
+  /api/v2.1/dtable/custom/app-download-link/:
     get:
       tags: [Files & Images (Custom Folder)]
       summary: Get Download Link
