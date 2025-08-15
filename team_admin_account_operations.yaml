@@ -1541,6 +1541,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "logs":
@@ -1602,6 +1604,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "login_list":
@@ -1652,6 +1656,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "data":
@@ -1693,6 +1699,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "file_access_log_list": [
