@@ -48,7 +48,7 @@ No further changes were made to the API documentation with v5.3.
 
 ## Version 5.1 (08.11.2024)
 
-[View API Documentation for v5.1](https://api.seatable.com/v5.1)
+The SeaTable API Reference for version 5.1 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v5.1).
 
 > 📘 New requests
 >
@@ -65,7 +65,7 @@ No further changes were made to the API documentation with v5.3.
 
 ## Version 5.0 (15.07.2024)
 
-[View API Documentation for v5.0](https://api.seatable.com/v5.0)
+The SeaTable API Reference for version 5.0 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v5.0).
 
 We recommend using the new `/api-gateway/` endpoints. These endpoints are faster because they check if the base has remained unchanged since the last request, allowing for quicker responses.
 
