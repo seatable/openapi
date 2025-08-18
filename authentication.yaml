@@ -48,7 +48,15 @@ components:
         google authenticator), optional, only needed if 2FA is activated for your account.
 
     #=======================Query parameters=======================#
-    # there are no query params in authentication.
+    expiration_time:
+      name: exp
+      description: |
+        Expiration time of the generated access token.
+        Examples: 5h (= 5 hours) or 3d (= 3 days)
+      in: query
+      schema:
+        type: string
+        default: 3d
 
     #=======================Path parameters=======================#
     workspace_id:
@@ -367,6 +375,8 @@ paths:
         Generate a Base-Token with an API-Token. The API-Token grants either read or write permission to this base, depending of the permission of the API-Token.
       security:
         - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/expiration_time"
       responses:
         "200":
           description: OK
@@ -406,6 +416,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
+        - $ref: "#/components/parameters/expiration_time"
       responses:
         "200":
           description: OK
