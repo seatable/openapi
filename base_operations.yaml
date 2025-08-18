@@ -4091,7 +4091,7 @@ paths:
     get:
       tags:
         - Row Comments
-      summary: Get number of comments per row
+      summary: Get Number of Comments
       operationId: getNumberOfComments
       description: Get the number of comments for all rows.
       security:
