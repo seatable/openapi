@@ -2422,7 +2422,7 @@ paths:
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
 
   # Rows
-  /api-gateway/api/v2/dtables/{base_uuid}/sql:
+  /api-gateway/api/v2/dtables/{base_uuid}/sql/:
     post:
       tags:
         - Rows

@@ -1,6 +1,6 @@
 ---
 title: Introduction
-excerpt: This is the reference for the SeaTable API. On this page you will find everything you need to use the SeaTable API.
+excerpt: This is the reference for the SeaTable API. On this page you will find everything you need to know to use SeaTable's API.
 category: 67bd4bf716397e0037c123d0
 isReference: true
 slug: introduction
@@ -18,13 +18,13 @@ summary {
 }
 </style>
 
-The SeaTable API is organized around REST. Our API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+The SeaTable API is organized around REST. This means: SeaTable's API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
 Take a look at our [development quick start guide](https://developer.seatable.com) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.com/integrations) like Zapier, Make.com or N8n to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://help.seatable.com).
 
-> 👍 New Online Course Now Available: Level One (Beginner)!
+> 👍 New Online Courses Available: Level 1 (Beginner) and Level 2 (Intermediate)!
 >
-> We are excited to announce the launch of our brand-new online course, designed especially for those who want to build a solid foundation in SeaTable. At the end of the course, you’ll have the opportunity to test your knowledge with a quiz. Successfully passing the quiz will earn you a new badge on SeaTable community forum, proudly displaying your proficiency level for everyone to see!
+> We are excited to announce the launch of our brand-new online courses, designed especially for those who want to build a solid foundation in SeaTable. At the end of each course, you’ll have the opportunity to test your knowledge with a quiz. Successfully passing the quiz will earn you a new badge on [SeaTable Forum](https://forum.seatable.com), proudly displaying your proficiency level for everyone to see!
 >
 > Ready to get started? **[Let's go](https://seatable.com/help/first-steps/online-course/)**
 
