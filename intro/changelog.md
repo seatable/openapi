@@ -1,7 +1,7 @@
 ---
 title: Changelog
 excerpt: This page lists changes made to the Web API and its documentation.
-category: 67bd4bf716397e0037c123d0
+category: 68a31677008af4fb2f94f547
 isReference: true
 slug: changelog
 ---
@@ -14,7 +14,13 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.com/blog) for detailed release notes.
 
+## Version 6.0 (??.??.2025)
+
+...
+
 ## Version 5.3 (16.06.2025)
+
+[View API Documentation for v5.3](https://api.seatable.com/v5.3)
 
 > 🚧 Breaking change: API-Gateway
 >
@@ -25,6 +31,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 No further changes were made to the API documentation with v5.3.
 
 ## Version 5.2 (25.02.2025)
+
+[View API Documentation for v5.2](https://api.seatable.com/v5.2)
 
 > ❗ Important Update: API Endpoint Changes
 >
@@ -48,7 +56,7 @@ No further changes were made to the API documentation with v5.3.
 
 ## Version 5.1 (08.11.2024)
 
-[View API Documentation for v5.1](https://api.seatable.com/v5.1)
+The SeaTable API Reference for version 5.1 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v5.1).
 
 > 📘 New requests
 >
@@ -65,7 +73,7 @@ No further changes were made to the API documentation with v5.3.
 
 ## Version 5.0 (15.07.2024)
 
-[View API Documentation for v5.0](https://api.seatable.com/v5.0)
+The SeaTable API Reference for version 5.0 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v5.0).
 
 We recommend using the new `/api-gateway/` endpoints. These endpoints are faster because they check if the base has remained unchanged since the last request, allowing for quicker responses.
 
