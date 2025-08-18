@@ -113,7 +113,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ping_response"
 
-  /dtable-db/ping:
+  /dtable-db/ping/:
     get:
       tags:
         - Ping
@@ -128,7 +128,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ping_response"
 
-  /api-gateway/api/v2/ping:
+  /api-gateway/api/v2/ping/:
     get:
       tags:
         - Ping

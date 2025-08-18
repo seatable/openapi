@@ -1103,6 +1103,36 @@ paths:
                     is_admin: false
                     role: Member
   /api/v2.1/org/{org_id}/admin/groups/{group_id}/members/{user_id}/:
+    put:
+      tags:
+        - Groups
+      summary: Update Group Member Role
+      operationId: updateGroupMemberRole
+      description: Update a member's role.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/group_id"
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [is_admin]
+              properties:
+                is_admin:
+                  # FIXME: The API should accept a boolean...
+                  type: string
+                  example: "true"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
     delete:
       tags:
         - Groups
@@ -1124,7 +1154,7 @@ paths:
                 type: object
               example:
                 success: true
-  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/shares:
+  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/shares/:
     get:
       tags:
         - Bases
@@ -1139,10 +1169,12 @@ paths:
         - $ref: "#/components/parameters/org_id"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        "401":
-          description: Successful response
+        "200":
+          description: OK
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
 
   # Sharing Links
   /api/v2.1/org/{org_id}/admin/external-links/:
@@ -1560,6 +1592,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "logs":
@@ -1621,6 +1655,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "login_list":
@@ -1652,7 +1688,7 @@ paths:
                     ],
                   "total_count": 70,
                 }
-  /api/v2.1/org/{org_id}/admin/login-logs/{user_id}:
+  /api/v2.1/org/{org_id}/admin/login-logs/{user_id}/:
     get:
       tags:
         - Activities & Logs
@@ -1671,6 +1707,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "data":
@@ -1712,6 +1750,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "file_access_log_list": [
@@ -1827,6 +1867,8 @@ paths:
           description: OK
           content:
             application/json:
+              schema:
+                type: object
               example:
                 {
                   "saml_config":
