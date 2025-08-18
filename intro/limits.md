@@ -31,7 +31,11 @@ x-ratelimit-reset: 1720710405
 
 > ❗ SeaTable Cloud: Monthly API limits
 >
-> Due to excessive use of SeaTable Cloud's API by some users, SeaTable Cloud introduced monthly API limits in the summer 2025. (In this [blog post](https://seatable.com/api-gateway-version-5-3/), you find background information.) The monthly API limits are a function of the subscription and the number of users in the team.  The limit is automatically reset at the end of each month. If you have exhausted your API limit for the month, you can upgrade your subscription to SeaTable Cloud and/or add more users to your paid subscription. The extra API calls are available momentarily after the upgrade. For more information on the specific limits, see the [pricing page](https://seatable.com/de/preise/).
+> Due to excessive use of SeaTable Cloud's API by some users, SeaTable Cloud introduced monthly API limits in the summer 2025. (In this [blog post](https://seatable.com/api-gateway-version-5-3/), you find background information.) >
+> 
+> The monthly API limits are a function of the subscription and the number of users in the team. The limit is automatically reset at the end of each month. 
+> 
+> If you have exhausted your API limit for the month, you can upgrade your subscription to SeaTable Cloud and/or add more users to your paid subscription. The extra API calls are available momentarily after the upgrade. For more information on the specific limits, see the [pricing page](https://seatable.com/de/preise/).
 
 ### General rate limits
 
@@ -63,7 +67,7 @@ If this is the case, you should start thinking about how to reduce the number of
 
 If you are a SeaTable Dedicated customer or you run your own SeaTable Server instance (Enterprise and Developer Edition), you can modify the default limits. The limits are set in configuration files. Beginning with SeaTable Server v5.3, the limits are defined in one single configuration file. In prior versions, updating rate limits involved modifying multiple configuration files:
 
-- [dtable-api-gateway.conf](https://admin.seatable.com/configuration/dtable-api-gateway-conf) (from version 5.3)
+- [dtable-api-gateway.conf](https://admin.seatable.com/configuration/dtable-api-gateway-conf) (**from** version 5.3)
 - [dtable_server_config.json](https://admin.seatable.com/configuration/dtable-server-config/) - (before version 5.3)
 - [dtable-db.conf](https://admin.seatable.com/configuration/dtable-db-conf/) (before version 5.3)
 - [dtable_web_settings.py](https://admin.seatable.com/configuration/dtable-web-settings/) (before version 5.3)
