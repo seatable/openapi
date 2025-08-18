@@ -18,10 +18,6 @@ All other API-requests require an authorization header that looks like this, whe
 
 `Authorization: Bearer {{Account-Token, API-Token or Base-Token}}`
 
-> 🚧 Self-hosted SeaTable need configuration change
->
-> The **Try It!** function of this page works out of the box with SeaTable Cloud. But if you host your own SeaTable Server you have to [change your nginx configuration](/reference/requirement-self-hosted) to use this great feature.
-
 > 📘 Bearer or Token?
 >
 > Before version 4.0, the authentication header in SeaTable was not like `Authorization: Bearer` but `Authorization: Token`. Starting with version 4.0 both authentication headers are supported. We recommend the use of `Authorization: Bearer`, according to the official [OpenAPI 3.0 Specifiation](https://swagger.io/docs/specification/authentication/bearer-authentication/).
