@@ -390,7 +390,6 @@ paths:
                   eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTQzNTI1OTQsImR0YWJsZV91dWlkIjoiNjUwZDhhMGQtN2UyNy00NmE4LThiMTgtNmNjNmYzZGIyMDU3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6InBvc3RtYW4ifQ.4aTmvBfFElyB3xg5jjF7zWCiyRZI17SZD980GdHT6e3
                 dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6f384ufy4
                 dtable_server: https://cloud.seatable.io/api-gateway/
-                dtable_db: https://cloud.seatable.io/dtable-db/
                 workspace_id: 20
                 use_api_gateway: true
                 dtable_name: Test base
