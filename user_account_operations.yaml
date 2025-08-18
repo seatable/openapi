@@ -2741,6 +2741,28 @@ paths:
               example:
                 success: true
 
+  /api/v2.1/dtable/{base_uuid}/size/:
+    get:
+      tags:
+        - Bases
+      summary: Get Base Size
+      operationId: getBaseSize
+      description: Get the storage usage of a base in bytes.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                # FIXME: API returns a string...
+                result: "171982"
+
   /api/v2.1/starred-dtables/:
     get:
       tags:
