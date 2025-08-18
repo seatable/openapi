@@ -32,17 +32,17 @@ Initially, authentication in SeaTable can seem a bit complicated, but the follow
 
 ![Authentication Flow in SeaTable](https://seatable.com/openapi/authentication-flow-in-seatable2.png)
 
-- Every **account operation** (Uuser, Team Admin or System Admin) requires an **Account-Token**.
+- Every **account operation** (user, team admin or system admin) requires an **Account-Token**.
 - Every **base operation** requires a **Base-Token**.
 - Every **file operation** requires an **API-Token**.
 
 ---
 
-## The three tokens
+## SeaTable's three tokens
 
 > 📘 Account-Token
 >
-> An **Account-Token** authenticates an _account API request_ (=Account Operations) like add a new base, add a group member or list all collaborators of a base. The Account-Token can be generated with the account-credentials.
+> An **Account-Token** authenticates an _account API request_ (=account operations) like add a new base, add a group member or list all collaborators of a base. The Account-Token can be generated with the account-credentials.
 
 > 📘 API-Token
 >
@@ -51,8 +51,8 @@ Initially, authentication in SeaTable can seem a bit complicated, but the follow
 
 > 📘 Base-Token
 >
-> A **Base-Token** authenticates a _base API request_ (=Base Operations) like add a new row, append a row or delete a row. The Base-Token can be generated in many ways. The most common way is to use an API-Token.
-> The read/write permission of an Base-Token depends on the read/write permission of the API-Token or the Account-Token it's generated from. Base-Token are valid for 3 days, therefore these must be generated regularly.
+> A **Base-Token** authenticates a _base API request_ (=base operations) like add a new row, append a row or delete a row. The Base-Token can be generated in many ways. The most common way is to use an API-Token.
+> The read/write permission of an Base-Token depends on the read/write permission of the API-Token or the Account-Token it's generated from. Base-Tokens are JWT tokens and are valid for 3 days, therefore these must be generated regularly.
 
 Here are the differences between these three tokens:
 
@@ -60,21 +60,22 @@ Here are the differences between these three tokens:
 | :------------ | :-------- | :--------- | :----------------------------------------------------------------------------------- |
 | Account-Token | 40 chars  | never      | account privileges (user, team-admin, system admin)                                  |
 | API-Token     | 40 chars  | never      | allows generating a Base-Token for a specific base with either read or write access  |
-| Base-Token    | >400 chars | 3 days     | allow executing a Base-Operation with either read or write access to a specific base |
+| Base-Token    | >400 chars | 3 days     | allows executing a Base-Operation with either read or write access to a specific base |
 
-> ❗ Keep your Tokens secure!
+
+> ❗ Keep your tokens secure!
 >
-> An Account-Token or an API-Token replaces the combination of username & password in a SeaTable API request. Once generated, such a Token is valid permanently.
-> Therefore your Tokens have the same sensibility as your username and password, so make sure keep them in a safe place!
+> An Account-Token or an API-Token replaces the combination of username & password in a SeaTable API request. Once generated, such a token is valid permanently.
+> Therefore your tokens have the same sensibility as your username and password, so make sure keep them in a safe place!
 
 ### Token Hierarchy
 
 If you are working with the SeaTable API for the first time, the three different API-Tokens can be confusing. With a few exceptions, the following rule should help you:
 
-- For all account operations, you need an account token. You create this token with your credentials.
-- For practically all base operations, you require a base token. You generate this from an API token.
+- For all account operations, you need an Account-Token. You create this token with your credentials.
+- For practically all base operations, you require a Base-Token. You generate this from an API-Token.
 
-Otherwise, it can be said that the Account-Token is the most powerful token because you can generate the other two tokens with it. With the API token, on the other hand, you can only generate a base token, and the base token can only be used to execute base operations. We call this the Token-Hierarchy of SeaTable.
+Otherwise, it can be said that the Account-Token is the most powerful token because you can generate the other two tokens with it. With the API-Token, on the other hand, you can only generate a Base-Token, and the Base-Boken can only be used to execute base operations. We call this SeaTable's token hierarchy.
 
 ### Security
 
@@ -82,6 +83,6 @@ Treat your tokens like passwords, so be sure to keep them secure! Do not share y
 
 ### Team Admin vs. System Admin
 
-Account-Operations differentiate between User, Team Admin and System Admin. These are the three possible roles a user can have within SeaTable. Each user always has the User permission. The Team Admin or System Admin role must also be assigned to a user, and Team Admins only exist if teams/organizations are enabled in SeaTable. This is the case with <https://cloud.seatable.io>, but is typically not the case with self-hosted SeaTable instances.
+Account operations differentiate between user, team admin and system admin. These are the three possible user types a user can have within SeaTable. Each user always has the user permission. The team admin or system admin type must also be assigned to a user, and team admins only exist if teams/organizations are enabled in SeaTable. This is the case with <https://cloud.seatable.io>, but is typically not the case with self-hosted SeaTable Server instances.
 
 More details on SeaTable's team/organization structure and admin management can be found at <https://help.seatable.com>.
