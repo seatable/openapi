@@ -3339,6 +3339,39 @@ paths:
                     type: integer
                     description: The total number of logs available.
                     example: 15
+  /api/v2.1/admin/group-member-audit/:
+    get:
+      tags:
+        - Logs
+      summary: List Group Member Audit Logs
+      operationId: listGroupMemberAuditLogs
+      description: Retrieves audit logs for changes to group members (either `group_member_add` or `group_member_delete`).
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                group_member_log_list:
+                  - user_email: 493524d94e7e467da506e30c24898555@auth.local
+                    user_name: 123
+                    user_contact_email: 123@qq.com
+                    group_id: 3
+                    group_name: g2
+                    operator_email: 8d597a4a971c43afa8926a2dede58231@auth.local
+                    operator_name: admin
+                    operator_contact_email: zwfxiaxue@163.com
+                    date: 2025-05-27T06:59:43+00:00
+                    operation: group_member_add
+                count: 1
   /api/v2.1/admin/file-access-logs/:
     get:
       tags:
