@@ -48,7 +48,15 @@ components:
         google authenticator), optional, only needed if 2FA is activated for your account.
 
     #=======================Query parameters=======================#
-    # there are no query params in authentication.
+    expiration_time:
+      name: exp
+      description: |
+        Expiration time of the generated access token.
+        Examples: 5h (= 5 hours) or 3d (= 3 days)
+      in: query
+      schema:
+        type: string
+        default: 3d
 
     #=======================Path parameters=======================#
     workspace_id:
@@ -148,32 +156,16 @@ components:
 
     AccessToken:
       type: object
-      description: blub
+      description: Access Token
       properties:
-        app_name:
-          type: string
         access_token:
           type: string
         dtable_uuid:
           type: string
           format: uuid
-        dtable_server:
-          type: string
-          format: url
-        dtable_socket:
-          type: string
-          format: url
-        workspace_id:
-          type: integer
-        dtable_name:
-          type: string
       example:
-        app_name: My App
         access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTQzNTI1OTQsImR0YWJsZV91dWlkIjoiNjUwZDhhMGQtN2UyNy00NmE4LThiMTgtNmNjNmYzZGIyMDU3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6InBvc3RtYW4ifQ.4aTmvBfFElyB3xg5jjF7zWCiyRZI17SZD980GdHT6e3
         dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6f384ufy4
-        dtable_server: https://cloud.seatable.io/api-gateway/
-        workspace_id: 127
-        dtable_name: Test Base
 
     authentication_permission:
       type: string
@@ -367,6 +359,8 @@ paths:
         Generate a Base-Token with an API-Token. The API-Token grants either read or write permission to this base, depending of the permission of the API-Token.
       security:
         - ApiTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/expiration_time"
       responses:
         "200":
           description: OK
@@ -380,7 +374,6 @@ paths:
                   eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MTQzNTI1OTQsImR0YWJsZV91dWlkIjoiNjUwZDhhMGQtN2UyNy00NmE4LThiMTgtNmNjNmYzZGIyMDU3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6InBvc3RtYW4ifQ.4aTmvBfFElyB3xg5jjF7zWCiyRZI17SZD980GdHT6e3
                 dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6f384ufy4
                 dtable_server: https://cloud.seatable.io/api-gateway/
-                dtable_db: https://cloud.seatable.io/dtable-db/
                 workspace_id: 20
                 use_api_gateway: true
                 dtable_name: Test base
@@ -406,6 +399,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/workspace_id"
         - $ref: "#/components/parameters/base_name"
+        - $ref: "#/components/parameters/expiration_time"
       responses:
         "200":
           description: OK

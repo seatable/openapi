@@ -2740,6 +2740,29 @@ paths:
                 type: object
               example:
                 success: true
+
+  /api/v2.1/dtable/{base_uuid}/size/:
+    get:
+      tags:
+        - Bases
+      summary: Get Base Size
+      operationId: getBaseSize
+      description: Get the storage usage of a base in bytes.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                # FIXME: API returns a string...
+                result: "171982"
+
   /api/v2.1/starred-dtables/:
     get:
       tags:
@@ -6730,6 +6753,30 @@ paths:
                 type: object
               example:
                 success: true
+
+  # Maintenance
+  /api/v2.1/dtable/{base_uuid}/repair/:
+    put:
+      tags:
+        - Maintenance
+      summary: Repair Base
+      operationId: repairBase
+      description: Repairs a base identified by its base_uuid. This repair scripts tries to detect errors in the json object and fix common problems.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: Successful response indicating that the dtable was repaired.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
 
   # Notifications
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/notification-rules/:

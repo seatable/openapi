@@ -4087,6 +4087,28 @@ paths:
                     created_at: "2021-03-09T15:54:22.000Z"
                     updated_at: "2021-03-09T15:54:22.000Z"
                     resolved: 0
+  /api/v2.1/dtables/{base_uuid}/rows-comments-num/:
+    get:
+      tags:
+        - Row Comments
+      summary: Get Number of Comments
+      operationId: getNumberOfComments
+      description: Get the number of comments for all rows.
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                rows_comments_num:
+                  H44KC2bvThyMFD4ZtcD_-A: 2
+                  C0LWRVCHT0OoAGjoXBuKMA: 1
 
   # Notifications (Base)
   /api-gateway/api/v2/dtables/{base_uuid}/notifications/:

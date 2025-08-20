@@ -1,0 +1,9 @@
+{
+  "access_token": "str",
+  "app_name": "str",
+  "dtable_name": "str",
+  "dtable_server": "str",
+  "dtable_uuid": "str",
+  "use_api_gateway": "bool",
+  "workspace_id": "int"
+}
