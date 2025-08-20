@@ -1637,6 +1637,39 @@ paths:
                     ],
                   "total_count": 3,
                 }
+  /api/v2.1/org/{org_id}/admin/group-member-audit/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Group Member Logs
+      operationId: listGroupMemberLogs
+      description: Retrieves audit logs for changes to group members (either `group_member_add` or `group_member_delete`).
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                group_member_log_list:
+                  - user_email: 70e6e6be77dc4afeb1d6786f1e3d14e2@auth.local
+                    user_name: org_user
+                    user_contact_email: org_user@qq.com
+                    group_id: 2
+                    group_name: org-t1
+                    operator_email: ecd40dcfcdd041a98d51bdde2a05612e@auth.local
+                    operator_name: org_admin
+                    operator_contact_email: org_admin@qq.com
+                    date: 2025-05-27T06:57:03+00:00
+                    operation: group_member_add
+                count: 1
   /api/v2.1/org/{org_id}/admin/login-logs/:
     get:
       tags:
