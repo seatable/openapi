@@ -2747,7 +2747,9 @@ paths:
         - Bases
       summary: Get Base Size
       operationId: getBaseSize
-      description: Get the storage usage of a base in bytes.
+      description: |
+        Get the storage usage of a base in bytes. This is the size of the JSON file stored on the filesystem or in S3 (depending on your server configuration).
+        Please note that this does not include assets stored inside the base, snapshots or rows stored in the big data backend.
       security:
         - AccountTokenAuth: []
       parameters:
