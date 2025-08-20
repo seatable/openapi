@@ -3488,6 +3488,30 @@ paths:
                   org_name: org-1
                   dtable_uuid: af5fa655-ef97-4573-8f2d-c3812e17a548
                   dtable_name: rows
+    delete:
+      tags:
+        - Logs
+      summary: Delete Virus File
+      operationId: deleteVirusFile
+      description: Delete a virus file. You can retrieve the `virus_id` by calling the [List Virus Files](/reference/listvirusfiles) endpoint.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - in: path
+          name: virus_id
+          required: true
+          schema:
+            type: integer
+          description: The ID of the virus file
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
 
   # Plugins
   /api/v2.1/admin/dtable-system-plugins/:
