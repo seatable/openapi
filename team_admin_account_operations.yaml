@@ -1641,8 +1641,8 @@ paths:
     get:
       tags:
         - Activities & Logs
-      summary: List Group Member Logs
-      operationId: listGroupMemberLogs
+      summary: List Group Member Audit Logs
+      operationId: listGroupMemberAuditLogs
       description: Retrieves audit logs for changes to group members (either `group_member_add` or `group_member_delete`).
       security:
         - AccountTokenAuth: []
