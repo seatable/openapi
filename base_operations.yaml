@@ -711,8 +711,8 @@ components:
     view_name:
       type: string
       description: |
-        "The name of the view to perform the operation on. Alternatively, you can use the `view_id` instead of `view_name`. If using `view_id`, ensure that the key in the request body is replaced accordingly.
-        **Example:** Instead of `view_name: Default View` you an use `view_id: 0000`."
+        The name of the view to perform the operation on. Alternatively, you can use the `view_id` instead of `view_name`. If using `view_id`, ensure that the key in the request body is replaced accordingly.
+        **Example:** Instead of `view_name: Default View` you an use `view_id: 0000`.
       example: "Default View"
 
     view_name_only:
