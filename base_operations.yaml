@@ -708,10 +708,17 @@ components:
         - type: table
         - is_locked: false
 
-    #view_name:
-    #  type: string
-    #  description: "The new name of the view, if you want to give the view a new name."
-    #  example: "Default View"
+    view_name:
+      type: string
+      description: |
+        "The name of the view to perform the operation on. Alternatively, you can use the `view_id` instead of `view_name`. If using `view_id`, ensure that the key in the request body is replaced accordingly.
+        **Example:** Instead of `view_name: Default View` you an use `view_id: 0000`."
+      example: "Default View"
+
+    view_name_only:
+      type: string
+      description: "The new name of the view, if you want to give the view a new name."
+      example: "Default View"
 
     is_locked:
       type: boolean
@@ -1178,7 +1185,7 @@ components:
       type: object
       properties:
         name:
-          $ref: "#/components/parameters/view_name_path"
+          $ref: "#/components/schemas/view_name_only"
         is_locked:
           $ref: "#/components/schemas/is_locked"
         filters:
@@ -2280,7 +2287,7 @@ components:
         table_name:
           $ref: "#/components/schemas/table_name"
         view_name:
-          $ref: "#/components/parameters/view_name"
+          $ref: "#/components/schemas/view_name"
       required:
         - table_name
         - view_name
