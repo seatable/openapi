@@ -1964,6 +1964,24 @@ paths:
                       "idp_certificate": "-----BEGIN CERTIFICATE-----xxxxxxxxxx-----END CERTIFICATE-----",
                     },
                 }
+    delete:
+      tags: [SAML]
+      summary: Delete SAML Config
+      operationId: deleteSamlConfig
+      description: Delete the team's SAML (Single Sign-On) configuration.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
 
   /api/v2.1/org/{org_id}/admin/verify-domain/:
     put:
