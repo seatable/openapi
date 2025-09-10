@@ -216,6 +216,10 @@ components:
         if the 2-factor-authentication is forced (`true` or
         `false`).
       example: "true"
+    enable_force_sso_login:
+      type: boolean
+      description: Whether login via SSO is enforced for all team members (`true` or `false`).
+      example: true
     enable_new_user_email:
       type: boolean
       description: >-
@@ -1554,6 +1558,8 @@ paths:
               properties:
                 enable_force_2fa:
                   $ref: "#/components/schemas/enable_force_2fa"
+                enable_force_sso_login:
+                  $ref: "#/components/schemas/enable_force_sso_login"
                 enable_new_user_email:
                   $ref: "#/components/schemas/enable_new_user_email"
                 enable_external_user_access_invite_link:
