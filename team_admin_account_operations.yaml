@@ -250,9 +250,6 @@ components:
       type: string
       description: The new name of your team.
       example: SeaTable GmbH
-    force_2fa:
-      type: integer
-      enum: [0, 1]
     metadata_url:
       type: string
       description: "URL pointing to the metadata of your Identity Provider (IdP)."
@@ -470,9 +467,9 @@ paths:
         2-factor authentication (2FA).
 
 
-        When the value of `force_2fa` is `1` in this request, the member will be
+        When the value of `force_2fa` is `true` in this request, the member will be
         requested to activate 2FA by scanning a QR code next time they log in.
-        To cancel enforcing them to use 2FA, change the value to `0` and send
+        To cancel enforcing them to use 2FA, change the value to `false` and send
         this request again.
 
 
@@ -486,7 +483,7 @@ paths:
               type: object
               properties:
                 force_2fa:
-                  $ref: "#/components/schemas/force_2fa"
+                  type: boolean
       security:
         - AccountTokenAuth: []
       parameters:
@@ -513,7 +510,7 @@ paths:
         disable 2FA for them.
 
         Again, this is to be distinguished from the request [Enforce 2FA for A
-        User in Team](/reference/enforcetwofactor-1) when you use `force_2fa = 0`, which only cancels the
+        User in Team](/reference/enforcetwofactor-1) when you use `force_2fa = false`, which only cancels the
         enforcement of 2FA but doesn't necessarily disable it for them.
       security:
         - AccountTokenAuth: []
