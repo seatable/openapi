@@ -31,11 +31,11 @@ x-ratelimit-reset: 1720710405
 
 > ❗ SeaTable Cloud: Monthly API limits
 >
-> Due to excessive use of SeaTable Cloud's API by some users, SeaTable Cloud introduced monthly API limits in the summer 2025. (In this [blog post](https://seatable.com/api-gateway-version-5-3/), you find background information.) >
+> Due to excessive use of SeaTable Cloud's API by some users, SeaTable Cloud introduced monthly API limits in the summer 2025. (In this [blog post](https://seatable.com/api-gateway-version-5-3/), you find background information.)
 > 
 > The monthly API limits are a function of the subscription and the number of users in the team. The limit is automatically reset at the end of each month. 
 > 
-> If you have exhausted your API limit for the month, you can upgrade your subscription to SeaTable Cloud and/or add more users to your paid subscription. The extra API calls are available momentarily after the upgrade. For more information on the specific limits, see the [pricing page](https://seatable.com/de/preise/).
+> If you have exhausted your API limit for the month, you can upgrade your subscription to SeaTable Cloud and/or add more users to your paid subscription. The extra API calls are available momentarily after the upgrade. For more information on the specific limits, see the [pricing page](https://seatable.com/prices/).
 
 ### General rate limits
 

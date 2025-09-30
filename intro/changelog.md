@@ -14,9 +14,29 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.com/blog) for detailed release notes.
 
-## Version 6.0 (??.??.2025)
+## Version 6.0-Beta (01.10.2025)
 
-...
+> 📘 New requests
+>
+> **Account Operations - System Admin**
+>
+> - [List Group Member Audit Logs](/reference/listgroupmemberauditlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+>
+> **Account Operations - Team Admin**
+>
+> - [List Group Member Audit Logs](/reference/listgroupmemberauditlogs-1) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Delete SAML Config](/reference/deletesamlconfig) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span>
+
+> 🚧 Breaking changes
+>
+> - [Move Rows to Big Data Backend](/reference/moverowstobigdata): This request now uses `view_name` instead of a raw SQL query to identify the rows to be moved to the big data backend.
+
+> 👍 Other changes
+>
+> - [Update Team Settings](/reference/updateteamsettings): New option `enable_force_sso_login` was added.
+> - [Get Base-Token with API-Token](/reference/getbasetokenwithapitoken): New option `exp` to set a expiration time.
+> - [Get Base-Token with Account-Token](/reference/getbasetokenwithaccounttoken): New option `exp` to set a expiration time.
+
 
 ## Version 5.3 (16.06.2025)
 
@@ -28,17 +48,25 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > 
 > You can get more information from this [blog article](https://seatable.com/api-gateway-version-5-3/).
 
-No further changes were made to the API documentation with v5.3.
+> 📘 New requests
+>
+> **Base Operations**
+>
+> - [List Row Comments Count](/reference/getrowcommentscount) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+>
+> **Account Operations - System Admin**
+>
+> - [List Virus Files](/reference/listvirusfiles) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Update Virus Files](/reference/updatevirusfiles) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span>
+> - [Delete Virus Files](/reference/deletevirusfiles) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span>
 
 ## Version 5.2 (25.02.2025)
 
-[View API Documentation for v5.2](https://api.seatable.com/v5.2)
+The SeaTable API Reference for version 5.2 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v5.2).
 
 > ❗ Important Update: API Endpoint Changes
 >
 > In version 5.2, the `/dtable-server` and `/dtable-db` endpoints will be deprecated and then removed in version 5.3. All functions will be transitioned to `/api-gateway` endpoints. Please update your custom integrations and scripts accordingly to ensure continued functionality. More information will be provided with the release notes of SeaTable version 5.2.
-
-[View API Documentation for v5.2](https://api.seatable.com/v5.2)
 
 > 📘 New requests
 >
