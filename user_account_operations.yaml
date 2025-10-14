@@ -2762,8 +2762,7 @@ paths:
               schema:
                 type: object
               example:
-                # FIXME: API returns a string...
-                result: "171982"
+                result: 171982
 
   /api/v2.1/starred-dtables/:
     get:
