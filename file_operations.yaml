@@ -153,6 +153,8 @@ paths:
         > 1. [Generate an upload link](/reference/getuploadlink).
         > 2. Upload the file to the base as an attachment. (this article)
         > 3. [Update a row](/reference/updaterow) and attach the file/the image to a file or image column. 
+        >
+        > The [SeaTable Developer Manual](https://developer.seatable.com/clients/javascript/examples/file-upload/) includes a Node.js script that showcases the necessary API calls.
 
         > 📘 Different variable names
         > 

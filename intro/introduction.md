@@ -202,6 +202,8 @@ Next you have all the information to [update a row](https://api.seatable.com/ref
 
 ### Upload a file to a file column
 
+Note: The [SeaTable Developer Manual](https://developer.seatable.com/clients/javascript/examples/file-upload/) includes a Node.js script that showcases the necessary API calls.
+
 #### Step 0: Prerequisites
 
 I assume that you already have a base with a table in which a file column exists. In addition I assume that you know how to generate a [Base-Token](https://api.seatable.com/reference/getbasetokenwithapitoken) from an API-Token. If not, check out the first example.
