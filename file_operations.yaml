@@ -117,8 +117,8 @@ paths:
       summary: Get Upload Link
       operationId: getUploadLink
       description: |
-        With the **API token** (not the Base Token), you can generate an upload link, the parent- and the relative path. These information are needed to upload a file / an image to a bases.
-        Then this file/image can be attached to a file/image column. 
+        Generate an upload link, including the parent- and the relative path. These values are needed in order to [upload a file / an image](https://api.seatable.com/reference/uploadfile) to a base.
+        Afterwards, this file/image can be attached to a file/image column. Please note that this endpoint requires an **API token** instead of a **Base token**.
 
         > 📘 The upload link is only valid for a short time
         > 
@@ -160,7 +160,14 @@ paths:
 
         ## Attach the file/image to a file or image column
 
-        After uploading the file/image to a base, SeaTable saves the uploaded file at non-public URL in the form: `/workspace/{workspace_id}`+`parent_dir`+`relative_path`+`name`. 
+        After uploading the file/image to a base, SeaTable saves the uploaded file at non-public URL in the form: `/workspace/{workspace_id}`+`parent_dir`+`relative_path`+`name`.
+        You are expected to construct this relative URL yourself.
+
+        The URL consists of the following components:
+        - `workspace_id`: Each base is attached to a workspace. You can use the [Get Base-Token with API-Token](https://api.seatable.com/reference/getbasetokenwithapitoken) endpoint to retrieve the workspace ID for a base.
+        - `parent_dir`: Use the value of the `parent_path` field from the response of the [Get Upload Link](https://api.seatable.com/reference/getuploadlink) API call.
+        - `relative_path`: Use the value of the `img_relative_path` or `file_relative_path` field (depending on the type of asset you want to upload) from the response of the [Get Upload Link](https://api.seatable.com/reference/getuploadlink) API call.
+        - `name`: Use the value of the `name` field from the response of the [Upload File (or Image)](https://api.seatable.com/reference/uploadfile) API call.
 
         Here is an example how this might look like: `https://cloud.seatable.io/workspace/24/asset/55f2f056-5da1-4095-b5f8-791bb51b991e/images/2023-07/party.png`
         If you are logged in with your browser, you can access this file. Otherwise you will see the login screen.
