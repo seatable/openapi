@@ -3359,7 +3359,6 @@ paths:
               schema:
                 type: object
               example:
-                # FIXME: Is called group_invite_log_list in v6.0.2!
                 group_member_log_list:
                   - user_email: 493524d94e7e467da506e30c24898555@auth.local
                     user_name: 123
