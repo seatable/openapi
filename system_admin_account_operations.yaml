@@ -718,7 +718,7 @@ paths:
               example:
                 org_id: 1,
                 org_name: "Team 1"
-                email": "6196ab3dacef4e539ae8da4844b58a1f@auth.local"
+                email: "6196ab3dacef4e539ae8da4844b58a1f@auth.local"
                 name: "John Doe"
                 contact_email: "john.doe@example.org"
                 unit: ""
