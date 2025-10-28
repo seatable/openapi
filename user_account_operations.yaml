@@ -478,6 +478,8 @@ components:
       type: string
       description: The UUID of the base.
       example: 650d8a0d-7e27-46a8-8b18-6cc6f3dbvh46
+      required:
+        - dtable_uuid
     dst_dtable_uuid:
       type: string
       description: The UUID of the destination base.
@@ -2120,8 +2122,7 @@ components:
     selected_columns:
       type: string
       description: >-
-        Columns for matching chosen when updating. Use comma (,) to separate column
-        names. Required.
+        A list of column names used to determine which rows in the table should be updated or added as new. Separate multiple column names with commas (,).
       example: Field1
     permission:
       type: string
@@ -4207,6 +4208,15 @@ paths:
       tags:
         - Import & Export
       summary: Update from xlsx or csv
+      description: |
+        This API call allows you to update a SeaTable database table by uploading an Excel (xlsx) or CSV file. The uploaded file contains rows with data that should be either matched against existing rows in the table for updates or inserted as new rows if no match is found.
+        Matching is performed based on the columns specified in the `selected_columns` parameter. For each row in the uploaded file, the system checks whether there are existing rows where the values in these selected columns match exactly. If a match is found, the existing row is updated with the new data from the file. If no match exists, the row is added as a new entry.
+        
+        > 📘 Example of the `selected_columns` parameter
+        >
+        > - If one column is specified (e.g., `Name`), the update process finds rows where the value in that column matches the corresponding value in the file. Those rows will be updated; unmatched rows result in new rows being created.
+        > - If multiple columns are specified (e.g., `Name,Age`), all these columns must match exactly for a row to be considered a match and updated.
+        > - Rows not matching on all selected columns are treated as new and will be added to the table.
       operationId: updateFromFile
       requestBody:
         content:
@@ -4222,6 +4232,11 @@ paths:
                   $ref: "#/components/schemas/table_name"
                 selected_columns:
                   $ref: "#/components/schemas/selected_columns"
+              required:
+                - dtable_uuid
+                - file
+                - table_name
+                - selected_columns
       security:
         - AccountTokenAuth: []
       parameters:
