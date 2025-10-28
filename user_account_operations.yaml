@@ -6906,9 +6906,7 @@ paths:
                         type: string
                       description: List of specific column keys to watch.
                     filters:
-                      type: array
-                      items:
-                        type: object
+                      $ref: "#/components/schemas/filters"
                       description: Filter conditions for triggering.
                     filter_conjunction:
                       type: string
