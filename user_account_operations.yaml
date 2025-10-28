@@ -6839,228 +6839,101 @@ paths:
         - Notifications
       summary: Add Notification Rule
       operationId: addNotificationRule
-      description: >-
-        Use this request to add a new notification rule for a base.
-
-
-        **Input Parameters**
-
-
-        **workspace_id** _\[int, required\]_
-
-
-        > The ID of the workspace where the base is stored.
-
-
-        **base_name** _\[string, required\]_
-
-
-        > The name of the base.
-
-
-        **RuleData** _\[JSON object, required\]_
-
-
-        > In this JSON object, use the following params to define this
-        notification rule:
-
-        > 
-
-        > **run_condition** _\[enum(__`per_day`__,_ _`per_update`__),
-        required\]_
-
-        > 
-
-        > > Define whether the action should be triggered by date or table
-        update. For **Records near deadline**, use `per_day` and for **Records
-        modified** and **Records meet specific conditions after modification**,
-        use `per_update`. Details see below.
-
-        > 
-
-        > **trigger** _\[JSON object, required\]_
-
-        > 
-
-        > > In this JSON object, define the trigger of the rule with the
-        following params:
-
-        > > 
-
-        > > > **rule_name** _\[string, required\]_
-
-        > > > 
-
-        > > > > The name of the rule.
-
-        > > > 
-
-        > > > **table_id** _\[string, required\]_
-
-        > > > 
-
-        > > > > The ID of the table.
-
-        > > > 
-
-        > > > **view_id** _\[string, required\]_
-
-        > > > 
-
-        > > > > The ID of the view.
-
-        > > > 
-
-        > > > **condition** _\[enum(__`rows_modified`__,_ _`near_deadline`__,_
-        _`filters_satisfy`__), required\]_
-
-        > > > 
-
-        > > > > - For 'Records near deadline', use `per_day` in the
-        **run_condition** param and `near_deadline` here.
-
-        > > > > - For 'Records modified', use `per_update` in the
-        **run_condition** param and `rows_modified` here.
-
-        > > > > - For 'Records meet specific conditions after modification', use
-        `per_update` in the **run_condition** param and `filters_satisfy` here.
-
-        > > 
-
-        > > For the case **Records near deadline**, when `run_condition` is
-        `per_day` and `condition` is `near_deadline`, you'll define which date
-        column to use as deadline dates, and optionally define how many days
-        before and to which time of the day should the notification be sent:
-
-        > > 
-
-        > > > **date_column_name** _\[string, required\]_
-
-        > > > 
-
-        > > > > For 'Records near deadline', give the name of the date column
-        that contains the deadline dates. If left blank, the first date column
-        in the table will be taken as deadline.
-
-        > > > 
-
-        > > > **alarm_days** _\[int, optional\]_
-
-        > > > 
-
-        > > > > Use a number to define how many days before the deadline should
-        the notification be triggered.
-
-        > > > 
-
-        > > > **notify_hour** _\[int(0-23), optional\]_
-
-        > > > 
-
-        > > > > Specify to which hour of the day should the notification be
-        sent.
-
-        > > 
-
-        > > For the case **Records modified**, when `run_condition` is
-        `per_update` and `condition` is `rows_modified`, a notification is sent
-        right away inside the base editor. If this notification is not read
-        within two hours, it'll be sent via email, if the receiver has enabled
-        email notification in their personal settings:
-
-        > > 
-
-        > > > There is no further trigger conditions necessary.
-
-        > > 
-
-        > > For the case **Records meet specific conditions after
-        modification**, when `run_condition` is `per_update` and `condition` is
-        `filters_satisfy`, you can define which fields to watch and set filters:
-
-        > > 
-
-        > > > **watch_all_columns** _\[enum(`true`, `false`, optional, `true` by
-        default)\]
-
-        > > > 
-
-        > > > > Use `true` or leave this param blank, if you want all columns to
-        be watched.
-
-        > > > 
-
-        > > > **column_keys** _\[list, optional\]
-
-        > > > 
-
-        > > > > When certain columns should be watched, use this list to include
-        their keys, so only when there's modification in these columns, this
-        notification rule will be triggered.
-
-        > > > 
-
-        > > > **filters** and **filter_conjunction** refer to the API Request
-        **Base Operations > Rows >** **List Filtered Rows**. You can define
-        filters for all the fields in the table as a combination to the watched
-        fields. So that only when the filtered records in the watched fields are
-        modified, will this notification rule be triggered.
-
-        > 
-
-        > **action** _\[JSON object, required\]_
-
-        > 
-
-        > > In this JSON object, define the users to be notified with the
-        following params:
-
-        > > 
-
-        > > > **type** _\[enum(__`notify`__), optional\]_
-
-        > > > 
-
-        > > > > For the moment, there's only one option to notify the user. The
-        `notify` value means a notification will be sent inside the base editor,
-        and when this isn't read within 2 hours, it'll be sent via email to the
-        user, if the user's email setting is activated. In the near future,
-        SeaTable will provide the option to send emails directly to users even
-        outside your organization by configuring an email sending service.
-
-        > > > 
-
-        > > > **users** _\[list, optional\]_
-
-        > > > 
-
-        > > > > In this list, provide the users' IDs to be notified.
-        Alternatively, use the `users_column_key` to automatically select users
-        from a collaborator column.
-
-        > > > 
-
-        > > > **users_column_key** _\[string, optional\]_
-
-        > > > 
-
-        > > > > Select users to be notified from a collaborator column by
-        providing its key.
-
-        > > > 
-
-        > > > **default_msg** _\[string, optional\]_
-
-        > > > 
-
-        > > > > Here you can write a short message to remind notified users why
-        this notification is sent, for example "The battery has to be changed in
-        2 days!".
+      description: Use this request to add a new notification rule for a base.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - run_condition
+                - trigger
+                - action
+              properties:
+                run_condition:
+                  type: string
+                  enum: [per_day, per_update]
+                  description: >
+                    Defines whether the action is triggered by date or table update.
+                    For "Records near deadline" use "per_day".
+                    For "Records modified" and "Records meet specific conditions after modification" use "per_update".
+                trigger:
+                  type: object
+                  required:
+                    - rule_name
+                    - table_id
+                    - view_id
+                    - condition
+                  properties:
+                    rule_name:
+                      type: string
+                      description: The name of the rule.
+                    table_id:
+                      type: string
+                      description: The ID of the table.
+                    view_id:
+                      type: string
+                      description: The ID of the view.
+                    condition:
+                      type: string
+                      enum: [rows_modified, near_deadline, filters_satisfy]
+                      description: >
+                        The trigger condition type.
+                        Use "near_deadline" with "per_day" run_condition,
+                        "rows_modified" with "per_update",
+                        and "filters_satisfy" with "per_update".
+                    date_column_name:
+                      type: string
+                      description: The date column used for deadline (required if condition is near_deadline).
+                    alarm_days:
+                      type: integer
+                      nullable: true
+                      description: Days before deadline to trigger notification.
+                    notify_hour:
+                      type: integer
+                      nullable: true
+                      minimum: 0
+                      maximum: 23
+                      description: Hour of day to send notification.
+                    watch_all_columns:
+                      type: boolean
+                      default: true
+                      description: Whether to watch all columns for changes.
+                    column_keys:
+                      type: array
+                      items:
+                        type: string
+                      description: List of specific column keys to watch.
+                    filters:
+                      type: array
+                      items:
+                        type: object
+                      description: Filter conditions for triggering.
+                    filter_conjunction:
+                      type: string
+                      enum: [and, or]
+                      description: "How filters are combined."
+                action:
+                  type: object
+                  required:
+                    - type
+                  properties:
+                    type:
+                      type: string
+                      enum: [notify]
+                      description: Currently only 'notify' for internal notification supported.
+                    users:
+                      type: array
+                      items:
+                        type: string
+                      description: List of user IDs to notify.
+                    users_column_key:
+                      type: string
+                      description: Column key with collaborators to notify.
+                    default_msg:
+                      type: string
+                      description: Optional message to notify users.
               example:
                 run_condition: per_update
                 trigger:
@@ -7073,7 +6946,7 @@ paths:
                 action:
                   type: notify
                   users:
-                    - "{{user_id}}"
+                    - "{{user_id}}"        
       security:
         - AccountTokenAuth: []
       parameters:
