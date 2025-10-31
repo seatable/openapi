@@ -23,6 +23,33 @@ components:
       description: This is the [Python-Scheduler-Token](/reference/authentication).
 
   parameters:
+    org_id:
+      name: org_id
+      description: The ID of the team/organization.
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+      required: false
+    start:
+      name: start
+      in: query
+      schema:
+        type: string
+        pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-[0-9]{2}
+      description: Start date in YYYY-MM-DD format.
+      example: 2025-10-25
+      required: false
+    end:
+      name: end
+      in: query
+      schema:
+        type: string
+        pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-[0-9]{2}
+      description: End date in YYYY-MM-DD format.
+      example: 2025-10-31
+      required: false
     month:
       name: month
       in: query
@@ -164,4 +191,43 @@ paths:
                   - total_run_count: 37
                     total_run_time: 153
                     base_uuid: 1a9707b4-68c9-4e3f-909a-6289ccb47ad7
+                total_count: 1
+  /admin/statistics/by-base/:
+    get:
+      tags:
+        - Statistics
+      summary: Grouped by Base
+      operationId: getStatisticsGroupedByBase
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+          required: true
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - base_uuid: 80e1cca6-8cb5-4226-932b-077b16cdcf57
+                    number_of_runs: 1
+                    total_run_time: 5
+                    triggered_manually: 1
+                    triggered_by_automation_rule: 0
+                    successful_runs: 0
+                    unsuccessful_runs: 1
+                  - base_uuid: a82d3e40-e63a-4b6a-aa5d-2488012d6af5
+                    number_of_runs: 14
+                    successful_runs: 10
+                    total_run_time: 2204
+                    triggered_by_automation_rule: 7
+                    triggered_manually: 7
+                    unsuccessful_runs: 4
                 total_count: 1
