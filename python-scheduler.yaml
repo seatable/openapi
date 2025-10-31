@@ -32,6 +32,15 @@ components:
         minimum: 1
       example: 1
       required: false
+    base_uuid:
+      name: base_uuid
+      description: The unique identifier of a base. Sometimes also called dtable_uuid.
+      in: query
+      schema:
+        type: string
+        pattern: ^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$
+      example: 5c264e76-0e5a-448a-9f34-580b551364ca
+      required: false
     start:
       name: start
       in: query
@@ -230,4 +239,47 @@ paths:
                     triggered_by_automation_rule: 7
                     triggered_manually: 7
                     unsuccessful_runs: 4
+                total_count: 1
+  /admin/runs/:
+    get:
+      tags:
+        - Runs
+      summary: List Runs
+      operationId: listRuns
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                runs:
+                  - id: 1
+                    dtable_uuid: a82d3e40-e63a-4b6a-aa5d-2488012d6af5
+                    owner: 397250457b2d4b689b27895309cc0f70@auth.local
+                    script_name: S9pJ.py
+                    operate_from: manualy
+                    return_code: 0
+                    success: true
+                    started_at: "2025-10-31T17:56:50+01:00"
+                    finished_at: "2025-10-31T17:56:51+01:00"
+                  - id: 2
+                    dtable_uuid: a82d3e40-e63a-4b6a-aa5d-2488012d6af5
+                    owner: 397250457b2d4b689b27895309cc0f70@auth.local
+                    script_name: S9pJ.py
+                    operate_from: automation-rule
+                    return_code: 0
+                    success: true
+                    started_at: "2025-10-31T17:57:32+01:00"
+                    finished_at: "2025-10-31T17:57:33+01:00"
                 total_count: 1
