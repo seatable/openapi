@@ -239,7 +239,47 @@ paths:
                     triggered_by_automation_rule: 7
                     triggered_manually: 7
                     unsuccessful_runs: 4
-                total_count: 1
+                total_count: 2
+  /admin/statistics/by-day/:
+    get:
+      tags:
+        - Statistics
+      summary: Grouped by Day
+      operationId: getStatisticsGroupedByDay
+      security:
+        - PythonSchedulerAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+          required: true
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - date: 2025-11-01
+                    number_of_runs: 1
+                    total_run_time: 5
+                    triggered_manually: 1
+                    triggered_by_automation_rule: 0
+                    successful_runs: 0
+                    unsuccessful_runs: 1
+                  - date: 2025-11-02
+                    number_of_runs: 14
+                    successful_runs: 10
+                    total_run_time: 2204
+                    triggered_by_automation_rule: 7
+                    triggered_manually: 7
+                    unsuccessful_runs: 4
+                total_count: 2
   /admin/runs/:
     get:
       tags:
