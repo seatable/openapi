@@ -86,3 +86,16 @@ To generate or update your snapshots just run pytest with the `--snapshot-update
 The snapshots will be stored in the directory `__snapshots__`.
 
 Make sure to commit new snapshot files or any changes you made to them.
+
+## Publish Postman Collection
+
+When you tag and push a new version, the corresponding Postman collection is automatically synced.
+For example, to publish version 6.0 to Postman:
+
+```
+git tag postman-v6.0
+git push --tags
+```
+
+Pushing the tag triggers a GitHub Action that runs the `sync-with-postman.sh` script.
+This action requires the GitHub secret `POSTMAN_API_KEY`, which you can generate at: https://seatable.postman.co/settings/me/api-keys.
