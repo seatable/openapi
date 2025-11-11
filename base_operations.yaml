@@ -2440,7 +2440,7 @@ paths:
         > 
         > New rows (INSERT statement) are always added to the **big data backend**. An error message will be returned, if the big data backend is not activated for the target base.
 
-        The complete [SQL Reference](https://developer.seatable.com/scripts/sql/reference/) can be found documentation in the developer manual. 
+        The complete [SQL Reference](https://developer.seatable.com/scripts/sql/functions/) can be found documentation in the developer manual. 
 
         Here are some example requests for a fictitious table *Family* with the columns *name*, *age* and *birthday*:
 

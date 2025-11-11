@@ -6,3 +6,4 @@
 /tests/.hypothesis
 /tests/__pycache__
 .vscode
+result-*.txt

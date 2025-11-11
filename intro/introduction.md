@@ -189,7 +189,6 @@ To [update a row](https://api.seatable.com/reference/updaterow) you need to know
 
 - [List Rows (with SQL)](https://api.seatable.com/reference/querysql)
 - [List Rows](https://api.seatable.com/reference/listrows)
-- [Base Info](https://api.seatable.com/reference/getbaseinfo)
 
 #### Step 2: Update the row
 

@@ -57,8 +57,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > **Account Operations - System Admin**
 >
 > - [List Virus Files](/reference/listvirusfiles) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
-> - [Update Virus Files](/reference/updatevirusfiles) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span>
-> - [Delete Virus Files](/reference/deletevirusfiles) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span>
+> - [Update Virus Files](/reference/updatevirusfile) <span class="APIMethod APIMethod_fixedWidth APIMethod_put">put</span>
+> - [Delete Virus Files](/reference/deletevirusfile) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span>
 
 ## Version 5.2 (25.02.2025)
 
@@ -107,13 +107,13 @@ We recommend using the new `/api-gateway/` endpoints. These endpoints are faster
 
 > 🚧 Breaking changes
 >
-> - [Get Row](/reference/getrowdeprecated) and [List Rows](/reference/listrowsdeprecated): `Link` now returns an array containing `display_value` and `row_id` instead of a string with only the `display_value`. This change harmonizes the output with `Get Row` and `List Rows with SQL` endpoints.
-> - [Get Row](/reference/getrowdeprecated) and [List Rows](/reference/listrowsdeprecated): `Link Formula` now returns the right output type depending of the result. Single numbers are returned as integers, multiple values as arrays. This change harmonizes the output of the `Get Row`, `List Rows` and `List Rows with SQL` endpoints.
+> - [Get Row](/reference/getrow) and [List Rows](/reference/listrows): `Link` now returns an array containing `display_value` and `row_id` instead of a string with only the `display_value`. This change harmonizes the output with `Get Row` and `List Rows with SQL` endpoints.
+> - [Get Row](/reference/getrow) and [List Rows](/reference/listrows): `Link Formula` now returns the right output type depending of the result. Single numbers are returned as integers, multiple values as arrays. This change harmonizes the output of the `Get Row`, `List Rows` and `List Rows with SQL` endpoints.
 
 > 👍 Other changes
 >
-> - [Get Row](/reference/getrowdeprecated): All column values are now consistently returned. If a value is not defined, `null` is returned instead of omitting the value.
-> - [List Rows](/reference/listrowsdeprecated): All column values are now consistently returned. If a value is not defined, `null` is returned instead of omitting the value.
+> - [Get Row](/reference/getrow): All column values are now consistently returned. If a value is not defined, `null` is returned instead of omitting the value.
+> - [List Rows](/reference/listrows): All column values are now consistently returned. If a value is not defined, `null` is returned instead of omitting the value.
 > - [Query SeaTable with SQL](/reference/querysql): Now supports `parameters` to protect against SQL injection.
 
 For more details about the changes, please refer to [this post on the SeaTable Forum](https://forum.seatable.com/t/important-changes-to-api-and-seatable-cloud-with-version-5-0/4887).
@@ -131,11 +131,11 @@ The SeaTable API Reference for version 4.4 is no longer accessible here. However
 > 🚧 Breaking changes
 >
 > - data collection table calls (user) were removed. This was done because data collection tables will be disabled in general with version 5.0. In SeaTable Cloud this feature was never available.
-> - [Get Row](/reference/getrowdeprecated): `_mtime` and `_ctime` are not returned if these column types are defined in this base. This is to harmonize the output with `List Rows` and `List Rows with SQL`.
+> - [Get Row](/reference/getrow): `_mtime` and `_ctime` are not returned if these column types are defined in this base. This is to harmonize the output with `List Rows` and `List Rows with SQL`.
 
 > 👍 Other changes
 >
-> - [List Rows](/reference/listrowsdeprecated): The options `order_by` and `direction` were removed to avoid conflict situations with a selected view.
+> - [List Rows](/reference/listrows): The options `order_by` and `direction` were removed to avoid conflict situations with a selected view.
 > - API-Gateway calls now return the current api usage and limits via X-header.
 
 ## Version 4.3 (08.02.2024)
@@ -146,8 +146,8 @@ The SeaTable API Reference for version 4.3 is no longer accessible here. However
 >
 > **Base Operations**
 >
-> - [Create Row Links in Big Data](/reference/createbigdatarowslinkdeprecated) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
-> - [Delete Row Links in Big Data](/reference/deletebigdatarowlinksdeprecated) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
+> - **Create Row Links in Big Data** <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
+> - **Delete Row Links in Big Data** <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span> `/dtable-db/api/v1/base/{base_uuid}/links/`
 >
 > **Account Operations - System Admin**
 >

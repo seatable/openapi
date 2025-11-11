@@ -99,3 +99,8 @@ git push --tags
 
 Pushing the tag triggers a GitHub Action that runs the `sync-with-postman.sh` script.
 This action requires the GitHub secret `POSTMAN_API_KEY`, which you can generate at: https://seatable.postman.co/settings/me/api-keys.
+
+## Check for Invalid Links
+
+Run `./check-links.sh` to validate all links in this OpenAPI documentation.
+This script generates a `result-YYYY-MM-DD.txt` file listing all valid and invalid links. Search this file for **404** errors or other issues and fix them accordingly.
