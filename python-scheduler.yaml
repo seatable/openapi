@@ -115,6 +115,11 @@ paths:
         - Statistics
       summary: Script runs per user
       operationId: scriptRunsPerUser
+      description: |
+        > 📘 Requires Self-Hosted Installation
+        >
+        > This endpoint requires a Python-Scheduler-Token, which can only be retrieved by the system administrator.
+        > Therefore this endpoint cannot be used with SeaTable Cloud.
       security:
         - PythonSchedulerAuth: []
       parameters:
@@ -147,6 +152,11 @@ paths:
         - Statistics
       summary: Script runs per team
       operationId: scriptRunsPerTeam
+      description: |
+        > 📘 Requires Self-Hosted Installation
+        >
+        > This endpoint requires a Python-Scheduler-Token, which can only be retrieved by the system administrator.
+        > Therefore this endpoint cannot be used with SeaTable Cloud.
       security:
         - PythonSchedulerAuth: []
       parameters:
@@ -179,6 +189,11 @@ paths:
         - Statistics
       summary: Script runs per base
       operationId: scriptRunsPerBase
+      description: |
+        > 📘 Requires Self-Hosted Installation
+        >
+        > This endpoint requires a Python-Scheduler-Token, which can only be retrieved by the system administrator.
+        > Therefore this endpoint cannot be used with SeaTable Cloud.
       security:
         - PythonSchedulerAuth: []
       parameters:
@@ -207,6 +222,11 @@ paths:
         - Statistics
       summary: Grouped by Base
       operationId: getStatisticsGroupedByBase
+      description: |
+        > 📘 Requires Self-Hosted Installation
+        >
+        > This endpoint requires a Python-Scheduler-Token, which can only be retrieved by the system administrator.
+        > Therefore this endpoint cannot be used with SeaTable Cloud.
       security:
         - PythonSchedulerAuth: []
       parameters:
@@ -246,6 +266,11 @@ paths:
         - Statistics
       summary: Grouped by Day
       operationId: getStatisticsGroupedByDay
+      description: |
+        > 📘 Requires Self-Hosted Installation
+        >
+        > This endpoint requires a Python-Scheduler-Token, which can only be retrieved by the system administrator.
+        > Therefore this endpoint cannot be used with SeaTable Cloud.
       security:
         - PythonSchedulerAuth: []
       parameters:
@@ -286,6 +311,11 @@ paths:
         - Runs
       summary: List Runs
       operationId: listRuns
+      description: |
+        > 📘 Requires Self-Hosted Installation
+        >
+        > This endpoint requires a Python-Scheduler-Token, which can only be retrieved by the system administrator.
+        > Therefore this endpoint cannot be used with SeaTable Cloud.
       security:
         - PythonSchedulerAuth: []
       parameters:
