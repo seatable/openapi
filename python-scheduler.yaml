@@ -46,18 +46,18 @@ components:
       in: query
       schema:
         type: string
-        pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-[0-9]{2}
-      description: Start date in YYYY-MM-DD format.
-      example: 2025-10-25
+        format: date-time
+      description: Start date in ISO format.
+      example: "2025-11-01T06:00:00+01:00"
       required: false
     end:
       name: end
       in: query
       schema:
         type: string
-        pattern: ^[0-9]{4}-(0[1-9]|1[0-2])-[0-9]{2}
-      description: End date in YYYY-MM-DD format.
-      example: 2025-10-31
+        format: date-time
+      description: End date in ISO format.
+      example: "2025-11-30T18:00:00+01:00"
       required: false
     month:
       name: month
