@@ -1152,9 +1152,8 @@ paths:
               required: [is_admin]
               properties:
                 is_admin:
-                  # FIXME: The API should accept a boolean...
-                  type: string
-                  example: "true"
+                  type: boolean
+                  example: false
       responses:
         "200":
           description: OK
