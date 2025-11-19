@@ -15,6 +15,12 @@ x-readme:
   metrics-enabled: false
   proxy-enabled: false
 
+tags:
+  - name: Files & Images
+    description: Manage file and image attachments within a base
+  - name: Files & Images (Custom Folder)
+    description: Manage file and image attachments stored within custom folders
+
 components:
   # Security scheme definitions (see Authentication)
   securitySchemes:

@@ -15,6 +15,31 @@ x-readme:
   metrics-enabled: false
   proxy-enabled: false
 
+# These tags are used by openapi2postmanv2 to generate folder descriptions
+tags:
+  - name: Base Info
+    description: Get information about a base
+  - name: Rows
+    description: Fetch and manipulate rows inside a base
+  - name: Links
+    description: Fetch and manipulate links inside a base
+  - name: Tables
+    description: Create and manipulate tables inside a base
+  - name: Views
+    description: Create and manipulate views inside a base
+  - name: Columns
+    description: Create and manipulate columns inside a table
+  - name: Big Data
+    description: Manage data in the big data backend
+  - name: Row Comments
+    description: Manage row comments
+  - name: Notifications
+    description: Manage notifications
+  - name: Activities & Logs
+    description: List activities and logs
+  - name: Snapshots
+    description: Manage base snapshots
+
 components:
   # Security scheme definitions (see Authentication)
   securitySchemes:

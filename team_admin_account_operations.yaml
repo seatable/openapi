@@ -17,6 +17,24 @@ x-readme:
 
 # the error messages, if query params are missing, are strange and misleading.
 
+tags:
+  - name: Users
+    description: Manage users
+  - name: Bases
+    description: Manage bases
+  - name: Groups
+    description: Manage groups
+  - name: Sharing Links
+    description: Manage sharing links
+  - name: Info & Settings
+    description: Retrieve team info and update team settings
+  - name: Activities & Logs
+    description: Retrieve team activities and logs
+  - name: Customizing
+    description: Customize team appearance
+  - name: SAML
+    description: Manage SAML settings
+
 components:
   securitySchemes:
     AccountTokenAuth:

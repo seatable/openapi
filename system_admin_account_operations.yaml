@@ -20,6 +20,42 @@ x-readme:
 # the auth.local has many different descriptions: owner, user_id, username or email. Keeping to the same description would be great.
 # is there a possibility to get "internal-links"?
 
+tags:
+  - name: Users
+    description: Manage users
+  - name: Bases
+    description: Manage bases
+  - name: Groups
+    description: Manage groups
+  - name: Teams
+    description: Manage teams/organizations
+  - name: Export
+    description: Export bases
+  - name: Common Dataset
+    description: Manage common datasets
+  - name: Departments
+    description: Manage departments
+  - name: Sharing Links
+    description: Manage sharing links
+  - name: Forms
+    description: Manage forms
+  - name: Automations
+    description: Manage automations
+  - name: Notifications
+    description: Manage notifications
+  - name: Logs
+    description: Retrieve logs
+  - name: Plugins
+    description: Manage plugins
+  - name: Statistics
+    description: Retrieve statistics
+  - name: Maintenance
+    description: Execute maintenance operations
+  - name: System Notifications
+    description: Manage notifications
+  - name: System Info & Customizing
+    description: Retrieve system info and customize SeaTable
+
 components:
   securitySchemes:
     AccountTokenAuth:

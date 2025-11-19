@@ -21,6 +21,15 @@ x-readme:
   metrics-enabled: false
   proxy-enabled: false
 
+# These tags are used by openapi2postmanv2 to generate folder descriptions
+tags:
+  - name: Account-Token
+    description: Endpoints related to account tokens
+  - name: API-Token
+    description: Endpoints related to API tokens
+  - name: Base-Token
+    description: Endpoints related to base tokens
+
 components:
   securitySchemes:
     AccountTokenAuth:

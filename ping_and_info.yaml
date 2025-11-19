@@ -15,6 +15,12 @@ x-readme:
   metrics-enabled: false
   proxy-enabled: false
 
+tags:
+  - name: Info
+    description: Retrieve server info
+  - name: Ping
+    description: Ping SeaTable services
+
 components:
   securitySchemes:
     AccountTokenAuth:

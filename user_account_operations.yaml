@@ -22,6 +22,46 @@ x-readme:
 # - why is workspace_id_query a query param?
 # - why is base_name in one case a query param?
 
+tags:
+  - name: User
+    description: Manage users
+  - name: Bases
+    description: Manage bases
+  - name: Groups & Workspaces
+    description: Manage groups and workspaces
+  - name: Attachment
+    description: Manage attachments
+  - name: Import & Export
+    description: Import and export data
+  - name: Sharing
+    description: Manage shares
+  - name: Sharing Links
+    description: Manage sharing links
+  - name: Common Dataset
+    description: Manage common datasets
+  - name: Departments
+    description: Manage departments
+  - name: Forms
+    description: Manage forms
+  - name: Automations
+    description: Manage automations
+  - name: Maintenance
+    description: Execute maintenance operations
+  - name: Notifications
+    description: Manage notifications
+  - name: System Notifications
+    description: Manage notifications
+  - name: Email Accounts
+    description: Manage email accounts
+  - name: Webhooks
+    description: Manage webhooks
+  - name: Snapshots
+    description: Manage base snapshots
+  - name: Apps
+    description: Manage apps
+  - name: Activities & Logs
+    description: Retrieve activities and logs
+
 components:
   securitySchemes:
     AccountTokenAuth:

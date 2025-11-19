@@ -15,6 +15,12 @@ x-readme:
   metrics-enabled: false
   proxy-enabled: false
 
+tags:
+  - name: Statistics
+    description: Retrieve statistics
+  - name: Runs
+    description: Retrieve script runs
+
 components:
   securitySchemes:
     PythonSchedulerAuth:
