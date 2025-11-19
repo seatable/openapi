@@ -44,6 +44,10 @@ Start experimenting with SeaTable API using this website, which lets you run Sea
 
 [SeaTable API within 30 seconds](https://youtu.be/aUcd1BzbaiA "@embed") -->
 
+Alternatively, you can use SeaTable's API from within [Postman](https://www.postman.com/):
+
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://god.gw.postman.com/run-collection/14674929-f4ee1a94-2271-4e18-95c1-c72825b55717?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D14674929-f4ee1a94-2271-4e18-95c1-c72825b55717%26entityType%3Dcollection%26workspaceId%3D80b1ca4c-1f9e-41bf-b0e1-6bde43e012fc)
+
 ## Examples of what you can do with the SeaTable API
 
 So don't let us waste time and let's start right away. The first step with every API is to think about what you want to do. Here are some examples:
