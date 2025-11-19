@@ -3213,10 +3213,15 @@ paths:
       security:
         - AccountTokenAuth: []
       responses:
-        "403":
+        "200":
           description: Successful response
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                # FIXME: Should actually be registration_logs...
+                invitation_logs: []
   /api/v2.1/admin/abuse-reports/:
     get:
       tags:

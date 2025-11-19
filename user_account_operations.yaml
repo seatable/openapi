@@ -261,7 +261,7 @@ components:
       schema:
         type: string
       required: true
-      example: fleischkaesebroetchen
+      example: f84903f9aa454a2481f3
     form_token:
       name: form_token
       in: path
@@ -4267,7 +4267,10 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/x-zip-compressed:
+              schema:
+                type: string
+                format: binary
   /api/v2.1/workspace/{workspace_id}/synchronous-export/export-table-to-excel/:
     get:
       tags:
@@ -4285,7 +4288,10 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/ms-excel:
+              schema:
+                type: string
+                format: binary
   /api/v2.1/workspace/{workspace_id}/synchronous-export/export-view-to-excel/:
     get:
       tags:
@@ -4305,7 +4311,10 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/ms-excel:
+              schema:
+                type: string
+                format: binary
   /dtable/external-links/{external_link_token}/download-zip/:
     get:
       tags:
@@ -4321,7 +4330,10 @@ paths:
         "200":
           description: Successful response
           content:
-            application/json: {}
+            application/x-zip-compressed:
+              schema:
+                type: string
+                format: binary
 
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/convert-big-data-view-to-excel/:
     get:
@@ -5784,10 +5796,14 @@ paths:
       parameters:
         - $ref: "#/components/parameters/dataset_id"
       responses:
-        "404":
+        "200":
           description: Successful response
           content:
-            application/json: {}
+            application/json:
+              schema:
+                type: object
+              example:
+                task_id: a375e995-ed2b-4064-ae34-03a18bb0627e
   /api/v2.1/dtable/common-datasets/syncs/:
     get:
       tags:
