@@ -184,6 +184,14 @@ components:
         pattern: "^[a-f0-9]{32}(@auth.local)$"
       required: true
       example: 123456789f1e4c8d8e1c31415867317c@auth.local
+    app_name:
+      name: app_name
+      description: The name of your app. Every API-Token has a name to identify the purpose. The name of the app must be unique for every base.
+      in: path
+      schema:
+        type: string
+      required: true
+      example: "My App"
 
   schemas:
     team_admin_permission:
@@ -1258,6 +1266,104 @@ paths:
             application/json:
               schema:
                 type: object
+  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/api-tokens/:
+    get:
+      tags:
+        - Bases
+      summary: List API-Tokens
+      operationId: listApiTokens
+      description: List API tokens of a single base.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                api_tokens:
+                  - app_name: n8n
+                    api_token: c1a7a416280ab3f9b0b632edbb58a69a771783f0
+                    generated_by: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    creator: user1
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    generated_at: '2025-11-28T14:18:39+01:00'
+                    last_access: '2025-11-28T14:18:39+01:00'
+                    permission: rw
+  /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/api-tokens/{app_name}/:
+    delete:
+      tags:
+        - Bases
+      summary: Delete API-Token
+      operationId: deleteApiToken
+      description: Delete a specific API token from a base. The token is identified by its *app_name*.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/app_name"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/org/{org_id}/admin/api-tokens/:
+    get:
+      tags:
+        - Bases
+      summary: List API-Tokens of All Bases
+      operationId: listApiTokensOfAllBases
+      description: List API tokens of all bases inside the team/organization.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                api_tokens:
+                  - app_name: n8n
+                    api_token: c1a7a416280ab3f9b0b632edbb58a69a771783f0
+                    generated_by: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    creator: user1
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    generated_at: '2025-11-28T14:18:39+01:00'
+                    last_access: '2025-11-28T14:18:39+01:00'
+                    permission: rw
+                    dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
+                    dtable_name: CRM
+                    dtable_icon: icon-user-interview
+                    dtable_color: "#E91E63"
+                  - app_name: API
+                    api_token: 89913c6509062bbd24efe42a509cf9c5bb843018
+                    generated_by: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    creator: user1
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    generated_at: '2025-11-28T14:18:54+01:00'
+                    last_access: '2025-11-28T14:18:54+01:00'
+                    permission: rw
+                    dtable_uuid: e97bb668-da36-484c-8ac9-8aa9e0564f4c
+                    dtable_name: Finances
+                    dtable_icon: icon-dollar
+                    dtable_color: "#00C9C7"
+                total_count: 2
 
   # Sharing Links
   /api/v2.1/org/{org_id}/admin/external-links/:
