@@ -682,6 +682,64 @@ paths:
                     owner_deleted: false,
                     rows_count: 20
                 count: 16
+  /api/v2.1/org/{org_id}/admin/users/{user_id}/dtables/:
+    get:
+      tags:
+        - Bases
+      summary: List User's Bases
+      operationId: listUsersBases
+      description: List all the bases of a certain user by the user's ID.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable_list:
+                  - id: 6
+                    workspace_id: 2
+                    uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
+                    name: CRM
+                    created_at: '2025-11-28T14:16:30+01:00'
+                    updated_at: '2025-11-28T14:17:04+01:00'
+                    color: "#E91E63"
+                    text_color: null
+                    icon: icon-user-interview
+                    is_encrypted: false
+                    in_storage: true
+                    org_id: 2
+                    email: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    group_id: -1
+                    owner: org-1-admin
+                    owner_deleted: false
+                    rows_count: 7
+                  - id: 7
+                    workspace_id: 2
+                    uuid: e97bb668-da36-484c-8ac9-8aa9e0564f4c
+                    name: Finances
+                    created_at: '2025-11-28T14:18:31+01:00'
+                    updated_at: '2025-11-28T14:18:31+01:00'
+                    color: "#00C9C7"
+                    text_color: null
+                    icon: icon-dollar
+                    is_encrypted: false
+                    in_storage: true
+                    org_id: 2
+                    email: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    group_id: -1
+                    owner: org-1-admin
+                    owner_deleted: false
+                    rows_count: 0
+                count: 2
   /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/:
     get:
       tags:
