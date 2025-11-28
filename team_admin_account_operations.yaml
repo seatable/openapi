@@ -406,6 +406,8 @@ paths:
                 id_in_org: ""
                 has_default_device: false
                 is_force_2fa: true
+                is_active: true
+                is_org_admin: false
     put:
       tags:
         - Users
