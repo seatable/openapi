@@ -1932,6 +1932,49 @@ paths:
                   ],
                   "count": 2
                 }
+  /api/v2.1/org/{org_id}/admin/automation-logs/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Automation Logs
+      operationId: listAutomationLogs
+      description: Returns a list of automation logs inside a specific team.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                logs:
+                  - id: 43543
+                    rule_id: 454
+                    trigger_time: "2025-11-28T14:05:52+01:00"
+                    run_condition: per_update
+                    success: true
+                    org_id: -1
+                    dtable_uuid: 8fc3fbc2-d8d2-4a23-965d-33cbf511d780
+                    owner: 314bd2ed8d9741b08852916907dc7dd5@auth.local
+                    warnings: null
+                  - id: 43544
+                    rule_id: 454
+                    trigger_time: "2025-11-28T14:05:55+01:00"
+                    run_condition: per_update
+                    success: true
+                    org_id: -1
+                    dtable_uuid: 8fc3fbc2-d8d2-4a23-965d-33cbf511d780
+                    owner: 314bd2ed8d9741b08852916907dc7dd5@auth.local
+                    warnings: null
+                total_count: 2
   /api/v2.1/org/{org_id}/admin/org-logo/:
     post:
       tags:
