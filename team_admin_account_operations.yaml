@@ -30,6 +30,8 @@ tags:
     description: Retrieve team info and update team settings
   - name: Activities & Logs
     description: Retrieve team activities and logs
+  - name: Statistics
+    description: Retrieve statistics about system activities
   - name: Customizing
     description: Customize team appearance
   - name: SAML
@@ -69,6 +71,14 @@ components:
         type: string
       description: Exact name or a part of the name of the base, case insensitive.
       example: "Example"
+    dtable_uuid:
+      name: dtable_uuid
+      in: query
+      schema:
+        type: string
+        pattern: '^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$'
+      description: The unique identifier of a base.
+      example: 5c264e76-0e5a-448a-9f34-580b551364ca
     ignore_asset:
       name: ignore_asset
       in: query
@@ -2203,6 +2213,228 @@ paths:
                     owner: 314bd2ed8d9741b08852916907dc7dd5@auth.local
                     warnings: null
                 total_count: 2
+
+  # Statistics
+  /api/v2.1/org/{org_id}/admin/statistics/admin-logs/by-day/:
+    get:
+      tags:
+        - Statistics
+      summary: Admin Logs (by Day)
+      operationId: getAdminLogStatisticsByDay
+      description: Returns statistics about admin logs grouped by day.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - date: '2025-10-29'
+                    number_of_operations: 2
+                    base_operations: 1
+                    group_operations: 0
+                    user_operations: 1
+                  - date: '2025-10-30'
+                    number_of_operations: 5
+                    base_operations: 3
+                    group_operations: 1
+                    user_operations: 1
+                  - date: '2025-10-31'
+                    number_of_operations: 2
+                    base_operations: 0
+                    group_operations: 1
+                    user_operations: 1
+                total_count: 3
+  /api/v2.1/org/{org_id}/admin/statistics/automation-logs/by-day/:
+    get:
+      tags:
+        - Statistics
+      summary: Automation Logs (by Day)
+      operationId: getAutomationLogStatisticsByDay
+      description: Returns statistics about automation logs grouped by day.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/dtable_uuid"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - trigger_date: '2025-11-27'
+                    number_of_executions: 10
+                    successful_executions: 9
+                    unsuccessful_executions: 1
+                  - trigger_date: '2025-11-28'
+                    number_of_executions: 2
+                    successful_executions: 2
+                    unsuccessful_executions: 0
+                total_count: 2
+  /api/v2.1/org/{org_id}/admin/statistics/automation-logs/by-base/:
+    get:
+      tags:
+        - Statistics
+      summary: Automation Logs (by Base)
+      operationId: getAutomationLogStatisticsByBase
+      description: Returns statistics about automation logs grouped by base.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
+                    number_of_executions: 2
+                    successful_executions: 2
+                    unsuccessful_executions: 0
+                  - dtable_uuid: e97bb668-da36-484c-8ac9-8aa9e0564f4c
+                    number_of_executions: 5
+                    successful_executions: 4
+                    unsuccessful_executions: 1
+                total_count: 2
+  /api/v2.1/org/{org_id}/admin/statistics/login-logs/by-day/:
+    get:
+      tags:
+        - Statistics
+      summary: Login Logs (by Day)
+      operationId: getLoginLogStatisticsByDay
+      description: Returns statistics about login logs grouped by day.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - date: '2025-11-27'
+                    number_of_attempts: 15
+                    successful_attempts: 14
+                    unsuccessful_attempts: 1
+                  - date: '2025-11-28'
+                    number_of_attempts: 2
+                    successful_attempts: 1
+                    unsuccessful_attempts: 1
+                total_count: 2
+  /api/v2.1/org/{org_id}/admin/statistics/python-runs/by-day/:
+    get:
+      tags:
+        - Statistics
+      summary: Python Runs (by Day)
+      operationId: getPythonRunStatisticsByDay
+      description: Returns statistics about python runs grouped by day.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/dtable_uuid"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - date: '2025-11-27'
+                    number_of_runs: 8
+                    total_run_time: 5
+                    triggered_by_automation_rule: 0
+                    triggered_manually: 8
+                    successful_runs: 3
+                    unsuccessful_runs: 5
+                  - date: '2025-11-28'
+                    number_of_runs: 4
+                    total_run_time: 22
+                    triggered_by_automation_rule: 0
+                    triggered_manually: 4
+                    successful_runs: 4
+                    unsuccessful_runs: 0
+                total_count: 2
+  /api/v2.1/org/{org_id}/admin/statistics/python-runs/by-base/:
+    get:
+      tags:
+        - Statistics
+      summary: Python Runs (by Base)
+      operationId: getPythonRunStatisticsByBase
+      description: Returns statistics about python runs grouped by base.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                results:
+                  - base_uuid: 4202f7ad-3168-4bf4-b1e4-01aee6782f94
+                    number_of_runs: 8
+                    total_run_time: 5
+                    triggered_by_automation_rule: 0
+                    triggered_manually: 8
+                    successful_runs: 3
+                    unsuccessful_runs: 5
+                  - base_uuid: ca490121-cea3-4a04-8e25-ac72b03a61e0
+                    number_of_runs: 4
+                    total_run_time: 22
+                    triggered_by_automation_rule: 0
+                    triggered_manually: 4
+                    successful_runs: 4
+                    unsuccessful_runs: 0
+                total_count: 2
+
   /api/v2.1/org/{org_id}/admin/org-logo/:
     post:
       tags:
