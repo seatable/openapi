@@ -76,6 +76,32 @@ components:
         type: boolean
       example: "false"
       description: Set this to `true` to export the base without assets. Default is `false`.
+    login_status:
+      name: login_status
+      in: query
+      schema:
+        type: string
+        enum: [success, failure]
+      example: success
+      description: Set this to `success` to only return successful logins. By default, all logins are returned.
+    start:
+      name: start
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: Start date in ISO format.
+      example: "2025-11-01T06:00:00+01:00"
+      required: false
+    end:
+      name: end
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: End date in ISO format.
+      example: "2025-11-30T18:00:00+01:00"
+      required: false
 
     #=======================Path parameters=======================#
     org_id:
@@ -1733,6 +1759,9 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/login_status"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
       responses:
         "200":
           description: OK
