@@ -1658,6 +1658,28 @@ paths:
                 enable_force_2fa: true
                 enable_new_user_email: true
                 enable_external_user_access_invite_link: false
+  /api/v2.1/org/admin/:
+    delete:
+        tags:
+          - Info & Settings
+        summary: Delete Team
+        operationId: deleteTeam
+        description: >-
+          Delete a team (organization) with its ID. This will eliminate the team!
+
+          However, this won't delete the team users - but all its members will
+          become team-less users in the system.
+        security:
+          - AccountTokenAuth: []
+        responses:
+          "200":
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                example:
+                  success: true
 
   /api/v2.1/org/{org_id}/admin/admin-logs/:
     get:
