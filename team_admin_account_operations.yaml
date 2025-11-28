@@ -1366,6 +1366,70 @@ paths:
                 total_count: 2
 
   # Sharing Links
+  /api/v2.1/org/{org_id}/admin/shares/:
+    get:
+      tags:
+        - Sharing Links
+      summary: List Shares
+      operationId: listShares
+      description: |
+        List all shares inside the given team/organization.
+
+        This includes the following:
+          - Bases shared to individual users
+          - Bases shared to groups
+          - Views shared to individual users
+          - Views shared to groups
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable_user_shares:
+                  - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
+                    email: 97f45993fc174280b939976c9b9256eb@auth.local
+                    name: org-1-user-1
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    contact_email: org-1-user-1@seatable.io
+                    permission: rw
+                    share_id: 1
+                dtable_group_shares:
+                  - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
+                    group_id: 1
+                    group_name: Marketing
+                    permission: rw
+                    share_id: 1
+                view_user_shares:
+                  - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
+                    id: 1
+                    dtable_name: CRM
+                    from_user: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    to_user: 97f45993fc174280b939976c9b9256eb@auth.local
+                    permission: r
+                    table_id: '0000'
+                    view_id: '0000'
+                    shared_name: User share
+                    from_user_name: org-1-admin
+                    to_user_name: org-1-user-1
+                view_group_shares:
+                  - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
+                    id: 1
+                    dtable_name: CRM
+                    from_user: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    to_group_id: 1
+                    permission: r
+                    table_id: '0000'
+                    view_id: '0000'
+                    shared_name: Group share
+                    from_user_name: org-1-admin
+                    to_group_name: Marketing
   /api/v2.1/org/{org_id}/admin/external-links/:
     get:
       tags:
