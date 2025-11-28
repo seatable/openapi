@@ -102,6 +102,15 @@ components:
       description: End date in ISO format.
       example: "2025-11-30T18:00:00+01:00"
       required: false
+    operation_group:
+      name: operation_group
+      in: query
+      schema:
+        type: string
+        enum: [user, group, base]
+      example: user
+      description: Filter by a specific operation group. By default, all operations are returned.
+      required: false
 
     #=======================Path parameters=======================#
     org_id:
@@ -1663,6 +1672,9 @@ paths:
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
         - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/operation_group"
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
       responses:
         "200":
           description: OK
