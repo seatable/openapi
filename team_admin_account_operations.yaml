@@ -121,6 +121,23 @@ components:
       example: user
       description: Filter by a specific operation group. By default, all operations are returned.
       required: false
+    group_by:
+      name: group_by
+      in: query
+      schema:
+        type: string
+        enum: [owner, dtable_uuid]
+      required: true
+      description: Query by owner or Base
+      example: "owner"
+    date:
+      name: date
+      in: query
+      schema:
+        type: string
+      required: true
+      description: A date string in YYYY-MM-DD format
+      example: "2025-01-01"
 
     #=======================Path parameters=======================#
     org_id:
@@ -2480,6 +2497,49 @@ paths:
                     successful_runs: 4
                     unsuccessful_runs: 0
                 total_count: 2
+  /api/v2.1/org/{org_id}/admin/statistics/ai/:
+    get:
+      tags:
+        - Statistics
+      summary: Get AI statistics by user/base
+      operationId: getUserOrBaseAIStatistics
+      description: Get AI usage statistics monthly by user/base.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/group_by"
+        - $ref: "#/components/parameters/date"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                group_by_owner:
+                  summary: Query group by owner
+                  value:
+                    results:
+                      - owner: 1@seafile_group
+                        total_cost: 0.15
+                        group_name: group-11
+                      - owner: d15ebe61bd684b868344498c73bdeac4@auth.local
+                        total_cost: 0.2
+                        nickname: test
+                    count: 2
+                group_by_base:
+                  summary: Query group by base
+                  value:
+                    results:
+                      - dtable_uuid: f0e6f53caee749b1a5eb65cb2991d6bb
+                        owner: 1@seafile_group
+                        total_cost: 0.04
+                        group_name: group-11
+                    count: 1
 
   /api/v2.1/org/{org_id}/admin/org-logo/:
     post:
