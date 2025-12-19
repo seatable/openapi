@@ -4269,7 +4269,7 @@ paths:
                   description: "type of toast, e.g., success, warning, error"
                   enum: ["success", "warning", "error"]
                   example: "success"
-                detial:
+                detail:
                   type: object
                   properties:
                     msg:
