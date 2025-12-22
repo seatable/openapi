@@ -141,6 +141,7 @@ paths:
               example:
                 upload_link: >-
                   https://cloud.seafile.com/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e
+                workspace_id: 42
                 parent_path: /asset/a275d870-fd55-48e4-8c4a-5fd6f2549765
                 img_relative_path: images/2021-08
                 file_relative_path: files/2021-08
@@ -361,6 +362,7 @@ paths:
               example:
                 dirent:
                   upload_link: "https://cloud.seatable.io/seafhttp/upload-api/e943a56a-c5b3-441a-ac1d-9199819dec71"
+                  workspace_id: 42
                   parent_path: "/asset/1338f224-8482-4d71-b8be-63c8f37b896a/custom"
                   relative_path": "/"
   /api/v2.1/dtable/custom/app-download-link/:
