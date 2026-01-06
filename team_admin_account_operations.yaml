@@ -2213,6 +2213,52 @@ paths:
                     owner: 314bd2ed8d9741b08852916907dc7dd5@auth.local
                     warnings: null
                 total_count: 2
+  /api/v2.1/org/{org_id}/admin/python-runs/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Python Runs
+      operationId: listPythonRuns
+      description: Returns a list of python runs inside a specific team.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/dtable_uuid"
+          name: base_uuid
+        - $ref: "#/components/parameters/start"
+        - $ref: "#/components/parameters/end"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                runs:
+                  - dtable_uuid: 306acc83-5305-45b4-b34b-528f6f51d7b8
+                    finished_at: "2026-01-06T11:57:11+01:00"
+                    id: 3,
+                    operate_from: manualy
+                    owner: 2a609b47d6254449a7f042a42ef02d09@auth.local
+                    return_code: 0,
+                    script_name: DDx0.py
+                    started_at: "2026-01-06T11:57:10+01:00"
+                    success: true
+                    script_display_name: "Hello World"
+                  - dtable_uuid: 149cd597-dcbc-4e2a-8344-91651a1b4853
+                    finished_at: "2026-01-06T12:11:18+01:00"
+                    id: 4
+                    operate_from: manualy
+                    owner: 2a609b47d6254449a7f042a42ef02d09@auth.local
+                    return_code: 0
+                    script_name: O60m.py
+                    started_at: "2026-01-06T12:11:18+01:00"
+                    success: true
+                    script_display_name: "Base 2 Script"
+                total_count: 2
 
   # Statistics
   /api/v2.1/org/{org_id}/admin/statistics/admin-logs/by-day/:
