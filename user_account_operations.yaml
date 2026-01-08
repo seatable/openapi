@@ -4307,10 +4307,8 @@ paths:
         "200":
           description: Successful response
           content:
-            application/x-zip-compressed:
-              schema:
-                type: string
-                format: binary
+            # TODO: Actually "application/x-zip-compressed", but dtable-web does not accept this when specified inside an "Accept" header
+            application/json: {}
   /api/v2.1/workspace/{workspace_id}/synchronous-export/export-table-to-excel/:
     get:
       tags:
@@ -4328,10 +4326,8 @@ paths:
         "200":
           description: Successful response
           content:
-            application/ms-excel:
-              schema:
-                type: string
-                format: binary
+            # TODO: Actually "application/ms-excel", but dtable-web does not accept this when specified inside an "Accept" header
+            application/json: {}
   /api/v2.1/workspace/{workspace_id}/synchronous-export/export-view-to-excel/:
     get:
       tags:
@@ -4351,10 +4347,8 @@ paths:
         "200":
           description: Successful response
           content:
-            application/ms-excel:
-              schema:
-                type: string
-                format: binary
+            # TODO: Actually "application/ms-excel", but dtable-web does not accept this when specified inside an "Accept" header
+            application/json: {}
   /dtable/external-links/{external_link_token}/download-zip/:
     get:
       tags:
@@ -4370,10 +4364,8 @@ paths:
         "200":
           description: Successful response
           content:
-            application/x-zip-compressed:
-              schema:
-                type: string
-                format: binary
+            # TODO: Actually "application/x-zip-compressed", but dtable-web does not accept this when specified inside an "Accept" header
+            application/json: {}
 
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/convert-big-data-view-to-excel/:
     get:
