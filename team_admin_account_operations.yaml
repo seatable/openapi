@@ -168,6 +168,15 @@ components:
       required: true
       description: The unique identifier of a base. Sometimes also called dtable_uuid.
       example: 5c264e76-0e5a-448a-9f34-580b551364ca
+    dtable_uuid_query:
+      name: dtable_uuid
+      in: path
+      schema:
+        type: string
+        pattern: '^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$'
+      required: true
+      description: The unique identifier of a base.
+      example: 5c264e76-0e5a-448a-9f34-580b551364ca
     external_link_token:
       name: external_link_token
       in: path
@@ -2241,7 +2250,7 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
-        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/base_uuid_query"
         - $ref: "#/components/parameters/start"
         - $ref: "#/components/parameters/end"
         - $ref: "#/components/parameters/page"
