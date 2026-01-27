@@ -8,7 +8,7 @@ on:
       # This workflow will run every time you push code to the following branch.
       # Check out GitHub's docs for more info on configuring this:
       # https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
-      - v6.0
+      - v6.1
 
 # I have multiple categories in seatable.readme.io:
 # - SeaTable API (docs only)                    < intro/*.md
@@ -54,52 +54,52 @@ jobs:
       - name: Update SeaTable API 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: docs ./intro --key=${{ secrets.README_API_KEY }} --version=6.0
+          rdme: docs ./intro --key=${{ secrets.README_API_KEY }} --version=6.1
 
       # authentication
       - name: Update authentication 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f54f --useSpecVersion
+          rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eeee --useSpecVersion
 
       # base operations
       - name: Update base operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f557 --useSpecVersion
+          rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eef6 --useSpecVersion
 
       # file operations
       - name: Update file operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi file_operations.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f556 --useSpecVersion
+          rdme: openapi file_operations.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eef5 --useSpecVersion
 
       # Account operations: System admin
       - name: Update sys admin account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi system_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f553 --useSpecVersion
+          rdme: openapi system_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eef2 --useSpecVersion
 
       # Account operations: Team admin
       - name: Update team admin account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi team_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f552 --useSpecVersion
+          rdme: openapi team_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eef1 --useSpecVersion
 
       # Account operations: User
       - name: Update user account operations 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi user_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f554 --useSpecVersion
+          rdme: openapi user_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eef3 --useSpecVersion
 
       # ping & info
       - name: Update ping & info 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi ping_and_info.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f551 --useSpecVersion
+          rdme: openapi ping_and_info.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eef0 --useSpecVersion
 
       # Python
       - name: Update python scheduler 🚀
         uses: readmeio/rdme@v8
         with:
-          rdme: openapi python-scheduler.yaml --key=${{ secrets.README_API_KEY }} --id=68a31677008af4fb2f94f555 --useSpecVersion
+          rdme: openapi python-scheduler.yaml --key=${{ secrets.README_API_KEY }} --id=6978dfd7217b10efe565eef4 --useSpecVersion
