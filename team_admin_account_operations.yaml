@@ -95,7 +95,7 @@ components:
       example: "false"
       description: Set this to `true` to export the base without assets. Default is `false`.
     login_status:
-      name: login_status
+      name: status
       in: query
       schema:
         type: string
