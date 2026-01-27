@@ -2240,8 +2240,8 @@ paths:
       security:
         - AccountTokenAuth: []
       parameters:
-        - $ref: "#/components/parameters/dtable_uuid"
-          name: base_uuid
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/start"
         - $ref: "#/components/parameters/end"
         - $ref: "#/components/parameters/page"
