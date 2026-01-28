@@ -2206,6 +2206,7 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/base_uuid_query"
         - $ref: "#/components/parameters/start"
         - $ref: "#/components/parameters/end"
         - $ref: "#/components/parameters/page"
