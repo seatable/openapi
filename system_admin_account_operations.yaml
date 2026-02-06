@@ -355,7 +355,6 @@ components:
       in: path
       schema:
         type: string
-        pattern: ^[a-f0-9]{20}$
       required: true
       example: "1f0447eab4df4343ab6d"
     form_token:

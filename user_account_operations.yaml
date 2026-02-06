@@ -413,7 +413,6 @@ components:
       in: path
       schema:
         type: string
-        pattern: "^[0-9a-f]{20}$"
       required: true
       example: f234baec8ce44028978a
     invite_link_token:

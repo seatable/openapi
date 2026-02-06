@@ -181,7 +181,6 @@ components:
       in: path
       schema:
         type: string
-        pattern: "^[0-9a-f]{20}$"
       required: true
       example: "d6d006b319ca4d2aa060"
     view_external_link_token:
@@ -189,7 +188,6 @@ components:
       in: path
       schema:
         type: string
-        pattern: "^[0-9a-f]{20}$"
       required: true
       example: "d6d006b319ca4d2aa060"
     invite_link_token:
