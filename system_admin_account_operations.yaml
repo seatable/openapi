@@ -484,9 +484,9 @@ components:
     asset_quota_mb:
       type: string
       description: The asset quota in MB.
-    automation_limit_per_month:
+    monthly_automation_limit_per_user:
       type: integer
-      description: Monthly limit on the number of automated rules
+      description: Monthly limit on the number of automation rules per user.
     file:
       type: string
       format: binary
@@ -827,8 +827,8 @@ paths:
                   $ref: "#/components/schemas/quota_total"
                 asset_quota_mb:
                   $ref: "#/components/schemas/asset_quota_mb"
-                automation_limit_per_month:
-                  $ref: "#/components/schemas/automation_limit_per_month"
+                monthly_automation_limit_per_user:
+                  $ref: "#/components/schemas/monthly_automation_limit_per_user"
       security:
         - AccountTokenAuth: []
       parameters:
@@ -855,7 +855,7 @@ paths:
                 create_time: "2020-11-18T12:30:31+00:00"
                 role: default
                 update_status_tip: ""
-                automation_limit_per_month: 1000
+                monthly_automation_limit_per_user: 1000
     delete:
       tags:
         - Users
@@ -1991,8 +1991,8 @@ paths:
                   $ref: "#/components/schemas/max_user_number"
                 asset_quota_mb:
                   $ref: "#/components/schemas/asset_quota_mb"
-                automation_limit_per_month:
-                  $ref: "#/components/schemas/automation_limit_per_month"
+                monthly_automation_limit_per_user:
+                  $ref: "#/components/schemas/monthly_automation_limit_per_user"
       security:
         - AccountTokenAuth: []
       parameters:
@@ -2019,7 +2019,7 @@ paths:
                 max_user_number: 3
                 rows_count: 7185
                 row_limit: -1
-                automation_limit_per_month: 1000
+                monthly_automation_limit_per_user: 1000
     get:
       tags:
         - Teams
