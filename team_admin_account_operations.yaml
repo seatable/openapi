@@ -79,14 +79,6 @@ components:
         pattern: '^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$'
       description: The unique identifier of a base.
       example: 5c264e76-0e5a-448a-9f34-580b551364ca
-    base_uuid_query:
-      name: base_uuid
-      in: query
-      schema:
-        type: string
-        pattern: '^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$'
-      description: The unique identifier of a base.
-      example: 5c264e76-0e5a-448a-9f34-580b551364ca
     ignore_asset:
       name: ignore_asset
       in: query
@@ -2248,7 +2240,7 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
-        - $ref: "#/components/parameters/base_uuid_query"
+        - $ref: "#/components/parameters/dtable_uuid"
         - $ref: "#/components/parameters/start"
         - $ref: "#/components/parameters/end"
         - $ref: "#/components/parameters/page"
@@ -2436,7 +2428,7 @@ paths:
         - AccountTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/org_id"
-        - $ref: "#/components/parameters/base_uuid_query"
+        - $ref: "#/components/parameters/dtable_uuid"
         - $ref: "#/components/parameters/start"
         - $ref: "#/components/parameters/end"
         - $ref: "#/components/parameters/page"
