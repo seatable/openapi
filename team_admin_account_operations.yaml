@@ -1501,6 +1501,7 @@ paths:
                     shared_name: User share
                     from_user_name: org-1-admin
                     to_user_name: org-1-user-1
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
                 view_group_shares:
                   - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
                     id: 1
