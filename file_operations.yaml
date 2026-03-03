@@ -185,7 +185,7 @@ paths:
         ```
         # Example how to add an already uploaded image to a row:
         "row": {
-          "My Image Column": ["/workspace/24/asset/55f2f056-5da1-4095-b5f8-791bb51b991e/images/2023-07/party.png`"]
+          "My Image Column": ["/workspace/24/asset/55f2f056-5da1-4095-b5f8-791bb51b991e/images/2023-07/party.png"]
         }
 
         # Example how to add an already uploaded file to a row:
@@ -364,7 +364,7 @@ paths:
                   upload_link: "https://cloud.seatable.io/seafhttp/upload-api/e943a56a-c5b3-441a-ac1d-9199819dec71"
                   workspace_id: 42
                   parent_path: "/asset/1338f224-8482-4d71-b8be-63c8f37b896a/custom"
-                  relative_path": "/"
+                  relative_path: "/"
   /api/v2.1/dtable/custom/app-download-link/:
     get:
       tags: [Files & Images (Custom Folder)]
