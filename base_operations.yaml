@@ -213,7 +213,7 @@ components:
       in: path
       schema:
         type: string
-        pattern: ^[A-Za-z0-9]{22}$
+        pattern: ^[A-Za-z0-9\-\_]{22}$
       required: true
       description: The id of the row.
       example: Qtf7xPmoRaiFyQPO1aENTjb
@@ -257,7 +257,7 @@ components:
   schemas:
     row_id:
       type: string
-      pattern: '^[a-zA-Z0-9\-\_]{22}$'
+      pattern: ^[A-Za-z0-9\-\_]{22}$
       description: The id of the row. The id of a row is unique inside a base and is often used to identify one specific row.
       example: "Qtf7xPmoRaiFyQPO1aENTjb"
     base:

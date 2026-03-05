@@ -219,7 +219,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/AccountToken"
         "400":
-          description: Forbidden
+          description: Bad Request
           content:
             application/json:
               example:
