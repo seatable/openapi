@@ -2417,7 +2417,6 @@ paths:
                         can_copy: false
                         can_export: false
                         can_print: false
-  # question: internal server error??
   /api-gateway/api/v2/dtables/{base_uuid}/related-users/:
     get:
       tags:
@@ -2563,7 +2562,6 @@ paths:
                     _mtime: "2021-03-10T16:11:11.176+00:00"
                     Name: Matcha
                     link: []
-    # question: how to add multiple rows????
     post:
       tags:
         - Rows
@@ -2744,7 +2742,6 @@ paths:
 
   # Links
   /api-gateway/api/v2/dtables/{base_uuid}/query-links/:
-    # getestet: ok.
     post:
       tags:
         - Links
@@ -2792,7 +2789,6 @@ paths:
                     display_value: Orson
 
   /api-gateway/api/v2/dtables/{base_uuid}/links/:
-    # getestet: ok. (big data???) -> Eingabe ???
     post:
       tags:
         - Links
@@ -2826,7 +2822,6 @@ paths:
                 type: object
               example:
                 success: true
-    # getestet: ok
     put:
       tags:
         - Links
@@ -2878,7 +2873,6 @@ paths:
                 deleted_links_count: 1
 
   /api-gateway/api/v2/dtables/{base_uuid}/auto-links/:
-    # getestet: ok.
     post:
       tags:
         - Links
@@ -2917,7 +2911,6 @@ paths:
                 task_id: 19b3c803-051e-4c16-bf4d-682d24f7981e
 
   /api-gateway/api/v2/dtables/{base_uuid}/auto-link-task/:
-    # getestet: ok.
     get:
       tags:
         - Links
@@ -4415,7 +4408,6 @@ paths:
                 total_count: 3
 
   # Snapshots
-  # tested create: ok
   /api-gateway/api/v2/dtables/{base_uuid}/snapshot/:
     post:
       tags: [Snapshots]
