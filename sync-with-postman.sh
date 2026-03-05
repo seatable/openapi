@@ -43,7 +43,19 @@ DESCRIPTION="This is the reference for the SeaTable API. On this page you will f
 jq --arg description "${DESCRIPTION}" '.collection.info.description = $description' postman/collection.wrapped.json | sponge postman/collection.wrapped.json
 
 # Create Postman collection
-response=$(curl -X POST "https://api.getpostman.com/collections?workspace=80b1ca4c-1f9e-41bf-b0e1-6bde43e012fc" \
+response=$(curl -s -w "\n%{http_code}" -X POST "https://api.getpostman.com/collections?workspace=80b1ca4c-1f9e-41bf-b0e1-6bde43e012fc" \
     -H "X-Api-Key: $POSTMAN_API_KEY" \
     -H 'Content-Type: application/json' \
     --data '@postman/collection.wrapped.json')
+
+http_code=$(echo "$response" | tail -1)
+body=$(echo "$response" | sed '$d')
+
+if [[ "$http_code" -ge 200 && "$http_code" -lt 300 ]]; then
+    echo "Success: Collection created (HTTP $http_code)"
+    echo "$body" | jq .
+else
+    echo "Error: Postman API returned HTTP $http_code"
+    echo "$body"
+    exit 1
+fi

@@ -50,6 +50,17 @@ jobs:
       - name: Check out repo 📚
         uses: actions/checkout@v4
 
+      - name: Validate OpenAPI specs
+        run: |
+          npx --yes swagger-cli validate authentication.yaml
+          npx --yes swagger-cli validate base_operations.yaml
+          npx --yes swagger-cli validate file_operations.yaml
+          npx --yes swagger-cli validate system_admin_account_operations.yaml
+          npx --yes swagger-cli validate team_admin_account_operations.yaml
+          npx --yes swagger-cli validate user_account_operations.yaml
+          npx --yes swagger-cli validate ping_and_info.yaml
+          npx --yes swagger-cli validate python-scheduler.yaml
+
       # SeaTable API (docs only)
       - name: Update SeaTable API 🚀
         uses: readmeio/rdme@v8
