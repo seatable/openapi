@@ -1663,7 +1663,7 @@ components:
           $ref: "#/components/schemas/column_name"
         column_type:
           type: string
-          enum: ["checkbox"]
+          enum: ["geolocation"]
         anchor_column:
           $ref: "#/components/schemas/anchor_column"
         column_data:
@@ -2048,13 +2048,14 @@ components:
 
     button_column:
       title: Button column
+      type: object
       description: Add a button column.
       properties:
         column_name:
           $ref: "#/components/schemas/column_name"
         column_type:
           type: string
-          enum: ["file"]
+          enum: ["button"]
         anchor_column:
           $ref: "#/components/schemas/anchor_column"
         column_data:

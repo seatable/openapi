@@ -70,7 +70,7 @@ class Secret:
     def __repr__(self):
         return "Secret(********)"
 
-    def __str___(self):
+    def __str__(self):
         return "*******"
 
 @pytest.fixture
