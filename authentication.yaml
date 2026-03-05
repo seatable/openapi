@@ -10,12 +10,6 @@ servers:
       server:
         default: cloud.seatable.io
 
-## Questions for later:
-# - why is the return value always 200 but only once 201?
-# - create temporary token > why is this a GET request?
-# - app_name is sometimes param, sometimes body, is there a reason for that?
-# - return values of auth. varies: "get base-token with api-token delivers 8 values back", "Get base-token with account-token" delivers only 5 values back. Why not the same?
-
 x-readme:
   explorer-enabled: true
   metrics-enabled: false
