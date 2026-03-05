@@ -139,6 +139,7 @@ components:
       example: Example
     page:
       name: page
+      description: Page number of results to return. Default is 1.
       in: query
       schema:
         type: integer
@@ -146,6 +147,7 @@ components:
       example: 1
     per_page:
       name: per_page
+      description: Number of results per page.
       in: query
       schema:
         type: integer
@@ -153,6 +155,7 @@ components:
       example: 2
     tz:
       name: to_tz
+      description: Timezone offset for date/time conversion.
       in: query
       schema:
         type: string
@@ -166,15 +169,17 @@ components:
       description: >-
         `true` or `false`, optional, `true` by default. When `false`, only
         the ID, name and type of each workspace is listed.
-      example: "false"
+      example: false
     parent_dir:
       name: parent_dir
+      description: The parent directory path.
       in: query
       schema:
         type: string
       example: /
     path:
       name: path
+      description: The file path relative to the asset directory.
       in: query
       schema:
         type: string
@@ -192,6 +197,7 @@ components:
       example: "3"
     account_name:
       name: account_name
+      description: The name of the third-party email account.
       in: query
       schema:
         type: string
@@ -234,6 +240,7 @@ components:
       description: "Search string. Substrings are allowed and capitalization does not matter."
     query_type:
       name: query_type
+      description: Filter the search by type. Use `base` to search only bases or `app` to search only apps.
       in: query
       schema:
         type: string
@@ -243,7 +250,7 @@ components:
       in: query
       schema:
         type: boolean
-      example: "false"
+      example: false
       description: Set this to `true` to export the base without assets. Default is `false`.
 
     #=======================Path parameters=======================#

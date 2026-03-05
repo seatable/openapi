@@ -113,7 +113,7 @@ components:
       in: query
       schema:
         type: boolean
-      example: "true"
+      example: true
     starting_time:
       name: start
       in: query
@@ -153,7 +153,7 @@ components:
         users who are not in any teams (`true`) or by teams (`false`).  The
         usage of `true` here is seldom meaningful for cloud.seatable.io as
         all the users in the SeaTable Cloud are team users.
-      example: "false"
+      example: false
     month:
       name: month
       in: query
@@ -234,7 +234,7 @@ components:
       in: query
       schema:
         type: boolean
-      example: "false"
+      example: false
       description: Set this to `true` to export the base without assets. Default is `false`.
     group_by:
       name: group_by
@@ -509,7 +509,7 @@ components:
       description: >-
         If a workspace should be automatically created for the user.
         Optional. `false` by default.
-      example: "true"
+      example: true
     max_user_number:
       type: string
       description: The maximum user number.
@@ -529,7 +529,7 @@ components:
       description: >-
         Required. Use `true` or `false` to mark the status of the
         report.
-      example: "true"
+      example: true
     plugin:
       type: string
       description: Path and file name to the plugin file.
@@ -641,7 +641,7 @@ components:
         Leave this param as its default (`false`) to upload your
         favicon, and use this param as `true` to upload a favicon
         with a notification sign.
-      example: "true"
+      example: true
     login_bg_image:
       type: string
       description: The path and filename of the background image.

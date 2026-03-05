@@ -84,7 +84,7 @@ components:
       in: query
       schema:
         type: boolean
-      example: "false"
+      example: false
       description: Set this to `true` to export the base without assets. Default is `false`.
     login_status:
       name: status
@@ -269,7 +269,7 @@ components:
       description: >-
         If a workspace should be automatically created for the user.
         Optional. `false` by default.
-      example: "true"
+      example: true
     team_admin_id_in_org:
       type: string
       description: >-
@@ -295,13 +295,13 @@ components:
       description: >-
         Whether you'd like to move your group to the bottom of the
         list (`true`). `false` by default.
-      example: "true"
+      example: true
     enable_force_2fa:
       type: boolean
       description: >-
         if the 2-factor-authentication is forced (`true` or
         `false`).
-      example: "true"
+      example: true
     enable_force_sso_login:
       type: boolean
       description: Whether login via SSO is enforced for all team members (`true` or `false`).
@@ -311,19 +311,19 @@ components:
       description: >-
         if newly added users will get a system email (`true` or
         `false`).
-      example: "true"
+      example: true
     enable_external_user_access_invite_link:
       type: boolean
       description: >-
         if external users can access bases via invite links (`true`
         or `false`).
-      example: "false"
+      example: false
     enable_member_modify_name:
       type: boolean
       description: >-
         if members are allowed to change their names (`true` or
         `false`).
-      example: "false"
+      example: false
     upload_file:
       type: object
       properties:

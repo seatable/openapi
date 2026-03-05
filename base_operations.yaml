@@ -4175,7 +4175,7 @@ paths:
                 seen:
                   type: boolean
                   description: true or false for read or unread. Otherwise invalid.
-                  example: "true"
+                  example: true
       security:
         - BaseTokenAuth: []
       parameters:
@@ -4224,7 +4224,7 @@ paths:
                 seen:
                   type: boolean
                   description: '`true` to mark as "seen" and `false` as "unseen".'
-                  example: "false"
+                  example: false
       security:
         - BaseTokenAuth: []
       parameters:
