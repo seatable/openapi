@@ -17,7 +17,7 @@ USERNAME = os.environ.get('SEATABLE_USERNAME')
 PASSWORD = os.environ.get('SEATABLE_PASSWORD')
 ADMIN_USERNAME = os.environ.get('SEATABLE_ADMIN_USERNAME')
 ADMIN_PASSWORD = os.environ.get('SEATABLE_ADMIN_PASSWORD')
-CLEANUP_AFTER_TESTS = os.environ.get('CLEANUP_AFTER_TESTS', True)
+CLEANUP_AFTER_TESTS = os.environ.get('CLEANUP_AFTER_TESTS', 'True')
 
 assert BASE_URL is not None, 'SEATABLE_SERVER environment variable is not set'
 assert USERNAME is not None, 'SEATABLE_USERNAME environment variable is not set'

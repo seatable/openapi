@@ -190,7 +190,7 @@ SeaTable offers some column types that are **filled automatically**. It is not p
 
 ### Handling of default values
 
-If you use the [Append Rows](https://api.seatable.io/reference/appendrows) endpoint, you can set the `apply_default` body parameter to `true`, which ensures that any default values are automatically applied.
+If you use the [Append Rows](https://api.seatable.com/reference/appendrows) endpoint, you can set the `apply_default` body parameter to `true`, which ensures that any default values are automatically applied.
 
 ---
 

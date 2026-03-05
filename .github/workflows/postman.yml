@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Install openapi-to-postmanv2 (v4) + postman-combine-collections
         run: npm i -g openapi-to-postmanv2@4 postman-combine-collections
-      - name: Set COLLECTON_NAME variable
+      - name: Set COLLECTION_NAME variable
         run: |
           TAG="${{ github.ref_name }}"
           COLLECTION_NAME="SeaTable ${TAG#postman-}"

@@ -117,7 +117,7 @@ Note down the name of the tables and the name of the columns. You will need thes
 
 #### Step 4: Write some data to your base
 
-The request to [Append Rows](https://api.seatable.io/reference/appendrows) to a base, requires the following information. You have to know ...
+The request to [Append Rows](https://api.seatable.com/reference/appendrows) to a base, requires the following information. You have to know ...
 
 - the `Base-Token` for authentication -> ok
 - the `base_uuid` to identify the base -> no problem

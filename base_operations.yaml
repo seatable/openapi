@@ -1055,7 +1055,7 @@ components:
       properties:
         column_key:
           $ref: "#/components/schemas/column_key"
-        email_filter_predicate:
+        filter_predicate:
           $ref: "#/components/schemas/email_filter_predicate"
         filter_term:
           $ref: "#/components/schemas/filter_term"
@@ -1241,7 +1241,6 @@ components:
               - $ref: "#/components/schemas/filters_automatic"
               - $ref: "#/components/schemas/filters_percentage"
               - $ref: "#/components/schemas/filters_date-time"
-              - $ref: "#/components/schemas/filters_url"
               - $ref: "#/components/schemas/filters_geolocation"
         filter_conjunction:
           $ref: "#/components/schemas/filter_conjunction"
