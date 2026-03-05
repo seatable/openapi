@@ -31,24 +31,24 @@ on:
 # You'd use the same slug that the openapi sync created, but that's about it! Keep in mind, you'd need to sync OpenAPI first then the Markdown if you're changing content within your Reference sections, as it may be possible to delete Markdown content by mistake!
 
 # Process for new version:
-# local: git checkout -b v4.1
+# local: git checkout -b vX.Y
 # Login to https://dash.readme.com/login and fork the openapi-definition for seatable.readme.io to a newer version.
-# Switch to the latest reference page https://dash.readme.com/project/seatable/v4.1/reference and get the new IDs
+# Switch to the latest reference page https://dash.readme.com/project/seatable/vX.Y/reference and get the new IDs
 # replace the --id=... values in this rdme-openapi.yml file.
-# change all 4.0 occurances to 4.1
-# Get the categories via API: https://docs.readme.com/main/reference/getcategories. You will need only the API key as password (get it from here: https://dash.readme.com/project/seatable/v4.1/api-key).
-# username stays empty. x-readme-version has to be v4.1 or newer.
+# change all version occurrences to vX.Y
+# Get the categories via API: https://docs.readme.com/main/reference/getcategories. You will need only the API key as password (get it from here: https://dash.readme.com/project/seatable/vX.Y/api-key).
+# username stays empty. x-readme-version has to be vX.Y or newer.
 # get the _id of title: "SeaTable API"
 # use this value of _id to replace the "category" value in all markdown files of the "intro" folder
 # replace in all other yaml files the version
-# local: git add . && git commit && git push --set-upstream origin v4.1
+# local: git add . && git commit && git push --set-upstream origin vX.Y
 
 jobs:
   rdme-openapi:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo 📚
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # SeaTable API (docs only)
       - name: Update SeaTable API 🚀
