@@ -1181,8 +1181,7 @@ paths:
         - Users
       summary: Search User by Org-ID
       operationId: searchUserByOrgId
-      description: >-
-        Hier muss noch eine Beschreibung ergänzt werden
+      description: Search for a user by their organization ID.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1715,7 +1714,7 @@ paths:
               schema:
                 type: object
               example:
-                - success: "?"
+                - success: true
   /api/v2.1/admin/groups/{group_id}/:
     put:
       tags: [Groups]
@@ -1729,8 +1728,6 @@ paths:
               properties:
                 new_owner:
                   $ref: "#/components/schemas/username"
-                #quota:
-                #  $ref: "#/components/schemas/group_quota"
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1963,7 +1960,7 @@ paths:
           example: "2"
       responses:
         "200":
-          description: ok
+          description: OK
   /api/v2.1/admin/organizations/{org_id}/:
     put:
       tags:
@@ -2444,7 +2441,7 @@ paths:
         - AccountTokenAuth: []
       responses:
         "200":
-          description: "ok"
+          description: OK
           content:
             application/json:
               schema:
@@ -2473,7 +2470,7 @@ paths:
         - $ref: "#/components/parameters/sync_id"
       responses:
         "200":
-          description: "ok"
+          description: OK
           content:
             application/json:
               schema:
@@ -3539,9 +3536,9 @@ paths:
                   - repo_id: 696b27df-173e-4628-8ac2-10347c58a428
                     file_path: /asset/af5fa655-ef97-4573-8f2d-c3812e17a548/files/2024-08/eicar.com.txt
                     has_deleted: true
-                    has_ignored": false,
+                    has_ignored: false
                     virus_id: 1
-                    group_id: 1,
+                    group_id: 1
                     group_name: group-11
                     org_id: 1
                     org_name: org-1
@@ -3551,7 +3548,7 @@ paths:
                     file_path: /asset/af5fa655-ef97-4573-8f2d-c3812e17a548/files/2024-08/eicar.com (1).txt
                     has_deleted: false
                     has_ignored: false
-                    virus_id: 2,
+                    virus_id: 2
                     username: ac8961c4118f4400ad71bada398675b7@auth.local
                     nickname: test@demo.com
                     org_id: 1
