@@ -1,0 +1,11 @@
+{
+  "version": "6.1",
+  "authentication": "6978dfd7217b10efe565eeee",
+  "base_operations": "6978dfd7217b10efe565eef6",
+  "file_operations": "6978dfd7217b10efe565eef5",
+  "system_admin_account_operations": "6978dfd7217b10efe565eef2",
+  "team_admin_account_operations": "6978dfd7217b10efe565eef1",
+  "user_account_operations": "6978dfd7217b10efe565eef3",
+  "ping_and_info": "6978dfd7217b10efe565eef0",
+  "python-scheduler": "6978dfd7217b10efe565eef4"
+}
