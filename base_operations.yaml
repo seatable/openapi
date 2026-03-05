@@ -118,7 +118,7 @@ components:
       required: false
       description: |
         The name of the view to perform the operation on. Alternatively, you can use the `view_id` instead of `view_name`. If using `view_id`, ensure that the key in the request body is replaced accordingly.
-        **Example:** Instead of `view_name: Default View` you an use `view_id: 0000`.
+        **Example:** Instead of `view_name: Default View` you can use `view_id: 0000`.
       example: "Default View"
     order_by:
       name: order_by
@@ -737,7 +737,7 @@ components:
       type: string
       description: |
         The name of the view to perform the operation on. Alternatively, you can use the `view_id` instead of `view_name`. If using `view_id`, ensure that the key in the request body is replaced accordingly.
-        **Example:** Instead of `view_name: Default View` you an use `view_id: 0000`.
+        **Example:** Instead of `view_name: Default View` you can use `view_id: 0000`.
       example: "Default View"
 
     view_name_only:

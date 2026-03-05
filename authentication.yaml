@@ -341,7 +341,7 @@ paths:
       summary: Delete API-Token
       operationId: deleteApiToken
       description: >-
-        Delete one specific API token from a base. The token is identified by his *app_name*.
+        Delete one specific API token from a base. The token is identified by its *app_name*.
       security:
         - AccountTokenAuth: []
       parameters:

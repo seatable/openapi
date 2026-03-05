@@ -132,7 +132,7 @@ A row object consists of key:value pairs. The keys are the column_names (or the 
     }
   ],
   "XX98": ["145504ae043c438cbb55f2afb084d586@auth.local"],
-  "d9W1": [
+  "Kf5R": [
     "https://cloud.seatable.io/workspace/9463/asset/91a1ec23-2db0-4812-bbf5-5772352a4d63/images/2023-03/book-cover.png"
   ],
   "38WE": 48,
