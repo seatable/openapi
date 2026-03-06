@@ -7,29 +7,30 @@ Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. 
 | # | Issue | Severity | Action Required |
 |---|-------|----------|-----------------|
 | 1 | Checkbox: integer `1` stored as `false` | High | Yes — reject or coerce |
-| 2 | Select columns: unknown options auto-created | Low | No — acceptable behavior |
+| 21 | Auth errors: 403 instead of 401 for missing/invalid tokens | Medium | Yes — return 401 |
 | 3 | Rating: no range validation | Medium | Yes — reject out-of-range |
 | 4 | Auto-number: overwritable via API | Medium | Yes — reject writes |
 | 5 | Invalid date: silently stored as `null` | Medium | Yes — return error |
-| 6 | Geolocation: partial data accepted | Low | Yes — require both lat/lng |
 | 7 | Read-only columns: inconsistent enforcement | Medium | Yes — same as #4 |
-| 8 | POST /rows/ ignores `convert_keys` in response | Low | No — feature request |
 | 9 | DELETE /links/ reports success for non-existing links | Medium | Yes — return count 0 |
+| 12 | No createRowComment endpoint | Medium | Yes — re-added in 6.1 |
+| 17 | addNewUser returns 403 for license limit | Medium | Yes — use 409 or 402 |
+| 2 | Select columns: unknown options auto-created | Low | No — acceptable behavior |
+| 6 | Geolocation: partial data accepted | Low | Yes — require both lat/lng |
+| 8 | POST /rows/ ignores `convert_keys` in response | Low | No — feature request |
 | 10 | Typo: "row _id not exits" | Low | Yes — fix typo |
 | 11 | Multiple typos in dtable-web ("does not exits") | Low | Yes — fix typos |
-| 12 | No createRowComment endpoint | Medium | Yes — re-added in 6.1 |
 | 13 | deleteUserShare missing requestBody in spec | Low | Fixed in this repo |
 | 14 | createWebhook returns 200 instead of 201 | Low | Yes — return 201 |
 | 15 | createGroupShare returns 200 instead of 201 | Low | Yes — return 201 |
 | 16 | group_id returned as string instead of integer | Low | Yes — return integer |
-| 17 | addNewUser returns 403 for license limit | Low | Yes — use 409 or 402 |
 | 18 | listColumns excludes auto-created Name column | Low | No — document behavior |
 | 19 | deleteGroup fails silently-ish when group has bases | Low | Fixed in this repo |
 | 20 | Ping endpoints: inconsistent response formats | Low | Fixed in this repo |
 
 ---
 
-## Data Integrity Issues
+## High Severity
 
 ### 1. Checkbox: integer `1` is stored as `false`
 
@@ -44,20 +45,34 @@ Stored: { "Checkbox": false }   ← expected: true
 
 **Recommendation:** Return an error if the value is not a boolean, or coerce truthy values (`1`, `"true"`) to `true`.
 
-### 2. Single-select / multiple-select: unknown options are auto-created
+---
 
-**Severity:** Low
+## Medium Severity
 
-Writing a non-existing option name to a select column silently creates the option in the column configuration. No error, no warning.
+### 21. Auth errors: 403 returned instead of 401 for missing or invalid tokens
 
-```
-Input:  { "Single-Select": "option xyz" }
-Result: New option "option xyz" created in column definition
-```
+**Severity:** Medium — incorrect HTTP semantics
 
-Any typo or hallucinated option name permanently modifies the column schema.
+Per RFC 9110, HTTP status codes have distinct meanings:
 
-**Assessment:** Acceptable behavior in most cases. A `create_if_missing` flag (default `true` for backward compatibility) would be a nice improvement.
+- **401 Unauthorized** = "You are not authenticated" — the request lacks valid credentials
+- **403 Forbidden** = "You are authenticated, but not authorized" — the server understood the credentials but the user lacks permission
+
+SeaTable uses 403 in cases where 401 would be correct:
+
+| Situation | Actual | Expected |
+|-----------|--------|----------|
+| No token → account endpoint | 403 | **401** |
+| Invalid token → account endpoint | 401 | 401 |
+| No token → base endpoint | 403 | **401** |
+| Invalid token → base endpoint | 403 | **401** |
+| Regular user → admin endpoint | 403 | 403 |
+
+The last case (authenticated user lacking admin privileges) correctly returns 403. But missing or invalid tokens should return 401, because the problem is failed authentication, not insufficient authorization.
+
+This distinction matters in practice: API clients can automatically attempt a token refresh on 401, but not on 403. When both cases return 403, the client loses the ability to distinguish "re-authenticate" from "you don't have access".
+
+**Recommendation:** Return 401 for missing or invalid tokens. Reserve 403 for authenticated users who lack permission for the requested action.
 
 ### 3. Rating: no range validation
 
@@ -98,19 +113,6 @@ Stored: { "Date": null }   ← no error returned
 
 **Recommendation:** Return a validation error for unparseable date strings.
 
-### 6. Geolocation: partial data accepted
-
-**Severity:** Low — incomplete data stored
-
-A geolocation column with `geo_format: "lng_lat"` accepts objects with only one coordinate.
-
-```
-Input:  { "Geolocation": { "lng": 11.576 } }   ← lat missing
-Stored: { "Geolocation": { "lng": 11.576 } }   ← no error
-```
-
-**Recommendation:** Require both `lat` and `lng` when writing.
-
 ### 7. Read-only columns: inconsistent enforcement
 
 **Severity:** Medium
@@ -126,9 +128,59 @@ Formula, creator, and created time correctly reject writes. Auto-number does not
 
 **Recommendation:** Same fix as #4 — reject writes to auto-number columns.
 
+### 9. DELETE /links/ reports success for non-existing links
+
+**Severity:** Medium
+
+Unlinking a row pair that doesn't exist returns `{ deleted_links_count: 1, success: true }` instead of `{ deleted_links_count: 0 }`.
+
+**Recommendation:** Return the actual count of deleted links.
+
+### 12. No createRowComment endpoint
+
+**Severity:** Medium
+
+There is no API endpoint to create a row comment. The `create_row_comment` schema exists in `base_operations.yaml` but no POST operation is defined on `/api-gateway/api/v2/dtables/{base_uuid}/comments/` (returns 405 Method Not Allowed).
+
+**Status:** Will be re-added in 6.1.
+
+### 17. addNewUser returns 403 for license limit
+
+**Severity:** Medium
+
+`POST /api/v2.1/admin/users/` returns `403 {"error_msg": "The number of users exceeds the limit."}` when the license user limit is reached. A 403 typically means insufficient permissions, which is misleading. A 409 Conflict or 402 Payment Required would be more appropriate.
+
 ---
 
-## API Response Issues
+## Low Severity
+
+### 2. Single-select / multiple-select: unknown options are auto-created
+
+**Severity:** Low
+
+Writing a non-existing option name to a select column silently creates the option in the column configuration. No error, no warning.
+
+```
+Input:  { "Single-Select": "option xyz" }
+Result: New option "option xyz" created in column definition
+```
+
+Any typo or hallucinated option name permanently modifies the column schema.
+
+**Assessment:** Acceptable behavior in most cases. A `create_if_missing` flag (default `true` for backward compatibility) would be a nice improvement.
+
+### 6. Geolocation: partial data accepted
+
+**Severity:** Low — incomplete data stored
+
+A geolocation column with `geo_format: "lng_lat"` accepts objects with only one coordinate.
+
+```
+Input:  { "Geolocation": { "lng": 11.576 } }   ← lat missing
+Stored: { "Geolocation": { "lng": 11.576 } }   ← no error
+```
+
+**Recommendation:** Require both `lat` and `lng` when writing.
 
 ### 8. POST /rows/ ignores `convert_keys` in response
 
@@ -144,14 +196,6 @@ Response: { "0000": "Test", "ZBoJ": 42, ... }   ← keys, not names
 `GET /rows/` and `GET /rows/{id}/` correctly respect `convert_keys`.
 
 **Assessment:** Not a bug, but a reasonable feature request for consistency.
-
-### 9. DELETE /links/ reports success for non-existing links
-
-**Severity:** Medium
-
-Unlinking a row pair that doesn't exist returns `{ deleted_links_count: 1, success: true }` instead of `{ deleted_links_count: 0 }`.
-
-**Recommendation:** Return the actual count of deleted links.
 
 ### 10. Typo: "row _id not exits"
 
@@ -173,49 +217,35 @@ Several source files contain the typo "does not exits" instead of "does not exis
 - `seahub/api2/endpoints/dtable_view_external_links.py:207` — `"View external link does not exits."`
 - `seahub/base/accounts.py:203,210,713` — `"User matching query does not exits."`
 
----
-
-## Missing Operations
-
-### 12. No createRowComment endpoint
-
-**Severity:** Medium
-
-There is no API endpoint to create a row comment. The `create_row_comment` schema exists in `base_operations.yaml` but no POST operation is defined on `/api-gateway/api/v2/dtables/{base_uuid}/comments/` (returns 405 Method Not Allowed).
-
-**Status:** Will be re-added in 6.1.
-
----
-
-## OpenAPI Spec Issues
-
 ### 13. deleteUserShare missing requestBody
+
+**Severity:** Low
 
 The `deleteUserShare` operation in `user_account_operations.yaml` had no `requestBody` defined, but the API requires `email` as form data in the request body.
 
 **Fixed in:** This repository (commit 188837f).
 
----
-
-## Inconsistent Response Behavior
-
 ### 14. createWebhook returns 200 instead of 201
+
+**Severity:** Low
 
 `POST /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/webhooks/` returns HTTP 200 on success. Creating a resource should return 201 Created per REST conventions.
 
 ### 15. createGroupShare returns 200 instead of 201
 
+**Severity:** Low
+
 `POST /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/group-shares/` returns HTTP 200 on success. Should return 201 Created. For comparison, `createUserShare` correctly returns 201.
 
 ### 16. group_id returned as string instead of integer
 
+**Severity:** Low
+
 `POST .../group-shares/` returns `group_id` as a string (e.g., `"44"`) in the response, but it is an integer everywhere else (path parameters, `listGroupShares` response).
 
-### 17. addNewUser returns 403 for license limit
-
-`POST /api/v2.1/admin/users/` returns `403 {"error_msg": "The number of users exceeds the limit."}` when the license user limit is reached. A 403 typically means insufficient permissions, which is misleading. A 409 Conflict or 402 Payment Required would be more appropriate.
-
 ### 18. listColumns excludes auto-created Name column
+
+**Severity:** Low
 
 `GET /api-gateway/api/v2/dtables/{base_uuid}/columns/` only returns explicitly created columns when a table was created with a custom columns array via `createTable`. The auto-created default `Name` column is not included.
 
