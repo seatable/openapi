@@ -1,0 +1,20 @@
+{
+  "colorbys": {},
+  "data": {
+    "geo_format": "lng_lat"
+  },
+  "description": null,
+  "draggable": true,
+  "edit_metadata_permission_type": "",
+  "edit_metadata_permitted_group": [],
+  "edit_metadata_permitted_users": [],
+  "editable": true,
+  "key": "str",
+  "name": "geolocation",
+  "permission_type": "",
+  "permitted_group": [],
+  "permitted_users": [],
+  "resizable": true,
+  "type": "geolocation",
+  "width": 200
+}

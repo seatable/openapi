@@ -2,6 +2,160 @@
   "columns": [
     {
       "colorbys": {},
+      "data": {
+        "decimal": "dot",
+        "format": "yuan",
+        "thousands": "comma"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number-yuan",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "YYYY-MM-DD"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-iso",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "duration_format": "h:mm:ss",
+        "format": "duration"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "duration-h-mm-ss",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "duration",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "options": [
+          {
+            "color": "#9860E5",
+            "id": "0000",
+            "name": "alpha",
+            "textColor": "#000000"
+          },
+          {
+            "color": "#89D2EA",
+            "id": "ef3s",
+            "name": "beta",
+            "textColor": "#000000"
+          }
+        ]
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "single-select",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "single-select",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "checkbox",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "checkbox",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "rate_max_number": 5
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "rate",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "rate",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "geo_format": "lng_lat"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "geolocation",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "geolocation",
+      "width": 200
+    },
+    {
+      "colorbys": {},
       "data": null,
       "description": null,
       "draggable": true,
@@ -34,26 +188,6 @@
       "permitted_users": [],
       "resizable": true,
       "type": "url",
-      "width": 200
-    },
-    {
-      "colorbys": {},
-      "data": {
-        "rate_max_number": 10
-      },
-      "description": null,
-      "draggable": true,
-      "edit_metadata_permission_type": "",
-      "edit_metadata_permitted_group": [],
-      "edit_metadata_permitted_users": [],
-      "editable": true,
-      "key": "str",
-      "name": "rate",
-      "permission_type": "",
-      "permitted_group": [],
-      "permitted_users": [],
-      "resizable": true,
-      "type": "rate",
       "width": 200
     }
   ]

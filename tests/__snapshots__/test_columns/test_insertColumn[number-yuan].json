@@ -1,0 +1,22 @@
+{
+  "colorbys": {},
+  "data": {
+    "decimal": "dot",
+    "format": "yuan",
+    "thousands": "comma"
+  },
+  "description": null,
+  "draggable": true,
+  "edit_metadata_permission_type": "",
+  "edit_metadata_permitted_group": [],
+  "edit_metadata_permitted_users": [],
+  "editable": true,
+  "key": "str",
+  "name": "number-yuan",
+  "permission_type": "",
+  "permitted_group": [],
+  "permitted_users": [],
+  "resizable": true,
+  "type": "number",
+  "width": 200
+}

@@ -1,7 +1,9 @@
 {
   "colorbys": {},
   "data": {
-    "rate_max_number": 5
+    "formula": "1 + 2",
+    "operated_columns": [],
+    "result_type": "number"
   },
   "description": null,
   "draggable": true,
@@ -10,11 +12,11 @@
   "edit_metadata_permitted_users": [],
   "editable": true,
   "key": "str",
-  "name": "rating",
+  "name": "formula-sum",
   "permission_type": "",
   "permitted_group": [],
   "permitted_users": [],
   "resizable": true,
-  "type": "rate",
+  "type": "formula",
   "width": 200
 }

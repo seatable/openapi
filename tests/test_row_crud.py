@@ -4,22 +4,41 @@ from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
 from syrupy.matchers import path_type
 
-from test_base_operations import create_table, append_rows
+from test_base_operations import create_table, append_rows, COLUMNS, ROWS
 
 
-SIMPLE_COLUMNS = [
-    {'column_name': 'text', 'column_type': 'text'},
-    {'column_name': 'number', 'column_type': 'number'},
-    {'column_name': 'checkbox', 'column_type': 'checkbox'},
-]
+# Row data for update test — changes many column types at once
+UPDATE_ROW = {
+    'text': 'updated-text',
+    'long-text': '## Updated\n- New Item 1\n- New Item 2',
+    'number': 999.01,
+    'number-decimal-dot-thousands-comma': 2_000_000.456,
+    'number-percent': 99.5,
+    'number-euro': 42.00,
+    'date-iso': '2031/12/31',
+    'date-iso-hours-minutes': '2031/12/31 11:30',
+    'date-us': '12/31/2031',
+    'date-us-hours-minutes': '12/31/2031 11:30',
+    'date-european': '31/12/2031',
+    'date-german': '31.12.2031',
+    'date-german-hours-minutes': '31.12.2031 11:30',
+    'duration-hours-minutes': '7200',
+    'duration-hours-minutes-seconds': '7265',
+    'single-select': 'option-2',
+    'multiple-select': ['option-3'],
+    'email': 'updated@seatable.io',
+    'url': 'https://cloud.seatable.io',
+    'checkbox': False,
+    'rate': 10,
+    'geolocation-country-region': {'country_region': 'France'},
+    'geolocation-lat-lon': {'lng': 2.35, 'lat': 48.86},
+}
 
 
 def test_updateRow(base: Base, snapshot_json: SnapshotAssertion):
     table_name = 'test_updateRow'
-    create_table(base, table_name, SIMPLE_COLUMNS)
-    row_ids = append_rows(base, table_name, [
-        {'text': 'original', 'number': 1, 'checkbox': False},
-    ])
+    create_table(base, table_name, COLUMNS)
+    row_ids = append_rows(base, table_name, [ROWS[0]])
 
     path_parameters = {'base_uuid': base.uuid}
     body = {
@@ -27,7 +46,7 @@ def test_updateRow(base: Base, snapshot_json: SnapshotAssertion):
         'updates': [
             {
                 'row_id': row_ids[0],
-                'row': {'text': 'updated', 'number': 99, 'checkbox': True},
+                'row': UPDATE_ROW,
             }
         ],
     }
@@ -47,9 +66,12 @@ def test_updateRow(base: Base, snapshot_json: SnapshotAssertion):
     assert response.status_code == 200
 
     data = response.json()
-    assert data['text'] == 'updated'
-    assert data['number'] == 99
-    assert data['checkbox'] is True
+    assert data['text'] == 'updated-text'
+    assert data['number'] == 999.01
+    assert data['checkbox'] is False
+    assert data['single-select'] == 'option-2'
+    assert data['email'] == 'updated@seatable.io'
+    assert data['rate'] == 10
 
     matcher = path_type({
         '_id': (str,),
@@ -57,6 +79,7 @@ def test_updateRow(base: Base, snapshot_json: SnapshotAssertion):
         '_mtime': (str,),
         '_creator': (str,),
         '_last_modifier': (str,),
+        'auto-number-date-prefix': (str,),
     })
 
     assert snapshot_json(matcher=matcher) == data
@@ -64,20 +87,16 @@ def test_updateRow(base: Base, snapshot_json: SnapshotAssertion):
 
 def test_updateRow_multiple(base: Base):
     table_name = 'test_updateRow_multiple'
-    create_table(base, table_name, SIMPLE_COLUMNS)
-    row_ids = append_rows(base, table_name, [
-        {'text': 'row-1', 'number': 1},
-        {'text': 'row-2', 'number': 2},
-        {'text': 'row-3', 'number': 3},
-    ])
+    create_table(base, table_name, COLUMNS)
+    row_ids = append_rows(base, table_name, ROWS[:3])
 
     path_parameters = {'base_uuid': base.uuid}
     body = {
         'table_name': table_name,
         'updates': [
-            {'row_id': row_ids[0], 'row': {'text': 'updated-1', 'number': 10}},
-            {'row_id': row_ids[1], 'row': {'text': 'updated-2', 'number': 20}},
-            {'row_id': row_ids[2], 'row': {'text': 'updated-3', 'number': 30}},
+            {'row_id': row_ids[0], 'row': {'text': 'updated-1', 'number': 10, 'single-select': 'option-3', 'checkbox': False}},
+            {'row_id': row_ids[1], 'row': {'text': 'updated-2', 'number': 20, 'single-select': 'option-1', 'rate': 5}},
+            {'row_id': row_ids[2], 'row': {'text': 'updated-3', 'number': 30, 'email': 'multi@seatable.io', 'url': 'https://seatable.io'}},
         ],
     }
     headers = {'Authorization': f'Bearer {base.token}'}
@@ -90,10 +109,10 @@ def test_updateRow_multiple(base: Base):
 
 def test_deleteRow(base: Base):
     table_name = 'test_deleteRow'
-    create_table(base, table_name, SIMPLE_COLUMNS)
+    create_table(base, table_name, COLUMNS)
     row_ids = append_rows(base, table_name, [
-        {'text': 'to-delete-1'},
-        {'text': 'to-delete-2'},
+        ROWS[0],
+        ROWS[1],
         {'text': 'keep'},
     ])
 
@@ -122,10 +141,8 @@ def test_deleteRow(base: Base):
 
 def test_lockRows(base: Base):
     table_name = 'test_lockRows'
-    create_table(base, table_name, SIMPLE_COLUMNS)
-    row_ids = append_rows(base, table_name, [
-        {'text': 'lock-me'},
-    ])
+    create_table(base, table_name, COLUMNS)
+    row_ids = append_rows(base, table_name, [ROWS[0]])
 
     path_parameters = {'base_uuid': base.uuid}
     headers = {'Authorization': f'Bearer {base.token}'}

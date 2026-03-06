@@ -1,0 +1,33 @@
+{
+  "colorbys": {},
+  "data": {
+    "options": [
+      {
+        "color": "#9860E5",
+        "id": "0000",
+        "name": "alpha",
+        "textColor": "#000000"
+      },
+      {
+        "color": "#89D2EA",
+        "id": "ef3s",
+        "name": "beta",
+        "textColor": "#000000"
+      }
+    ]
+  },
+  "description": null,
+  "draggable": true,
+  "edit_metadata_permission_type": "",
+  "edit_metadata_permitted_group": [],
+  "edit_metadata_permitted_users": [],
+  "editable": true,
+  "key": "str",
+  "name": "single-select",
+  "permission_type": "",
+  "permitted_group": [],
+  "permitted_users": [],
+  "resizable": true,
+  "type": "single-select",
+  "width": 200
+}

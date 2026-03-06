@@ -7,7 +7,47 @@
   "_locked": null,
   "_locked_by": null,
   "_mtime": "str",
-  "checkbox": true,
-  "number": 99,
-  "text": "updated"
+  "auto-number-date-prefix": "str",
+  "auto-number-integer": "0001",
+  "auto-number-string-prefix": "row-0001",
+  "checkbox": false,
+  "collaborator": null,
+  "date-european": "2031-12-31T00:00:00+01:00",
+  "date-german": "2031-12-31T00:00:00+01:00",
+  "date-german-hours-minutes": "2031-12-31T11:30:00+01:00",
+  "date-iso": "2031-12-31T00:00:00+01:00",
+  "date-iso-hours-minutes": "2031-12-31T11:30:00+01:00",
+  "date-us": "2031-12-31T00:00:00+01:00",
+  "date-us-hours-minutes": "2031-12-31T11:30:00+01:00",
+  "digital-sign": {
+    "sign_image_url": "https://admin.seatable.com/assets/SeaTable256-256.png",
+    "sign_time": "2024-06-05T13:28:56.090+00:00",
+    "username": "some-user@auth.local"
+  },
+  "duration-hours-minutes": 7200,
+  "duration-hours-minutes-seconds": 7265,
+  "email": "updated@seatable.io",
+  "formula": "2032-12-31T00:00:00+01:00",
+  "formula-boolean-return-value": false,
+  "formula-float-return-value": 3.9000000000000004,
+  "formula-integer-return-value": 3,
+  "geolocation-country-region": {
+    "country_region": "France"
+  },
+  "geolocation-lat-lon": {
+    "lat": 48.86,
+    "lng": 2.35
+  },
+  "long-text": "## Updated\n- New Item 1\n- New Item 2",
+  "multiple-select": [
+    "option-3"
+  ],
+  "number": 999.01,
+  "number-decimal-dot-thousands-comma": 2000000.456,
+  "number-euro": 42,
+  "number-percent": 99.5,
+  "rate": 10,
+  "single-select": "option-2",
+  "text": "updated-text",
+  "url": "https://cloud.seatable.io"
 }

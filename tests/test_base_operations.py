@@ -383,22 +383,7 @@ def test_getRow(base: Base, snapshot_json, operation_id: str):
 
     create_table(base, table_name, COLUMNS)
 
-    row = {
-        'text': 'ABC',
-        'long-text': '## Heading\n- Item 1\n- Item 2',
-        'number': 499.99,
-        'date-iso': '2030/06/20',
-        'date-iso-hours-minutes': '2030/06/20 23:55',
-        'date-german': '20.06.2030',
-        'date-german-hours-minutes': '20.06.2030 23:55',
-        'checkbox': True,
-        'single-select': "option-1",
-        'multiple-select': ["option-1", "option-2"],
-        'rate': 2,
-        'url': 'https://cloud.seatable.io',
-        'email': 'demo@example.com'
-    }
-    row_id = append_rows(base, table_name, [row])[0]
+    row_id = append_rows(base, table_name, [ROWS[0]])[0]
 
     path_parameters = {'base_uuid': base.uuid, 'row_id': row_id}
     query = {'table_name': table_name, 'convert_keys': True}

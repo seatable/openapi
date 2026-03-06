@@ -20,6 +20,24 @@
     },
     {
       "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "long-text",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "long-text",
+      "width": 200
+    },
+    {
+      "colorbys": {},
       "data": {
         "decimal": "dot",
         "format": "number",
@@ -42,6 +60,386 @@
     },
     {
       "colorbys": {},
+      "data": {
+        "decimal": "dot",
+        "format": "number",
+        "thousands": "comma"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number-decimal-dot-thousands-comma",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "decimal": "comma",
+        "format": "percent",
+        "thousands": "no"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number-percent",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "decimal": "comma",
+        "format": "euro",
+        "thousands": "no"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number-euro",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "collaborator",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "collaborator",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "YYYY-MM-DD"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-iso",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "YYYY-MM-DD HH:mm"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-iso-hours-minutes",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "M/D/YYYY"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-us",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "M/D/YYYY HH:mm"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-us-hours-minutes",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "DD/MM/YYYY"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-european",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "DD.MM.YYYY"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-german",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "format": "DD.MM.YYYY HH:mm"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "date-german-hours-minutes",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "date",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "duration_format": "h:mm",
+        "format": "duration"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "duration-hours-minutes",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "duration",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "duration_format": "h:mm:ss",
+        "format": "duration"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "duration-hours-minutes-seconds",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "duration",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "options": [
+          {
+            "color": "#9860E5",
+            "id": "0000",
+            "name": "option-1",
+            "textColor": "#000000"
+          },
+          {
+            "color": "#89D2EA",
+            "id": "ef3s",
+            "name": "option-2",
+            "textColor": "#000000"
+          },
+          {
+            "color": "#59CB74",
+            "id": "38d7",
+            "name": "option-3",
+            "textColor": "#000000"
+          }
+        ]
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "single-select",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "single-select",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "options": [
+          {
+            "color": "#9860E5",
+            "id": "0000",
+            "name": "option-1",
+            "textColor": "#000000"
+          },
+          {
+            "color": "#89D2EA",
+            "id": "ef32",
+            "name": "option-2",
+            "textColor": "#000000"
+          },
+          {
+            "color": "#59CB74",
+            "id": "yze2",
+            "name": "option-3",
+            "textColor": "#000000"
+          }
+        ]
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "multiple-select",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "multiple-select",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "email",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "email",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "url",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "url",
+      "width": 200
+    },
+    {
+      "colorbys": {},
       "data": null,
       "description": null,
       "draggable": true,
@@ -56,6 +454,231 @@
       "permitted_users": [],
       "resizable": true,
       "type": "checkbox",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "rate_max_number": 10
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "rate",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "rate",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "dateAdd({date-iso}, 1, 'year')"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "1 + 2"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-integer-return-value",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "1.3 + 2.6"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-float-return-value",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "and(true(), false())"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-boolean-return-value",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "geo_format": "country_region",
+        "lang": "en"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "geolocation-country-region",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "geolocation",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "geo_format": "lng_lat"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "geolocation-lat-lon",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "geolocation",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "digits": 4,
+        "format": "0000"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "auto-number-integer",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "auto-number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "digits": 4,
+        "format": "0000",
+        "prefix": "row",
+        "prefix_type": "string"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "auto-number-string-prefix",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "auto-number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "digits": 4,
+        "format": "0000",
+        "prefix_type": "date"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "auto-number-date-prefix",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "auto-number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "digital-sign",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "digital-sign",
       "width": 200
     }
   ]
