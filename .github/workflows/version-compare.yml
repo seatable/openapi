@@ -84,11 +84,12 @@ jobs:
 
       # --- New version ---
 
-      - name: Write SeaTable license file (again after volume cleanup)
+      - name: Clean up seatable-data and write license file
         working-directory: version-compare
         env:
           SEATABLE_LICENSE: ${{ secrets.SEATABLE_LICENSE }}
         run: |
+          docker run --rm -v "$PWD/seatable-data:/data" alpine sh -c "rm -rf /data/*"
           mkdir -p seatable-data/seatable
           echo "${SEATABLE_LICENSE}" > seatable-data/seatable/seatable-license.txt
 

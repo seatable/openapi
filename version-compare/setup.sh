@@ -10,7 +10,7 @@ ADMIN_PASSWORD="admin1234"
 TEST_USER_EMAIL="testuser@example.com"
 TEST_USER_PASSWORD="testuser1234"
 
-TIMEOUT=40
+TIMEOUT=60
 INTERVAL=10
 
 echo "Waiting for SeaTable to become available..."
