@@ -1,4 +1,5 @@
 /.idea
+/.venv
 /generator
 /tests/.env
 /tests/.venv

@@ -4,6 +4,7 @@ This repository contains all supported API calls for the SeaTable Server as Open
 
 1. Generate the online API reference at https://api.seatable.com (via ReadMe.com).
 2. Generate the Postman collection at https://www.postman.com/seatable.
+3. Generate the official [SeaTable PHP client](https://github.com/seatable/seatable-api-php) via OpenAPI Generator.
 
 The repository is organized into version branches (e.g. `v6.1`, `v6.2`).
 
@@ -80,7 +81,7 @@ You can choose the Docker image per version — use `seatable/seatable-enterpris
 
 The workflow starts each version via Docker, runs the test suite against both, and uploads a report highlighting any differences in API responses. The Docker setup is in the `version-compare/` directory.
 
-**Required GitHub Secrets:** `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (PAT with read access) for pulling private images.
+**Required GitHub Secrets:** `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (PAT with read access) for pulling private images, and `SEATABLE_LICENSE` (SeaTable Enterprise license file content).
 
 ## Publish Postman Collection
 

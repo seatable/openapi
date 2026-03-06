@@ -1,0 +1,62 @@
+{
+  "columns": [
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "text",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "text",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "decimal": "dot",
+        "format": "number",
+        "thousands": "no"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "checkbox",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "checkbox",
+      "width": 200
+    }
+  ]
+}

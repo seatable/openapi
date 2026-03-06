@@ -1,0 +1,60 @@
+{
+  "columns": [
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "email",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "email",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "url",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "url",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "rate_max_number": 10
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "rate",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "rate",
+      "width": 200
+    }
+  ]
+}

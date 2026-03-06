@@ -1,0 +1,13 @@
+{
+  "_archived": false,
+  "_creator": "str",
+  "_ctime": "str",
+  "_id": "str",
+  "_last_modifier": "str",
+  "_locked": null,
+  "_locked_by": null,
+  "_mtime": "str",
+  "checkbox": true,
+  "number": 99,
+  "text": "updated"
+}
