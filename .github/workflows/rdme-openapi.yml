@@ -2,7 +2,7 @@
 # Documentation: https://docs.readme.com/docs/rdme or https://github.com/readmeio/rdme
 #
 # The version is derived from the branch name (e.g. v6.2 -> 6.2).
-# The ReadMe category IDs are stored in .readme-ids.json (one per branch).
+# The ReadMe category IDs are stored in .github/readme-ids.json (one per branch).
 #
 # Process for new version:
 #   1. git checkout -b vX.Y
@@ -10,7 +10,7 @@
 #   3. Get the new category IDs from https://dash.readme.com/project/seatable/vX.Y/reference
 #      or via API: https://docs.readme.com/main/reference/getcategories
 #      (use the API key from https://dash.readme.com/project/seatable/vX.Y/api-key as password - username stays empty)
-#   4. Update .readme-ids.json with the new IDs.
+#   4. Update .github/readme-ids.json with the new IDs.
 #   5. Update the "category" value in all intro/*.md frontmatter.
 #   6. Update the version in all YAML spec files.
 #   7. git add . && git commit && git push --set-upstream origin vX.Y
@@ -37,14 +37,14 @@ jobs:
 
       - name: Read ReadMe IDs from config
         run: |
-          echo "ID_AUTH=$(jq -r '.authentication' .readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_BASE=$(jq -r '.base_operations' .readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_FILE=$(jq -r '.file_operations' .readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_SYSADMIN=$(jq -r '.system_admin_account_operations' .readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_TEAMADMIN=$(jq -r '.team_admin_account_operations' .readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_USER=$(jq -r '.user_account_operations' .readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_PING=$(jq -r '.ping_and_info' .readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_PYTHON=$(jq -r '.\"python-scheduler\"' .readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_AUTH=$(jq -r '.authentication' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_BASE=$(jq -r '.base_operations' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_FILE=$(jq -r '.file_operations' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_SYSADMIN=$(jq -r '.system_admin_account_operations' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_TEAMADMIN=$(jq -r '.team_admin_account_operations' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_USER=$(jq -r '.user_account_operations' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_PING=$(jq -r '.ping_and_info' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_PYTHON=$(jq -r '.\"python-scheduler\"' .github/readme-ids.json)" >> $GITHUB_ENV
 
       - name: Check links in docs and specs
         uses: lycheeverse/lychee-action@v2

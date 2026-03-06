@@ -24,7 +24,7 @@ jobs:
       - name: Install CLI tools
         run: sudo apt-get update && sudo apt-get install -y jq moreutils
       - name: Sync with Postman
-        run: ./sync-with-postman.sh
+        run: ./.github/sync-with-postman.sh
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         # Always upload artifacts, even on failed runs
