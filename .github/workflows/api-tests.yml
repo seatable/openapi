@@ -17,7 +17,7 @@ on:
         description: "SeaTable version (e.g. 6.1.0)"
         required: true
       image:
-        description: "Docker image"
+        description: "Docker Hub repository"
         required: true
         type: choice
         default: "seatable/seatable-enterprise"

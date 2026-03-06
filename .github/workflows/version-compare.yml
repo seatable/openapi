@@ -17,7 +17,7 @@ on:
         description: "Baseline version (e.g. 6.0.10)"
         required: true
       old_image:
-        description: "Docker image for baseline"
+        description: "Docker Hub repository for baseline"
         required: true
         type: choice
         default: "seatable/seatable-enterprise"
@@ -28,7 +28,7 @@ on:
         description: "New version to compare (e.g. 6.1.0)"
         required: true
       new_image:
-        description: "Docker image for new version"
+        description: "Docker Hub repository for new version"
         required: true
         type: choice
         default: "seatable/seatable-enterprise-testing"
