@@ -1,0 +1,138 @@
+# Compares API responses between two SeaTable versions.
+#
+# Starts each version via Docker, runs the test suite, and reports
+# any differences in API behavior between the two versions.
+#
+# Required GitHub Secrets:
+#   DOCKERHUB_USERNAME - Docker Hub username (for private image access)
+#   DOCKERHUB_TOKEN    - Docker Hub Personal Access Token
+#   SEATABLE_LICENSE   - SeaTable Enterprise license file content
+
+name: Version Compare
+
+on:
+  workflow_dispatch:
+    inputs:
+      old_version:
+        description: "Baseline version (e.g. 6.0.10)"
+        required: true
+      old_image:
+        description: "Docker image for baseline"
+        required: true
+        default: "seatable/seatable-enterprise"
+      new_version:
+        description: "New version to compare (e.g. 6.1.0)"
+        required: true
+      new_image:
+        description: "Docker image for new version"
+        required: true
+        default: "seatable/seatable-enterprise-testing"
+
+env:
+  SEATABLE_SERVER: "http://localhost"
+  SEATABLE_USERNAME: "testuser@example.com"
+  SEATABLE_PASSWORD: "testuser1234"
+  SEATABLE_ADMIN_USERNAME: "admin@example.com"
+  SEATABLE_ADMIN_PASSWORD: "admin1234"
+  CLEANUP_AFTER_TESTS: "True"
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install -r tests/requirements.txt
+
+      - name: Write SeaTable license file
+        working-directory: version-compare
+        env:
+          SEATABLE_LICENSE: ${{ secrets.SEATABLE_LICENSE }}
+        run: |
+          mkdir -p seatable-data/seatable
+          echo "${SEATABLE_LICENSE}" > seatable-data/seatable/seatable-license.txt
+
+      # --- Baseline (old version) ---
+
+      - name: Start SeaTable ${{ inputs.old_version }}
+        working-directory: version-compare
+        run: |
+          SEATABLE_IMAGE=${{ inputs.old_image }} SEATABLE_VERSION=${{ inputs.old_version }} docker compose up -d
+          ./setup.sh
+
+      - name: Run tests against ${{ inputs.old_version }} (create baseline snapshots)
+        working-directory: tests
+        run: |
+          pytest --snapshot-update --color=yes -v 2>&1 | tee /tmp/baseline-output.txt || true
+
+      - name: Stop SeaTable ${{ inputs.old_version }}
+        working-directory: version-compare
+        run: SEATABLE_VERSION=${{ inputs.old_version }} docker compose down -v
+
+      # --- New version ---
+
+      - name: Start SeaTable ${{ inputs.new_version }}
+        working-directory: version-compare
+        run: |
+          SEATABLE_IMAGE=${{ inputs.new_image }} SEATABLE_VERSION=${{ inputs.new_version }} docker compose up -d
+          ./setup.sh
+
+      - name: Run tests against ${{ inputs.new_version }} (compare with baseline)
+        working-directory: tests
+        run: |
+          pytest --color=yes -v 2>&1 | tee /tmp/compare-output.txt
+        continue-on-error: true
+
+      - name: Generate diff report
+        if: always()
+        run: |
+          mkdir -p /tmp/report
+
+          cat > /tmp/report/summary.md << EOF
+          # API Version Comparison Report
+
+          **Baseline:** ${{ inputs.old_image }}:${{ inputs.old_version }}
+          **Compared:** ${{ inputs.new_image }}:${{ inputs.new_version }}
+
+          EOF
+
+          if [ -f /tmp/compare-output.txt ] && grep -q "FAILED" /tmp/compare-output.txt; then
+            echo "## Differences Found" >> /tmp/report/summary.md
+            echo "" >> /tmp/report/summary.md
+            echo '```' >> /tmp/report/summary.md
+            grep -E "FAILED|AssertionError|snapshot" /tmp/compare-output.txt >> /tmp/report/summary.md || true
+            echo '```' >> /tmp/report/summary.md
+          else
+            echo "## No Differences Found" >> /tmp/report/summary.md
+            echo "" >> /tmp/report/summary.md
+            echo "All API responses match between versions." >> /tmp/report/summary.md
+          fi
+
+          cp /tmp/baseline-output.txt /tmp/report/ 2>/dev/null || true
+          cp /tmp/compare-output.txt /tmp/report/ 2>/dev/null || true
+
+      - name: Stop SeaTable ${{ inputs.new_version }}
+        if: always()
+        working-directory: version-compare
+        run: SEATABLE_VERSION=${{ inputs.new_version }} docker compose down -v
+
+      - name: Upload comparison report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-compare-${{ inputs.old_version }}-vs-${{ inputs.new_version }}
+          path: /tmp/report/
+          retention-days: 30

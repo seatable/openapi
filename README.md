@@ -25,82 +25,62 @@ To publish a new API version (e.g. v6.2):
 6. Update the version in all YAML spec files.
 7. Push the branch: `git push --set-upstream origin v6.2`
 
-## Automatic tests
+## Tests
 
-This repository contains automated tests to detect possible regressions. The tests use [Schemathesis](https://schemathesis.readthedocs.io/en/stable/) to extract information from the OpenAPI files and [pytest](https://docs.pytest.org/en/8.2.x/) to run the actual tests.
+This repository contains tests to detect changes in SeaTable's API behavior between versions. The tests use [Schemathesis](https://schemathesis.readthedocs.io/en/stable/) to extract information from the OpenAPI files, [pytest](https://docs.pytest.org/en/8.2.x/) to run the tests, and [syrupy](https://github.com/tophat/syrupy) for snapshot-based comparison.
 
-Snapshots are stored and compared using [syrupy](https://github.com/tophat/syrupy) to detect possible regressions.
+There are two ways to run the tests:
 
-### Prerequisites
+### Option 1: Manual tests against an external server
 
+Run the tests locally against any SeaTable Server. Useful for testing a specific server or for developing new tests.
+
+**Prerequisites:**
 - Python 3.10+
 - pip
 - Publicly available SeaTable Server
 - Two accounts (user and system-admin permission)
 
-### Preparation of local test setup
-
-For local test execution, we recommend setting up a virtual environment.
+**Setup:**
 
 ```bash
 cd tests
 
-# Create virtual environment (instead of python, you might also use python3)
+# Create and activate virtual environment
 python -m venv .venv
-
-# Activate virtual environment
 source .venv/bin/activate
 
-# Install dependencies - only once!
+# Install dependencies
 pip install -r requirements.txt
 
 # Create environment variables
 cp env.example .env
 # edit .env with the editor of your choice and save it...
-
-# Deactivate virtual environment
-deactivate
 ```
 
-### Local execution of tests
-
-With this virtual environment it is super easy to run your tests locally.
+**Run tests:**
 
 ```bash
 cd tests
-
-# Activate virtual environment
 source .venv/bin/activate
-
-# Source environment variables
 source .env
 
-# Run tests
-# You can specify specific test scenarios or run all tests
+# Run all tests or specific test files
 pytest                                           # runs all files starting with test_xxx
-pytest test_base_operations.py --color=yes -vv   # runs only the scenario from test_base_operations.py (verbose mode)
-
-# Deactivate virtual environment (optional)
-deactivate
+pytest test_base_operations.py --color=yes -vv   # runs only one specific test file (verbose mode)
 ```
 
-### Create/Update Snapshots
+**Snapshots:** The tests compare API responses against stored snapshots. On first run, generate them with `pytest --snapshot-update`. The snapshots are stored in `__snapshots__/`. Make sure to commit new or updated snapshot files.
 
-If you add a test for the first time, you might receive the result that all tests failed.
+### Option 2: Automated version comparison via Docker
 
-```bash
-============================================== short test summary info ===============================================
-FAILED test_base_operations.py::test_createBase - assert [- snapshot] == [+ received]
-FAILED test_base_operations.py::test_createTable[createTable] - assert [- snapshot] == [+ received]
-...
-```
+Compare API behavior between two SeaTable versions automatically. Go to GitHub Actions → "Version Compare" → "Run workflow" and enter the old and new version numbers.
 
-The reason is that the test cases compare previous outputs (snapshots) with the real results. Because you don't have any snapshots yet, pytest has nothing to compare with and all tests will fail.
+You can choose the Docker image per version — use `seatable/seatable-enterprise` for released versions and `seatable/seatable-enterprise-testing` (private) for unreleased versions.
 
-To generate or update your snapshots just run pytest with the `--snapshot-update` flag to instruct syrupy to generate and update all snapshot files.
-The snapshots will be stored in the directory `__snapshots__`.
+The workflow starts each version via Docker, runs the test suite against both, and uploads a report highlighting any differences in API responses. The Docker setup is in the `version-compare/` directory.
 
-Make sure to commit new snapshot files or any changes you made to them.
+**Required GitHub Secrets:** `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (PAT with read access) for pulling private images.
 
 ## Publish Postman Collection
 

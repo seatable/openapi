@@ -1,0 +1,68 @@
+services:
+  seatable-server:
+    image: ${SEATABLE_IMAGE:-seatable/seatable-enterprise}:${SEATABLE_VERSION:?Variable is not set}
+    container_name: seatable-server
+    environment:
+      - SEATABLE_MYSQL_DB_HOST=mariadb
+      - SEATABLE_MYSQL_DB_USER=root
+      - SEATABLE_MYSQL_DB_PORT=3306
+      - SEATABLE_MYSQL_DB_PASSWORD=seatable
+      - INIT_SEATABLE_MYSQL_ROOT_PASSWORD=seatable
+      - SEATABLE_MYSQL_DB_DTABLE_DB_NAME=dtable_db
+      - SEATABLE_MYSQL_DB_CCNET_DB_NAME=ccnet_db
+      - SEATABLE_MYSQL_DB_SEAFILE_DB_NAME=seafile_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=seatable
+      - JWT_PRIVATE_KEY=test-jwt-private-key-for-ci
+      - SEATABLE_SERVER_HOSTNAME=localhost
+      - SEATABLE_SERVER_PROTOCOL=http
+      - SEATABLE_ADMIN_EMAIL=admin@example.com
+      - SEATABLE_ADMIN_PASSWORD=admin1234
+      - TIME_ZONE=Europe/Berlin
+    volumes:
+      - ./seatable-data:/shared
+    ports:
+      - "80:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+
+  mariadb:
+    image: mariadb:11.8.3-noble
+    container_name: mariadb
+    command: ["mariadbd", "--innodb_snapshot_isolation=OFF"]
+    environment:
+      - MYSQL_ROOT_PASSWORD=seatable
+      - MYSQL_LOG_CONSOLE=true
+      - MARIADB_AUTO_UPGRADE=1
+      - TZ=${TIME_ZONE}
+    volumes:
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql:ro
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect", "--mariadbupgrade", "--innodb_initialized"]
+      interval: 10s
+      retries: 6
+      start_period: 20s
+      timeout: 10s
+
+  redis:
+    image: redis:8.2.2-bookworm
+    container_name: redis
+    command: ["redis-server", "--requirepass", "seatable"]
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "seatable", "ping"]
+      interval: 10s
+      retries: 3
+      timeout: 5s
+
+networks:
+  backend:
