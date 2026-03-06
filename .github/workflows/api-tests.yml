@@ -85,9 +85,9 @@ jobs:
         run: |
           mkdir -p /tmp/report
 
-          passed=$(grep -oP '\d+ passed' /tmp/test-output.txt | head -1 || echo "0 passed")
-          failed=$(grep -oP '\d+ failed' /tmp/test-output.txt | head -1 || echo "")
-          errors=$(grep -oP '\d+ error' /tmp/test-output.txt | head -1 || echo "")
+          passed=$(grep -oE '[0-9]+ passed' /tmp/test-output.txt | head -1 || echo "0 passed")
+          failed=$(grep -oE '[0-9]+ failed' /tmp/test-output.txt | head -1 || echo "")
+          errors=$(grep -oE '[0-9]+ error' /tmp/test-output.txt | head -1 || echo "")
 
           cat > /tmp/report/summary.md << HEADER
           # API Test Report
@@ -136,6 +136,6 @@ jobs:
 
       - name: Fail if tests failed
         run: |
-          if grep -qP '\d+ (failed|error)' /tmp/test-output.txt; then
+          if grep -qE '[0-9]+ (failed|error)' /tmp/test-output.txt; then
             exit 1
           fi
