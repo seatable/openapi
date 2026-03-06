@@ -15,6 +15,10 @@ Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. 
 | 9 | DELETE /links/ reports success for non-existing links | Medium | Yes — return count 0 |
 | 12 | No createRowComment endpoint | Medium | Yes — re-added in 6.1 |
 | 17 | addNewUser returns 403 for license limit | Medium | Yes — use 409 or 402 |
+| 22 | updateColumn to link type creates broken column | Medium | Yes — validate column_data |
+| 23 | Temp API-Token creation uses GET instead of POST | Low | Yes — use POST |
+| 24 | app_name inconsistently used as path vs body param | Low | No — document behavior |
+| 25 | Base-Token endpoints return different field sets | Low | No — document behavior |
 | 2 | Select columns: unknown options auto-created | Low | No — acceptable behavior |
 | 6 | Geolocation: partial data accepted | Low | Yes — require both lat/lng |
 | 8 | POST /rows/ ignores `convert_keys` in response | Low | No — feature request |
@@ -142,7 +146,7 @@ Unlinking a row pair that doesn't exist returns `{ deleted_links_count: 1, succe
 
 There is no API endpoint to create a row comment. The `create_row_comment` schema exists in `base_operations.yaml` but no POST operation is defined on `/api-gateway/api/v2/dtables/{base_uuid}/comments/` (returns 405 Method Not Allowed).
 
-**Status:** Will be re-added in 6.1.
+**Status:** Re-added in 6.1. OpenAPI spec updated.
 
 ### 17. addNewUser returns 403 for license limit
 
@@ -150,9 +154,51 @@ There is no API endpoint to create a row comment. The `create_row_comment` schem
 
 `POST /api/v2.1/admin/users/` returns `403 {"error_msg": "The number of users exceeds the limit."}` when the license user limit is reached. A 403 typically means insufficient permissions, which is misleading. A 409 Conflict or 402 Payment Required would be more appropriate.
 
+### 22. updateColumn to link type creates broken column
+
+**Severity:** Medium — data integrity
+
+Changing a column's type to `link` via `updateColumn` creates a broken column that shows a blank page when opening column settings in the UI. This happens regardless of whether `column_data` is provided with `table` and `other_table` values.
+
+**Recommendation:** Validate that the required `column_data` fields for link columns are present and valid, or reject the type change with a clear error.
+
 ---
 
 ## Low Severity
+
+### 23. Temporary API-Token creation uses GET instead of POST
+
+**Severity:** Low — REST convention violation
+
+`GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/temp-api-token/` creates a new temporary API token. By REST conventions, resource creation should use POST, not GET. GET requests should be idempotent and safe.
+
+**Recommendation:** Change to POST. This is a breaking change, so it may need a deprecation period.
+
+### 24. app_name inconsistently used as path parameter vs body parameter
+
+**Severity:** Low
+
+The `app_name` parameter is used as a body parameter when creating an API token (`POST .../api-tokens/`) but as a path parameter when updating or deleting one (`PUT/DELETE .../api-tokens/{app_name}/`).
+
+**Assessment:** This is intentional — the name is set during creation (body) and used as identifier afterwards (path). But it could be confusing for API consumers.
+
+### 25. Base-Token endpoints return different field sets
+
+**Severity:** Low — inconsistent but functional
+
+The two base-token endpoints return different response fields:
+
+| Field | `getBaseTokenWithApiToken` | `getBaseTokenWithAccountToken` |
+|-------|:-:|:-:|
+| `access_token` | yes | yes |
+| `dtable_uuid` | yes | yes |
+| `app_name` | yes | no |
+| `dtable_server` | yes | no |
+| `workspace_id` | yes | no |
+| `use_api_gateway` | yes | no |
+| `dtable_name` | yes | no |
+
+**Assessment:** The extra fields from the API-Token endpoint are useful context. Consider adding them to the Account-Token endpoint as well for consistency.
 
 ### 2. Single-select / multiple-select: unknown options are auto-created
 

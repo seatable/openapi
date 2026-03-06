@@ -1651,7 +1651,7 @@ components:
       properties:
         geo_format:
           type: string
-          enum: ["lng_lat", "county_region"]
+          enum: ["lng_lat", "country_region"]
 
     geolocation_column:
       title: Geolocation
@@ -2036,14 +2036,32 @@ components:
         - $ref: "#/components/schemas/table_name_object"
         - $ref: "#/components/schemas/autonumber_column"
     autonumber_column_format:
-      description: Specify the auto number column.
+      description: >-
+        Specify the auto number column. The `format` field defines the number
+        pattern (e.g. "0000" for 4 digits). Use `prefix_type` to add a prefix:
+        "string" for a custom text prefix, or "date" for a date-based prefix.
       type: object
       properties:
         format:
           type: string
-          example: "ID-0000"
+          description: The number format pattern.
+          example: "0000"
+        digits:
+          type: integer
+          description: Number of digits (must match the zeros in `format`).
+          example: 4
+        prefix_type:
+          type: string
+          description: Type of prefix — "string" for a custom prefix, "date" for a date-based prefix (YYYYMMDD).
+          enum: ["string", "date"]
+          example: "string"
+        prefix:
+          type: string
+          description: The prefix value (only used when `prefix_type` is "string").
+          example: "ID-"
       required:
         - format
+        - digits
 
     button_column:
       title: Button column
@@ -3983,6 +4001,49 @@ paths:
 
   # Row Comments
   /api-gateway/api/v2/dtables/{base_uuid}/comments/:
+    post:
+      tags:
+        - Row Comments
+      summary: Create Row Comment
+      operationId: createRowComment
+      description: Create a new comment on a row.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                row_id:
+                  type: string
+                  description: The id of the row.
+                  example: Qtf7xPmoRaiFyQPO1aENTjb
+                comment:
+                  type: string
+                  description: The comment text.
+                  example: "Let's discuss this tomorrow"
+              required:
+                - row_id
+                - comment
+      security:
+        - BaseTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                id: 4
+                author: 28dhr6e7d1754bb4afa2c2cb7369d244@auth.local
+                comment: "Let's discuss this tomorrow"
+                dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
+                row_id: Qtf7xPmoRaiFyQPO1aENTjb
+                created_at: "2021-01-15T14:00:00.000Z"
+                updated_at: "2021-01-15T14:00:00.000Z"
+                resolved: 0
     get:
       tags:
         - Row Comments
