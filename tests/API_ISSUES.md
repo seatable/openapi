@@ -1,6 +1,6 @@
 # SeaTable API — Issues and Inconsistencies
 
-Issues discovered during automated API testing against SeaTable 6.0.10. These are server-side API behaviors — not bugs in the OpenAPI spec or test suite.
+Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. These are server-side API behaviors — not bugs in the OpenAPI spec or test suite.
 
 ## Summary
 
@@ -25,6 +25,7 @@ Issues discovered during automated API testing against SeaTable 6.0.10. These ar
 | 17 | addNewUser returns 403 for license limit | Low | Yes — use 409 or 402 |
 | 18 | listColumns excludes auto-created Name column | Low | No — document behavior |
 | 19 | deleteGroup fails silently-ish when group has bases | Low | Fixed in this repo |
+| 20 | Ping endpoints: inconsistent response formats | Low | Fixed in this repo |
 
 ---
 
@@ -227,3 +228,21 @@ The `deleteUserShare` operation in `user_account_operations.yaml` had no `reques
 `DELETE /api/v2.1/groups/{group_id}/` returns `400` with `"Cannot delete group with bases"` if the group still contains bases. The error is correct but undocumented — callers need to delete or move all bases first.
 
 **Fixed in:** This repository — added documentation note to `deleteGroup` in all three specs.
+
+### 20. Ping endpoints: inconsistent response formats
+
+**Severity:** Low
+
+The five ping endpoints return three different response formats:
+
+| Endpoint | Content-Type | Body |
+|----------|-------------|------|
+| `GET /api2/ping/` | `application/json` | `"pong"` (JSON string) |
+| `GET /api2/auth/ping/` | `application/json` | `"pong"` (JSON string) |
+| `GET /dtable-server/ping/` | `text/html` | `pong` (plain text) |
+| `GET /dtable-db/ping/` | `application/json` | `{"ret": "pong"}` (JSON object) |
+| `GET /api-gateway/api/v2/ping/` | `application/json` | `{"ret": "pong"}` (JSON object) |
+
+**Recommendation:** Harmonize all ping endpoints to return the same format — ideally `application/json` with `{"ret": "pong"}` for consistency with dtable-db and api-gateway.
+
+**Workaround:** OpenAPI spec in this repository has been adjusted to match actual behavior.
