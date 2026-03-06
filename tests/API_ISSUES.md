@@ -146,7 +146,7 @@ Unlinking a row pair that doesn't exist returns `{ deleted_links_count: 1, succe
 
 There is no API endpoint to create a row comment. The `create_row_comment` schema exists in `base_operations.yaml` but no POST operation is defined on `/api-gateway/api/v2/dtables/{base_uuid}/comments/` (returns 405 Method Not Allowed).
 
-**Status:** Re-added in 6.1. OpenAPI spec updated.
+**Status:** Will be re-added in 6.2.
 
 ### 17. addNewUser returns 403 for license limit
 

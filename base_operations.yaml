@@ -4001,49 +4001,6 @@ paths:
 
   # Row Comments
   /api-gateway/api/v2/dtables/{base_uuid}/comments/:
-    post:
-      tags:
-        - Row Comments
-      summary: Create Row Comment
-      operationId: createRowComment
-      description: Create a new comment on a row.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                row_id:
-                  type: string
-                  description: The id of the row.
-                  example: Qtf7xPmoRaiFyQPO1aENTjb
-                comment:
-                  type: string
-                  description: The comment text.
-                  example: "Let's discuss this tomorrow"
-              required:
-                - row_id
-                - comment
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                id: 4
-                author: 28dhr6e7d1754bb4afa2c2cb7369d244@auth.local
-                comment: "Let's discuss this tomorrow"
-                dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
-                row_id: Qtf7xPmoRaiFyQPO1aENTjb
-                created_at: "2021-01-15T14:00:00.000Z"
-                updated_at: "2021-01-15T14:00:00.000Z"
-                resolved: 0
     get:
       tags:
         - Row Comments
