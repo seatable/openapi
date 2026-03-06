@@ -8,7 +8,7 @@
 #   DOCKERHUB_TOKEN    - Docker Hub Personal Access Token
 #   SEATABLE_LICENSE   - SeaTable Enterprise license file content
 
-name: Version Compare
+name: "[RUN] Version Compare"
 
 on:
   workflow_dispatch:
@@ -19,14 +19,22 @@ on:
       old_image:
         description: "Docker image for baseline"
         required: true
+        type: choice
         default: "seatable/seatable-enterprise"
+        options:
+          - "seatable/seatable-enterprise"
+          - "seatable/seatable-enterprise-testing"
       new_version:
         description: "New version to compare (e.g. 6.1.0)"
         required: true
       new_image:
         description: "Docker image for new version"
         required: true
+        type: choice
         default: "seatable/seatable-enterprise-testing"
+        options:
+          - "seatable/seatable-enterprise"
+          - "seatable/seatable-enterprise-testing"
 
 env:
   SEATABLE_SERVER: "http://localhost"

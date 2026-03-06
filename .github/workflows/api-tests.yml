@@ -1,0 +1,141 @@
+# Validates API responses against OpenAPI schemas.
+#
+# Starts SeaTable via Docker, runs the test suite with schema validation,
+# and reports any spec violations.
+#
+# Required GitHub Secrets:
+#   DOCKERHUB_USERNAME - Docker Hub username (for private image access)
+#   DOCKERHUB_TOKEN    - Docker Hub Personal Access Token
+#   SEATABLE_LICENSE   - SeaTable Enterprise license file content
+
+name: "[RUN] API Tests"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "SeaTable version (e.g. 6.1.0)"
+        required: true
+      image:
+        description: "Docker image"
+        required: true
+        type: choice
+        default: "seatable/seatable-enterprise"
+        options:
+          - "seatable/seatable-enterprise"
+          - "seatable/seatable-enterprise-testing"
+
+env:
+  SEATABLE_SERVER: "http://localhost"
+  SEATABLE_USERNAME: "testuser@example.com"
+  SEATABLE_PASSWORD: "testuser1234"
+  SEATABLE_ADMIN_USERNAME: "admin@example.com"
+  SEATABLE_ADMIN_PASSWORD: "admin1234"
+  CLEANUP_AFTER_TESTS: "True"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Determine SeaTable version
+        id: version
+        run: |
+          echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+          echo "image=${{ inputs.image }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        run: pip install -r tests/requirements.txt
+
+      - name: Write SeaTable license file
+        working-directory: version-compare
+        env:
+          SEATABLE_LICENSE: ${{ secrets.SEATABLE_LICENSE }}
+        run: |
+          mkdir -p seatable-data/seatable
+          echo "${SEATABLE_LICENSE}" > seatable-data/seatable/seatable-license.txt
+
+      - name: Start SeaTable ${{ steps.version.outputs.version }}
+        working-directory: version-compare
+        run: |
+          SEATABLE_IMAGE=${{ steps.version.outputs.image }} SEATABLE_VERSION=${{ steps.version.outputs.version }} docker compose up -d
+          ./setup.sh
+
+      - name: Run API tests
+        working-directory: tests
+        run: |
+          pytest --snapshot-update --color=yes -v 2>&1 | tee /tmp/test-output.txt
+        continue-on-error: true
+
+      - name: Generate report
+        if: always()
+        run: |
+          mkdir -p /tmp/report
+
+          passed=$(grep -oP '\d+ passed' /tmp/test-output.txt | head -1 || echo "0 passed")
+          failed=$(grep -oP '\d+ failed' /tmp/test-output.txt | head -1 || echo "")
+          errors=$(grep -oP '\d+ error' /tmp/test-output.txt | head -1 || echo "")
+
+          cat > /tmp/report/summary.md << HEADER
+          # API Test Report
+
+          **SeaTable:** ${{ steps.version.outputs.image }}:${{ steps.version.outputs.version }}
+          **Branch:** ${GITHUB_REF_NAME}
+          **Results:** ${passed} ${failed} ${errors}
+          HEADER
+
+          if grep -qE "FAILED|ERROR" /tmp/test-output.txt; then
+            echo "" >> /tmp/report/summary.md
+            echo "## Failures" >> /tmp/report/summary.md
+            echo "" >> /tmp/report/summary.md
+            echo '```' >> /tmp/report/summary.md
+            grep -E "^FAILED" /tmp/test-output.txt >> /tmp/report/summary.md || true
+            echo '```' >> /tmp/report/summary.md
+
+            if grep -q "CheckFailed" /tmp/test-output.txt; then
+              echo "" >> /tmp/report/summary.md
+              echo "## Schema Validation Failures" >> /tmp/report/summary.md
+              echo "" >> /tmp/report/summary.md
+              echo '```' >> /tmp/report/summary.md
+              grep -B 2 -A 10 "Response violates schema" /tmp/test-output.txt \
+                | head -200 >> /tmp/report/summary.md || true
+              echo '```' >> /tmp/report/summary.md
+            fi
+          else
+            echo "" >> /tmp/report/summary.md
+            echo "All tests passed. API responses conform to OpenAPI schemas." >> /tmp/report/summary.md
+          fi
+
+          cp /tmp/test-output.txt /tmp/report/
+
+      - name: Stop SeaTable
+        if: always()
+        working-directory: version-compare
+        run: SEATABLE_VERSION=${{ steps.version.outputs.version }} docker compose down -v
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-tests-${{ steps.version.outputs.version }}
+          path: /tmp/report/
+          retention-days: 30
+
+      - name: Fail if tests failed
+        run: |
+          if grep -qP '\d+ (failed|error)' /tmp/test-output.txt; then
+            exit 1
+          fi
