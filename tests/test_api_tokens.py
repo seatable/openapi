@@ -25,6 +25,7 @@ def test_createApiToken(base: Base, account_token: Secret, snapshot_json: Snapsh
         'api_token': (str,),
         'generated_at': (str,),
         'generated_by': (str,),
+        'last_access': (str,),
     })
 
     assert snapshot_json(matcher=matcher) == data
@@ -59,14 +60,17 @@ def test_listApiTokens(base: Base, account_token: Secret, snapshot_json: Snapsho
     token_names = [t['app_name'] for t in data['api_tokens']]
     assert 'test-token-list' in token_names
 
-    matcher = path_type({
-        r"api_tokens\..*\.api_token": (str,),
-        r"api_tokens\..*\.generated_at": (str,),
-        r"api_tokens\..*\.generated_by": (str,),
-        r"api_tokens\..*\.last_access": (str, type(None)),
-    }, regex=True)
+    # Filter to only our token for stable snapshot comparison
+    our_token = next(t for t in data['api_tokens'] if t['app_name'] == 'test-token-list')
 
-    assert snapshot_json(matcher=matcher) == data
+    matcher = path_type({
+        'api_token': (str,),
+        'generated_at': (str,),
+        'generated_by': (str,),
+        'last_access': (str, type(None)),
+    })
+
+    assert snapshot_json(matcher=matcher) == our_token
 
     # Cleanup
     path_parameters['app_name'] = 'test-token-list'

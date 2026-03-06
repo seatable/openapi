@@ -1,4 +1,5 @@
 import os
+import re
 import pytest
 import schemathesis
 import secrets
@@ -10,6 +11,56 @@ from requests import Response
 from schemathesis import Case
 from syrupy.extensions.json import JSONSnapshotExtension
 from typing import Generator
+
+# Patterns for volatile values that change between test runs
+_TIMESTAMP_RE = re.compile(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}')
+_AUTH_LOCAL_RE = re.compile(r'^[0-9a-f]+@auth\.local$')
+_ROW_ID_RE = re.compile(r'^[A-Za-z0-9_-]{22}$')
+
+
+def normalize(data):
+    """Replace volatile values with type placeholders for stable snapshot comparison.
+
+    Handles: ISO timestamps, internal @auth.local emails, 22-char row IDs.
+    """
+    if isinstance(data, dict):
+        return {k: normalize(v) for k, v in data.items()}
+    if isinstance(data, list):
+        return [normalize(v) for v in data]
+    if isinstance(data, str):
+        if _TIMESTAMP_RE.match(data):
+            return 'str'
+        if _AUTH_LOCAL_RE.match(data):
+            return 'str'
+        if _ROW_ID_RE.match(data):
+            return 'str'
+        return data
+    return data
+
+
+def normalize_row(row, keep_keys=None):
+    """Normalize a row dict: replace volatile values and rename dynamic column keys.
+
+    System keys (_id, _ctime, ...) and keys listed in keep_keys are preserved.
+    Other short alphanumeric keys (column keys like 'D4Z6') are renamed to
+    '_col_0', '_col_1', etc. so snapshots stay stable across runs.
+    """
+    if keep_keys is None:
+        keep_keys = {'0000'}
+
+    result = {}
+    system_keys = sorted(k for k in row if k.startswith('_'))
+    kept = sorted(k for k in row if k in keep_keys)
+    dynamic = sorted(k for k in row if not k.startswith('_') and k not in keep_keys)
+
+    for k in system_keys:
+        result[k] = normalize(row[k])
+    for k in kept:
+        result[k] = row[k]
+    for i, k in enumerate(dynamic):
+        result[f'_col_{i}'] = row[k]
+
+    return result
 
 BASE_URL = os.environ.get('SEATABLE_SERVER')
 USERNAME = os.environ.get('SEATABLE_USERNAME')

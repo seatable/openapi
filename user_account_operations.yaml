@@ -2315,6 +2315,22 @@ paths:
                 enable_subscription: false
                 dtable_updates_email_interval: 0
                 dtable_collaborate_email_interval: 0
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                detail: Invalid token
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                detail: You do not have permission to perform this action.
   /api/v2.1/user/contact-email/:
     put:
       tags:

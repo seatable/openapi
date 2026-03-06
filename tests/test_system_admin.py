@@ -41,7 +41,7 @@ def test_getSystemInformation(system_admin_account_token: Secret, snapshot_json:
         'archived_base_count': (int,),
         'archived_row_count': (int,),
         'archived_base_storage': (int,),
-    })
+    }, regex=True)
 
     assert snapshot_json(matcher=matcher) == data
 

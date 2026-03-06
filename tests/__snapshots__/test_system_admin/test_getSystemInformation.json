@@ -6,13 +6,13 @@
   "dtable_server_info": [
     {
       "enable_cluster": false,
-      "last_dtable_saving_count": 16,
-      "last_dtable_saving_end_time": 1772793550479,
-      "last_dtable_saving_start_time": 1772793550261,
-      "last_period_operations_count": 736,
-      "loaded_dtables_count": 30,
-      "operation_count_since_up": 0,
-      "web_socket_count": 0
+      "last_dtable_saving_count": "int",
+      "last_dtable_saving_end_time": "int",
+      "last_dtable_saving_start_time": "int",
+      "last_period_operations_count": "int",
+      "loaded_dtables_count": "int",
+      "operation_count_since_up": "int",
+      "web_socket_count": "int"
     }
   ],
   "dtable_server_info_in_etcd": [],

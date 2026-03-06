@@ -2417,6 +2417,22 @@ paths:
                         can_copy: false
                         can_export: false
                         can_print: false
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error_message: Permission denied.
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error_message: invalid token
   /api-gateway/api/v2/dtables/{base_uuid}/related-users/:
     get:
       tags:
@@ -2680,6 +2696,22 @@ paths:
                 Date: "2020-08-01"
                 Content: "111"
                 link: []
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error_message: Permission denied.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error_message: Row not found.
 
   /api-gateway/api/v2/dtables/{base_uuid}/lock-rows/:
     put:

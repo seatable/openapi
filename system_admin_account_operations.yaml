@@ -709,6 +709,14 @@ paths:
                     storage_usage: 1721496
                     rows_count: 142
                 total_count: 2000
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                detail: You do not have permission to perform this action.
     post:
       tags:
         - Users

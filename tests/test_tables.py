@@ -1,4 +1,4 @@
-from conftest import Base, base_operations_schema
+from conftest import Base, base_operations_schema, normalize, normalize_row
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
 from syrupy.matchers import path_type
@@ -42,6 +42,17 @@ def test_duplicateTable(base: Base, snapshot_json: SnapshotAssertion):
     assert response.status_code == 200
 
     data = response.json()
+
+    # Normalize volatile row data for stable snapshots
+    data['rows'] = sorted(
+        [normalize_row(r) for r in data['rows']],
+        key=lambda r: r.get('0000', ''),
+    )
+    id_rows = sorted(data['id_row_map'].values(), key=lambda r: r.get('0000', ''))
+    data['id_row_map'] = {
+        f'row_{i}': normalize_row(r) for i, r in enumerate(id_rows)
+    }
+
     matcher = path_type({
         '_id': (str,),
         r"columns\..*\.key": (str,),
