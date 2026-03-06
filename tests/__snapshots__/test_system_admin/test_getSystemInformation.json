@@ -6,11 +6,11 @@
   "dtable_server_info": [
     {
       "enable_cluster": false,
-      "last_dtable_saving_count": 6,
-      "last_dtable_saving_end_time": 1772788917706,
-      "last_dtable_saving_start_time": 1772788917609,
-      "last_period_operations_count": 226,
-      "loaded_dtables_count": 17,
+      "last_dtable_saving_count": 4,
+      "last_dtable_saving_end_time": 1772789817683,
+      "last_dtable_saving_start_time": 1772789817615,
+      "last_period_operations_count": 275,
+      "loaded_dtables_count": 26,
       "operation_count_since_up": 0,
       "web_socket_count": 0
     }

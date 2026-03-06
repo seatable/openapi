@@ -33,24 +33,7 @@
       "storage_usage": "int",
       "unit": "",
       "workspace_id": 3
-    },
-    {
-      "contact_email": null,
-      "create_time": "str",
-      "email": "str",
-      "id_in_org": "",
-      "is_active": true,
-      "is_staff": true,
-      "last_login": "str",
-      "login_id": "",
-      "name": "admin",
-      "role": "default",
-      "rows_count": "int",
-      "social_auth": [],
-      "storage_usage": "int",
-      "unit": "",
-      "workspace_id": null
     }
   ],
-  "total_count": 3
+  "total_count": 2
 }
