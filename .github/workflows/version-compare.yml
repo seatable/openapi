@@ -110,20 +110,64 @@ jobs:
         run: |
           mkdir -p /tmp/report
 
-          cat > /tmp/report/summary.md << EOF
+          cat > /tmp/report/summary.md << 'HEADER'
           # API Version Comparison Report
+          HEADER
 
-          **Baseline:** ${{ inputs.old_image }}:${{ inputs.old_version }}
-          **Compared:** ${{ inputs.new_image }}:${{ inputs.new_version }}
+          echo "" >> /tmp/report/summary.md
+          echo "**Baseline:** ${{ inputs.old_image }}:${{ inputs.old_version }}" >> /tmp/report/summary.md
+          echo "**Compared:** ${{ inputs.new_image }}:${{ inputs.new_version }}" >> /tmp/report/summary.md
+          echo "" >> /tmp/report/summary.md
 
-          EOF
+          # Count results from baseline
+          if [ -f /tmp/baseline-output.txt ]; then
+            baseline_passed=$(grep -oP '\d+ passed' /tmp/baseline-output.txt | head -1 || echo "0 passed")
+            baseline_failed=$(grep -oP '\d+ failed' /tmp/baseline-output.txt | head -1 || echo "0 failed")
+            baseline_errors=$(grep -oP '\d+ error' /tmp/baseline-output.txt | head -1 || echo "0 errors")
+            echo "**Baseline results:** ${baseline_passed}, ${baseline_failed}, ${baseline_errors}" >> /tmp/report/summary.md
+          fi
 
-          if [ -f /tmp/compare-output.txt ] && grep -q "FAILED" /tmp/compare-output.txt; then
+          # Count results from comparison
+          if [ -f /tmp/compare-output.txt ]; then
+            compare_passed=$(grep -oP '\d+ passed' /tmp/compare-output.txt | head -1 || echo "0 passed")
+            compare_failed=$(grep -oP '\d+ failed' /tmp/compare-output.txt | head -1 || echo "0 failed")
+            compare_errors=$(grep -oP '\d+ error' /tmp/compare-output.txt | head -1 || echo "0 errors")
+            echo "**Comparison results:** ${compare_passed}, ${compare_failed}, ${compare_errors}" >> /tmp/report/summary.md
+          fi
+
+          echo "" >> /tmp/report/summary.md
+
+          if [ -f /tmp/compare-output.txt ] && grep -qE "FAILED|ERROR" /tmp/compare-output.txt; then
             echo "## Differences Found" >> /tmp/report/summary.md
             echo "" >> /tmp/report/summary.md
+
+            # List failed tests
+            echo "### Failed Tests" >> /tmp/report/summary.md
+            echo "" >> /tmp/report/summary.md
             echo '```' >> /tmp/report/summary.md
-            grep -E "FAILED|AssertionError|snapshot" /tmp/compare-output.txt >> /tmp/report/summary.md || true
+            grep "FAILED" /tmp/compare-output.txt >> /tmp/report/summary.md || true
             echo '```' >> /tmp/report/summary.md
+            echo "" >> /tmp/report/summary.md
+
+            # Extract snapshot diffs (the actual response differences)
+            echo "### Response Differences" >> /tmp/report/summary.md
+            echo "" >> /tmp/report/summary.md
+            echo '```diff' >> /tmp/report/summary.md
+            # syrupy outputs diffs between "snapshot" and "received" markers
+            sed -n '/^____/,/^____\|^====\|^FAILED\|^---.*---$/p' /tmp/compare-output.txt \
+              | head -500 >> /tmp/report/summary.md || true
+            echo '```' >> /tmp/report/summary.md
+            echo "" >> /tmp/report/summary.md
+
+            # Extract schema validation failures
+            if grep -q "CheckFailed" /tmp/compare-output.txt; then
+              echo "### Schema Validation Failures" >> /tmp/report/summary.md
+              echo "" >> /tmp/report/summary.md
+              echo '```' >> /tmp/report/summary.md
+              grep -A 10 "Response violates schema" /tmp/compare-output.txt \
+                | head -100 >> /tmp/report/summary.md || true
+              echo '```' >> /tmp/report/summary.md
+            fi
           else
             echo "## No Differences Found" >> /tmp/report/summary.md
             echo "" >> /tmp/report/summary.md
