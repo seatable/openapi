@@ -252,6 +252,16 @@ paths:
               example:
                 download_link: >-
                   https://cloud.seatable.io/seafhttp/files/12345678-1234-4672-834c-4eca40dc104b/test.png
+        "400":
+          description: Bad Request — file not found at the given path.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_msg:
+                    type: string
+                    example: "path /files/2020-01/nonexistent.txt not found."
   /api/v2.1/dtable/app-asset/:
     delete:
       tags:
@@ -274,6 +284,16 @@ paths:
                 type: object
               example:
                 success: true
+        "404":
+          description: Not Found — file does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_msg:
+                    type: string
+                    example: "File not found."
 
   # Files & Images (Custom Folder)
   /api/v2.1/dtable/custom/app-asset-dir/:

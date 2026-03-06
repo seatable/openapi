@@ -17,6 +17,7 @@ Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. 
 | 17 | addNewUser returns 403 for license limit | Medium | Yes — use 409 or 402 |
 | 22 | updateColumn to link type creates broken column | Medium | Yes — validate column_data |
 | 23 | Temp API-Token creation uses GET instead of POST | Low | Yes — use POST |
+| 26 | getFileDownloadLink returns 400 instead of 404 | Low | Yes — return 404 |
 | 24 | app_name inconsistently used as path vs body param | Low | No — document behavior |
 | 25 | Base-Token endpoints return different field sets | Low | No — document behavior |
 | 2 | Select columns: unknown options auto-created | Low | No — acceptable behavior |
@@ -322,3 +323,13 @@ The five ping endpoints return three different response formats:
 **Recommendation:** Harmonize all ping endpoints to return the same format — ideally `application/json` with `{"ret": "pong"}` for consistency with dtable-db and api-gateway.
 
 **Workaround:** OpenAPI spec in this repository has been adjusted to match actual behavior.
+
+### 26. getFileDownloadLink returns 400 instead of 404 for non-existent file
+
+**Severity:** Low — inconsistent error codes
+
+`GET /api/v2.1/dtable/app-download-link/?path=/files/2020-01/nonexistent.txt` returns 400 with `{"error_msg": "path ... not found."}`. In contrast, `DELETE /api/v2.1/dtable/app-asset/` correctly returns 404 with `{"error_msg": "File not found."}` for the same situation.
+
+A missing file is a 404 case, not a 400 (bad request).
+
+**Recommendation:** Return 404 from `getFileDownloadLink` when the file does not exist, consistent with `DeleteBaseAsset`.

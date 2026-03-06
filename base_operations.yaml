@@ -2531,6 +2531,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/sql_query_response"
+        "400":
+          description: Bad Request — invalid SQL syntax or non-existing table.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_message:
+                    type: string
+                    example: "no such table: nonexistent_table"
   /api-gateway/api/v2/dtables/{base_uuid}/rows/:
     get:
       tags:
