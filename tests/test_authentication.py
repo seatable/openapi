@@ -1,10 +1,7 @@
-import schemathesis
-from conftest import Base, BASE_URL, USERNAME, PASSWORD
+from conftest import Base, USERNAME, PASSWORD, authentication_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
 from syrupy.matchers import path_type
-
-authentication_schema = schemathesis.from_path('../authentication.yaml', base_url=BASE_URL, validate_schema=True)
 
 def test_getAccountTokenfromUsername(snapshot_json: SnapshotAssertion):
     body = {'username': USERNAME, 'password': PASSWORD}

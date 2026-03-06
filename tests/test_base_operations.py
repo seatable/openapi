@@ -1,13 +1,11 @@
 import pytest
 import requests
 import schemathesis
-from conftest import Base, BASE_URL, Secret
+from conftest import Base, BASE_URL, Secret, user_account_operations, base_operations_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
 from syrupy.matchers import path_type
 
-schema = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
-base_operations_schema = schemathesis.from_path('../base_operations.yaml', base_url=BASE_URL, validate_schema=True)
 file_operations = schemathesis.from_path('../file_operations.yaml', base_url=BASE_URL, validate_schema=True)
 
 COLUMNS = [
@@ -313,7 +311,7 @@ ROWS = [
 
 def test_createBase(workspace_id: int, account_token: Secret, snapshot_json: SnapshotAssertion):
     body = {"workspace_id": workspace_id, "name": 'automated-testing-ahSh2sot'}
-    case: Case = schema.get_operation_by_id('createBase').make_case(body=body)
+    case: Case = user_account_operations.get_operation_by_id('createBase').make_case(body=body)
     response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
 
     assert response.status_code == 201

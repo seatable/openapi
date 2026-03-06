@@ -11,7 +11,6 @@ from schemathesis import Case
 from syrupy.extensions.json import JSONSnapshotExtension
 from typing import Generator
 
-# TODO: Read from environment
 BASE_URL = os.environ.get('SEATABLE_SERVER')
 USERNAME = os.environ.get('SEATABLE_USERNAME')
 PASSWORD = os.environ.get('SEATABLE_PASSWORD')
@@ -29,11 +28,10 @@ assert CLEANUP_AFTER_TESTS in ["True", "False"], "CLEANUP_AFTER_TESTS environmen
 # TODO: Make sure credentials are never logged to the console (in case of exceptions/assertion errors)
 # https://github.com/pytest-dev/pytest/issues/8613
 
-schema = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
+user_account_operations = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
 system_admin_account_operations = schemathesis.from_path('../system_admin_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
 authentication_schema = schemathesis.from_path('../authentication.yaml', base_url=BASE_URL, validate_schema=True)
 base_operations_schema = schemathesis.from_path('../base_operations.yaml', base_url=BASE_URL, validate_schema=True)
-user_account_operations = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
 
 @schemathesis.hook
 def after_call(context, case, response: Response):
@@ -83,7 +81,7 @@ def snapshot_json(snapshot):
 def account_token() -> str:
     body = {"username": USERNAME, "password": PASSWORD}
 
-    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
+    operation = authentication_user_account_operations.get_operation_by_id('getAccountTokenfromUsername')
     case: Case = operation.make_case(body=body)
     response = case.call_and_validate()
 
@@ -102,7 +100,7 @@ def base(account_token: Secret):
     base_name = 'Automated Tests'
 
     body = {"workspace_id": workspace_id, "name": base_name}
-    case: Case = schema.get_operation_by_id('createBase').make_case(body=body)
+    case: Case = user_account_operations.get_operation_by_id('createBase').make_case(body=body)
     response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
 
     assert response.status_code == 201
@@ -113,7 +111,7 @@ def base(account_token: Secret):
     path_parameters = {'workspace_id': workspace_id, 'base_name': base_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
 
-    operation = authentication_schema.get_operation_by_id('getBaseTokenWithAccountToken')
+    operation = authentication_user_account_operations.get_operation_by_id('getBaseTokenWithAccountToken')
     case: Case = operation.make_case(path_parameters=path_parameters, headers=headers)
     response = case.call_and_validate()
 
@@ -133,7 +131,7 @@ def base(account_token: Secret):
         path_parameters = {'workspace_id': workspace_id}
         body = {'name': base_name}
 
-        case: Case = schema.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
+        case: Case = user_account_operations.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
         response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
 
         assert response.status_code == 200
@@ -143,7 +141,7 @@ def base(account_token: Secret):
 def get_api_token(account_token: Secret, workspace_id: int, base_name: str) -> Secret:
     path_parameters = {'workspace_id': workspace_id, 'base_name': base_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
-    case: Case = authentication_schema.get_operation_by_id('createTempApiToken').make_case(path_parameters=path_parameters, headers=headers)
+    case: Case = authentication_user_account_operations.get_operation_by_id('createTempApiToken').make_case(path_parameters=path_parameters, headers=headers)
     response = case.call_and_validate()
 
     assert response.status_code == 200
@@ -167,7 +165,7 @@ def workspace_id(account_token: Secret) -> Generator[int, None, None]:
         path_parameters = {'workspace_id': workspace_id}
         body = {'name': base_name}
 
-        case: Case = schema.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
+        case: Case = user_account_operations.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
         response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
 
         assert response.status_code == 200
@@ -179,7 +177,7 @@ def workspace_id(account_token: Secret) -> Generator[int, None, None]:
 def system_admin_account_token() -> Secret:
     body = {"username": ADMIN_USERNAME, "password": ADMIN_PASSWORD}
 
-    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
+    operation = authentication_user_account_operations.get_operation_by_id('getAccountTokenfromUsername')
     case: Case = operation.make_case(body=body)
     response = case.call_and_validate()
 
@@ -213,7 +211,7 @@ def team(system_admin_account_token: Secret) -> Generator[int, None, None]:
 
     # Fetch account token for team admin
     body = {"username": team_admin_email, "password": team_admin_password}
-    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
+    operation = authentication_user_account_operations.get_operation_by_id('getAccountTokenfromUsername')
     case: Case = operation.make_case(body=body)
     response = case.call_and_validate()
 
