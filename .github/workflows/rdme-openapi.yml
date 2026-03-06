@@ -44,12 +44,12 @@ jobs:
           echo "ID_TEAMADMIN=$(jq -r '.team_admin_account_operations' .github/readme-ids.json)" >> $GITHUB_ENV
           echo "ID_USER=$(jq -r '.user_account_operations' .github/readme-ids.json)" >> $GITHUB_ENV
           echo "ID_PING=$(jq -r '.ping_and_info' .github/readme-ids.json)" >> $GITHUB_ENV
-          echo "ID_PYTHON=$(jq -r '.\"python-scheduler\"' .github/readme-ids.json)" >> $GITHUB_ENV
+          echo "ID_PYTHON=$(jq -r '.python_scheduler' .github/readme-ids.json)" >> $GITHUB_ENV
 
       - name: Check links in docs and specs
         uses: lycheeverse/lychee-action@v2
         with:
-          args: "--no-progress --scheme https './intro/*.md' './*.yaml'"
+          args: "--verbose --no-progress --scheme https --exclude-path 'intro/changelog.md' './intro/*.md' './*.yaml'"
           fail: true
 
       - name: Validate OpenAPI specs

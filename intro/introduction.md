@@ -20,13 +20,13 @@ summary {
 
 The SeaTable API is organized around REST. This means: SeaTable's API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-Take a look at our [development quick start guide](https://developer.seatable.com) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.com/integrations) like Zapier, Make.com or N8n to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://help.seatable.com).
+Take a look at our [development quick start guide](https://developer.seatable.com) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.com/integrations/) like Zapier, Make.com or N8n to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://seatable.com/help/).
 
 > 👍 New Online Courses Available: Level 1 (Beginner) and Level 2 (Intermediate)!
 >
 > We are excited to announce the launch of our brand-new online courses, designed especially for those who want to build a solid foundation in SeaTable. At the end of each course, you’ll have the opportunity to test your knowledge with a quiz. Successfully passing the quiz will earn you a new badge on [SeaTable Forum](https://forum.seatable.com), proudly displaying your proficiency level for everyone to see!
 >
-> Ready to get started? **[Let's go](https://seatable.com/help/first-steps/online-course/)**
+> Ready to get started? **[Let's go](https://seatable.com/help/online-courses/)**
 
 ## Prerequisites
 
@@ -59,7 +59,7 @@ So don't let us waste time and let's start right away. The first step with every
 
 #### Step 1: Create an API-Token
 
-The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.com/help/erzeugen-eines-api-tokens/). You only have to do this once! The `API-Token` keeps valid forever for this specific base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](https://api.seatable.com/reference/createapitoken).
+The first step is to create an `API-Token` with write permission for one of your bases at SeaTable Cloud. If you don't know how to do this, check this [help article](https://seatable.com/help/create-api-tokens/). You only have to do this once! The `API-Token` keeps valid forever for this specific base. Of course you can generate as many `API-Tokens` as you want. You can even use the API to [generate additional API-Tokens](https://api.seatable.com/reference/createapitoken).
 
 An API-Token might look like this: `1de50f1a57143bfe72873cbbd28ecb4de9eb3c61`
 
@@ -160,7 +160,7 @@ SeaTable requires a different authentication depending on whether you want to do
 
 #### Step 2: Find out the workspace id
 
-To generate a base inside SeaTable you have to tell SeaTable where the base should be created. It could be in the area of `My bases` or it could be in one of your groups. To define the target where you want to create a base you have to provide the `workspace_id`. The easiest way to determine the workspace id of a group or `My bases` is to open a base of that area in the browser and look at the URL. This [help article](https://seatable.com/help/workspace-id-einer-gruppe-ermitteln/) explains this in more details. Open the base and write down the workspace id.
+To generate a base inside SeaTable you have to tell SeaTable where the base should be created. It could be in the area of `My bases` or it could be in one of your groups. To define the target where you want to create a base you have to provide the `workspace_id`. The easiest way to determine the workspace id of a group or `My bases` is to open a base of that area in the browser and look at the URL. This [help article](https://seatable.com/help/find-workspace-id-group/) explains this in more details. Open the base and write down the workspace id.
 
 #### Step 3: Create the base
 
@@ -189,7 +189,7 @@ Generate a Base-Token like in example no. 1. This will also give you the `base_u
 
 #### Step 1: Determine the row you would like to update
 
-To [update a row](https://api.seatable.com/reference/updaterow) you need to know the row_id you want to update. You can either get the `row_id` just by [opening the row details in the browser](https://seatable.com/help/was-ist-die-zeilen-id/) or you could use one of the various API requests to get the content of a base:
+To [update a row](https://api.seatable.com/reference/updaterow) you need to know the row_id you want to update. You can either get the `row_id` just by [opening the row details in the browser](https://seatable.com/help/what-is-row-id/) or you could use one of the various API requests to get the content of a base:
 
 - [List Rows (with SQL)](https://api.seatable.com/reference/querysql)
 - [List Rows](https://api.seatable.com/reference/listrows)
@@ -240,7 +240,7 @@ Here is the input you should use: (example data)
 - parent_dir: **/asset/a275d870-fd55-48e4-8c4a-5fd6f2549765**
 - relative_path: **files/2021-08**
 
-As soon as you uploaded the file, it can be found via the [file management of the base](https://seatable.com/help/das-dateimanagement-einer-base/).
+As soon as you uploaded the file, it can be found via the [file management of the base](https://seatable.com/help/file-management-in-a-base/).
 To append the file an image or file column, you still need another API request.
 
 #### Step 3: Update an existing file/image column
