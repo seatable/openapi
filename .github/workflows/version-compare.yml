@@ -84,6 +84,14 @@ jobs:
 
       # --- New version ---
 
+      - name: Write SeaTable license file (again after volume cleanup)
+        working-directory: version-compare
+        env:
+          SEATABLE_LICENSE: ${{ secrets.SEATABLE_LICENSE }}
+        run: |
+          mkdir -p seatable-data/seatable
+          echo "${SEATABLE_LICENSE}" > seatable-data/seatable/seatable-license.txt
+
       - name: Start SeaTable ${{ inputs.new_version }}
         working-directory: version-compare
         run: |

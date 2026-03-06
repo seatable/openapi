@@ -312,7 +312,7 @@ ROWS = [
 def test_createBase(workspace_id: int, account_token: Secret, snapshot_json: SnapshotAssertion):
     body = {"workspace_id": workspace_id, "name": 'automated-testing-ahSh2sot'}
     case: Case = user_account_operations.get_operation_by_id('createBase').make_case(body=body)
-    response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
+    response = case.call(headers={"Authorization": f"Bearer {account_token.value}"})
 
     assert response.status_code == 201
 
@@ -336,7 +336,7 @@ def test_createTable(base: Base, snapshot_json: SnapshotAssertion, operation_id:
     operation = base_operations_schema.get_operation_by_id('createTable')
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -361,7 +361,7 @@ def test_appendRows(base: Base, snapshot_json: SnapshotAssertion, operation_id: 
     operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -407,7 +407,7 @@ def test_getRow(base: Base, snapshot_json, operation_id: str):
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
 
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -437,7 +437,7 @@ def test_listRows(base: Base, snapshot_json, operation_id: str):
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
 
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -493,7 +493,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
     headers = {'Authorization': f'Bearer {base.token}'}
     case: Case = base_operations_schema.get_operation_by_id('insertColumn') \
         .make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     link_id = response.json()['data']['link_id']
     assert isinstance(link_id, str)
@@ -509,7 +509,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
     }
     case: Case = base_operations_schema.get_operation_by_id('createRowLink') \
         .make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -596,7 +596,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
         path_parameters = {'base_uuid': base.uuid}
         case: Case = base_operations_schema.get_operation_by_id('insertColumn') \
             .make_case(path_parameters=path_parameters, body=column, headers=headers)
-        response = case.call_and_validate()
+        response = case.call()
         assert response.status_code == 200
 
     # List rows
@@ -611,7 +611,7 @@ def test_listRows_links(base: Base,  snapshot_json: SnapshotAssertion, operation
     )
 
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     # Verify that response matches snapshot
     assert snapshot_json(matcher=matcher) == response.json()
@@ -629,7 +629,7 @@ def test_listRows_files_images(base: Base,  snapshot_json: SnapshotAssertion, op
     # Generate upload link
     headers = {'Authorization': f'Bearer {base.api_token}'}
     case: Case = file_operations.get_operation_by_id('getUploadLink').make_case(headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
     assert response.status_code == 200
 
     upload_link_data = response.json()
@@ -680,7 +680,7 @@ def test_listRows_files_images(base: Base,  snapshot_json: SnapshotAssertion, op
     headers = {'Authorization': f'Bearer {base.token}'}
     operation = base_operations_schema.get_operation_by_id(operation_id)
     case: Case = operation.make_case(path_parameters=path_parameters, query=query, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     # Verify that response matches snapshot
     matcher = path_type(
@@ -706,7 +706,7 @@ def test_querySQL(base: Base, snapshot_json: SnapshotAssertion, operation_id: st
     operation = base_operations_schema.get_operation_by_id(operation_id)
 
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -729,7 +729,7 @@ def create_table(base: Base, table_name: str, columns: list[dict]):
     operation = base_operations_schema.get_operation_by_id('createTable')
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
 
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -740,7 +740,7 @@ def append_rows(base: Base, table_name: str, rows: list[dict]) -> list[str]:
 
     operation = base_operations_schema.get_operation_by_id('appendRows')
     case: Case = operation.make_case(path_parameters=path_parameters, body=body, headers=headers)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 

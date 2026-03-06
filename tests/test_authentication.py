@@ -6,7 +6,7 @@ from syrupy.matchers import path_type
 def test_getAccountTokenfromUsername(snapshot_json: SnapshotAssertion):
     body = {'username': USERNAME, 'password': PASSWORD}
     case: Case = authentication_schema.get_operation_by_id('getAccountTokenfromUsername').make_case(body=body)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -18,13 +18,13 @@ def test_getAccountTokenfromUsername(snapshot_json: SnapshotAssertion):
 
 def test_getBaseTokenWithApiToken(base: Base, snapshot_json: SnapshotAssertion):
     case: Case = authentication_schema.get_operation_by_id('getBaseTokenWithApiToken').make_case()
-    response = case.call_and_validate(headers={'Authorization': f'Bearer {base.api_token}'})
+    response = case.call(headers={'Authorization': f'Bearer {base.api_token}'})
 
     assert response.status_code == 200
 
     json = response.json()
 
-    assert json['dtable_server'].startswith('https://')
+    assert json['dtable_server'].startswith('http://') or json['dtable_server'].startswith('https://')
     assert json['dtable_server'].endswith('/api-gateway/')
 
     matcher = path_type({

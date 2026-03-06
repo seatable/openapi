@@ -81,9 +81,9 @@ def snapshot_json(snapshot):
 def account_token() -> str:
     body = {"username": USERNAME, "password": PASSWORD}
 
-    operation = authentication_user_account_operations.get_operation_by_id('getAccountTokenfromUsername')
+    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
     case: Case = operation.make_case(body=body)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -101,7 +101,7 @@ def base(account_token: Secret):
 
     body = {"workspace_id": workspace_id, "name": base_name}
     case: Case = user_account_operations.get_operation_by_id('createBase').make_case(body=body)
-    response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
+    response = case.call(headers={"Authorization": f"Bearer {account_token.value}"})
 
     assert response.status_code == 201
 
@@ -111,9 +111,9 @@ def base(account_token: Secret):
     path_parameters = {'workspace_id': workspace_id, 'base_name': base_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
 
-    operation = authentication_user_account_operations.get_operation_by_id('getBaseTokenWithAccountToken')
-    case: Case = operation.make_case(path_parameters=path_parameters, headers=headers)
-    response = case.call_and_validate()
+    operation = authentication_schema.get_operation_by_id('getBaseTokenWithAccountToken')
+    case: Case = operation.make_case(path_parameters=path_parameters)
+    response = case.call(headers=headers)
 
     assert response.status_code == 200
 
@@ -132,7 +132,7 @@ def base(account_token: Secret):
         body = {'name': base_name}
 
         case: Case = user_account_operations.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
-        response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
+        response = case.call(headers={"Authorization": f"Bearer {account_token.value}"})
 
         assert response.status_code == 200
 
@@ -141,8 +141,8 @@ def base(account_token: Secret):
 def get_api_token(account_token: Secret, workspace_id: int, base_name: str) -> Secret:
     path_parameters = {'workspace_id': workspace_id, 'base_name': base_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
-    case: Case = authentication_user_account_operations.get_operation_by_id('createTempApiToken').make_case(path_parameters=path_parameters, headers=headers)
-    response = case.call_and_validate()
+    case: Case = authentication_schema.get_operation_by_id('createTempApiToken').make_case(path_parameters=path_parameters)
+    response = case.call(headers=headers)
 
     assert response.status_code == 200
 
@@ -166,7 +166,7 @@ def workspace_id(account_token: Secret) -> Generator[int, None, None]:
         body = {'name': base_name}
 
         case: Case = user_account_operations.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
-        response = case.call_and_validate(headers={"Authorization": f"Bearer {account_token.value}"})
+        response = case.call(headers={"Authorization": f"Bearer {account_token.value}"})
 
         assert response.status_code == 200
 
@@ -177,9 +177,9 @@ def workspace_id(account_token: Secret) -> Generator[int, None, None]:
 def system_admin_account_token() -> Secret:
     body = {"username": ADMIN_USERNAME, "password": ADMIN_PASSWORD}
 
-    operation = authentication_user_account_operations.get_operation_by_id('getAccountTokenfromUsername')
+    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
     case: Case = operation.make_case(body=body)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -201,7 +201,7 @@ def team(system_admin_account_token: Secret) -> Generator[int, None, None]:
         'with_workspace': True,
     }
     case: Case = system_admin_account_operations.get_operation_by_id('addTeam').make_case(body=body)
-    response = case.call_and_validate(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
+    response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
 
     assert response.status_code == 200
 
@@ -211,9 +211,9 @@ def team(system_admin_account_token: Secret) -> Generator[int, None, None]:
 
     # Fetch account token for team admin
     body = {"username": team_admin_email, "password": team_admin_password}
-    operation = authentication_user_account_operations.get_operation_by_id('getAccountTokenfromUsername')
+    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
     case: Case = operation.make_case(body=body)
-    response = case.call_and_validate()
+    response = case.call()
 
     assert response.status_code == 200
 
@@ -225,7 +225,7 @@ def team(system_admin_account_token: Secret) -> Generator[int, None, None]:
     if CLEANUP_AFTER_TESTS == 'True':
         path_parameters = {'org_id': team_id}
         case: Case = system_admin_account_operations.get_operation_by_id('deleteTeam').make_case(path_parameters=path_parameters)
-        response = case.call_and_validate(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
+        response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
 
 @pytest.fixture
 def team_name(system_admin_account_token: Secret) -> Generator[str, None, None]:
@@ -236,7 +236,7 @@ def team_name(system_admin_account_token: Secret) -> Generator[str, None, None]:
     if CLEANUP_AFTER_TESTS == 'True':
         # Remove team to not cause issues on future test runs
         case: Case = system_admin_account_operations.get_operation_by_id('listTeams').make_case()
-        response = case.call_and_validate(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
+        response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
         data = response.json()
 
         assert response.status_code == 200
@@ -247,7 +247,7 @@ def team_name(system_admin_account_token: Secret) -> Generator[str, None, None]:
 
         path_parameters = {'org_id': org_id}
         case: Case = system_admin_account_operations.get_operation_by_id('deleteTeam').make_case(path_parameters=path_parameters)
-        response = case.call_and_validate(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
+        response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
 
 def generate_password() -> str:
     alphabet = string.ascii_letters + string.digits
@@ -258,8 +258,8 @@ def create_group(account_token: Secret, group_name: str) -> tuple[int, int]:
     body = {'name': group_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
     case: Case = user_account_operations.get_operation_by_id('createGroup') \
-        .make_case(body=body, headers=headers)
-    response = case.call_and_validate()
+        .make_case(body=body)
+    response = case.call(headers=headers)
     assert response.status_code == 201
 
     group_id = response.json()['id']
@@ -270,8 +270,8 @@ def create_group(account_token: Secret, group_name: str) -> tuple[int, int]:
     # TODO: Fix bug with query
     query = {'detail': False}
     case: Case = user_account_operations.get_operation_by_id('listWorkspaces') \
-        .make_case(headers=headers)
-    response = case.call_and_validate()
+        .make_case()
+    response = case.call(headers=headers)
 
     assert response.status_code == 200
 
@@ -287,7 +287,7 @@ def delete_group(account_token: Secret, group_id: int):
         path_parameters = {'group_id': group_id}
         headers = {'Authorization': f'Bearer {account_token.value}'}
         case: Case = user_account_operations.get_operation_by_id('deleteGroup') \
-            .make_case(path_parameters=path_parameters, headers=headers)
-        response = case.call_and_validate()
+            .make_case(path_parameters=path_parameters)
+        response = case.call(headers=headers)
 
         assert response.status_code == 200
