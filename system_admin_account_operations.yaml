@@ -1752,7 +1752,13 @@ paths:
       tags: [Groups]
       summary: Delete Group
       operationId: deleteGroup
-      description: Delete a group with its ID.
+      description: >-
+        Delete a group with its ID.
+
+
+        > 🚧 Group must be empty
+        >
+        > A group can only be deleted if it contains no bases. Delete or move all bases out of the group first, otherwise the API returns `400` with `"Cannot delete group with bases"`.
       security:
         - AccountTokenAuth: []
       parameters:

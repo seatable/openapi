@@ -24,6 +24,7 @@ Issues discovered during automated API testing against SeaTable 6.0.10. These ar
 | 16 | group_id returned as string instead of integer | Low | Yes — return integer |
 | 17 | addNewUser returns 403 for license limit | Low | Yes — use 409 or 402 |
 | 18 | listColumns excludes auto-created Name column | Low | No — document behavior |
+| 19 | deleteGroup fails silently-ish when group has bases | Low | Fixed in this repo |
 
 ---
 
@@ -218,3 +219,11 @@ The `deleteUserShare` operation in `user_account_operations.yaml` had no `reques
 `GET /api-gateway/api/v2/dtables/{base_uuid}/columns/` only returns explicitly created columns when a table was created with a custom columns array via `createTable`. The auto-created default `Name` column is not included.
 
 **Assessment:** Not necessarily a bug, but the behavior should be documented.
+
+### 19. deleteGroup returns misleading error when group contains bases
+
+**Severity:** Low
+
+`DELETE /api/v2.1/groups/{group_id}/` returns `400` with `"Cannot delete group with bases"` if the group still contains bases. The error is correct but undocumented — callers need to delete or move all bases first.
+
+**Fixed in:** This repository — added documentation note to `deleteGroup` in all three specs.
