@@ -5496,7 +5496,7 @@ paths:
                 username: 876543216569491ba42905bf1647fd3f@auth.local
                 permission: rw
                 token: 65432148a9074901923d
-                link: https://cloud.seatable.io/dtable/links/65432148a9074901923d
+                link: https://cloud.seatable.io/dtable/links/65432148a9074901923d/
                 dtable: Example
                 dtable_id: 562
                 workspace_id: 2
@@ -7838,7 +7838,7 @@ paths:
                       {
                         "username": "145504ae043c438cbb55f2afb084d586@auth.local",
                         "token": "a3ec5042d7ae47f18c2e",
-                        "link": "https://cloud.seatable.io/dtable/universal-app/links/a3ec5042d7ae47f18c2e",
+                        "link": "https://cloud.seatable.io/dtable/universal-app/links/a3ec5042d7ae47f18c2e/",
                         "app_name": "Dgdfh",
                         "app_id": 72,
                         "expire_date": "",
@@ -7886,7 +7886,7 @@ paths:
                           "settings": { "pages": ["..."] },
                         },
                       "created_at": "2023-04-02T21:23:21+00:00",
-                      "external_app_url": "https://cloud.seatable.io/dtable/universal-app/links/a3ec5042d7ae47f18c2e",
+                      "external_app_url": "https://cloud.seatable.io/dtable/universal-app/links/a3ec5042d7ae47f18c2e/",
                       "visit_times": 3,
                       "creator": "Hulk",
                       "can_anonymous_access": false,

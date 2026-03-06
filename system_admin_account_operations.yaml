@@ -3751,7 +3751,7 @@ paths:
       operationId: addPlugin
       description: >-
         Add a plugin with a .zip file. This file could be retrieved from the
-        internet, for example, from the [SeaTable Plugins Market](https://cloud.seatable.io/apps/custom/plugin-archive).
+        internet, for example, from the [SeaTable Plugins Market](https://cloud.seatable.io/apps/custom/plugin-archive/).
       requestBody:
         content:
           multipart/form-data:

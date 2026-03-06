@@ -1675,7 +1675,7 @@ paths:
                   - dtable_name: All types
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     token: >-
-                      https://cloud.seatable.io/dtable/links/9167cdbd67574226a72e
+                      https://cloud.seatable.io/dtable/links/9167cdbd67574226a72e/
                     ctime: "2021-12-15T13:11:54.083636"
                     password: null
                     expire_date: null
@@ -1686,7 +1686,7 @@ paths:
                   - dtable_name: All types
                     username: 876543216569491ba42905bf1647fd3f@auth.local
                     token: >-
-                      https://cloud.seatable.io/dtable/links/b7ea0a4269234565998e
+                      https://cloud.seatable.io/dtable/links/b7ea0a4269234565998e/
                     ctime: "2021-12-15T13:11:55.058965"
                     password: null
                     expire_date: null
@@ -1730,7 +1730,7 @@ paths:
                 username: 876543216569491ba42905bf1647fd3f@auth.local
                 permission: rw
                 token: 9167cdbd67574226a72e
-                link: https://cloud.seatable.io/dtable/links/9167cdbd67574226a72e
+                link: https://cloud.seatable.io/dtable/links/9167cdbd67574226a72e/
                 dtable: All types
                 dtable_id: 2
                 workspace_id: 2

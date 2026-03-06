@@ -20,7 +20,7 @@ All other API-requests require an authorization header that looks like this, whe
 
 > 📘 Bearer or Token?
 >
-> Before version 4.0, the authentication header in SeaTable was not like `Authorization: Bearer` but `Authorization: Token`. Starting with version 4.0 both authentication headers are supported. We recommend the use of `Authorization: Bearer`, according to the official [OpenAPI 3.0 Specifiation](https://swagger.io/docs/specification/authentication/bearer-authentication/).
+> Before version 4.0, the authentication header in SeaTable was not like `Authorization: Bearer` but `Authorization: Token`. Starting with version 4.0 both authentication headers are supported. We recommend the use of `Authorization: Bearer`, according to the official [OpenAPI 3.0 Specifiation](https://swagger.io/docs/specification/v3_0/authentication/bearer-authentication/).
 
 ## Authentication Flows in SeaTable
 
@@ -81,4 +81,4 @@ Treat your tokens like passwords, so be sure to keep them secure! Do not share y
 
 Account operations differentiate between user, team admin and system admin. These are the three possible user types a user can have within SeaTable. Each user always has the user permission. The team admin or system admin type must also be assigned to a user, and team admins only exist if teams/organizations are enabled in SeaTable. This is the case with <https://cloud.seatable.io>, but is typically not the case with self-hosted SeaTable Server instances.
 
-More details on SeaTable's team/organization structure and admin management can be found at <https://help.seatable.com>.
+More details on SeaTable's team/organization structure and admin management can be found at <https://seatable.com/help/>.

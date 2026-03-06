@@ -93,8 +93,8 @@ components:
       name: external_link_token
       description: |
         The random string from the external link. Eg: 
-        - If the external link is https://cloud.seatable.io/dtable/external-links/c41cef71f5094827a786, the link token is *c41cef71f5094827a786*.
-        - If the external link is a custom link like https://cloud.seatable.io/dtable/external-links/custom/my-personal-link, the link token is only *my-personal-link*.
+        - If the external link is https://cloud.seatable.io/dtable/external-links/c41cef71f5094827a786/, the link token is *c41cef71f5094827a786*.
+        - If the external link is a custom link like https://cloud.seatable.io/dtable/external-links/custom/my-personal-link/, the link token is only *my-personal-link*.
       in: path
       schema:
         type: string
