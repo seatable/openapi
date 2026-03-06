@@ -33,6 +33,14 @@ components:
       type: string
       description: if successful, this api returns just the string `pong`
       example: pong
+    ping_response_object:
+      type: object
+      properties:
+        ret:
+          type: string
+          example: pong
+      required:
+        - ret
     server_info:
       type: object
       description: get server info like the version and the edition
@@ -115,9 +123,10 @@ paths:
         "200":
           description: Service is available and running
           content:
-            application/json:
+            text/html:
               schema:
-                $ref: "#/components/schemas/ping_response"
+                type: string
+                example: pong
 
   /dtable-db/ping/:
     get:
@@ -132,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ping_response"
+                $ref: "#/components/schemas/ping_response_object"
 
   /api-gateway/api/v2/ping/:
     get:
@@ -147,4 +156,4 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ping_response"
+                $ref: "#/components/schemas/ping_response_object"

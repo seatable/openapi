@@ -33,12 +33,21 @@ system_admin_account_operations = schemathesis.from_path('../system_admin_accoun
 authentication_schema = schemathesis.from_path('../authentication.yaml', base_url=BASE_URL, validate_schema=True)
 base_operations_schema = schemathesis.from_path('../base_operations.yaml', base_url=BASE_URL, validate_schema=True)
 
+SCHEMA_VALIDATION_CHECKS = (
+    schemathesis.checks.status_code_conformance,
+    schemathesis.checks.content_type_conformance,
+    schemathesis.checks.response_schema_conformance,
+)
+
 @schemathesis.hook
 def after_call(context, case, response: Response):
     # TODO: Disable redirects for all tests? (to prevent issues like https://forum.seatable.com/t/seatable-4-4-out-now/4237/4)
 
     # Log all request URLs. You have to run pytest with '-rA' in order to see these for successful tests.
     print(f'{response.request.method} {response.request.url}')
+
+    # Validate response against OpenAPI schema
+    case.validate_response(response, checks=SCHEMA_VALIDATION_CHECKS)
 
 @dataclass
 class Base:
