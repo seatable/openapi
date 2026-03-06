@@ -1,0 +1,8 @@
+{
+  "api_token": "str",
+  "app_name": "test-token-create",
+  "generated_at": "str",
+  "generated_by": "str",
+  "last_access": "2026-03-06T10:25:09+01:00",
+  "permission": "rw"
+}

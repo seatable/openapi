@@ -1,0 +1,20 @@
+{
+  "api_calls_count": 0,
+  "avatar_url": "str",
+  "contact_email": "testuser@example.com",
+  "create_time": "str",
+  "email": "str",
+  "id_in_org": "",
+  "is_active": true,
+  "is_staff": false,
+  "login_id": "",
+  "monthly_api_call_limit_per_user": -1,
+  "name": "Test User",
+  "phone": "",
+  "role": "default",
+  "row_limit": -1,
+  "row_usage": 0,
+  "storage_quota": -2,
+  "storage_usage": 0,
+  "unit": ""
+}

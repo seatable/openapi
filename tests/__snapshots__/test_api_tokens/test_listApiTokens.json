@@ -1,0 +1,12 @@
+{
+  "api_tokens": [
+    {
+      "api_token": "str",
+      "app_name": "test-token-list",
+      "generated_at": "str",
+      "generated_by": "str",
+      "last_access": "str",
+      "permission": "r"
+    }
+  ]
+}

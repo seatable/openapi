@@ -1,0 +1,117 @@
+{
+  "_id": "str",
+  "columns": [
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "text",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "text",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "decimal": "dot",
+        "format": "number",
+        "thousands": "no"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    }
+  ],
+  "header_settings": {},
+  "id_row_map": {
+    "TozLLTC4QSibRKOnMht-1w": {
+      "0000": "row-1",
+      "6Q4X": 1,
+      "_creator": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_ctime": "2026-03-06T09:25:14.659+00:00",
+      "_id": "TozLLTC4QSibRKOnMht-1w",
+      "_last_modifier": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_mtime": "2026-03-06T09:25:14.659+00:00"
+    },
+    "bLgVxZ6jSB-W2FbvEXfIgw": {
+      "0000": "row-2",
+      "6Q4X": 2,
+      "_creator": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_ctime": "2026-03-06T09:25:14.659+00:00",
+      "_id": "bLgVxZ6jSB-W2FbvEXfIgw",
+      "_last_modifier": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_mtime": "2026-03-06T09:25:14.659+00:00"
+    }
+  },
+  "is_header_locked": false,
+  "name": "test_duplicateTable(copy)",
+  "rows": [
+    {
+      "0000": "row-1",
+      "6Q4X": 1,
+      "_creator": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_ctime": "2026-03-06T09:25:14.659+00:00",
+      "_id": "TozLLTC4QSibRKOnMht-1w",
+      "_last_modifier": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_mtime": "2026-03-06T09:25:14.659+00:00"
+    },
+    {
+      "0000": "row-2",
+      "6Q4X": 2,
+      "_creator": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_ctime": "2026-03-06T09:25:14.659+00:00",
+      "_id": "bLgVxZ6jSB-W2FbvEXfIgw",
+      "_last_modifier": "c511806090ff462ab7baea26be7583f7@auth.local",
+      "_mtime": "2026-03-06T09:25:14.659+00:00"
+    }
+  ],
+  "view_structure": {
+    "folders": [],
+    "view_ids": [
+      "0000"
+    ]
+  },
+  "views": [
+    {
+      "_id": "0000",
+      "colorbys": {},
+      "colors": {},
+      "column_colors": {},
+      "filter_conjunction": "And",
+      "filters": [],
+      "formula_rows": {},
+      "groupbys": [],
+      "groups": [],
+      "hidden_columns": [],
+      "is_locked": false,
+      "link_rows": {},
+      "name": "Default View",
+      "private_for": null,
+      "row_height": "default",
+      "rows": [],
+      "sorts": [],
+      "summaries": {},
+      "type": "table"
+    }
+  ]
+}

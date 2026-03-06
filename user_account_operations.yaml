@@ -4562,6 +4562,16 @@ paths:
       summary: Delete User Share
       operationId: deleteUserShare
       description: Stop sharing a base to a user.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  $ref: "#/components/schemas/user_account_email"
       security:
         - AccountTokenAuth: []
       parameters:
