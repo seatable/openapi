@@ -2,6 +2,7 @@ import schemathesis
 from conftest import BASE_URL, Secret, system_admin_account_operations, USERNAME
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import props
 from syrupy.matchers import path_type
 
 
@@ -36,14 +37,16 @@ def test_getSystemInformation(system_admin_account_token: Secret, snapshot_json:
         r"dtable_server_info\..*\.last_period_operations_count": (int,),
         r"dtable_server_info\..*\.app_connection_count": (int,),
         r"dtable_server_info\..*\.last_dtable_saving_count": (int,),
-        r"dtable_server_info\..*\.last_dtable_saving_start_time": (int, type(None)),
-        r"dtable_server_info\..*\.last_dtable_saving_end_time": (int, type(None)),
         'archived_base_count': (int,),
         'archived_row_count': (int,),
         'archived_base_storage': (int,),
     }, regex=True)
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(
+        # Exclude nullable props
+        exclude=props('last_dtable_saving_start_time', 'last_dtable_saving_end_time'),
+        matcher=matcher,
+    ) == data
 
 
 def test_listUsers(system_admin_account_token: Secret, snapshot_json: SnapshotAssertion):
