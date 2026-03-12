@@ -114,7 +114,7 @@ def test_upload_image(base: Base):
     upload_link = upload_data['upload_link']
     parent_path = upload_data['parent_path']
     img_relative_path = upload_data['img_relative_path']
-    workspace_id = upload_data['workspace_id']
+    workspace_id = base.workspace_id
 
     # Step 2: Upload a minimal 1x1 PNG
     # Smallest valid PNG: 1x1 pixel, red
