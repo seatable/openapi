@@ -111,4 +111,8 @@ def test_getUser(system_admin_account_token: Secret, snapshot_json: SnapshotAsse
         'storage_quota': (int,),
     })
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(
+        # v6.1+
+        exclude=props('automation_rules_trigger_count', 'monthly_automation_limit_per_user'),
+        matcher=matcher,
+    ) == data
