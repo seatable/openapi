@@ -36,14 +36,6 @@ on:
           - "seatable/seatable-enterprise"
           - "seatable/seatable-enterprise-testing"
 
-env:
-  SEATABLE_SERVER: "http://localhost"
-  SEATABLE_USERNAME: "testuser@example.com"
-  SEATABLE_PASSWORD: "testuser1234"
-  SEATABLE_ADMIN_USERNAME: "admin@example.com"
-  SEATABLE_ADMIN_PASSWORD: "admin1234"
-  CLEANUP_AFTER_TESTS: "True"
-
 jobs:
   compare:
     runs-on: ubuntu-latest
@@ -69,9 +61,7 @@ jobs:
         working-directory: version-compare
         env:
           SEATABLE_LICENSE: ${{ secrets.SEATABLE_LICENSE }}
-        run: |
-          mkdir -p seatable-data/seatable
-          echo "${SEATABLE_LICENSE}" > seatable-data/seatable/seatable-license.txt
+        run: echo "${SEATABLE_LICENSE}" > seatable-license.txt
 
       # --- Baseline (old version) ---
 
@@ -84,6 +74,7 @@ jobs:
       - name: Run tests against ${{ inputs.old_version }} (create baseline snapshots)
         working-directory: tests
         run: |
+          set -a && source ../version-compare/.env && set +a
           pytest --snapshot-update --color=yes -v 2>&1 | tee /tmp/baseline-output.txt || true
 
       - name: Stop SeaTable ${{ inputs.old_version }}
@@ -99,7 +90,7 @@ jobs:
         run: |
           docker run --rm -v "$PWD/seatable-data:/data" alpine sh -c "rm -rf /data/*"
           mkdir -p seatable-data/seatable
-          echo "${SEATABLE_LICENSE}" > seatable-data/seatable/seatable-license.txt
+          echo "${SEATABLE_LICENSE}" > seatable-license.txt
 
       - name: Start SeaTable ${{ inputs.new_version }}
         working-directory: version-compare
@@ -110,6 +101,7 @@ jobs:
       - name: Run tests against ${{ inputs.new_version }} (compare with baseline)
         working-directory: tests
         run: |
+          set -a && source ../version-compare/.env && set +a
           pytest --color=yes -v 2>&1 | tee /tmp/compare-output.txt
         continue-on-error: true
 
