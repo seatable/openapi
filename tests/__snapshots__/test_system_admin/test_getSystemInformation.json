@@ -7,8 +7,6 @@
     {
       "enable_cluster": false,
       "last_dtable_saving_count": "int",
-      "last_dtable_saving_end_time": "int",
-      "last_dtable_saving_start_time": "int",
       "last_period_operations_count": "int",
       "loaded_dtables_count": "int",
       "operation_count_since_up": "int",
