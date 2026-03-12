@@ -15,7 +15,7 @@
       "social_auth": [],
       "storage_usage": "int",
       "unit": "",
-      "workspace_id": 1
+      "workspace_id": "int"
     },
     {
       "contact_email": "testuser@example.com",
@@ -32,7 +32,7 @@
       "social_auth": [],
       "storage_usage": "int",
       "unit": "",
-      "workspace_id": 3
+      "workspace_id": "int"
     }
   ],
   "total_count": 2

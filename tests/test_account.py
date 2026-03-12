@@ -1,6 +1,7 @@
 from conftest import Secret, user_account_operations
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import props
 from syrupy.matchers import path_type
 
 
@@ -24,11 +25,17 @@ def test_getAccountInfo(account_token: Secret, snapshot_json: SnapshotAssertion)
         'login_id': (str,),
         'contact_email': (str,),
         'space_usage': (str,),
+        'row_total': (int,),
         'row_usage_rate': (str,),
         'row_usage': (int,),
+        'total': (int,),
     })
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(
+        # v6.1+
+        exclude=props('automation_count', 'automation_limit', 'automation_usage_rate'),
+        matcher=matcher,
+    ) == data
 
 
 def test_listWorkspaces(account_token: Secret, snapshot_json: SnapshotAssertion):
