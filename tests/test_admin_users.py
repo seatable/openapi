@@ -1,18 +1,5 @@
-from conftest import Secret, system_admin_account_operations
+from conftest import Secret, free_user_slot, system_admin_account_operations
 from schemathesis import Case
-
-
-def _free_user_slot(headers: dict):
-    """Delete any leftover users to free a license slot (license allows max 3 users)."""
-    case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
-    response = case.call(headers=headers)
-    for user in response.json()['data']:
-        if user['contact_email'] not in ('admin@example.com', 'testuser@example.com'):
-            path_parameters = {'user_id': user['email']}
-            case: Case = system_admin_account_operations.get_operation_by_id('deleteUser') \
-                .make_case(path_parameters=path_parameters)
-            case.call(headers=headers)
-            return
 
 
 def test_admin_user_lifecycle(system_admin_account_token: Secret):
@@ -20,7 +7,7 @@ def test_admin_user_lifecycle(system_admin_account_token: Secret):
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
     # Free a license slot if needed
-    _free_user_slot(headers)
+    free_user_slot(headers)
 
     # 1. Create user
     body = {
