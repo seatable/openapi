@@ -1,4 +1,4 @@
-from conftest import Secret, system_admin_account_operations, USERNAME, ADMIN_USERNAME
+from conftest import Secret, free_user_slot, system_admin_account_operations, USERNAME, ADMIN_USERNAME
 from schemathesis import Case
 
 
@@ -59,7 +59,7 @@ def test_resetUserPassword(system_admin_account_token: Secret):
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
     # Free a slot and create temp user
-    _free_user_slot(headers)
+    free_user_slot(headers)
 
     body = {
         'email': 'reset-pw-test@example.com',
@@ -89,16 +89,3 @@ def test_resetUserPassword(system_admin_account_token: Secret):
         case: Case = system_admin_account_operations.get_operation_by_id('deleteUser') \
             .make_case(path_parameters={'user_id': user_id})
         case.call(headers=headers)
-
-
-def _free_user_slot(headers: dict):
-    """Delete any leftover users to free a license slot (license allows max 3 users)."""
-    case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
-    response = case.call(headers=headers)
-    for user in response.json()['data']:
-        if user['contact_email'] not in (ADMIN_USERNAME, USERNAME):
-            path_parameters = {'user_id': user['email']}
-            case: Case = system_admin_account_operations.get_operation_by_id('deleteUser') \
-                .make_case(path_parameters=path_parameters)
-            case.call(headers=headers)
-            return

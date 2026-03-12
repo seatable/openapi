@@ -351,3 +351,18 @@ def delete_group(account_token: Secret, group_id: int):
         response = case.call(headers=headers)
 
         assert response.status_code == 200
+
+def free_user_slot(headers: dict):
+    """Delete any leftover users to free a license slot (license allows max 3 users)."""
+    case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
+    response = case.call(headers=headers)
+    for user in response.json()['data']:
+        # Do not try to delete preconfigured users or staff members
+        if user['contact_email'] in [USERNAME, ADMIN_USERNAME] or user['is_staff'] == True:
+            continue
+
+        path_parameters = {'user_id': user['email']}
+        case: Case = system_admin_account_operations.get_operation_by_id('deleteUser') \
+            .make_case(path_parameters=path_parameters)
+        case.call(headers=headers)
+        return
