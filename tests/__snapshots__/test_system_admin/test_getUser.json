@@ -14,9 +14,9 @@
   "name": "Test User",
   "phone": "",
   "role": "default",
-  "row_limit": -1,
+  "row_limit": "int",
   "row_usage": 0,
-  "storage_quota": -2,
+  "storage_quota": "int",
   "storage_usage": 0,
   "unit": ""
 }

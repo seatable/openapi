@@ -64,9 +64,7 @@ jobs:
         working-directory: version-compare
         env:
           SEATABLE_LICENSE: ${{ secrets.SEATABLE_LICENSE }}
-        run: |
-          mkdir -p seatable-data/seatable
-          echo "${SEATABLE_LICENSE}" > seatable-data/seatable/seatable-license.txt
+        run: echo "${SEATABLE_LICENSE}" > seatable-license.txt
 
       - name: Start SeaTable ${{ steps.version.outputs.version }}
         working-directory: version-compare

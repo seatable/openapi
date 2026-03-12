@@ -9,14 +9,14 @@
   "email": "str",
   "enable_subscription": false,
   "institution": "",
-  "is_cloud_personal_account": false,
+  "is_cloud_personal_account": true,
   "is_staff": false,
   "login_id": "str",
   "name": "Test User",
-  "row_total": -1,
+  "row_total": "int",
   "row_usage": "int",
   "row_usage_rate": "str",
   "space_usage": "str",
-  "total": -2,
+  "total": "int",
   "usage": 0
 }

@@ -23,7 +23,7 @@
   "license_maxusers": "int",
   "license_mode": "subscription",
   "license_to": "str",
-  "multi_tenancy_enabled": false,
+  "multi_tenancy_enabled": true,
   "org_count": "int",
   "users_count": "int",
   "version": "str",

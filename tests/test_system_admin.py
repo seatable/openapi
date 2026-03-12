@@ -71,6 +71,7 @@ def test_listUsers(system_admin_account_token: Secret, snapshot_json: SnapshotAs
         r"data\..*\.storage_usage": (int,),
         r"data\..*\.rows_count": (int,),
         r"data\..*\.avatar_url": (str,),
+        r"data\..*\.workspace_id": (int,),
     }, regex=True)
 
     assert snapshot_json(matcher=matcher) == data
@@ -103,6 +104,8 @@ def test_getUser(system_admin_account_token: Secret, snapshot_json: SnapshotAsse
         'email': (str,),
         'create_time': (str,),
         'avatar_url': (str,),
+        'row_limit': (int,),
+        'storage_quota': (int,),
     })
 
     assert snapshot_json(matcher=matcher) == data

@@ -22,6 +22,11 @@ services:
       - TIME_ZONE=Europe/Berlin
     volumes:
       - ./seatable-data:/shared
+      - type: bind
+        source: ./seatable-license.txt
+        target: /shared/seatable/seatable-license.txt
+        bind:
+          create_host_path: false
     ports:
       - "80:80"
     depends_on:
