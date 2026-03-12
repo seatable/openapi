@@ -25,13 +25,6 @@ on:
           - "seatable/seatable-enterprise"
           - "seatable/seatable-enterprise-testing"
 
-env:
-  SEATABLE_SERVER: "http://localhost"
-  SEATABLE_USERNAME: "testuser@example.com"
-  SEATABLE_PASSWORD: "testuser1234"
-  SEATABLE_ADMIN_USERNAME: "admin@example.com"
-  SEATABLE_ADMIN_PASSWORD: "admin1234"
-  CLEANUP_AFTER_TESTS: "True"
 
 jobs:
   test:
@@ -75,6 +68,7 @@ jobs:
       - name: Run API tests
         working-directory: tests
         run: |
+          set -a && source ../version-compare/.env && set +a
           pytest --snapshot-update --color=yes -v 2>&1 | tee /tmp/test-output.txt
         continue-on-error: true
 

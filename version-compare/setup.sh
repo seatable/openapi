@@ -4,11 +4,12 @@
 
 set -euo pipefail
 
-SEATABLE_URL="${SEATABLE_URL:-http://localhost}"
-ADMIN_EMAIL="admin@example.com"
-ADMIN_PASSWORD="admin1234"
-TEST_USER_EMAIL="testuser@example.com"
-TEST_USER_PASSWORD="testuser1234"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Load credentials from .env
+set -a
+source "${SCRIPT_DIR}/.env"
+set +a
 
 TIMEOUT=60
 INTERVAL=10
@@ -17,7 +18,7 @@ echo "Waiting for SeaTable to become available..."
 start_time=$(date +%s)
 
 while true; do
-    if curl -sf "${SEATABLE_URL}/dtable-server/ping/" > /dev/null 2>&1; then
+    if curl -sf "${SEATABLE_SERVER}/dtable-server/ping/" > /dev/null 2>&1; then
         echo "SeaTable is ready."
         break
     fi
@@ -37,7 +38,7 @@ echo "Waiting for SeaTable API to become available..."
 start_time=$(date +%s)
 
 while true; do
-    if curl -sf "${SEATABLE_URL}/api2/ping/" > /dev/null 2>&1; then
+    if curl -sf "${SEATABLE_SERVER}/api2/ping/" > /dev/null 2>&1; then
         echo "SeaTable API is ready."
         break
     fi
@@ -57,9 +58,9 @@ echo "Obtaining admin token..."
 start_time=$(date +%s)
 
 while true; do
-    AUTH_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "${SEATABLE_URL}/api2/auth-token/" \
-        --data-urlencode "username=${ADMIN_EMAIL}" \
-        --data-urlencode "password=${ADMIN_PASSWORD}")
+    AUTH_RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "${SEATABLE_SERVER}/api2/auth-token/" \
+        --data-urlencode "username=${SEATABLE_ADMIN_USERNAME}" \
+        --data-urlencode "password=${SEATABLE_ADMIN_PASSWORD}")
     AUTH_BODY=$(echo "$AUTH_RESPONSE" | sed '$d')
     AUTH_STATUS=$(echo "$AUTH_RESPONSE" | tail -1 | sed 's/HTTP_STATUS://')
 
@@ -82,10 +83,10 @@ ADMIN_TOKEN=$(echo "$AUTH_BODY" | python3 -c "import sys,json; print(json.load(s
 
 # Create test user
 echo "Creating test user..."
-response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${SEATABLE_URL}/api/v2.1/admin/users/" \
+response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${SEATABLE_SERVER}/api/v2.1/admin/users/" \
     -H "Authorization: Bearer ${ADMIN_TOKEN}" \
     -H "Content-Type: application/json" \
-    -d "{\"email\": \"${TEST_USER_EMAIL}\", \"password\": \"${TEST_USER_PASSWORD}\", \"name\": \"Test User\", \"is_staff\": false, \"is_active\": true}")
+    -d "{\"email\": \"${SEATABLE_USERNAME}\", \"password\": \"${SEATABLE_PASSWORD}\", \"name\": \"Test User\", \"is_staff\": false, \"is_active\": true}")
 
 if [ "$response" -eq 200 ] || [ "$response" -eq 201 ]; then
     echo "Test user created."
