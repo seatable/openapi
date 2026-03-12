@@ -187,7 +187,8 @@ ENABLED_ROLE_PERMISSIONS = {
     },
 }
 
-REST_FRAMEWORK_THROTTLING_WHITELIST = ['172.16.0.0/12', '192.168.0.0/16', '127.0.0.1']
+# Allow Docker Gateway IP address
+REST_FRAMEWORK_THROTTING_WHITELIST = ['172.19.0.1', '127.0.0.1']
 SETTINGS
 
 echo "Restarting SeaTable to apply settings..."
