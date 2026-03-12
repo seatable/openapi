@@ -32,15 +32,31 @@ This repository contains tests to detect changes in SeaTable's API behavior betw
 
 There are two ways to run the tests:
 
-### Option 1: Manual tests against an external server
+### Option 1: Manual tests
 
-Run the tests locally against any SeaTable Server. Useful for testing a specific server or for developing new tests.
+Run the tests locally against a SeaTable Server. Useful for testing a specific server or for developing new tests.
 
 **Prerequisites:**
 - Python 3.10+
 - pip
-- Publicly available SeaTable Server
 - Two accounts (user and system-admin permission)
+
+**SeaTable Installation:**
+
+```bash
+cd version-compare
+
+# seatable/seatable-enterprise or seatable/seatable-enterprise-testing
+export SEATABLE_IMAGE=seatable/seatable-enterprise
+export SEATABLE_VERSION=6.0.10
+
+# Create license file
+cp "SOURCE" seatable-license.txt
+
+docker compose up -d
+
+./setup.sh
+```
 
 **Setup:**
 
@@ -53,10 +69,6 @@ source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Create environment variables
-cp env.example .env
-# edit .env with the editor of your choice and save it...
 ```
 
 **Run tests:**
@@ -64,7 +76,7 @@ cp env.example .env
 ```bash
 cd tests
 source .venv/bin/activate
-source .env
+set -a && source ../version-compare/.env && set +a
 
 # Run all tests or specific test files
 pytest                                           # runs all files starting with test_xxx
