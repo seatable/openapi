@@ -86,7 +86,7 @@ echo "Creating test user..."
 response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "${SEATABLE_SERVER}/api/v2.1/admin/users/" \
     -H "Authorization: Bearer ${ADMIN_TOKEN}" \
     -H "Content-Type: application/json" \
-    -d "{\"email\": \"${SEATABLE_USERNAME}\", \"password\": \"${SEATABLE_PASSWORD}\", \"name\": \"Test User\", \"is_staff\": false, \"is_active\": true}")
+    -d "{\"email\": \"${SEATABLE_USERNAME}\", \"password\": \"${SEATABLE_PASSWORD}\", \"name\": \"Test User\", \"is_staff\": false, \"is_active\": true, \"with_workspace\": true}")
 
 if [ "$response" -eq 200 ] || [ "$response" -eq 201 ]; then
     echo "Test user created."
