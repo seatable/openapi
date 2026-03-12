@@ -74,10 +74,13 @@ def test_listUsers(system_admin_account_token: Secret, snapshot_json: SnapshotAs
         r"data\..*\.storage_usage": (int,),
         r"data\..*\.rows_count": (int,),
         r"data\..*\.avatar_url": (str,),
-        r"data\..*\.workspace_id": (int,),
     }, regex=True)
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(
+        # workspace_id is nullable (None until the user opens the web interface for the first time)
+        exclude=props('workspace_id'),
+        matcher=matcher,
+    ) == data
 
 
 def test_getUser(system_admin_account_token: Secret, snapshot_json: SnapshotAssertion):
