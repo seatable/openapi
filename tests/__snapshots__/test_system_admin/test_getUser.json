@@ -1,6 +1,5 @@
 {
   "api_calls_count": 0,
-  "automation_rules_trigger_count": 0,
   "avatar_url": "str",
   "contact_email": "testuser@example.com",
   "create_time": "str",
@@ -10,7 +9,6 @@
   "is_staff": false,
   "login_id": "",
   "monthly_api_call_limit_per_user": -1,
-  "monthly_automation_limit_per_user": -1,
   "name": "Test User",
   "phone": "",
   "role": "default",
