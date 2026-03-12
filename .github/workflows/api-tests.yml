@@ -69,7 +69,7 @@ jobs:
         working-directory: tests
         run: |
           set -a && source ../version-compare/.env && set +a
-          pytest --snapshot-update --color=yes -v 2>&1 | tee /tmp/test-output.txt
+          pytest --color=yes -v 2>&1 | tee /tmp/test-output.txt
         continue-on-error: true
 
       - name: Generate report
