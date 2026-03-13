@@ -263,6 +263,67 @@ def test_updateColumn_freeze(base: Base):
     assert response.status_code == 200
 
 
+@pytest.mark.xfail(reason="appendColumns does not work with link-formula columns")
+def test_appendColumns_link_formula(base: Base):
+    table_name_1 = 'test_appendColumns_lf_1'
+    table_name_2 = 'test_appendColumns_lf_2'
+    create_table(base, table_name_1, [{'column_name': 'number', 'column_type': 'number'}])
+    create_table(base, table_name_2, [{'column_name': 'number', 'column_type': 'number'}])
+
+    path_parameters = {'base_uuid': base.uuid}
+    headers = {'Authorization': f'Bearer {base.token}'}
+
+    # Insert a link column on table_2 pointing to table_1
+    body = {
+        'table_name': table_name_2,
+        'column_name': 'link',
+        'column_type': 'link',
+        'column_data': {
+            'table': table_name_2,
+            'other_table': table_name_1,
+        },
+    }
+    case: Case = base_operations_schema.find_operation_by_id('insertColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+    assert response.status_code == 200
+
+    # Try to append link-formula columns via appendColumns
+    body = {
+        'table_name': table_name_2,
+        'columns': [
+            {
+                'column_name': 'link-formula-lookup',
+                'column_type': 'link-formula',
+                'column_data': {
+                    'formula': 'lookup',
+                    'link_column': 'link',
+                    'level1_linked_column': 'number',
+                },
+            },
+            {
+                'column_name': 'link-formula-countlinks',
+                'column_type': 'link-formula',
+                'column_data': {
+                    'formula': 'count_links',
+                    'link_column': 'link',
+                },
+            },
+        ],
+    }
+    case: Case = base_operations_schema.find_operation_by_id('appendColumns') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 200
+
+    data = response.json()
+    assert 'columns' in data
+    column_names = [c['name'] for c in data['columns']]
+    assert 'link-formula-lookup' in column_names
+    assert 'link-formula-countlinks' in column_names
+
+
 @pytest.mark.xfail(reason="Server rejects DD/MM/YYYY HH:mm format as not meeting specifications")
 def test_insertColumn_date_european_hours_minutes(base: Base):
     table_name = 'test_insertColumn_date_european_hm'
