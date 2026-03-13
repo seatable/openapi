@@ -263,6 +263,29 @@ def test_updateColumn_freeze(base: Base):
     assert response.status_code == 200
 
 
+@pytest.mark.xfail(reason="Server rejects DD/MM/YYYY HH:mm format as not meeting specifications")
+def test_insertColumn_date_european_hours_minutes(base: Base):
+    table_name = 'test_insertColumn_date_european_hm'
+    create_table(base, table_name, [])
+
+    path_parameters = {'base_uuid': base.uuid}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    body = {
+        'table_name': table_name,
+        'column_name': 'date-european-hours-minutes',
+        'column_type': 'date',
+        'column_data': {
+            'format': 'DD/MM/YYYY HH:mm',
+        },
+    }
+
+    case: Case = base_operations_schema.find_operation_by_id('insertColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 200
+
+
 def test_deleteColumn(base: Base):
     table_name = 'test_deleteColumn'
     columns = [
