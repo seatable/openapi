@@ -77,9 +77,6 @@ assert ADMIN_USERNAME is not None, 'SEATABLE_ADMIN_USERNAME environment variable
 assert ADMIN_PASSWORD is not None, 'SEATABLE_ADMIN_PASSWORD environment variable is not set'
 assert CLEANUP_AFTER_TESTS in ["True", "False"], "CLEANUP_AFTER_TESTS environment variable must be either 'True' or 'False'"
 
-# TODO: Make sure credentials are never logged to the console (in case of exceptions/assertion errors)
-# https://github.com/pytest-dev/pytest/issues/8613
-
 user_account_operations = schemathesis.openapi.from_path('../user_account_operations.yaml')
 system_admin_account_operations = schemathesis.openapi.from_path('../system_admin_account_operations.yaml')
 authentication_schema = schemathesis.openapi.from_path('../authentication.yaml')
