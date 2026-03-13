@@ -32,8 +32,8 @@ def _get_row(base: Base, table_name: str, row_id: str) -> dict:
     path_parameters = {'base_uuid': base.uuid, 'row_id': row_id}
     query = {'table_name': table_name, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('getRow') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('getRow') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
     assert response.status_code == 200
     return response.json()
@@ -44,8 +44,8 @@ def _append_row(base: Base, table_name: str, row: dict) -> dict:
     path_parameters = {'base_uuid': base.uuid}
     body = {'table_name': table_name, 'rows': [row]}
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('appendRows') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('appendRows') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
     row_id = response.json()['row_ids'][0]['_id']
@@ -60,8 +60,8 @@ def _update_row(base: Base, table_name: str, row_id: str, row_data: dict):
         'updates': [{'row_id': row_id, 'row': row_data}],
     }
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('updateRow') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateRow') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
 

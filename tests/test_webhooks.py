@@ -9,8 +9,8 @@ def test_webhook_lifecycle(base: Base, account_token: Secret):
 
     # 1. Create webhook
     body = {'url': 'https://example.com/webhook'}
-    case: Case = user_account_operations.get_operation_by_id('createWebhook') \
-        .make_case(path_parameters=path_parameters, body=body)
+    case: Case = user_account_operations.find_operation_by_id('createWebhook') \
+        .Case(path_parameters=path_parameters, body=body)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -21,8 +21,8 @@ def test_webhook_lifecycle(base: Base, account_token: Secret):
     assert data['webhook']['url'] == 'https://example.com/webhook'
 
     # 2. List webhooks
-    case: Case = user_account_operations.get_operation_by_id('listWebhooks') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = user_account_operations.find_operation_by_id('listWebhooks') \
+        .Case(path_parameters=path_parameters)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -34,24 +34,24 @@ def test_webhook_lifecycle(base: Base, account_token: Secret):
     # 3. Update webhook
     path_params_with_id = {**path_parameters, 'webhook_id': webhook_id}
     body = {'url': 'https://example.com/webhook-updated'}
-    case: Case = user_account_operations.get_operation_by_id('updateWebhook') \
-        .make_case(path_parameters=path_params_with_id, body=body)
+    case: Case = user_account_operations.find_operation_by_id('updateWebhook') \
+        .Case(path_parameters=path_params_with_id, body=body)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
     assert response.json()['webhook']['url'] == 'https://example.com/webhook-updated'
 
     # 4. Delete webhook
-    case: Case = user_account_operations.get_operation_by_id('deleteWebhook') \
-        .make_case(path_parameters=path_params_with_id)
+    case: Case = user_account_operations.find_operation_by_id('deleteWebhook') \
+        .Case(path_parameters=path_params_with_id)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
     assert response.json()['success'] is True
 
     # Verify it's gone
-    case: Case = user_account_operations.get_operation_by_id('listWebhooks') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = user_account_operations.find_operation_by_id('listWebhooks') \
+        .Case(path_parameters=path_parameters)
     response = case.call(headers=headers)
 
     assert response.status_code == 200

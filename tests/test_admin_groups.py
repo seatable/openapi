@@ -13,8 +13,8 @@ def test_listGroups(system_admin_account_token: Secret, account_token: Secret):
     group_id, _ = create_group(account_token, 'admin-list-test')
 
     try:
-        case: Case = system_admin_account_operations.get_operation_by_id('listGroups') \
-            .make_case(query={'page': 1, 'per_page': 25})
+        case: Case = system_admin_account_operations.find_operation_by_id('listGroups') \
+            .Case(query={'page': 1, 'per_page': 25})
         response = case.call(headers=headers)
 
         assert response.status_code == 200
@@ -40,8 +40,8 @@ def test_listGroups_search(system_admin_account_token: Secret, account_token: Se
     group_id, _ = create_group(account_token, 'unique-search-group')
 
     try:
-        case: Case = system_admin_account_operations.get_operation_by_id('listGroups') \
-            .make_case(query={'name': 'unique-search'})
+        case: Case = system_admin_account_operations.find_operation_by_id('listGroups') \
+            .Case(query={'name': 'unique-search'})
         response = case.call(headers=headers)
 
         assert response.status_code == 200
@@ -60,7 +60,7 @@ def test_transferGroup(system_admin_account_token: Secret, account_token: Secret
 
     try:
         # Find admin's internal user_id
-        case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
+        case: Case = system_admin_account_operations.find_operation_by_id('listUsers').Case()
         response = case.call(headers=headers)
         admin_user = next(u for u in response.json()['data'] if u['contact_email'] == ADMIN_USERNAME)
         admin_user_id = admin_user['email']
@@ -68,8 +68,8 @@ def test_transferGroup(system_admin_account_token: Secret, account_token: Secret
         # Transfer group to admin
         path_parameters = {'group_id': group_id}
         body = {'new_owner': admin_user_id}
-        case: Case = system_admin_account_operations.get_operation_by_id('transferGroup') \
-            .make_case(path_parameters=path_parameters, body=body)
+        case: Case = system_admin_account_operations.find_operation_by_id('transferGroup') \
+            .Case(path_parameters=path_parameters, body=body)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
@@ -81,6 +81,6 @@ def test_transferGroup(system_admin_account_token: Secret, account_token: Secret
     finally:
         # Delete as admin (now the owner)
         path_parameters = {'group_id': group_id}
-        case: Case = system_admin_account_operations.get_operation_by_id('deleteGroup') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = system_admin_account_operations.find_operation_by_id('deleteGroup') \
+            .Case(path_parameters=path_parameters)
         case.call(headers=headers)

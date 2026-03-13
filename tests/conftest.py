@@ -9,6 +9,7 @@ from datetime import datetime
 from random import randint
 from requests import Response
 from schemathesis import Case
+from schemathesis.specs.openapi.checks import content_type_conformance, response_schema_conformance, status_code_conformance
 from syrupy.extensions.json import JSONSnapshotExtension
 from typing import Generator
 
@@ -79,15 +80,15 @@ assert CLEANUP_AFTER_TESTS in ["True", "False"], "CLEANUP_AFTER_TESTS environmen
 # TODO: Make sure credentials are never logged to the console (in case of exceptions/assertion errors)
 # https://github.com/pytest-dev/pytest/issues/8613
 
-user_account_operations = schemathesis.from_path('../user_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
-system_admin_account_operations = schemathesis.from_path('../system_admin_account_operations.yaml', base_url=BASE_URL, validate_schema=True)
-authentication_schema = schemathesis.from_path('../authentication.yaml', base_url=BASE_URL, validate_schema=True)
-base_operations_schema = schemathesis.from_path('../base_operations.yaml', base_url=BASE_URL, validate_schema=True)
+user_account_operations = schemathesis.openapi.from_path('../user_account_operations.yaml')
+system_admin_account_operations = schemathesis.openapi.from_path('../system_admin_account_operations.yaml')
+authentication_schema = schemathesis.openapi.from_path('../authentication.yaml')
+base_operations_schema = schemathesis.openapi.from_path('../base_operations.yaml')
 
 SCHEMA_VALIDATION_CHECKS = (
-    schemathesis.checks.status_code_conformance,
-    schemathesis.checks.content_type_conformance,
-    schemathesis.checks.response_schema_conformance,
+    status_code_conformance,
+    content_type_conformance,
+    response_schema_conformance,
 )
 
 @schemathesis.hook
@@ -141,8 +142,8 @@ def snapshot_json(snapshot):
 def account_token() -> str:
     body = {"username": USERNAME, "password": PASSWORD}
 
-    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
-    case: Case = operation.make_case(body=body)
+    operation = authentication_schema.find_operation_by_id('getAccountTokenfromUsername')
+    case: Case = operation.Case(body=body)
     response = case.call()
 
     assert response.status_code == 200
@@ -160,7 +161,7 @@ def base(account_token: Secret):
     base_name = 'Automated Tests'
 
     body = {"workspace_id": workspace_id, "name": base_name}
-    case: Case = user_account_operations.get_operation_by_id('createBase').make_case(body=body)
+    case: Case = user_account_operations.find_operation_by_id('createBase').Case(body=body)
     response = case.call(headers={"Authorization": f"Bearer {account_token.value}"})
 
     assert response.status_code == 201
@@ -171,8 +172,8 @@ def base(account_token: Secret):
     path_parameters = {'workspace_id': workspace_id, 'base_name': base_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
 
-    operation = authentication_schema.get_operation_by_id('getBaseTokenWithAccountToken')
-    case: Case = operation.make_case(path_parameters=path_parameters)
+    operation = authentication_schema.find_operation_by_id('getBaseTokenWithAccountToken')
+    case: Case = operation.Case(path_parameters=path_parameters)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -191,7 +192,7 @@ def base(account_token: Secret):
         path_parameters = {'workspace_id': workspace_id}
         body = {'name': base_name}
 
-        case: Case = user_account_operations.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
+        case: Case = user_account_operations.find_operation_by_id('deleteBase').Case(path_parameters=path_parameters, body=body)
         response = case.call(headers={"Authorization": f"Bearer {account_token.value}"})
 
         assert response.status_code == 200
@@ -201,7 +202,7 @@ def base(account_token: Secret):
 def get_api_token(account_token: Secret, workspace_id: int, base_name: str) -> Secret:
     path_parameters = {'workspace_id': workspace_id, 'base_name': base_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
-    case: Case = authentication_schema.get_operation_by_id('createTempApiToken').make_case(path_parameters=path_parameters)
+    case: Case = authentication_schema.find_operation_by_id('createTempApiToken').Case(path_parameters=path_parameters)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -225,7 +226,7 @@ def workspace_id(account_token: Secret) -> Generator[int, None, None]:
         path_parameters = {'workspace_id': workspace_id}
         body = {'name': base_name}
 
-        case: Case = user_account_operations.get_operation_by_id('deleteBase').make_case(path_parameters=path_parameters, body=body)
+        case: Case = user_account_operations.find_operation_by_id('deleteBase').Case(path_parameters=path_parameters, body=body)
         response = case.call(headers={"Authorization": f"Bearer {account_token.value}"})
 
         assert response.status_code == 200
@@ -237,8 +238,8 @@ def workspace_id(account_token: Secret) -> Generator[int, None, None]:
 def system_admin_account_token() -> Secret:
     body = {"username": ADMIN_USERNAME, "password": ADMIN_PASSWORD}
 
-    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
-    case: Case = operation.make_case(body=body)
+    operation = authentication_schema.find_operation_by_id('getAccountTokenfromUsername')
+    case: Case = operation.Case(body=body)
     response = case.call()
 
     assert response.status_code == 200
@@ -260,7 +261,7 @@ def team(system_admin_account_token: Secret) -> Generator[int, None, None]:
         'password': team_admin_password,
         'with_workspace': True,
     }
-    case: Case = system_admin_account_operations.get_operation_by_id('addTeam').make_case(body=body)
+    case: Case = system_admin_account_operations.find_operation_by_id('addTeam').Case(body=body)
     response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
 
     assert response.status_code == 200
@@ -271,8 +272,8 @@ def team(system_admin_account_token: Secret) -> Generator[int, None, None]:
 
     # Fetch account token for team admin
     body = {"username": team_admin_email, "password": team_admin_password}
-    operation = authentication_schema.get_operation_by_id('getAccountTokenfromUsername')
-    case: Case = operation.make_case(body=body)
+    operation = authentication_schema.find_operation_by_id('getAccountTokenfromUsername')
+    case: Case = operation.Case(body=body)
     response = case.call()
 
     assert response.status_code == 200
@@ -284,7 +285,7 @@ def team(system_admin_account_token: Secret) -> Generator[int, None, None]:
 
     if CLEANUP_AFTER_TESTS == 'True':
         path_parameters = {'org_id': team_id}
-        case: Case = system_admin_account_operations.get_operation_by_id('deleteTeam').make_case(path_parameters=path_parameters)
+        case: Case = system_admin_account_operations.find_operation_by_id('deleteTeam').Case(path_parameters=path_parameters)
         response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
 
 @pytest.fixture
@@ -295,7 +296,7 @@ def team_name(system_admin_account_token: Secret) -> Generator[str, None, None]:
 
     if CLEANUP_AFTER_TESTS == 'True':
         # Remove team to not cause issues on future test runs
-        case: Case = system_admin_account_operations.get_operation_by_id('listTeams').make_case()
+        case: Case = system_admin_account_operations.find_operation_by_id('listTeams').Case()
         response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
         data = response.json()
 
@@ -306,7 +307,7 @@ def team_name(system_admin_account_token: Secret) -> Generator[str, None, None]:
         assert isinstance(org_id, int)
 
         path_parameters = {'org_id': org_id}
-        case: Case = system_admin_account_operations.get_operation_by_id('deleteTeam').make_case(path_parameters=path_parameters)
+        case: Case = system_admin_account_operations.find_operation_by_id('deleteTeam').Case(path_parameters=path_parameters)
         response = case.call(headers={'Authorization': f'Bearer {system_admin_account_token.value}'})
 
 def generate_password() -> str:
@@ -317,8 +318,8 @@ def create_group(account_token: Secret, group_name: str) -> tuple[int, int]:
     """Creates a group and returns (group_id, workspace_id)"""
     body = {'name': group_name}
     headers = {'Authorization': f'Bearer {account_token.value}'}
-    case: Case = user_account_operations.get_operation_by_id('createGroup') \
-        .make_case(body=body)
+    case: Case = user_account_operations.find_operation_by_id('createGroup') \
+        .Case(body=body)
     response = case.call(headers=headers)
     assert response.status_code == 201
 
@@ -329,8 +330,8 @@ def create_group(account_token: Secret, group_name: str) -> tuple[int, int]:
 
     # TODO: Fix bug with query
     query = {'detail': False}
-    case: Case = user_account_operations.get_operation_by_id('listWorkspaces') \
-        .make_case()
+    case: Case = user_account_operations.find_operation_by_id('listWorkspaces') \
+        .Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -346,15 +347,15 @@ def delete_group(account_token: Secret, group_id: int):
     if CLEANUP_AFTER_TESTS == 'True':
         path_parameters = {'group_id': group_id}
         headers = {'Authorization': f'Bearer {account_token.value}'}
-        case: Case = user_account_operations.get_operation_by_id('deleteGroup') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = user_account_operations.find_operation_by_id('deleteGroup') \
+            .Case(path_parameters=path_parameters)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
 
 def free_user_slot(headers: dict):
     """Delete any leftover users to free a license slot (license allows max 3 users)."""
-    case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
+    case: Case = system_admin_account_operations.find_operation_by_id('listUsers').Case()
     response = case.call(headers=headers)
     for user in response.json()['data']:
         # Do not try to delete preconfigured users or staff members
@@ -362,7 +363,7 @@ def free_user_slot(headers: dict):
             continue
 
         path_parameters = {'user_id': user['email']}
-        case: Case = system_admin_account_operations.get_operation_by_id('deleteUser') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = system_admin_account_operations.find_operation_by_id('deleteUser') \
+            .Case(path_parameters=path_parameters)
         case.call(headers=headers)
         return

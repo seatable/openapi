@@ -8,7 +8,7 @@ from syrupy.matchers import path_type
 def test_getAccountInfo(account_token: Secret, snapshot_json: SnapshotAssertion):
     headers = {'Authorization': f'Bearer {account_token.value}'}
 
-    case: Case = user_account_operations.get_operation_by_id('getAccountInfo').make_case()
+    case: Case = user_account_operations.find_operation_by_id('getAccountInfo').Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -41,7 +41,7 @@ def test_getAccountInfo(account_token: Secret, snapshot_json: SnapshotAssertion)
 def test_listWorkspaces(account_token: Secret, snapshot_json: SnapshotAssertion):
     headers = {'Authorization': f'Bearer {account_token.value}'}
 
-    case: Case = user_account_operations.get_operation_by_id('listWorkspaces').make_case()
+    case: Case = user_account_operations.find_operation_by_id('listWorkspaces').Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 200

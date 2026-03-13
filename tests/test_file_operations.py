@@ -5,9 +5,7 @@ from schemathesis import Case
 
 import schemathesis
 
-file_operations_schema = schemathesis.from_path(
-    '../file_operations.yaml', base_url=BASE_URL, validate_schema=True
-)
+file_operations_schema = schemathesis.openapi.from_path('../file_operations.yaml')
 
 from test_base_operations import create_table, append_rows
 
@@ -30,8 +28,8 @@ def _base_headers(base: Base) -> dict:
 
 def test_get_upload_link(base: Base):
     """Get an upload link for the base."""
-    case: Case = file_operations_schema.get_operation_by_id('getUploadLink') \
-        .make_case()
+    case: Case = file_operations_schema.find_operation_by_id('getUploadLink') \
+        .Case()
     response = case.call(headers=_api_headers(base))
 
     assert response.status_code == 200
@@ -45,8 +43,8 @@ def test_get_upload_link(base: Base):
 def test_upload_and_download_file(base: Base):
     """Upload a file, verify download link works, then delete it."""
     # Step 1: Get upload link
-    case: Case = file_operations_schema.get_operation_by_id('getUploadLink') \
-        .make_case()
+    case: Case = file_operations_schema.find_operation_by_id('getUploadLink') \
+        .Case()
     response = case.call(headers=_api_headers(base))
     assert response.status_code == 200
 
@@ -79,8 +77,8 @@ def test_upload_and_download_file(base: Base):
     # Step 3: Get download link
     file_path = f'/{file_relative_path}/test-upload.txt'
     query = {'path': file_path}
-    case: Case = file_operations_schema.get_operation_by_id('getFileDownloadLink') \
-        .make_case(query=query)
+    case: Case = file_operations_schema.find_operation_by_id('getFileDownloadLink') \
+        .Case(query=query)
     response = case.call(headers=_api_headers(base))
     assert response.status_code == 200
 
@@ -93,8 +91,8 @@ def test_upload_and_download_file(base: Base):
     assert download_response.content == file_content
 
     # Step 5: Delete the file
-    case: Case = file_operations_schema.get_operation_by_id('DeleteBaseAsset') \
-        .make_case(query={'path': file_path})
+    case: Case = file_operations_schema.find_operation_by_id('DeleteBaseAsset') \
+        .Case(query={'path': file_path})
     response = case.call(headers=_api_headers(base))
     assert response.status_code == 200
     assert response.json()['success'] is True
@@ -105,8 +103,8 @@ def test_upload_image(base: Base):
     create_table(base, TABLE, COLUMNS)
 
     # Step 1: Get upload link
-    case: Case = file_operations_schema.get_operation_by_id('getUploadLink') \
-        .make_case()
+    case: Case = file_operations_schema.find_operation_by_id('getUploadLink') \
+        .Case()
     response = case.call(headers=_api_headers(base))
     assert response.status_code == 200
 
@@ -153,8 +151,8 @@ def test_upload_image(base: Base):
     body = {'sql': sql, 'convert_keys': True}
     path_parameters = {'base_uuid': base.uuid}
     headers = _base_headers(base)
-    case: Case = base_operations_schema.get_operation_by_id('querySQL') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('querySQL') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
     results = response.json()['results']
@@ -165,8 +163,8 @@ def test_upload_image(base: Base):
 
 def test_download_link_nonexistent_file(base: Base):
     """Requesting download link for non-existent file returns an error."""
-    case: Case = file_operations_schema.get_operation_by_id('getFileDownloadLink') \
-        .make_case(query={'path': '/files/2020-01/nonexistent.txt'})
+    case: Case = file_operations_schema.find_operation_by_id('getFileDownloadLink') \
+        .Case(query={'path': '/files/2020-01/nonexistent.txt'})
     response = case.call(headers=_api_headers(base))
 
     assert response.status_code == 400
@@ -174,8 +172,8 @@ def test_download_link_nonexistent_file(base: Base):
 
 def test_delete_nonexistent_file(base: Base):
     """Deleting a non-existent file returns an error."""
-    case: Case = file_operations_schema.get_operation_by_id('DeleteBaseAsset') \
-        .make_case(query={'path': '/files/2020-01/nonexistent.txt'})
+    case: Case = file_operations_schema.find_operation_by_id('DeleteBaseAsset') \
+        .Case(query={'path': '/files/2020-01/nonexistent.txt'})
     response = case.call(headers=_api_headers(base))
 
     assert response.status_code == 404

@@ -15,8 +15,8 @@ def test_listColumns(base: Base, snapshot_json: SnapshotAssertion):
     query = {'table_name': table_name}
     headers = {'Authorization': f'Bearer {base.token}'}
 
-    case: Case = base_operations_schema.get_operation_by_id('listColumns') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listColumns') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -129,8 +129,8 @@ def test_insertColumn(base: Base, snapshot_json: SnapshotAssertion, column: dict
     if 'column_data' in column:
         body['column_data'] = column['column_data']
 
-    case: Case = base_operations_schema.get_operation_by_id('insertColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('insertColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -161,8 +161,8 @@ def test_appendColumns(base: Base, snapshot_json: SnapshotAssertion):
         'columns': APPEND_COLUMNS,
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('appendColumns') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('appendColumns') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -194,16 +194,16 @@ def test_updateColumn_rename(base: Base):
         'new_column_name': 'new-name',
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('updateColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
 
     # Verify rename
     query = {'table_name': table_name}
-    case: Case = base_operations_schema.get_operation_by_id('listColumns') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listColumns') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -226,8 +226,8 @@ def test_updateColumn_resize(base: Base):
         'new_column_width': 400,
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('updateColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -248,16 +248,16 @@ def test_updateColumn_freeze(base: Base):
         'column': 'freeze-me',
         'frozen': True,
     }
-    case: Case = base_operations_schema.get_operation_by_id('updateColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
 
     # Unfreeze
     body['frozen'] = False
-    case: Case = base_operations_schema.get_operation_by_id('updateColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -278,16 +278,16 @@ def test_deleteColumn(base: Base):
         'column': 'delete-me',
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('deleteColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('deleteColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
 
     # Verify column is gone
     query = {'table_name': table_name}
-    case: Case = base_operations_schema.get_operation_by_id('listColumns') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listColumns') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200

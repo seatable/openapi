@@ -13,8 +13,8 @@ from schemathesis import Case
 
 def test_login_wrong_password():
     body = {'username': USERNAME, 'password': 'wrong-password'}
-    case: Case = authentication_schema.get_operation_by_id('getAccountTokenfromUsername') \
-        .make_case(body=body)
+    case: Case = authentication_schema.find_operation_by_id('getAccountTokenfromUsername') \
+        .Case(body=body)
     response = case.call()
 
     assert response.status_code == 400
@@ -23,8 +23,8 @@ def test_login_wrong_password():
 
 def test_login_nonexistent_user():
     body = {'username': 'nobody@example.com', 'password': 'irrelevant'}
-    case: Case = authentication_schema.get_operation_by_id('getAccountTokenfromUsername') \
-        .make_case(body=body)
+    case: Case = authentication_schema.find_operation_by_id('getAccountTokenfromUsername') \
+        .Case(body=body)
     response = case.call()
 
     assert response.status_code == 400
@@ -32,8 +32,8 @@ def test_login_nonexistent_user():
 
 def test_login_missing_password():
     body = {'username': USERNAME}
-    case: Case = authentication_schema.get_operation_by_id('getAccountTokenfromUsername') \
-        .make_case(body=body)
+    case: Case = authentication_schema.find_operation_by_id('getAccountTokenfromUsername') \
+        .Case(body=body)
     response = case.call()
 
     assert response.status_code == 400
@@ -45,7 +45,7 @@ def test_login_missing_password():
 
 def test_account_endpoint_without_token():
     """Access an account endpoint without Authorization header."""
-    case: Case = user_account_operations.get_operation_by_id('getAccountInfo').make_case()
+    case: Case = user_account_operations.find_operation_by_id('getAccountInfo').Case()
     response = case.call(headers={})
 
     assert response.status_code == 403
@@ -53,7 +53,7 @@ def test_account_endpoint_without_token():
 
 def test_account_endpoint_with_invalid_token():
     """Access an account endpoint with a garbage token."""
-    case: Case = user_account_operations.get_operation_by_id('getAccountInfo').make_case()
+    case: Case = user_account_operations.find_operation_by_id('getAccountInfo').Case()
     response = case.call(headers={'Authorization': 'Bearer invalid-token-12345'})
 
     assert response.status_code == 401
@@ -62,7 +62,7 @@ def test_account_endpoint_with_invalid_token():
 def test_admin_endpoint_as_regular_user(account_token: Secret):
     """Regular user trying to access system admin endpoint."""
     headers = {'Authorization': f'Bearer {account_token.value}'}
-    case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
+    case: Case = system_admin_account_operations.find_operation_by_id('listUsers').Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 403
@@ -75,8 +75,8 @@ def test_admin_endpoint_as_regular_user(account_token: Secret):
 def test_base_token_for_nonexistent_base(account_token: Secret):
     """Request a base token for a base that doesn't exist."""
     path_parameters = {'workspace_id': 99999, 'base_name': 'nonexistent'}
-    case: Case = authentication_schema.get_operation_by_id('getBaseTokenWithAccountToken') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = authentication_schema.find_operation_by_id('getBaseTokenWithAccountToken') \
+        .Case(path_parameters=path_parameters)
     response = case.call(headers={'Authorization': f'Bearer {account_token.value}'})
 
     assert response.status_code == 404
@@ -84,7 +84,7 @@ def test_base_token_for_nonexistent_base(account_token: Secret):
 
 def test_base_token_with_invalid_api_token():
     """Request a base token with an invalid API token."""
-    case: Case = authentication_schema.get_operation_by_id('getBaseTokenWithApiToken').make_case()
+    case: Case = authentication_schema.find_operation_by_id('getBaseTokenWithApiToken').Case()
     response = case.call(headers={'Authorization': 'Token invalid-api-token-xyz'})
 
     assert response.status_code == 403
@@ -97,8 +97,8 @@ def test_base_token_with_invalid_api_token():
 def test_base_operation_without_token(base: Base):
     """Access a base operation without any token."""
     path_parameters = {'base_uuid': base.uuid}
-    case: Case = base_operations_schema.get_operation_by_id('getMetadata') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = base_operations_schema.find_operation_by_id('getMetadata') \
+        .Case(path_parameters=path_parameters)
     response = case.call(headers={})
 
     assert response.status_code == 403
@@ -108,8 +108,8 @@ def test_base_operation_with_invalid_token(base: Base):
     """Access a base operation with a garbage base token."""
     path_parameters = {'base_uuid': base.uuid}
     headers = {'Authorization': 'Bearer invalid-jwt-token'}
-    case: Case = base_operations_schema.get_operation_by_id('getMetadata') \
-        .make_case(path_parameters=path_parameters, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('getMetadata') \
+        .Case(path_parameters=path_parameters, headers=headers)
     response = case.call()
 
     assert response.status_code == 403
@@ -119,8 +119,8 @@ def test_base_operation_with_wrong_uuid():
     """Access a base that doesn't exist with a valid-looking but wrong UUID."""
     path_parameters = {'base_uuid': '00000000-0000-0000-0000-000000000000'}
     headers = {'Authorization': 'Bearer invalid-jwt-token'}
-    case: Case = base_operations_schema.get_operation_by_id('getMetadata') \
-        .make_case(path_parameters=path_parameters, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('getMetadata') \
+        .Case(path_parameters=path_parameters, headers=headers)
     response = case.call()
 
     assert response.status_code in (401, 403, 404)
@@ -135,8 +135,8 @@ def test_get_nonexistent_row(base: Base):
     path_parameters = {'base_uuid': base.uuid, 'row_id': 'AAAAAAAAAAAAAAAAAAAAAA'}
     headers = {'Authorization': f'Bearer {base.token}'}
     query = {'table_name': 'Table1'}
-    case: Case = base_operations_schema.get_operation_by_id('getRow') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('getRow') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code in (400, 404)

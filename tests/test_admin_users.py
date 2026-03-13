@@ -17,8 +17,8 @@ def test_admin_user_lifecycle(system_admin_account_token: Secret):
         'is_staff': False,
         'is_active': True,
     }
-    case: Case = system_admin_account_operations.get_operation_by_id('addNewUser') \
-        .make_case(body=body)
+    case: Case = system_admin_account_operations.find_operation_by_id('addNewUser') \
+        .Case(body=body)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -33,8 +33,8 @@ def test_admin_user_lifecycle(system_admin_account_token: Secret):
         # 2. Update user
         path_parameters = {'user_id': user_id}
         body = {'name': 'Updated Test User', 'is_active': False}
-        case: Case = system_admin_account_operations.get_operation_by_id('updateUser') \
-            .make_case(path_parameters=path_parameters, body=body)
+        case: Case = system_admin_account_operations.find_operation_by_id('updateUser') \
+            .Case(path_parameters=path_parameters, body=body)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
@@ -46,8 +46,8 @@ def test_admin_user_lifecycle(system_admin_account_token: Secret):
     finally:
         # 3. Delete user (always clean up)
         path_parameters = {'user_id': user_id}
-        case: Case = system_admin_account_operations.get_operation_by_id('deleteUser') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = system_admin_account_operations.find_operation_by_id('deleteUser') \
+            .Case(path_parameters=path_parameters)
         response = case.call(headers=headers)
 
         assert response.status_code == 200

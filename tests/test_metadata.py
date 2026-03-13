@@ -13,8 +13,8 @@ def test_getMetadata(base: Base):
     path_parameters = {'base_uuid': base.uuid}
     headers = {'Authorization': f'Bearer {base.token}'}
 
-    case: Case = base_operations_schema.get_operation_by_id('getMetadata') \
-        .make_case(path_parameters=path_parameters, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('getMetadata') \
+        .Case(path_parameters=path_parameters, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -36,8 +36,8 @@ def test_listCollaborators(base: Base):
     path_parameters = {'base_uuid': base.uuid}
     headers = {'Authorization': f'Bearer {base.token}'}
 
-    case: Case = base_operations_schema.get_operation_by_id('listCollaborators') \
-        .make_case(path_parameters=path_parameters, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listCollaborators') \
+        .Case(path_parameters=path_parameters, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
