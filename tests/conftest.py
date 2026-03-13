@@ -327,9 +327,6 @@ def create_group(account_token: Secret, group_name: str) -> tuple[int, int]:
     assert isinstance(group_id, int)
 
     # TODO: Is there an easier way to get the workspace ID of a group?
-
-    # TODO: Fix bug with query
-    query = {'detail': False}
     case: Case = user_account_operations.find_operation_by_id('listWorkspaces') \
         .Case()
     response = case.call(headers=headers)
