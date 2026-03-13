@@ -13,8 +13,8 @@ def test_renameTable(base: Base):
     headers = {'Authorization': f'Bearer {base.token}'}
     body = {'table_name': 'test_renameTable', 'new_table_name': 'test_renameTable_renamed'}
 
-    case: Case = base_operations_schema.get_operation_by_id('renameTable') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('renameTable') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -35,8 +35,8 @@ def test_duplicateTable(base: Base, snapshot_json: SnapshotAssertion):
     headers = {'Authorization': f'Bearer {base.token}'}
     body = {'table_name': 'test_duplicateTable', 'is_duplicate_records': True}
 
-    case: Case = base_operations_schema.get_operation_by_id('duplicateTable') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('duplicateTable') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -68,8 +68,8 @@ def test_deleteTable(base: Base):
     headers = {'Authorization': f'Bearer {base.token}'}
     body = {'table_name': 'test_deleteTable'}
 
-    case: Case = base_operations_schema.get_operation_by_id('deleteTable') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('deleteTable') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200

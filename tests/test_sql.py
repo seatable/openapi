@@ -22,8 +22,8 @@ def _sql(base: Base, sql: str) -> dict:
     path_parameters = {'base_uuid': base.uuid}
     body = {'sql': sql, 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('querySQL') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('querySQL') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
     return response.json()
@@ -131,8 +131,8 @@ def test_sql_invalid_table(base: Base):
     path_parameters = {'base_uuid': base.uuid}
     body = {'sql': 'SELECT * FROM nonexistent_table', 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('querySQL') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('querySQL') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 400
@@ -143,8 +143,8 @@ def test_sql_invalid_syntax(base: Base):
     path_parameters = {'base_uuid': base.uuid}
     body = {'sql': 'SELEC * FORM test', 'convert_keys': True}
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('querySQL') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('querySQL') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 400

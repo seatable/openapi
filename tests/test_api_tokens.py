@@ -9,8 +9,8 @@ def test_createApiToken(base: Base, account_token: Secret, snapshot_json: Snapsh
     headers = {'Authorization': f'Bearer {account_token.value}'}
     body = {'app_name': 'test-token-create', 'permission': 'rw'}
 
-    case: Case = authentication_schema.get_operation_by_id('createApiToken') \
-        .make_case(path_parameters=path_parameters, body=body)
+    case: Case = authentication_schema.find_operation_by_id('createApiToken') \
+        .Case(path_parameters=path_parameters, body=body)
     response = case.call(headers=headers)
 
     assert response.status_code == 201
@@ -32,8 +32,8 @@ def test_createApiToken(base: Base, account_token: Secret, snapshot_json: Snapsh
 
     # Cleanup
     path_parameters['app_name'] = 'test-token-create'
-    case: Case = authentication_schema.get_operation_by_id('deleteApiToken') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = authentication_schema.find_operation_by_id('deleteApiToken') \
+        .Case(path_parameters=path_parameters)
     case.call(headers=headers)
 
 
@@ -43,14 +43,14 @@ def test_listApiTokens(base: Base, account_token: Secret, snapshot_json: Snapsho
 
     # Create a token first
     body = {'app_name': 'test-token-list', 'permission': 'r'}
-    case: Case = authentication_schema.get_operation_by_id('createApiToken') \
-        .make_case(path_parameters=path_parameters, body=body)
+    case: Case = authentication_schema.find_operation_by_id('createApiToken') \
+        .Case(path_parameters=path_parameters, body=body)
     response = case.call(headers=headers)
     assert response.status_code == 201
 
     # List tokens
-    case: Case = authentication_schema.get_operation_by_id('listApiTokens') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = authentication_schema.find_operation_by_id('listApiTokens') \
+        .Case(path_parameters=path_parameters)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -74,8 +74,8 @@ def test_listApiTokens(base: Base, account_token: Secret, snapshot_json: Snapsho
 
     # Cleanup
     path_parameters['app_name'] = 'test-token-list'
-    case: Case = authentication_schema.get_operation_by_id('deleteApiToken') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = authentication_schema.find_operation_by_id('deleteApiToken') \
+        .Case(path_parameters=path_parameters)
     case.call(headers=headers)
 
 
@@ -85,8 +85,8 @@ def test_updateApiToken(base: Base, account_token: Secret):
 
     # Create a token
     body = {'app_name': 'test-token-update', 'permission': 'r'}
-    case: Case = authentication_schema.get_operation_by_id('createApiToken') \
-        .make_case(path_parameters=path_parameters, body=body)
+    case: Case = authentication_schema.find_operation_by_id('createApiToken') \
+        .Case(path_parameters=path_parameters, body=body)
     response = case.call(headers=headers)
     assert response.status_code == 201
     assert response.json()['permission'] == 'r'
@@ -94,16 +94,16 @@ def test_updateApiToken(base: Base, account_token: Secret):
     # Update permission
     path_parameters_with_name = {**path_parameters, 'app_name': 'test-token-update'}
     body = {'permission': 'rw'}
-    case: Case = authentication_schema.get_operation_by_id('updateApiToken') \
-        .make_case(path_parameters=path_parameters_with_name, body=body)
+    case: Case = authentication_schema.find_operation_by_id('updateApiToken') \
+        .Case(path_parameters=path_parameters_with_name, body=body)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
     assert response.json()['permission'] == 'rw'
 
     # Cleanup
-    case: Case = authentication_schema.get_operation_by_id('deleteApiToken') \
-        .make_case(path_parameters=path_parameters_with_name)
+    case: Case = authentication_schema.find_operation_by_id('deleteApiToken') \
+        .Case(path_parameters=path_parameters_with_name)
     case.call(headers=headers)
 
 
@@ -113,15 +113,15 @@ def test_deleteApiToken(base: Base, account_token: Secret):
 
     # Create a token
     body = {'app_name': 'test-token-delete', 'permission': 'r'}
-    case: Case = authentication_schema.get_operation_by_id('createApiToken') \
-        .make_case(path_parameters=path_parameters, body=body)
+    case: Case = authentication_schema.find_operation_by_id('createApiToken') \
+        .Case(path_parameters=path_parameters, body=body)
     response = case.call(headers=headers)
     assert response.status_code == 201
 
     # Delete it
     path_parameters['app_name'] = 'test-token-delete'
-    case: Case = authentication_schema.get_operation_by_id('deleteApiToken') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = authentication_schema.find_operation_by_id('deleteApiToken') \
+        .Case(path_parameters=path_parameters)
     response = case.call(headers=headers)
 
     assert response.status_code == 200

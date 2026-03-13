@@ -18,8 +18,8 @@ def test_group_share_lifecycle(base: Base, account_token: Secret):
     try:
         # 1. Create group share (read-only)
         body = {'group_id': str(target_group_id), 'permission': 'r'}
-        case: Case = user_account_operations.get_operation_by_id('createGroupShare') \
-            .make_case(path_parameters=path_parameters, body=body)
+        case: Case = user_account_operations.find_operation_by_id('createGroupShare') \
+            .Case(path_parameters=path_parameters, body=body)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
@@ -30,8 +30,8 @@ def test_group_share_lifecycle(base: Base, account_token: Secret):
         assert data['dtable_group_share']['permission'] == 'r'
 
         # 2. List group shares
-        case: Case = user_account_operations.get_operation_by_id('listGroupShares') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = user_account_operations.find_operation_by_id('listGroupShares') \
+            .Case(path_parameters=path_parameters)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
@@ -43,24 +43,24 @@ def test_group_share_lifecycle(base: Base, account_token: Secret):
         # 3. Update group share (change to read-write)
         path_params_with_group = {**path_parameters, 'group_id': target_group_id}
         body = {'permission': 'rw'}
-        case: Case = user_account_operations.get_operation_by_id('updateGroupShare') \
-            .make_case(path_parameters=path_params_with_group, body=body)
+        case: Case = user_account_operations.find_operation_by_id('updateGroupShare') \
+            .Case(path_parameters=path_params_with_group, body=body)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
         assert response.json()['success'] is True
 
         # 4. Delete group share
-        case: Case = user_account_operations.get_operation_by_id('deleteGroupShare') \
-            .make_case(path_parameters=path_params_with_group)
+        case: Case = user_account_operations.find_operation_by_id('deleteGroupShare') \
+            .Case(path_parameters=path_params_with_group)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
         assert response.json()['success'] is True
 
         # Verify it's gone
-        case: Case = user_account_operations.get_operation_by_id('listGroupShares') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = user_account_operations.find_operation_by_id('listGroupShares') \
+            .Case(path_parameters=path_parameters)
         response = case.call(headers=headers)
 
         assert response.status_code == 200

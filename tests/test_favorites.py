@@ -8,15 +8,15 @@ def test_favorite_lifecycle(base: Base, account_token: Secret):
 
     # 1. Favorite the base
     body = {'dtable_uuid': base.uuid}
-    case: Case = user_account_operations.get_operation_by_id('favoriteBase') \
-        .make_case(body=body)
+    case: Case = user_account_operations.find_operation_by_id('favoriteBase') \
+        .Case(body=body)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
     assert response.json()['success'] is True
 
     # 2. List favorites and verify it's there
-    case: Case = user_account_operations.get_operation_by_id('listFavorites').make_case()
+    case: Case = user_account_operations.find_operation_by_id('listFavorites').Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -27,15 +27,15 @@ def test_favorite_lifecycle(base: Base, account_token: Secret):
 
     # 3. Unfavorite
     query = {'dtable_uuid': base.uuid}
-    case: Case = user_account_operations.get_operation_by_id('unfavoriteBase') \
-        .make_case(query=query)
+    case: Case = user_account_operations.find_operation_by_id('unfavoriteBase') \
+        .Case(query=query)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
     assert response.json()['success'] is True
 
     # 4. Verify it's gone
-    case: Case = user_account_operations.get_operation_by_id('listFavorites').make_case()
+    case: Case = user_account_operations.find_operation_by_id('listFavorites').Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 200

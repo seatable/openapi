@@ -9,7 +9,7 @@ from syrupy.matchers import path_type
 def test_getSystemInformation(system_admin_account_token: Secret, snapshot_json: SnapshotAssertion):
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
-    case: Case = system_admin_account_operations.get_operation_by_id('getSystemInformation').make_case()
+    case: Case = system_admin_account_operations.find_operation_by_id('getSystemInformation').Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -53,8 +53,8 @@ def test_listUsers(system_admin_account_token: Secret, snapshot_json: SnapshotAs
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
     query = {'page': 1, 'per_page': 25}
 
-    case: Case = system_admin_account_operations.get_operation_by_id('listUsers') \
-        .make_case(query=query)
+    case: Case = system_admin_account_operations.find_operation_by_id('listUsers') \
+        .Case(query=query)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -87,7 +87,7 @@ def test_getUser(system_admin_account_token: Secret, snapshot_json: SnapshotAsse
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
     # First get user list to find the user_id
-    case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
+    case: Case = system_admin_account_operations.find_operation_by_id('listUsers').Case()
     response = case.call(headers=headers)
     assert response.status_code == 200
 
@@ -97,8 +97,8 @@ def test_getUser(system_admin_account_token: Secret, snapshot_json: SnapshotAsse
 
     # Get user details
     path_parameters = {'user_id': user_id}
-    case: Case = system_admin_account_operations.get_operation_by_id('getUser') \
-        .make_case(path_parameters=path_parameters)
+    case: Case = system_admin_account_operations.find_operation_by_id('getUser') \
+        .Case(path_parameters=path_parameters)
     response = case.call(headers=headers)
 
     assert response.status_code == 200

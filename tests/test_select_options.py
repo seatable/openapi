@@ -24,8 +24,8 @@ def test_addSelectOption(base: Base):
         ],
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('addSelectOption') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('addSelectOption') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -33,8 +33,8 @@ def test_addSelectOption(base: Base):
 
     # Verify options exist via listColumns
     query = {'table_name': table_name}
-    case: Case = base_operations_schema.get_operation_by_id('listColumns') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listColumns') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -70,16 +70,16 @@ def test_updateSelectOption(base: Base):
         'return_options': True,
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('updateSelectOption') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateSelectOption') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
 
     # Verify rename via listColumns
     query = {'table_name': table_name}
-    case: Case = base_operations_schema.get_operation_by_id('listColumns') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listColumns') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -102,8 +102,8 @@ def test_deleteSelectOption(base: Base):
         'column_name': 'color',
         'column_type': 'multiple-select',
     }
-    case: Case = base_operations_schema.get_operation_by_id('insertColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('insertColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
 
@@ -117,8 +117,8 @@ def test_deleteSelectOption(base: Base):
             {'name': 'blue', 'color': '#0000FF', 'textColor': '#FFFFFF'},
         ],
     }
-    case: Case = base_operations_schema.get_operation_by_id('addSelectOption') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('addSelectOption') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
 
@@ -128,8 +128,8 @@ def test_deleteSelectOption(base: Base):
         'option_names': ['red', 'blue'],
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('deleteSelectOption') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('deleteSelectOption') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -137,8 +137,8 @@ def test_deleteSelectOption(base: Base):
 
     # Verify only green remains
     query = {'table_name': table_name}
-    case: Case = base_operations_schema.get_operation_by_id('listColumns') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listColumns') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200

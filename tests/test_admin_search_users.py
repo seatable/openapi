@@ -5,7 +5,7 @@ from schemathesis import Case
 def test_listAdminUsers(system_admin_account_token: Secret):
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
-    case: Case = system_admin_account_operations.get_operation_by_id('listAdminUsers').make_case()
+    case: Case = system_admin_account_operations.find_operation_by_id('listAdminUsers').Case()
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -27,8 +27,8 @@ def test_searchUser(system_admin_account_token: Secret):
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
     query = {'query': 'testuser'}
-    case: Case = system_admin_account_operations.get_operation_by_id('searchUser') \
-        .make_case(query=query)
+    case: Case = system_admin_account_operations.find_operation_by_id('searchUser') \
+        .Case(query=query)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -46,8 +46,8 @@ def test_searchUser_no_results(system_admin_account_token: Secret):
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
     query = {'query': 'nonexistent-user-xyz-12345'}
-    case: Case = system_admin_account_operations.get_operation_by_id('searchUser') \
-        .make_case(query=query)
+    case: Case = system_admin_account_operations.find_operation_by_id('searchUser') \
+        .Case(query=query)
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -66,8 +66,8 @@ def test_resetUserPassword(system_admin_account_token: Secret):
         'password': 'OldPassword123!',
         'name': 'Reset PW Test',
     }
-    case: Case = system_admin_account_operations.get_operation_by_id('addNewUser') \
-        .make_case(body=body)
+    case: Case = system_admin_account_operations.find_operation_by_id('addNewUser') \
+        .Case(body=body)
     response = case.call(headers=headers)
     assert response.status_code == 200
     user_id = response.json()['email']
@@ -75,8 +75,8 @@ def test_resetUserPassword(system_admin_account_token: Secret):
     try:
         # Reset password
         path_parameters = {'user_id': user_id}
-        case: Case = system_admin_account_operations.get_operation_by_id('resetUserPassword') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = system_admin_account_operations.find_operation_by_id('resetUserPassword') \
+            .Case(path_parameters=path_parameters)
         response = case.call(headers=headers)
 
         assert response.status_code == 200
@@ -86,6 +86,6 @@ def test_resetUserPassword(system_admin_account_token: Secret):
         assert len(data['new_password']) >= 6
 
     finally:
-        case: Case = system_admin_account_operations.get_operation_by_id('deleteUser') \
-            .make_case(path_parameters={'user_id': user_id})
+        case: Case = system_admin_account_operations.find_operation_by_id('deleteUser') \
+            .Case(path_parameters={'user_id': user_id})
         case.call(headers=headers)

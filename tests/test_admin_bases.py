@@ -9,8 +9,8 @@ def test_listAllBases(system_admin_account_token: Secret, base: Base):
     """List all bases in the system, verify our test base appears."""
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
-    case: Case = system_admin_account_operations.get_operation_by_id('listAllBases') \
-        .make_case(query={'page': 1, 'per_page': 25})
+    case: Case = system_admin_account_operations.find_operation_by_id('listAllBases') \
+        .Case(query={'page': 1, 'per_page': 25})
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -29,27 +29,27 @@ def test_listUsersBases(system_admin_account_token: Secret, account_token: Secre
     user_headers = {'Authorization': f'Bearer {account_token.value}'}
 
     # Find testuser's internal user_id and personal workspace_id
-    case: Case = system_admin_account_operations.get_operation_by_id('listUsers').make_case()
+    case: Case = system_admin_account_operations.find_operation_by_id('listUsers').Case()
     response = case.call(headers=admin_headers)
     user = next(u for u in response.json()['data'] if u['contact_email'] == USERNAME)
     user_id = user['email']
 
-    case: Case = user_account_operations.get_operation_by_id('listWorkspaces').make_case()
+    case: Case = user_account_operations.find_operation_by_id('listWorkspaces').Case()
     response = case.call(headers=user_headers)
     personal_ws = next(w for w in response.json()['workspace_list'] if w.get('type') == 'personal')
     ws_id = personal_ws['id']
 
     # Create a base in the personal workspace
     body = {'workspace_id': ws_id, 'name': 'UserBasesTest'}
-    case: Case = user_account_operations.get_operation_by_id('createBase').make_case(body=body)
+    case: Case = user_account_operations.find_operation_by_id('createBase').Case(body=body)
     response = case.call(headers=user_headers)
     assert response.status_code == 201
     base_uuid = response.json()['table']['uuid']
 
     try:
         path_parameters = {'user_id': user_id}
-        case: Case = system_admin_account_operations.get_operation_by_id('listUsersBases') \
-            .make_case(path_parameters=path_parameters)
+        case: Case = system_admin_account_operations.find_operation_by_id('listUsersBases') \
+            .Case(path_parameters=path_parameters)
         response = case.call(headers=admin_headers)
 
         assert response.status_code == 200
@@ -65,8 +65,8 @@ def test_listUsersBases(system_admin_account_token: Secret, account_token: Secre
     finally:
         path_parameters = {'workspace_id': ws_id}
         body = {'name': 'UserBasesTest'}
-        case: Case = user_account_operations.get_operation_by_id('deleteBase') \
-            .make_case(path_parameters=path_parameters, body=body)
+        case: Case = user_account_operations.find_operation_by_id('deleteBase') \
+            .Case(path_parameters=path_parameters, body=body)
         case.call(headers=user_headers)
 
 
@@ -74,8 +74,8 @@ def test_listTrashedBases(system_admin_account_token: Secret):
     """List trashed bases (may be empty, just verify the endpoint works)."""
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
 
-    case: Case = system_admin_account_operations.get_operation_by_id('listTrashedBases') \
-        .make_case(query={'page': 1, 'per_page': 25})
+    case: Case = system_admin_account_operations.find_operation_by_id('listTrashedBases') \
+        .Case(query={'page': 1, 'per_page': 25})
     response = case.call(headers=headers)
 
     assert response.status_code == 200
@@ -95,21 +95,21 @@ def test_trash_and_restore_base(system_admin_account_token: Secret, account_toke
 
     try:
         body = {'workspace_id': ws_id, 'name': 'TrashMe'}
-        case: Case = user_account_operations.get_operation_by_id('createBase').make_case(body=body)
+        case: Case = user_account_operations.find_operation_by_id('createBase').Case(body=body)
         response = case.call(headers=user_headers)
         assert response.status_code == 201
         base_uuid = response.json()['table']['uuid']
         base_id = response.json()['table']['id']
 
         # Delete base via admin API (moves to trash)
-        case: Case = system_admin_account_operations.get_operation_by_id('deleteBase') \
-            .make_case(path_parameters={'base_uuid': base_uuid})
+        case: Case = system_admin_account_operations.find_operation_by_id('deleteBase') \
+            .Case(path_parameters={'base_uuid': base_uuid})
         response = case.call(headers=admin_headers)
         assert response.status_code == 200
 
         # Verify it appears in trash
-        case: Case = system_admin_account_operations.get_operation_by_id('listTrashedBases') \
-            .make_case(query={'page': 1, 'per_page': 100})
+        case: Case = system_admin_account_operations.find_operation_by_id('listTrashedBases') \
+            .Case(query={'page': 1, 'per_page': 100})
         response = case.call(headers=admin_headers)
         assert response.status_code == 200
 
@@ -117,14 +117,14 @@ def test_trash_and_restore_base(system_admin_account_token: Secret, account_toke
         assert base_id in trashed_ids
 
         # Restore from trash
-        case: Case = system_admin_account_operations.get_operation_by_id('restoreTrashedBase') \
-            .make_case(path_parameters={'base_id': base_id})
+        case: Case = system_admin_account_operations.find_operation_by_id('restoreTrashedBase') \
+            .Case(path_parameters={'base_id': base_id})
         response = case.call(headers=admin_headers)
         assert response.status_code == 200
 
         # Verify it's no longer in trash
-        case: Case = system_admin_account_operations.get_operation_by_id('listTrashedBases') \
-            .make_case(query={'page': 1, 'per_page': 100})
+        case: Case = system_admin_account_operations.find_operation_by_id('listTrashedBases') \
+            .Case(query={'page': 1, 'per_page': 100})
         response = case.call(headers=admin_headers)
         trashed_ids = [b['id'] for b in response.json()['trash_dtable_list']]
         assert base_id not in trashed_ids
@@ -132,8 +132,8 @@ def test_trash_and_restore_base(system_admin_account_token: Secret, account_toke
         # Clean up: delete the restored base properly
         path_parameters = {'workspace_id': ws_id}
         body = {'name': 'TrashMe'}
-        case: Case = user_account_operations.get_operation_by_id('deleteBase') \
-            .make_case(path_parameters=path_parameters, body=body)
+        case: Case = user_account_operations.find_operation_by_id('deleteBase') \
+            .Case(path_parameters=path_parameters, body=body)
         case.call(headers=user_headers)
 
     finally:

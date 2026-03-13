@@ -33,15 +33,15 @@ def _setup_linked_tables(base: Base, suffix: str = ''):
             'other_table': table2,
         },
     }
-    case: Case = base_operations_schema.get_operation_by_id('insertColumn') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('insertColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
     link_id = response.json()['data']['link_id']
 
     # Get table IDs from metadata
-    case: Case = base_operations_schema.get_operation_by_id('getMetadata') \
-        .make_case(path_parameters=path_parameters, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('getMetadata') \
+        .Case(path_parameters=path_parameters, headers=headers)
     response = case.call()
     tables = response.json()['metadata']['tables']
     t1_id = next(t['_id'] for t in tables if t['name'] == table1)
@@ -57,8 +57,8 @@ def _setup_linked_tables(base: Base, suffix: str = ''):
             t1_row_ids[1]: [t2_row_ids[0]],      # Bob -> Project A
         },
     }
-    case: Case = base_operations_schema.get_operation_by_id('createRowLink') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('createRowLink') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
     assert response.status_code == 200
 
@@ -79,8 +79,8 @@ def test_listRowLinks(base: Base):
         ],
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('listRowLinks') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listRowLinks') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -108,8 +108,8 @@ def test_updateRowLink(base: Base):
         },
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('updateRowLink') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateRowLink') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -121,8 +121,8 @@ def test_updateRowLink(base: Base):
         'link_column_name': 'projects',
         'rows': [{'row_id': t1_row_ids[1]}],
     }
-    case: Case = base_operations_schema.get_operation_by_id('listRowLinks') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listRowLinks') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -147,8 +147,8 @@ def test_deleteRowLink(base: Base):
         },
     }
 
-    case: Case = base_operations_schema.get_operation_by_id('deleteRowLink') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('deleteRowLink') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -159,8 +159,8 @@ def test_deleteRowLink(base: Base):
         'link_column_name': 'projects',
         'rows': [{'row_id': t1_row_ids[0]}],
     }
-    case: Case = base_operations_schema.get_operation_by_id('listRowLinks') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listRowLinks') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200

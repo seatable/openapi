@@ -51,16 +51,16 @@ def test_updateRow(base: Base, snapshot_json: SnapshotAssertion):
         ],
     }
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('updateRow') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateRow') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
 
     # Verify the update by reading the row back
     query = {'table_name': table_name, 'convert_keys': True}
-    case: Case = base_operations_schema.get_operation_by_id('getRow') \
-        .make_case(path_parameters={'base_uuid': base.uuid, 'row_id': row_ids[0]}, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('getRow') \
+        .Case(path_parameters={'base_uuid': base.uuid, 'row_id': row_ids[0]}, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -100,8 +100,8 @@ def test_updateRow_multiple(base: Base):
         ],
     }
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('updateRow') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('updateRow') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -122,16 +122,16 @@ def test_deleteRow(base: Base):
         'row_ids': [row_ids[0], row_ids[1]],
     }
     headers = {'Authorization': f'Bearer {base.token}'}
-    case: Case = base_operations_schema.get_operation_by_id('deleteRow') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('deleteRow') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
 
     # Verify only one row remains
     query = {'table_name': table_name, 'convert_keys': True}
-    case: Case = base_operations_schema.get_operation_by_id('listRows') \
-        .make_case(path_parameters=path_parameters, query=query, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('listRows') \
+        .Case(path_parameters=path_parameters, query=query, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
@@ -149,15 +149,15 @@ def test_lockRows(base: Base):
 
     # Lock
     body = {'table_name': table_name, 'row_ids': row_ids}
-    case: Case = base_operations_schema.get_operation_by_id('lockRows') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('lockRows') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
 
     # Unlock
-    case: Case = base_operations_schema.get_operation_by_id('unlockRows') \
-        .make_case(path_parameters=path_parameters, body=body, headers=headers)
+    case: Case = base_operations_schema.find_operation_by_id('unlockRows') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
     response = case.call()
 
     assert response.status_code == 200
