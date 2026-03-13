@@ -39,7 +39,6 @@ Run the tests locally against a SeaTable Server. Useful for testing a specific s
 **Prerequisites:**
 - Python 3.10+
 - pip
-- Two accounts (user and system-admin permission)
 
 **SeaTable Installation:**
 
