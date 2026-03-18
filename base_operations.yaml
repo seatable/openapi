@@ -2605,6 +2605,10 @@ paths:
       operationId: appendRows
       description: |-
         Append multiple rows to a table. Define the column:values pairs of each column in the [rows object](/reference/models).
+        
+        > 🚧 Column names only
+        >
+        > This endpoint always expects **column names** (e.g. `Name`) in the row object, not internal column keys (e.g. `0000`). The `convert_keys` parameter is not supported. Unknown keys are silently ignored without error.
       requestBody:
         content:
           application/json:
@@ -2644,6 +2648,10 @@ paths:
         > 📘 Structure of the row object
         > 
         > The row object contains key:value pairs with the column name as key and the desired values. Check the page [Models](/reference/models) to get a better understanding of the row object.
+
+        > 🚧 Column names only
+        >
+        > This endpoint always expects **column names** (e.g. `Name`) in the row object, not internal column keys (e.g. `0000`). The `convert_keys` parameter is not supported. Unknown keys are silently ignored without error.
       requestBody:
         content:
           application/json:
