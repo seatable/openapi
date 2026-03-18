@@ -567,7 +567,7 @@ components:
           $ref: "#/components/schemas/table_name"
         row_ids:
           type: array
-          description: "Defines the rows which should be updated."
+          description: "Defines the rows which should be deleted."
           items:
             $ref: "#/components/schemas/row_id"
       required:
@@ -658,7 +658,7 @@ components:
 
     match_link_columns:
       type: object
-      description: update multiple rows
+      description: Match and link rows from two tables based on matching column values.
       properties:
         link_id:
           $ref: "#/components/schemas/link_id"
@@ -945,7 +945,7 @@ components:
       type: array
       items:
         type: string
-      description: "IDs of the rows that should be hidden"
+      description: "IDs of the columns that should be hidden"
 
     filters_text:
       title: Text
@@ -3928,7 +3928,7 @@ paths:
       tags: [Big Data]
       summary: Move Rows to Normal Backend
       operationId: moveRowsToNormalBackend
-      description: Moves the seleted rows into the big data backend.
+      description: Moves the selected rows from the big data backend to the normal backend.
       requestBody:
         content:
           application/json:

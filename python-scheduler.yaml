@@ -70,10 +70,10 @@ components:
       in: query
       schema:
         type: string
-        pattern: ^[0-9]{4}-(0[1-9]|1[0-2])
+        pattern: ^[0-9]{4}(0[1-9]|1[0-2])$
       description: >-
-        For which month you'd like to list the statistics in the format of YYYY-MM. If you leave this value empty,
-      example: "2023-06"
+        For which month you'd like to list the statistics in the format of YYYYMM. If you leave this value empty, the current month is used.
+      example: "202306"
       required: false
     order_by:
       name: order_by

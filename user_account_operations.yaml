@@ -4402,7 +4402,7 @@ paths:
       summary: Export Big Data View to Excel
       operationId: exportBigDataView
       description: >-
-        Hier muss noch eine Beschreibung ergänzt werden
+        Exports a big data view as an Excel file. Returns a task ID that can be used to track the export progress.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -4423,7 +4423,7 @@ paths:
         - Import & Export
       summary: Append Excel CSV
       operationId: appendToTableFromFile
-      description: Hier muss noch eine Beschreibung ergänzt werden.
+      description: Appends rows from an uploaded Excel or CSV file to an existing table.
       requestBody:
         content:
           multipart/form-data:
@@ -5665,7 +5665,7 @@ paths:
               type: object
               properties:
                 dst_dtable_uuid:
-                  $ref: "#/components/schemas/dtable_name"
+                  $ref: "#/components/schemas/dtable_uuid"
       security:
         - AccountTokenAuth: []
       parameters:
@@ -7382,8 +7382,8 @@ paths:
         - $ref: "#/components/parameters/account_name"
         - $ref: "#/components/parameters/base_uuid"
       responses:
-        "400":
-          description: Bad Request
+        "200":
+          description: OK
           content:
             application/json:
               schema:
@@ -7705,7 +7705,7 @@ paths:
         - Apps
       summary: List Apps
       operationId: listApps
-      description: Hier muss noch eine Beschreibung ergänzt werden
+      description: Lists all universal apps that you manage or have access to.
       security:
         - AccountTokenAuth: []
       responses:
@@ -7774,7 +7774,7 @@ paths:
         - Apps
       summary: Import Users to App
       operationId: importUsersToApp
-      description: Hier muss noch eine Beschreibung ergänzt werden
+      description: Imports multiple users to a universal app in a single batch operation.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -7817,7 +7817,7 @@ paths:
         - Apps
       summary: List Universal App Users
       operationId: listUniversalAppUsers
-      description: Hier muss noch eine Beschreibung ergänzt werden
+      description: Lists all users of a specific universal app.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -7853,7 +7853,7 @@ paths:
         - Apps
       summary: List App Invite Links
       operationId: listAppInviteLinks
-      description: Hier muss noch eine Beschreibung ergänzt werden
+      description: Lists all invite links for a specific universal app.
       security:
         - AccountTokenAuth: []
       parameters:

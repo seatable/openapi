@@ -104,7 +104,7 @@ components:
   schemas:
     AccountToken:
       type: object
-      description: account-token ...
+      description: The account token used for authenticating API requests.
       properties:
         token:
           type: string
@@ -113,9 +113,10 @@ components:
           maxLength: 40
     ApiTokenList:
       type: object
-      description: ...
+      description: List of API tokens for a base.
       properties:
         api_tokens:
+          type: array
           items:
             $ref: "#/components/schemas/ApiToken"
     ApiToken:
@@ -272,7 +273,7 @@ paths:
         - $ref: "#/components/parameters/base_name"
       responses:
         "201":
-          description: Ok
+          description: Created
           content:
             application/json:
               schema:
@@ -411,10 +412,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/AccessToken"
         "401":
-          description: "Forbidden"
+          description: "Unauthorized"
           content:
             application/json:
               example: { "detail": "Invalid token" }
+        "403":
+          description: "Forbidden"
+          content:
+            application/json:
+              example: { "detail": "Authentication credentials were not provided." }
         "404":
           description: Not found
           content:
