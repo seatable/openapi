@@ -14,6 +14,41 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.com/blog) for detailed release notes.
 
+## Version 6.1 (19.03.2026)
+
+> 📘 New requests
+>
+> **Account Operations - System Admin**
+>
+> - [Get AI Statistics](/reference/getownerorteamaistatistics) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+>
+> **Account Operations - Team Admin**
+>
+> - [List User's Bases](/reference/listusersbases-1) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List API Tokens](/reference/listapitokens-1) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List API Tokens of All Bases](/reference/listapitokensofallbases) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Delete API Token](/reference/deleteapitoken-1) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span>
+> - [List Shares](/reference/listshares) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Delete Team](/reference/deleteteam-1) <span class="APIMethod APIMethod_fixedWidth APIMethod_delete">delete</span>
+> - [List Automation Logs](/reference/listautomationlogs) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List Python Runs](/reference/listpythonruns) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get AI Statistics](/reference/getuserorbaseaistatistics) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get Admin Log Statistics by Day](/reference/getadminlogstatisticsbyday) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get Automation Log Statistics by Day](/reference/getautomationlogstatisticsbyday) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get Automation Log Statistics by Base](/reference/getautomationlogstatisticsbybase) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get Login Log Statistics by Day](/reference/getloginlogstatisticsbyday) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get Python Run Statistics by Day](/reference/getpythonrunstatisticsbyday) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [Get Python Run Statistics by Base](/reference/getpythonrunstatisticsbybase) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+
+> 👍 Other changes
+>
+> - [Update User](/reference/updateuser): New option `monthly_automation_limit_per_user` was added.
+> - [Update Team](/reference/updateteam): New option `monthly_automation_limit_per_user` was added.
+> - [Get User](/reference/getuser-1) (Team Admin): Response now includes `is_active` and `is_org_admin` fields.
+> - [List Team Operations](/reference/listteamoperationlog): New query parameters `operation_group`, `start`, and `end` for filtering.
+> - [List Team Logins](/reference/listteamlogins): New query parameters `login_status`, `start`, and `end` for filtering.
+
+
 ## Version 6.0 (04.11.2025)
 
 > 📘 New requests
