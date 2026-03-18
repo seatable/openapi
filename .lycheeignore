@@ -4,6 +4,5 @@ cloud.seatable.io/media/
 cloud.seatable.io/image-view/
 cloud.seatable.io/dtable/forms/
 cloud.seatable.io/api-gateway/
-cloud.seafile.com/seafhttp/
 
 # ReadMe.com internal links are excluded via --exclude in the workflow

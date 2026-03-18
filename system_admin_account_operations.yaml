@@ -15,11 +15,6 @@ x-readme:
   metrics-enabled: false
   proxy-enabled: false
 
-# why uses /api/v2.1/admin/organizations-basic-info/ query_params? Why not using a body?
-# why sometimes base_uuid, sometimes base_id?
-# the auth.local has many different descriptions: owner, user_id, username or email. Keeping to the same description would be great.
-# is there a possibility to get "internal-links"?
-
 tags:
   - name: Users
     description: Manage users
@@ -477,7 +472,7 @@ components:
     row_limit:
       type: integer
       description: User's total row limit in number. For example 10000.
-      example: "50000"
+      example: 50000
     quota_total:
       type: string
       description: Update their total quota in MB.
@@ -552,7 +547,7 @@ components:
       description: >-
         If a custom CSS should be used. Optional, `0` by default. If
         set to `1`, paste your CSS into the param `CUSTOM_CSS`.
-      example: "0"
+      example: 0
     CUSTOM_CSS:
       type: string
       description: The content of your custom CSS. Optional. Empty by default.
@@ -564,49 +559,49 @@ components:
         registration. Optional, `1` by default. If `0`, then the
         user need to be activated by the administrator or via the
         activation email.
-      example: "1"
+      example: 1
     REGISTRATION_SEND_MAIL:
       type: integer
       description: >-
         If an activation email should be sent after the user has
         registered. Optional, `0` by default.
-      example: "0"
+      example: 0
     LOGIN_REMEMBER_DAYS:
       type: integer
       description: >-
         How many default days a user could be kept signed in.
         Optional, `7` by default.
-      example: "7"
+      example: 7
     LOGIN_ATTEMPT_LIMIT:
       type: integer
       description: >-
         The maximum number of failed login attempts before showing
         CAPTCHA. Optional, `5` by default.
-      example: "5"
+      example: 5
     FREEZE_USER_ON_LOGIN_FAILED:
       type: integer
       description: >-
         If the user's account should be frozen when they exceed the
         login attempts limit. Optional, `0` by default.
-      example: "0"
+      example: 0
     USER_STRONG_PASSWORD_REQUIRED:
       type: integer
       description: >-
         Force the users to use a strong password when signing up or
         changing password. Optional, `0` by default.
-      example: "0"
+      example: 0
     FORCE_PASSWORD_CHANGE:
       type: integer
       description: >-
         Force newly added users to change their password, or when
         the admin resets their password. Optional, `1` by default.
-      example: "1"
+      example: 1
     USER_PASSWORD_MIN_LENGTH:
       type: integer
       description: >-
         The minimum length of user passwords. Optional, `6` by
         default.
-      example: "6"
+      example: 6
     USER_PASSWORD_STRENGTH_LEVEL:
       type: integer
       description: >-
@@ -614,19 +609,19 @@ components:
         `3` means password must have at least 3 of the following: a
         number, an upper letter, a lower letter and a special
         symbol. Optional, `3` by default.
-      example: "3"
+      example: 3
     ENABLE_TWO_FACTOR_AUTH:
       type: integer
       description: >-
         If two factor authentication should be activated for the
         system. Optional, `0` by default.
-      example: "0"
+      example: 0
     ENABLE_SIGNUP:
       type: integer
       description: >-
         If registration on the web interface is allowed. Optional,
         `0` by default.
-      example: "1"
+      example: 1
     logo:
       type: string
       description: The path and filename of the image file of your logo.
@@ -3292,7 +3287,6 @@ paths:
               schema:
                 type: object
               example:
-                # FIXME: Should actually be registration_logs...
                 invitation_logs: []
   /api/v2.1/admin/abuse-reports/:
     get:

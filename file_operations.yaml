@@ -140,7 +140,7 @@ paths:
                 type: object
               example:
                 upload_link: >-
-                  https://cloud.seafile.com/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e
+                  https://cloud.seatable.io/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e
                 workspace_id: 42
                 parent_path: /asset/a275d870-fd55-48e4-8c4a-5fd6f2549765
                 img_relative_path: images/2021-08

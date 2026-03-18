@@ -680,14 +680,14 @@ paths:
                     updated_at: "2021-03-02T10:29:03+00:00"
                     color: null
                     text_color: null
-                    icon: null,
-                    is_encrypted: false,
-                    in_storage: true,
-                    org_id: 1,
-                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
-                    group_id: -1,
-                    owner: Jasmin Tee,
-                    owner_deleted: false,
+                    icon: null
+                    is_encrypted: false
+                    in_storage: true
+                    org_id: 1
+                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local
+                    group_id: -1
+                    owner: Jasmin Tee
+                    owner_deleted: false
                     rows_count: 2
                   - id: 159
                     workspace_id: 304
@@ -697,14 +697,14 @@ paths:
                     updated_at: "2021-03-02T10:29:03+00:00"
                     color: null
                     text_color: null
-                    icon: null,
-                    is_encrypted: false,
-                    in_storage: true,
-                    org_id: 1,
-                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
-                    group_id: -1,
-                    owner: TeamAdmin,
-                    owner_deleted: false,
+                    icon: null
+                    is_encrypted: false
+                    in_storage: true
+                    org_id: 1
+                    email: c882391bfa0144c4af64e4e0cde50b6c@auth.local
+                    group_id: -1
+                    owner: TeamAdmin
+                    owner_deleted: false
                     rows_count: 20
                 count: 16
   /api/v2.1/org/{org_id}/admin/users/{user_id}/dtables/:
@@ -794,13 +794,13 @@ paths:
                 updated_at: "2021-03-02T10:29:03+00:00"
                 color: null
                 text_color: null
-                icon: null,
-                is_encrypted: false,
-                in_storage: true,
-                org_id: 1,
+                icon: null
+                is_encrypted: false
+                in_storage: true
+                org_id: 1
                 owner: JiweRan
-                email: c882391bfa0144c4af64e4e0cde50b6c@auth.local,
-                group_id: -1,
+                email: c882391bfa0144c4af64e4e0cde50b6c@auth.local
+                group_id: -1
                 owner_deleted: false,
                 rows_count: 2
     delete:
@@ -1765,23 +1765,6 @@ paths:
                 type: object
               example:
                 success: true
-
-  # Base Export (asynchron, deshalb bieten wir das nicht mehr an.)
-  #/api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/export-dtable/:
-  #  get:
-  #    tags: [Export]
-  #    summary: Export base
-  #    description: |
-  #      Use this request to export a base as Team Admin.
-  #    security:
-  #      - AccountTokenAuth: []
-  #    parameters:
-  #      - $ref: "#/components/parameters/org_id"
-  #      - $ref: "#/components/parameters/base_uuid"
-  #      - $ref: "#/components/parameters/ignore_asset"
-  #    responses:
-  #      "200":
-  #        description: OK
 
   # Info & Settings
   /api/v2.1/org/admin/info/:

@@ -216,7 +216,7 @@ components:
         pattern: ^[A-Za-z0-9\-\_]{22}$
       required: true
       description: The id of the row.
-      example: Qtf7xPmoRaiFyQPO1aENTjb
+      example: Qtf7xPmoRaiFyQPO1aENTj
     view_name_path:
       name: view_name
       in: path
@@ -259,7 +259,7 @@ components:
       type: string
       pattern: ^[A-Za-z0-9\-\_]{22}$
       description: The id of the row. The id of a row is unique inside a base and is often used to identify one specific row.
-      example: "Qtf7xPmoRaiFyQPO1aENTjb"
+      example: "Qtf7xPmoRaiFyQPO1aENTj"
     base:
       type: object
       description: base (database) in SeaTable
@@ -889,7 +889,7 @@ components:
 
     date_filter_term:
       type: string
-      pattern: "^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?$" # --> pattern für das Datum im Format 2012-03-30
+      pattern: "^[0-9]{4}-((0[1-9])|(1[0-2]))?-(([0-2][0-9])|(3[01]))?$"
 
     filter_term_modifier:
       type: string
@@ -2718,7 +2718,7 @@ paths:
               schema:
                 type: object
               example:
-                _id: Qtf7xPmoRaiFyQPO1aENTjb
+                _id: Qtf7xPmoRaiFyQPO1aENTj
                 _mtime: "2021-03-10T16:19:31.761+00:00"
                 Name: NewName
                 Date: "2020-08-01"
@@ -2844,7 +2844,7 @@ paths:
               schema:
                 type: object
               example:
-                Qtf7xPmoRaiFyQPO1aENTjb:
+                Qtf7xPmoRaiFyQPO1aENTj:
                   - row_id: G5rbgqudTKKfAm1-cjnjbQ
                     display_value: Orson
 
@@ -3496,7 +3496,7 @@ paths:
         - modify_column_type
         - resize_column
         - move_column
-        - freeze_column (eventuell weglassen)
+        - freeze_column
 
         `column` is the name or `key` of the target column.
 
