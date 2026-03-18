@@ -143,7 +143,7 @@ We recommend using the new `/api-gateway/` endpoints. These endpoints are faster
 > 🚧 Breaking changes
 >
 > - [Get Row](/reference/getrow) and [List Rows](/reference/listrows): `Link` now returns an array containing `display_value` and `row_id` instead of a string with only the `display_value`. This change harmonizes the output with `Get Row` and `List Rows with SQL` endpoints.
-> - [Get Row](/reference/getrow) and [List Rows](/reference/listrows): `Link Formula` now returns the right output type depending of the result. Single numbers are returned as integers, multiple values as arrays. This change harmonizes the output of the `Get Row`, `List Rows` and `List Rows with SQL` endpoints.
+> - [Get Row](/reference/getrow) and [List Rows](/reference/listrows): `Link Formula` now returns the right output type depending on the result. Single numbers are returned as integers, multiple values as arrays. This change harmonizes the output of the `Get Row`, `List Rows` and `List Rows with SQL` endpoints.
 
 > 👍 Other changes
 >
@@ -221,7 +221,7 @@ The SeaTable API Reference for version 4.2 is no longer accessible here. However
 
 > 👍 Other changes
 >
-> - Deprecated base export calls for sytem admins were removed from documentation.
+> - Deprecated base export calls for system admins were removed from documentation.
 
 ## Version 4.1 (23.08.2023)
 

@@ -590,7 +590,7 @@ paths:
 
 
         This request is to be distinguished from the next request, because
-        cancelling the enforcement doesn't necesssarily [Disable 2FA for A User
+        cancelling the enforcement doesn't necessarily [Disable 2FA for A User
         in Team](/reference/disabletwofactor-1), which serves a different purpose.
       requestBody:
         content:
@@ -1068,7 +1068,7 @@ paths:
         "User xxx is already group owner".
 
         *   `new_group_name` is the new name of your group. If you don't want to
-        change the name, remove shi parameter because if you enter the current
+        change the name, remove this parameter because if you enter the current
         group name here you'll get an error "There is already a group with that
         name".
       requestBody:

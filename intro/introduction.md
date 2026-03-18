@@ -38,7 +38,7 @@ Start experimenting with SeaTable API using this website, which lets you run Sea
 
 > 👍 No user data leaves your browser
 >
-> Everything what you do on this website, happens solely on your browser. Every API-Request is send directly from your browser to SeaTable Cloud. Therefore you don't have to worry. You can enter and use your real credentials and tokens.
+> Everything what you do on this website, happens solely on your browser. Every API-Request is sent directly from your browser to SeaTable Cloud. Therefore you don't have to worry. You can enter and use your real credentials and tokens.
 
 <!-- ## SeaTable API within 30 seconds
 
@@ -164,7 +164,7 @@ To generate a base inside SeaTable you have to tell SeaTable where the base shou
 
 #### Step 3: Create the base
 
-Equiped with all these information it should be easy for you to create a new base. Use the request [Create base](https://api.seatable.com/reference/createbase) and fill out all the required values and hit
+Equipped with all these information it should be easy for you to create a new base. Use the request [Create base](https://api.seatable.com/reference/createbase) and fill out all the required values and hit
 **Try It!**. Every new base will automatically contain a first empty table with the name `Table1`.
 
 #### Step 4: Create a table and two columns (you will need a Base-Token)
@@ -174,7 +174,7 @@ The following requests have to be executed inside the base. There the necessary 
 Next we [create a table](https://api.seatable.com/reference/createtable) and call it `Table 2`. You can already define as many columns as you want that should be created.
 But even after the initial creation you could [append new columns](https://api.seatable.com/reference/appendcolumns-1) at every time you want. Open the base with your browser and you will immediately see the new table with the new columns.
 
-Congratulations! You created your first base with a seconds table and some extra columns.
+Congratulations! You created your first base with a second table and some extra columns.
 
 <hr></details>
 
@@ -213,9 +213,9 @@ I assume that you already have a base with a table in which a file column exists
 
 #### Step 1: Generate an upload link for this base
 
-First we have to [generate an upload link](https://api.seatable.com/reference/getuploadlink). Be aware that this requests needs the API-Token for authentification, because technically speaking it does not happen inside a base.
+First we have to [generate an upload link](https://api.seatable.com/reference/getuploadlink). Be aware that this requests needs the API-Token for authentication, because technically speaking it does not happen inside a base.
 
-The result will be look like this:
+The result will look like this:
 
 ```json Temporary upload link, generated with the SeaTable-API
 {
@@ -246,7 +246,7 @@ To append the file an image or file column, you still need another API request.
 #### Step 3: Update an existing file/image column
 
 Now you have to [update a row](https://api.seatable.com/reference/updaterow) and write the required information of the previously uploaded file to the right file/image column.
-Do not be confused by the fact that the upload of a file and an image is different. The `row` element has to be different. In case of an image you just have to provide the internal URL of the image as an array item. In cas of a file you have to provide more informations as an object.
+Do not be confused by the fact that the upload of a file and an image is different. The `row` element has to be different. In case of an image you just have to provide the internal URL of the image as an array item. In case of a file you have to provide more information as an object.
 
 ```json Example how to add an already uploaded image to a row:
 "row": {
@@ -282,7 +282,7 @@ The following example can only be executed as team admin. All requests require a
 
 #### Step 1: Get an Account-Token
 
-Start with the call [Get Account Token](https://api.seatable.com/reference/getaccounttokenfromusername). It requires your username and password and will return your `account-token`. Threat this token like your password, because it can be used to execute all types of account operations.
+Start with the call [Get Account Token](https://api.seatable.com/reference/getaccounttokenfromusername). It requires your username and password and will return your `account-token`. Treat this token like your password, because it can be used to execute all types of account operations.
 
 ```json
 {
@@ -313,7 +313,7 @@ Like as in the last example, start with the call [Get Account Token](https://api
 
 #### Step 2: Get the user id of the user
 
-To enforce 2-Factor-Authentification (2FA) for one of your team members, you need the `email` (sometimes also call `user_id`). Every user has a unique email adress like `123456789f1e4c8d8e1c31415867317c@auth.local`. Use [List Team Members](https://api.seatable.com/reference/listteamusers-1) to get this unique value of the user you want to update.
+To enforce 2-Factor-Authentication (2FA) for one of your team members, you need the `email` (sometimes also called `user_id`). Every user has a unique email address like `123456789f1e4c8d8e1c31415867317c@auth.local`. Use [List Team Members](https://api.seatable.com/reference/listteamusers-1) to get this unique value of the user you want to update.
 
 #### Step 3: Enforce 2FA
 

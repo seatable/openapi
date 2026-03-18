@@ -172,7 +172,7 @@ components:
       schema:
         type: integer
       description: |
-        offset is the beginning number of your query. 0 by default. If your record is linked to multiple records, use e.g. 0 to start quering from the 1st element or e.g. 5 to start querying from the 6th element, etc. **Attention:** The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime).
+        offset is the beginning number of your query. 0 by default. If your record is linked to multiple records, use e.g. 0 to start querying from the 1st element or e.g. 5 to start querying from the 6th element, etc. **Attention:** The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime).
       example: 0
     days:
       name: days
@@ -458,7 +458,7 @@ components:
     insert_row:
       title: Insert a row (above or below another row)
       type: object
-      description: Insert a row below or above another row your specified by his row-ID.
+      description: Insert a row below or above another row you specified by its row ID.
       properties:
         table_name:
           $ref: "#/components/schemas/table_name"
@@ -645,7 +645,7 @@ components:
                 $ref: "#/components/schemas/row_id"
               offset:
                 type: integer
-                description: "Offset is the beginning number of your query. If your record is linked to multiple records, use e.g. 0 to start quering from the 1st element or e.g. 5 to start querying from the 6th element, etc. Attention: The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime). Default is 0."
+                description: "Offset is the beginning number of your query. If your record is linked to multiple records, use e.g. 0 to start querying from the 1st element or e.g. 5 to start querying from the 6th element, etc. Attention: The returned list of linked rows is not ordered by its original order on the web interface, but rather by created time (ctime). Default is 0."
               limit:
                 type: integer
                 description: "Specify the maximum number of records to be returned. For example, use 20 to retrieve more than the default 10 records."
@@ -913,7 +913,7 @@ components:
     filter_conjunction:
       type: string
       enum: ["And", "Or"]
-      description: "If your view has multiple filters you have to decide how the filters are should hang together."
+      description: "If your view has multiple filters you have to decide how the filters should hang together."
 
     sort_type:
       type: string
@@ -1506,7 +1506,7 @@ components:
                 description: The name of your option.
               color:
                 type: string
-                description: select your code-code for the background.
+                description: select your color-code for the background.
                 pattern: "#([A-Za-z0-9]){6}"
                 example: #F4667C
               textColor:
@@ -2490,7 +2490,7 @@ paths:
         > 
         > New rows (INSERT statement) are always added to the **big data backend**. An error message will be returned, if the big data backend is not activated for the target base.
 
-        The complete [SQL Reference](https://developer.seatable.com/scripts/sql/functions/) can be found documentation in the developer manual. 
+        The complete [SQL Reference](https://developer.seatable.com/scripts/sql/functions/) can be found in the developer manual. 
 
         Here are some example requests for a fictitious table *Family* with the columns *name*, *age* and *birthday*:
 
@@ -2550,7 +2550,7 @@ paths:
       description: |
         Returns a list of rows contained in a table (or in a view if provided).
 
-        The usage of a view in SeaTable could be much more convenient then the usage of the complex SQL-syntax of the [SQL query endpoint](/reference/querysql).
+        The usage of a view in SeaTable could be much more convenient than the usage of the complex SQL-syntax of the [SQL query endpoint](/reference/querysql).
 
         > 👍 Big Data support added 
         > 
@@ -2702,7 +2702,7 @@ paths:
         - Rows
       summary: Get Row
       operationId: getRow
-      description: Get the values of one row with all columns and values, according to the row id provided. Depending of `convert` the response will contain the column names or the column keys.
+      description: Get the values of one row with all columns and values, according to the row id provided. Depending on `convert_keys` the response will contain the column names or the column keys.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2888,7 +2888,7 @@ paths:
       summary: Update Row Link(s)
       operationId: updateRowLink
       description: |
-        Updates the link(s) between one column and many others (1:n relation). Existings links will be removed and replaced with this new mapping.
+        Updates the link(s) between one column and many others (1:n relation). Existing links will be removed and replaced with this new mapping.
       requestBody:
         content:
           application/json:
@@ -2912,7 +2912,7 @@ paths:
         - Links
       summary: Delete Row Link(s)
       operationId: deleteRowLink
-      description: Deletes one or multiple links between two rows. Only the links between the row_ids mentioned in the mapping, will be removed. Other links will stay and not touched.
+      description: Deletes one or multiple links between two rows. Only the links between the row_ids mentioned in the mapping, will be removed. Other links will stay and not be touched.
       requestBody:
         content:
           application/json:
@@ -2942,8 +2942,8 @@ paths:
         Automatically create link relationships. 
         The caller needs to create a link column before calling the API, 
         supporting both archived and unarchived data.
-        It will return a task ID, by quering which you can get the status of the
-        link creation in the backend wihtin 5 minutes.
+        It will return a task ID, by querying which you can get the status of the
+        link creation in the backend within 5 minutes.
         The matched data in the link column in the 2 tables must have the similar 
         data structure (not same column type). For example, the text column can match
         email, auto-number or url type column, and so on.
@@ -2977,7 +2977,7 @@ paths:
       summary: Auto Link task
       operationId: autoLinkTask
       description: |
-        Query the status of auto add links task.There are 3 different status:
+        Query the status of auto add links task. There are 3 different status:
         - success
         - failed
         - running
@@ -3067,7 +3067,7 @@ paths:
         - Tables
       summary: Rename Table
       operationId: renameTable
-      description: Rename a table by providing it's original `table_name` and the desired `new_table_name`.
+      description: Rename a table by providing its original `table_name` and the desired `new_table_name`.
       requestBody:
         content:
           application/json:
@@ -3754,7 +3754,7 @@ paths:
       operationId: deleteSelectOption
       description: >-
         Use this request to remove single select or multiple select options that
-        you don't need any more. Thes deleted options will be removed from the
+        you don't need any more. These deleted options will be removed from the
         entries containing them.
 
 

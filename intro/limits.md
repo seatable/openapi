@@ -59,7 +59,7 @@ If this is the case, you should start thinking about how to reduce the number of
 
 - Check your code for unnecessary requests.
 - Slow down the speed or the frequency of your cronjob.
-- Use caching technics or use a queue for pending requests.
+- Use caching techniques or use a queue for pending requests.
 - Only request new data, if something changed.
 - Use SeaTable Webhooks to be informed about changes in your base instead of asking continuously for changes via the API.
 

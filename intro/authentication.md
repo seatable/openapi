@@ -12,7 +12,7 @@ slug: authentication
 }
 </style>
 
-Almost every SeaTable API requests require an authentication via authentication-header. The only exceptions are the request's **Ping** and the **Server Info Request**. These two requests don't require an authentication.
+Almost every SeaTable API request requires an authentication via authentication-header. The only exceptions are the request's **Ping** and the **Server Info Request**. These two requests don't require an authentication.
 
 All other API-requests require an authorization header that looks like this, where different tokens can be used.
 
@@ -20,7 +20,7 @@ All other API-requests require an authorization header that looks like this, whe
 
 > 📘 Bearer or Token?
 >
-> Before version 4.0, the authentication header in SeaTable was not like `Authorization: Bearer` but `Authorization: Token`. Starting with version 4.0 both authentication headers are supported. We recommend the use of `Authorization: Bearer`, according to the official [OpenAPI 3.0 Specifiation](https://swagger.io/docs/specification/v3_0/authentication/bearer-authentication/).
+> Before version 4.0, the authentication header in SeaTable was not like `Authorization: Bearer` but `Authorization: Token`. Starting with version 4.0 both authentication headers are supported. We recommend the use of `Authorization: Bearer`, according to the official [OpenAPI 3.0 Specification](https://swagger.io/docs/specification/v3_0/authentication/bearer-authentication/).
 
 ## Authentication Flows in SeaTable
 
@@ -43,12 +43,12 @@ Initially, authentication in SeaTable can seem a bit complicated, but the follow
 > 📘 API-Token
 >
 > An **API-Token** is like a password to use the API requests of a single base. The main purpose of an API-Token is to generate a Base-Token or to grant access to the files of a base.
-> You can create as many API-Token per base as you want. Every API-Token can have different read or write permissions. This token is valid until you delete them.
+> You can create as many API-Tokens per base as you want. Every API-Token can have different read or write permissions. This token is valid until you delete them.
 
 > 📘 Base-Token
 >
 > A **Base-Token** authenticates a _base API request_ (=base operations) like add a new row, append a row or delete a row. The Base-Token can be generated in many ways. The most common way is to use an API-Token.
-> The read/write permission of an Base-Token depends on the read/write permission of the API-Token or the Account-Token it's generated from. Base-Tokens are JWT tokens and are valid for 3 days, therefore these must be generated regularly.
+> The read/write permission of a Base-Token depends on the read/write permission of the API-Token or the Account-Token it's generated from. Base-Tokens are JWT tokens and are valid for 3 days, therefore these must be generated regularly.
 
 Here are the differences between these three tokens:
 
@@ -62,7 +62,7 @@ Here are the differences between these three tokens:
 > ❗ Keep your tokens secure!
 >
 > An Account-Token or an API-Token replaces the combination of username & password in a SeaTable API request. Once generated, such a token is valid permanently.
-> Therefore your tokens have the same sensibility as your username and password, so make sure keep them in a safe place!
+> Therefore your tokens have the same sensitivity as your username and password, so make sure to keep them in a safe place!
 
 ### Token Hierarchy
 
@@ -71,7 +71,7 @@ If you are working with the SeaTable API for the first time, the three different
 - For all account operations, you need an Account-Token. You create this token with your credentials.
 - For practically all base operations, you require a Base-Token. You generate this from an API-Token.
 
-Otherwise, it can be said that the Account-Token is the most powerful token because you can generate the other two tokens with it. With the API-Token, on the other hand, you can only generate a Base-Token, and the Base-Boken can only be used to execute base operations. We call this SeaTable's token hierarchy.
+Otherwise, it can be said that the Account-Token is the most powerful token because you can generate the other two tokens with it. With the API-Token, on the other hand, you can only generate a Base-Token, and the Base-Token can only be used to execute base operations. We call this SeaTable's token hierarchy.
 
 ### Security
 

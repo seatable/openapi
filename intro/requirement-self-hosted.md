@@ -26,7 +26,7 @@ This feature makes it super easy to explore and get to know the SeaTable API wit
 
 > 👍 No user data leaves your browser
 >
-> Everything what you do on this website, happens solely on your browser. Every API-Request is send directly from your browser to SeaTable Cloud. Therefore you don't have to worry. You can enter and use your real credentials and tokens.
+> Everything what you do on this website, happens solely on your browser. Every API-Request is sent directly from your browser to SeaTable Cloud. Therefore you don't have to worry. You can enter and use your real credentials and tokens.
 
 ## Try It! with SeaTable Cloud
 
@@ -50,7 +50,7 @@ This section is for those interested in the technical details behind why api.sea
 To prevent this CORS must be allowed and therefore the following code is necessary in your nginx configuration.
 
 ```bash Enable CORS
-# CORS seetings to allow API from readme.com
+# CORS settings to allow API from readme.com
 proxy_hide_header   'Access-Control-Allow-Origin';
 add_header 'Access-Control-Allow-Origin' '*' always;
 add_header 'Access-Control-Allow-Methods' 'GET,POST,PUT,DELETE,OPTIONS' always;

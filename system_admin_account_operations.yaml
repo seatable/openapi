@@ -106,6 +106,7 @@ components:
     return_ancestors:
       name: return_ancestors
       in: query
+      description: Whether to include ancestor groups in the response.
       schema:
         type: boolean
       example: true
@@ -188,17 +189,20 @@ components:
     parent_dir:
       name: parent_dir
       in: query
+      description: The parent directory path.
       schema:
         type: string
       example: /asset/
     query:
       name: query
       in: query
+      description: Search query string.
       schema:
         type: string
     org_id_query:
       name: org_id
       in: query
+      description: Filter by team ID.
       schema:
         type: integer
         minimum: 1
@@ -290,6 +294,7 @@ components:
     automation_rule_id:
       name: automation_rule_id
       in: path
+      description: The ID of the automation rule.
       schema:
         type: integer
         minimum: 1
@@ -298,6 +303,7 @@ components:
     notification_rule_id:
       name: notification_rule_id
       in: path
+      description: The ID of the notification rule.
       schema:
         type: integer
         minimum: 1
@@ -306,6 +312,7 @@ components:
     collection_table_token:
       name: collection_table_token
       in: path
+      description: The token of the collection table.
       schema:
         type: string
         pattern: ^[0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$
@@ -333,6 +340,7 @@ components:
     department_id:
       name: department_id
       in: path
+      description: The ID of the department.
       schema:
         type: integer
         minimum: 1
@@ -341,6 +349,7 @@ components:
     external_link_token:
       name: external_link_token
       in: path
+      description: The token of the external link.
       schema:
         type: string
       required: true
@@ -348,6 +357,7 @@ components:
     view_external_link_token:
       name: view_external_link_token
       in: path
+      description: The token of the view external link.
       schema:
         type: string
       required: true
@@ -355,6 +365,7 @@ components:
     form_token:
       name: form_token
       in: path
+      description: The token of the form.
       schema:
         type: string
         pattern: ^[0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$
@@ -363,6 +374,7 @@ components:
     plugin_id:
       name: plugin_id
       in: path
+      description: The ID of the plugin.
       schema:
         type: integer
         minimum: 1
@@ -371,6 +383,7 @@ components:
     sys_notification_id:
       name: sys_notification_id
       in: path
+      description: The ID of the system notification.
       schema:
         type: integer
       required: true
@@ -378,6 +391,7 @@ components:
     group_id:
       name: group_id
       in: path
+      description: The ID of the group.
       schema:
         type: integer
         minimum: 1
@@ -386,6 +400,7 @@ components:
     abuse_report_id:
       name: abuse_report_id
       in: path
+      description: The ID of the abuse report.
       schema:
         type: integer
         minimum: 1
@@ -394,6 +409,7 @@ components:
     task_id:
       name: task_id
       in: path
+      description: The ID of the task.
       schema:
         type: string
       required: true
@@ -723,6 +739,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - email
+                - password
               properties:
                 email:
                   $ref: "#/components/schemas/email"
@@ -1085,6 +1104,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - force_2fa
               properties:
                 force_2fa:
                   $ref: "#/components/schemas/system_admin_force_2fa"
@@ -1248,6 +1269,8 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - file
               properties:
                 file:
                   $ref: "#/components/schemas/file"
@@ -1704,6 +1727,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - group_name
+                - group_owner
               properties:
                 group_name:
                   $ref: "#/components/schemas/system_admin_group_name"
@@ -1728,6 +1754,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - new_owner
               properties:
                 new_owner:
                   $ref: "#/components/schemas/username"
@@ -3338,6 +3366,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - handled
               properties:
                 handled:
                   $ref: "#/components/schemas/handled"
@@ -3765,6 +3795,8 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - plugin
               properties:
                 plugin:
                   $ref: "#/components/schemas/plugin"
@@ -4238,6 +4270,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - msg
+                - username
               properties:
                 msg:
                   $ref: "#/components/schemas/msg"
@@ -4420,6 +4455,8 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - logo
               properties:
                 logo:
                   $ref: "#/components/schemas/logo"
@@ -4454,6 +4491,8 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - favicon
               properties:
                 favicon:
                   $ref: "#/components/schemas/favicon"
@@ -4482,6 +4521,8 @@ paths:
           multipart/form-data:
             schema:
               type: object
+              required:
+                - login_bg_image
               properties:
                 login_bg_image:
                   $ref: "#/components/schemas/login_bg_image"

@@ -132,6 +132,7 @@ components:
       example: 5c264e76-0e5a-448a-9f34-580b551364ca
     dtable_name_query:
       name: dtable_name
+      description: The name of the base to search for.
       in: query
       schema:
         type: string
@@ -225,6 +226,7 @@ components:
       description: Whether return the list of datasets by groups when dtable_uuid is not given, default false, optional
     op_date:
       name: op_date
+      description: Filter by operation date.
       in: query
       schema:
         type: string
@@ -256,6 +258,7 @@ components:
     #=======================Path parameters=======================#
     user_id:
       name: user_id
+      description: The unique user ID in the format `xxx@auth.local`.
       in: path
       schema:
         type: string
@@ -290,12 +293,14 @@ components:
       example: 5c264e76-0e5a-448a-9f34-580b551364ca
     folder_id:
       name: folder_id
+      description: The ID of the folder.
       in: path
       schema:
         type: string
       required: true
     commit_id:
       name: commit_id
+      description: The commit ID for a base snapshot.
       in: path
       schema:
         type: string
@@ -304,6 +309,7 @@ components:
       example: 7ee107a4eadb9561e8ce7699494939015f0d101b
     external_link_token:
       name: external_link_token
+      description: The token of the external link.
       in: path
       schema:
         type: string
@@ -311,6 +317,7 @@ components:
       example: f84903f9aa454a2481f3
     form_token:
       name: form_token
+      description: The token of the form.
       in: path
       schema:
         type: string
@@ -319,6 +326,7 @@ components:
       example: 12345678-d378-4c12-8d7a-6da0fb48ee83
     collection_token:
       name: collection_token
+      description: The token of the collection table.
       in: path
       schema:
         type: string
@@ -345,6 +353,7 @@ components:
       example: "1"
     3rd_party_account_id:
       name: 3rd_party_account_id
+      description: The ID of the third-party account.
       in: path
       schema:
         type: string
@@ -352,6 +361,7 @@ components:
       example: "5"
     group_id:
       name: group_id
+      description: The ID of the group.
       in: path
       schema:
         type: integer
@@ -360,6 +370,7 @@ components:
       example: 1
     group_member:
       name: group_member
+      description: The unique user ID of the group member.
       in: path
       schema:
         type: string
@@ -368,6 +379,7 @@ components:
       example: 12345678-d378-4c12-8d7a-6da0fb48ee83
     webhook_id:
       name: webhook_id
+      description: The ID of the webhook.
       in: path
       schema:
         type: integer
@@ -376,6 +388,7 @@ components:
       example: 1
     notification_rule_id:
       name: notification_rule_id
+      description: The ID of the notification rule.
       in: path
       schema:
         type: string
@@ -393,6 +406,7 @@ components:
       example: 7
     app_token:
       name: app_token
+      description: The token of the universal app.
       in: path
       schema:
         type: string
@@ -401,6 +415,7 @@ components:
       example: 8254d58e-6a67-45ab-be37-87939d80e99f
     group_view_share_id:
       name: group_view_share_id
+      description: The ID of the group view share.
       in: path
       schema:
         type: integer
@@ -409,6 +424,7 @@ components:
       example: 6
     user_view_share_id:
       name: user_view_share_id
+      description: The ID of the user view share.
       in: path
       schema:
         type: integer
@@ -417,6 +433,7 @@ components:
       example: 15
     view_external_link_token:
       name: view_external_link_token
+      description: The token of the view external link.
       in: path
       schema:
         type: string
@@ -424,6 +441,7 @@ components:
       example: f234baec8ce44028978a
     invite_link_token:
       name: invite_link_token
+      description: The token of the invite link.
       in: path
       schema:
         type: string
@@ -452,6 +470,7 @@ components:
       example: 10
     automation_rule_id:
       name: automation_rule_id
+      description: The ID of the automation rule.
       in: path
       schema:
         type: integer
@@ -3324,7 +3343,7 @@ paths:
         "User xxx is already group owner".
 
         *   `name` is the new name of your group. If you don't want to
-        change the name, remove shi parameter because if you enter the current
+        change the name, remove this parameter because if you enter the current
         group name here you'll get an error "There is already a group with that
         name".
       requestBody:
@@ -3524,7 +3543,7 @@ paths:
 
 
         Just give a search keyword in the `q` param. Attention: Although a
-        fussy search is allowed, unlike the web interface, the search via API
+        fuzzy search is allowed, unlike the web interface, the search via API
         is still case sensitive!
 
         A successful search will return each member's details that fit to your
@@ -4493,7 +4512,7 @@ paths:
       description: >-
         List all the users sharing a base (except the current user). This
         request only lists off all the individual users sharing the base, which
-        does not includ groups and group members sharing this base.
+        does not include groups and group members sharing this base.
 
 
         To see which groups are sharing this base, use the request [List Groups Base is Shared To](/reference/listgroupshares).
@@ -7659,7 +7678,7 @@ paths:
         - Snapshots
       summary: List Big Data Backups
       operationId: listBigDataBackups
-      description: List all all available big data backups.
+      description: List all available big data backups.
       security:
         - AccountTokenAuth: []
       parameters:
