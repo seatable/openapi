@@ -13,8 +13,10 @@ Usage:
 
 import glob
 import os
+import re
 import subprocess
 import sys
+from datetime import datetime, timezone
 
 import yaml
 
@@ -73,6 +75,106 @@ def git_lastmod(filepath):
     except FileNotFoundError:
         pass
     return None
+
+
+def git_blame_dates(filepath):
+    """Run git blame and return dict: line_number (1-based) -> 'YYYY-MM-DD'."""
+    try:
+        result = subprocess.run(
+            ["git", "blame", "--line-porcelain", "--", filepath],
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+        if result.returncode != 0:
+            return {}
+    except FileNotFoundError:
+        return {}
+
+    dates = {}
+    current_line = None
+    for raw in result.stdout.splitlines():
+        parts = raw.split()
+        if len(parts) >= 3 and len(parts[0]) == 40 and parts[2].isdigit():
+            current_line = int(parts[2])
+        elif raw.startswith("author-time ") and current_line is not None:
+            ts = int(raw.split()[1])
+            dt = datetime.fromtimestamp(ts, tz=timezone.utc)
+            dates[current_line] = dt.strftime("%Y-%m-%d")
+    return dates
+
+
+def find_operation_line_ranges(filepath):
+    """Find line ranges for each operationId in a YAML spec file.
+
+    Returns dict: operationId -> (start_line, end_line) with 1-based inclusive lines.
+    """
+    with open(filepath) as f:
+        lines = f.readlines()
+
+    HTTP_METHODS = {"get:", "post:", "put:", "patch:", "delete:"}
+    result = {}
+
+    for i, line in enumerate(lines):
+        if "operationId:" not in line:
+            continue
+        op_id = line.split("operationId:")[1].strip()
+        if not op_id:
+            continue
+
+        # Walk backwards to find the HTTP method line
+        method_line = i
+        method_indent = None
+        for j in range(i - 1, -1, -1):
+            stripped = lines[j].strip()
+            if stripped in HTTP_METHODS:
+                method_line = j
+                method_indent = len(lines[j]) - len(lines[j].lstrip())
+                break
+
+        if method_indent is None:
+            continue
+
+        # Walk forward to find end of this operation block
+        end_line = len(lines) - 1
+        for j in range(i + 1, len(lines)):
+            stripped = lines[j].strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            current_indent = len(lines[j]) - len(lines[j].lstrip())
+            if current_indent <= method_indent:
+                end_line = j - 1
+                break
+
+        result[op_id] = (method_line + 1, end_line + 1)  # Convert to 1-based
+
+    return result
+
+
+def get_operation_lastmods(filepath):
+    """Get per-operation lastmod dates for a spec file.
+
+    Returns dict: operationId -> 'YYYY-MM-DD'.
+    Falls back to file-level lastmod if git blame fails.
+    """
+    blame_dates = git_blame_dates(filepath)
+    if not blame_dates:
+        fallback = git_lastmod(filepath)
+        return None, fallback
+
+    op_ranges = find_operation_line_ranges(filepath)
+    op_lastmods = {}
+
+    for op_id, (start, end) in op_ranges.items():
+        max_date = None
+        for line_no in range(start, end + 1):
+            date = blame_dates.get(line_no)
+            if date and (max_date is None or date > max_date):
+                max_date = date
+        if max_date:
+            op_lastmods[op_id] = max_date
+
+    return op_lastmods, None
 
 
 def load_yaml(path):
@@ -185,14 +287,18 @@ def generate_sitemap(intro_pages, specs_data):
         lastmod = git_lastmod(page["file"])
         entries.append((url, lastmod, 0.8))
 
-    # API operations — lastmod comes from the spec file, priority per spec
+    # API operations — lastmod per operation via git blame
     for spec_file, spec, operations in specs_data:
         spec_path = os.path.join(SPEC_DIR, spec_file)
-        lastmod = git_lastmod(spec_path)
+        op_lastmods, fallback = get_operation_lastmods(spec_path)
         priority = SPEC_PRIORITY.get(spec_file, 0.3)
         for op in operations:
             if op["operationId"]:
                 url = f"{BASE_URL}/reference/{op['operationId'].lower()}"
+                if op_lastmods:
+                    lastmod = op_lastmods.get(op["operationId"], fallback)
+                else:
+                    lastmod = fallback
                 entries.append((url, lastmod, priority))
 
     # Deduplicate by URL (keep highest priority)

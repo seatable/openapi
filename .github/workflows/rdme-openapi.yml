@@ -26,13 +26,15 @@ on:
       - "v*"
 
 jobs:
+  # -----------------------------------------------------------------------
+  # Job 1: Publish OpenAPI specs and docs to ReadMe.com
+  # -----------------------------------------------------------------------
   publish:
+    name: Publish to ReadMe
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Full history for git lastmod in sitemap
 
       - name: Derive version from branch name
         run: |
@@ -51,8 +53,6 @@ jobs:
           echo "ID_PING=$(jq -r '.ping_and_info' .github/readme-ids.json)" >> $GITHUB_ENV
           echo "ID_PYTHON=$(jq -r '.python_scheduler' .github/readme-ids.json)" >> $GITHUB_ENV
 
-      # --- Validate ---
-
       - name: Check links in docs and specs
         uses: lycheeverse/lychee-action@v2
         with:
@@ -69,8 +69,6 @@ jobs:
           npx --yes swagger-cli validate user_account_operations.yaml
           npx --yes swagger-cli validate ping_and_info.yaml
           npx --yes swagger-cli validate python-scheduler.yaml
-
-      # --- Publish to ReadMe ---
 
       - name: Update SeaTable API docs
         uses: readmeio/rdme@v9
@@ -117,13 +115,27 @@ jobs:
         with:
           rdme: openapi python-scheduler.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_PYTHON }} --useSpecVersion
 
-      # --- Generate and deploy static files ---
+  # -----------------------------------------------------------------------
+  # Job 2: Generate and deploy static files to vserver
+  # -----------------------------------------------------------------------
+  deploy-static:
+    name: Deploy static files
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for git lastmod in sitemap
 
       - name: Install Python dependencies
         run: pip install pyyaml
 
       - name: Generate sitemap.xml, llms.txt, llms-full.txt
         run: python3 custom-domain/generate.py
+
+      - name: Validate sitemap.xml
+        run: xmllint --noout custom-domain/output/sitemap.xml
 
       - name: Copy static files to output
         run: cp custom-domain/robots.txt custom-domain/sitemap.xsl custom-domain/output/
@@ -135,6 +147,6 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy static files to vserver
+      - name: Deploy to vserver
         run: "rsync -avz --delete . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:"
         working-directory: custom-domain/output
