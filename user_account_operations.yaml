@@ -3508,7 +3508,7 @@ paths:
                   $ref: "#/components/schemas/is_admin"
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3528,7 +3528,7 @@ paths:
         - $ref: "#/components/parameters/group_member"
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -4358,7 +4358,7 @@ paths:
         - $ref: "#/components/parameters/ignore_asset"
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             # TODO: Actually "application/x-zip-compressed", but dtable-web does not accept this when specified inside an "Accept" header
             application/json: {}
@@ -4378,7 +4378,7 @@ paths:
         - $ref: "#/components/parameters/workspace_id"
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             # TODO: Actually "application/ms-excel", but dtable-web does not accept this when specified inside an "Accept" header
             application/json: {}
@@ -4400,7 +4400,7 @@ paths:
         - $ref: "#/components/parameters/workspace_id"
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             # TODO: Actually "application/ms-excel", but dtable-web does not accept this when specified inside an "Accept" header
             application/json: {}
@@ -4417,7 +4417,7 @@ paths:
         - $ref: "#/components/parameters/external_link_token"
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             # TODO: Actually "application/x-zip-compressed", but dtable-web does not accept this when specified inside an "Accept" header
             application/json: {}
@@ -4439,7 +4439,7 @@ paths:
         - $ref: "#/components/parameters/view_id"
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json:
               example: { "task_id": "1680694429195" }
@@ -4938,7 +4938,7 @@ paths:
         - $ref: "#/components/parameters/base_name"
       responses:
         "200":
-          description: "ok"
+          description: OK
           content:
             application/json:
               schema:
@@ -5895,7 +5895,7 @@ paths:
         - $ref: "#/components/parameters/dataset_id"
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json:
               schema:
@@ -6898,7 +6898,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
       responses:
         "200":
-          description: Successful response indicating that the dtable was repaired.
+          description: OK indicating that the dtable was repaired.
           content:
             application/json:
               schema:
@@ -7831,7 +7831,7 @@ paths:
                       "created_at": "2022-08-05T16:58:33+08:00",
                       "is_active": true,
                       "name": "org_guest",
-                      "app_name": "\u901a\u7528\u5e94\u7528-a",
+                      "app_name": "My App",
                       "role_id": 21,
                       "role_name": "default",
                       "role_permission": "rw",
@@ -8045,7 +8045,7 @@ paths:
         - $ref: "#/components/parameters/per_page"
       responses:
         "200":
-          description: Successful response with the queried big data operation logs.
+          description: OK with the queried big data operation logs.
           content:
             application/json:
               schema:

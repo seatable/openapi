@@ -1227,19 +1227,19 @@ paths:
                         "email": "148768b50bb44c9d9d04f101a2b34a49@auth.local",
                         "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
                         "name": "org_guest1",
-                        "contact_email": "org_guest1@qq.com",
+                        "contact_email": "org_guest1@example.com",
                       },
                       {
                         "email": "4919f22fa6e14a538b47428b5589ec60@auth.local",
                         "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
                         "name": "org_guest2",
-                        "contact_email": "org_guest2@qq.com",
+                        "contact_email": "org_guest2@example.com",
                       },
                       {
                         "email": "53f1af67b0dd492491264dd8143040b3@auth.local",
                         "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
                         "name": "org_guest",
-                        "contact_email": "org_guest@qq.com",
+                        "contact_email": "org_guest@example.com",
                       },
                     ],
                 }
@@ -3316,7 +3316,7 @@ paths:
         - AccountTokenAuth: []
       responses:
         "200":
-          description: Successful response
+          description: OK
           content:
             application/json:
               schema:
@@ -3413,7 +3413,7 @@ paths:
         - $ref: "#/components/parameters/per_page"
       responses:
         "200":
-          description: Successful response with the queried audit logs.
+          description: OK
           content:
             application/json:
               schema:
@@ -3489,12 +3489,12 @@ paths:
                 group_member_log_list:
                   - user_email: 493524d94e7e467da506e30c24898555@auth.local
                     user_name: 123
-                    user_contact_email: 123@qq.com
+                    user_contact_email: user@example.com
                     group_id: 3
                     group_name: g2
                     operator_email: 8d597a4a971c43afa8926a2dede58231@auth.local
                     operator_name: admin
-                    operator_contact_email: zwfxiaxue@163.com
+                    operator_contact_email: admin@example.com
                     date: 2025-05-27T06:59:43+00:00
                     operation: group_member_add
                 count: 1
@@ -3524,12 +3524,12 @@ paths:
                       "device": "",
                       "user": "af57b7dda06b4928b255339d92294853@auth.local",
                       "name": "org_admin1",
-                      "contact_email": "org_admin1@qq.com",
+                      "contact_email": "org_admin1@example.com",
                       "ip": "172.18.0.1",
                       "org_id": 1,
                       "dtable_uuid": "8e7ad4a8-73dc-4be4-abae-057fd5203a0e",
                       "file_path": "/custom/aaa (1) (1).md",
-                      "dtable_name": "1\u5bfc\u5165\u534f\u4f5c\u4eba",
+                      "dtable_name": "Example Base",
                       "org_name": "org1",
                       "file_or_dir_name": "aaa (1) (1).md"
                     },
@@ -3539,12 +3539,12 @@ paths:
                       "device": "",
                       "user": "fc7043070b1d40878570f666de8d3481@auth.local",
                       "name": "view",
-                      "contact_email": "yangtong1009@163.com",
+                      "contact_email": "viewer@example.com",
                       "ip": "172.18.0.1",
                       "org_id": -1,
                       "dtable_uuid": "96908687-8713-4b81-9856-77f9d96af4b3",
                       "file_path": "/custom/aaa.md",
-                      "dtable_name": "\u5bfc\u5165\u4f18\u5316",
+                      "dtable_name": "Test Base",
                       "org_name": "",
                       "file_or_dir_name": "aaa.md"
                     }
@@ -4224,7 +4224,7 @@ paths:
         - $ref: "#/components/parameters/base_uuid"
       responses:
         "200":
-          description: Successful response indicating that the dtable was repaired.
+          description: OK
           content:
             application/json:
               schema:

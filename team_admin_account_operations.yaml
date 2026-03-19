@@ -2014,12 +2014,12 @@ paths:
                 group_member_log_list:
                   - user_email: 70e6e6be77dc4afeb1d6786f1e3d14e2@auth.local
                     user_name: org_user
-                    user_contact_email: org_user@qq.com
+                    user_contact_email: org_user@example.com
                     group_id: 2
                     group_name: org-t1
                     operator_email: ecd40dcfcdd041a98d51bdde2a05612e@auth.local
                     operator_name: org_admin
-                    operator_contact_email: org_admin@qq.com
+                    operator_contact_email: org_admin@example.com
                     date: 2025-05-27T06:57:03+00:00
                     operation: group_member_add
                 count: 1
@@ -2150,12 +2150,12 @@ paths:
                       "device": "",
                       "user": "af57b7dda06b4928b255339d92294853@auth.local",
                       "name": "org_admin1",
-                      "contact_email": "org_admin1@qq.com",
+                      "contact_email": "org_admin1@example.com",
                       "ip": "172.18.0.1",
                       "org_id": 1,
                       "dtable_uuid": "8e7ad4a8-73dc-4be4-abae-057fd5203a0e",
                       "file_path": "custom/aaa (1) (1).md",
-                      "dtable_name": "1\u5bfc\u5165\u534f\u4f5c\u4eba",
+                      "dtable_name": "Example Base",
                       "file_or_dir_name": "aaa (1) (1).md"
                     },
                     {
@@ -2164,12 +2164,12 @@ paths:
                       "device": "",
                       "user": "af57b7dda06b4928b255339d92294853@auth.local",
                       "name": "org_admin1",
-                      "contact_email": "org_admin1@qq.com",
+                      "contact_email": "org_admin1@example.com",
                       "ip": "172.18.0.1",
                       "org_id": 1,
                       "dtable_uuid": "8e7ad4a8-73dc-4be4-abae-057fd5203a0e",
                       "file_path": "/custom/aaa (1) (1).md",
-                      "dtable_name": "1\u5bfc\u5165\u534f\u4f5c\u4eba",
+                      "dtable_name": "Example Base",
                       "file_or_dir_name": "aaa (1) (1).md"
                     }
                   ],
