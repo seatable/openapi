@@ -125,8 +125,8 @@ jobs:
       - name: Generate sitemap.xml, llms.txt, llms-full.txt
         run: python3 custom-domain/generate.py
 
-      - name: Copy robots.txt to output
-        run: cp custom-domain/robots.txt custom-domain/output/
+      - name: Copy static files to output
+        run: cp custom-domain/robots.txt custom-domain/sitemap.xsl custom-domain/output/
 
       - name: Setup SSH
         run: |
