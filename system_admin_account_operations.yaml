@@ -1247,7 +1247,7 @@ paths:
     post:
       tags:
         - Users
-      summary: Import users
+      summary: Import Users
       operationId: importUsers
       description: >-
         As system administrator, you can batch import users with an Excel file,
@@ -2355,7 +2355,7 @@ paths:
   /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/:
     get:
       tags: [Export]
-      summary: Export base
+      summary: Export Base
       operationId: exportBase
       description: |
         Use this request to export a base as System Admin.
@@ -2441,7 +2441,7 @@ paths:
     get:
       tags:
         - Common Dataset
-      summary: List invalid Syncs
+      summary: List Invalid Syncs
       operationId: listInvalidSyncs
       description: >-
         In some cases, a common dataset synchronization configuration becomes
@@ -4168,7 +4168,7 @@ paths:
     get:
       tags:
         - Statistics
-      summary: Get AI statistics by owner/team
+      summary: Get AI Statistics by Owner/Team
       operationId: getOwnerOrTeamAIStatistics
       description: Get AI usage statistics monthly by owner/team.
       security:
@@ -4331,7 +4331,7 @@ paths:
     get:
       tags:
         - System Info & Customizing
-      summary: Get system information
+      summary: Get System Information
       operationId: getSystemInformation
       description: >-
         Get the general system information with this request as system

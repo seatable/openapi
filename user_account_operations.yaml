@@ -2582,7 +2582,7 @@ paths:
   /api/v2.1/dtable/items-search/:
     get:
       tags: [Bases]
-      summary: Search base or apps
+      summary: Search Base or Apps
       operationId: searchBaseOrApps
       description: Search the base or apps of a user. Capitalization is irrelevant for the search and substrings are also allowed.
       security:
@@ -4299,7 +4299,7 @@ paths:
     post:
       tags:
         - Import & Export
-      summary: Update from xlsx or csv
+      summary: Update from XLSX or CSV
       description: |
         This API call allows you to update a SeaTable database table by uploading an Excel (xlsx) or CSV file. The uploaded file contains rows with data that should be either matched against existing rows in the table for updates or inserted as new rows if no match is found.
         Matching is performed based on the columns specified in the `selected_columns` parameter. For each row in the uploaded file, the system checks whether there are existing rows where the values in these selected columns match exactly. If a match is found, the existing row is updated with the new data from the file. If no match exists, the row is added as a new entry.

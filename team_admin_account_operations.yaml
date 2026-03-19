@@ -2492,7 +2492,7 @@ paths:
     get:
       tags:
         - Statistics
-      summary: Get AI statistics by user/base
+      summary: Get AI Statistics by User/Base
       operationId: getUserOrBaseAIStatistics
       description: Get AI usage statistics monthly by user/base.
       security:

@@ -119,7 +119,7 @@ paths:
     get:
       tags:
         - Statistics
-      summary: Script runs per user
+      summary: Script Runs per User
       operationId: scriptRunsPerUser
       description: |
         > 📘 Requires Self-Hosted Installation
@@ -156,7 +156,7 @@ paths:
     get:
       tags:
         - Statistics
-      summary: Script runs per team
+      summary: Script Runs per Team
       operationId: scriptRunsPerTeam
       description: |
         > 📘 Requires Self-Hosted Installation
@@ -193,7 +193,7 @@ paths:
     get:
       tags:
         - Statistics
-      summary: Script runs per base
+      summary: Script Runs per Base
       operationId: scriptRunsPerBase
       description: |
         > 📘 Requires Self-Hosted Installation
