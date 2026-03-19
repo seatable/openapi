@@ -1,8 +1,4 @@
 # Example URLs in OpenAPI specs (not real endpoints)
-cloud.seatable.io/seafhttp/
-cloud.seatable.io/media/
-cloud.seatable.io/image-view/
-cloud.seatable.io/dtable/forms/
-cloud.seatable.io/api-gateway/
+cloud.seatable.io
 
 # ReadMe.com internal links are excluded via --exclude in the workflow

@@ -7562,7 +7562,7 @@ paths:
                 webhook:
                   id: 1
                   dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
-                  url: https://www.seatable.io
+                  url: https://seatable.com
                   creator: 123456786569491ba42905bf1647fd3f@auth.local
                   created_at: "2021-03-16T14:27:58.873621"
                   settings:
@@ -7752,7 +7752,7 @@ paths:
                         "app_id": 20,
                         "app_name": "test",
                         "app_token": "5863cf72-a3fa-488a-84cd-d02d2c578660",
-                        "app_config": '{"app_type": "universal-app", "app_name": "test", "settings": {"pages": [{"id": "XtTu", "name": "test", "type": "custom_page", "icon": "app-gallery", "content_url": "https://stage.seatable.io/workspace/3/asset/2d0d0c32-5e79-4437-a414-766ade7618a5/external-apps/XtTu/XtTu.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "XtTu", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
+                        "app_config": '{"app_type": "universal-app", "app_name": "test", "settings": {"pages": [{"id": "XtTu", "name": "test", "type": "custom_page", "icon": "app-gallery", "content_url": "https://cloud.seatable.io/workspace/3/asset/2d0d0c32-5e79-4437-a414-766ade7618a5/external-apps/XtTu/XtTu.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "XtTu", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
                         "role_name": "admin",
                         "permission": "rw",
                         "dtable_uuid": "2d0d0c325e794437a414766ade7618a5",
@@ -7767,7 +7767,7 @@ paths:
                         "app_id": 23,
                         "app_name": "app",
                         "app_token": "00252a1e-6b47-4df6-bfe7-c69eb8a9f905",
-                        "app_config": '{"app_type": "universal-app", "app_name": "app", "settings": {"pages": [{"id": "IpvJ", "name": "test", "type": "custom_page", "icon": "app-form", "content_url": "https://stage.seatable.io/workspace/3/asset/a81922f3-ead6-4904-942e-4617402b8006/external-apps/IpvJ/IpvJ.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "IpvJ", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
+                        "app_config": '{"app_type": "universal-app", "app_name": "app", "settings": {"pages": [{"id": "IpvJ", "name": "test", "type": "custom_page", "icon": "app-form", "content_url": "https://cloud.seatable.io/workspace/3/asset/a81922f3-ead6-4904-942e-4617402b8006/external-apps/IpvJ/IpvJ.json", "trigger_workflow_option": {"can_trigger_workflow": false}}], "navigation": [{"id": "IpvJ", "type": "page"}]}, "use_custom_icon": false, "icon_class_name": "customer-contract-management", "app_icon": "", "app_theme_mode": "dark", "icon_color_index": 0, "app_theme_color": "#FF8000"}',
                         "role_name": "admin",
                         "permission": "rw",
                         "dtable_uuid": "f80260f70ad246aca54ffa1a17bc9db6",
