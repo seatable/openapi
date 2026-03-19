@@ -244,6 +244,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiTokenList"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              example: { "detail": "Invalid token" }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              example: { "detail": "Authentication credentials were not provided." }
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              example: { "error_msg": "Workspace 99999 not found." }
     post:
       tags:
         - API-Token
@@ -278,6 +293,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiToken"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example: { "error_msg": "app_name invalid." }
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              example: { "detail": "Invalid token" }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              example: { "detail": "Authentication credentials were not provided." }
 
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/temp-api-token/:
     get:
@@ -298,6 +328,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiTokenTemporary"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              example: { "detail": "Invalid token" }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              example: { "detail": "Authentication credentials were not provided." }
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              example: { "error_msg": "Workspace 99999 not found." }
 
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/api-tokens/{app_name}/:
     put:
@@ -330,6 +375,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiToken"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              example: { "detail": "Invalid token" }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              example: { "detail": "Authentication credentials were not provided." }
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              example: { "error_msg": "dtable <base_name> not found." }
     delete:
       tags:
         - API-Token
@@ -352,6 +412,21 @@ paths:
                 type: object
               example:
                 success: true
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              example: { "detail": "Invalid token" }
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              example: { "detail": "Authentication credentials were not provided." }
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              example: { "error_msg": "dtable <base_name> not found." }
 
   /api/v2.1/dtable/app-access-token/:
     get:
@@ -444,3 +519,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AccessToken"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              example: { "error_msg": "Token <external_link_token> not found" }
