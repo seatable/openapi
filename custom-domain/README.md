@@ -1,6 +1,6 @@
 # How to use a custom domain with readme.com
 
-The following setup allows to reach api documentation via custom subdomain. A nginx webserver redirects all traffic to the readme.com page. The sitemap is generated every day and delivered by nginx.
+The following setup allows to reach api documentation via custom subdomain. A nginx webserver redirects all traffic to the readme.com page. Static files (`robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`) are generated from the OpenAPI specs via GitHub Actions and deployed to the server via rsync.
 
 ## Project settings at readme.com
 
@@ -10,11 +10,40 @@ The following setup allows to reach api documentation via custom subdomain. A ng
 - SITEMAP: [ ] The sitemap.xml is disabled
 - CANONICAL URL: https://api.seatable.com
 
+## Static file generation
+
+The `generate.py` script reads all OpenAPI spec files and intro pages to produce:
+
+- **sitemap.xml** — all reference pages derived from operationIds and intro page slugs
+- **llms.txt** — compact API overview for LLM consumption ([llms.txt standard](https://llmstxt.org/))
+- **llms-full.txt** — complete API reference with all endpoints, parameters, and descriptions
+
+Run locally:
+
+```bash
+pip install pyyaml
+python3 custom-domain/generate.py
+```
+
+Output goes to `custom-domain/output/`.
+
+## Deployment
+
+The GitHub Actions workflow `.github/workflows/deploy-static.yml` runs on every push to a `v*` branch:
+
+1. Generates `sitemap.xml`, `llms.txt`, `llms-full.txt` from the specs
+2. Copies `robots.txt` to the output directory
+3. Deploys all files to the server via rsync
+
+Required GitHub secrets: `SSH_PRIVATE_KEY`, `SSH_HOST`, `SSH_USER`.
+The server must have `rrsync` configured with target `/opt/api.seatable.com/`.
+
 ## Server configuration
 
 ### nginx configuration
 
-This is the nginx configuration to redirect the traffic from a subdomain to readme.com.
+Nginx runs as a Docker container. The static files are mounted at `/var/www/api.seatable.com/` inside the container, while on the host they reside under `/opt/api.seatable.com/`.
+
 It is important to add any header in the nginx configuration, otherwise the google crawling bots deny crawling the page.
 
 ```bash
@@ -54,63 +83,15 @@ server {
         root /var/www/api.seatable.com/;
         access_log off;
     }
+
+    location /llms.txt {
+        root /var/www/api.seatable.com/;
+        access_log off;
+    }
+
+    location /llms-full.txt {
+        root /var/www/api.seatable.com/;
+        access_log off;
+    }
 }
-```
-
-### robots.txt
-
-The `/var/www/api.seatable.com/robots.txt` looks like this:
-
-```bash
-User-agent: *
-Allow: /
-Disallow: /edit/
-Disallow: /suggested-edits/
-Disallow: /login
-Disallow: /logout
-Disallow: /v9
-Disallow: /v8
-Disallow: /v7
-Disallow: /v6
-Disallow: /v5
-Disallow: /v4
-Disallow: /v3
-Disallow: /v2
-Disallow: /v1
-```
-
-### Cronjob to create a sitemap.xml
-
-The following script runs every day one via cronjob in the directory `/var/www/api.seatable.com` and generates a `sitemap.xml`.
-The cronjob could be: `1 1 * * * /var/www/api.seatable.com/create-sitemap.sh`
-
-```bash
-#!/bin/bash
-
-SOURCE_URL="https://api.seatable.com/reference/introduction"
-OUTPUT_FILE_NAME="/var/www/api.seatable.com/sitemap.xml"
-
-echo "Generate a new sitemap for ${SOURCE_URL}"
-curl ${SOURCE_URL} | grep -o 'href="/reference/[^"]*">' | cut -c7- | rev | cut -c3- | rev > ./found_links.txt
-sort /tmp/found_links.txt | uniq > /tmp/found_links_cleaned.txt
-
-# Create the XML header
-echo '<?xml version="1.0" encoding="UTF-8"?>' > ${OUTPUT_FILE_NAME}
-echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' >> ${OUTPUT_FILE_NAME}
-
-# Read each line from the input file and generate XML entries
-while IFS= read -r line; do
-    line=$(echo "$line" | sed 's/^\///')  # Remove leading /
-    echo "  <url>" >> ${OUTPUT_FILE_NAME}
-    echo "    <loc>https://api.seatable.com/$line</loc>" >> ${OUTPUT_FILE_NAME}
-    echo "    <changefreq>daily</changefreq>" >> ${OUTPUT_FILE_NAME}
-    echo "    <priority>0.3</priority>" >> ${OUTPUT_FILE_NAME}
-    echo "  </url>" >> ${OUTPUT_FILE_NAME}
-done < found_links_cleaned.txt
-
-# Close the XML
-echo '</urlset>' >> ${OUTPUT_FILE_NAME}
-
-rm /tmp/found_links.txt
-rm /tmp/found_links_cleaned.txt
 ```

@@ -1,0 +1,44 @@
+# Generates and deploys static files (sitemap.xml, robots.txt, llms.txt,
+# llms-full.txt) to the api.seatable.com vserver via rsync.
+#
+# Runs after every push to a version branch, same trigger as rdme-openapi.yml.
+#
+# Required secrets: SSH_PRIVATE_KEY, SSH_HOST, SSH_USER
+# The server must have rrsync configured with target /opt/api.seatable.com/
+
+name: Deploy static files
+
+on:
+  push:
+    branches:
+      - "v*"
+
+jobs:
+  deploy:
+    name: Generate and deploy
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Install Python dependencies
+        run: pip install pyyaml
+
+      - name: Generate sitemap.xml, llms.txt, llms-full.txt
+        run: python3 custom-domain/generate.py
+
+      - name: Copy robots.txt to output
+        run: cp custom-domain/robots.txt custom-domain/output/
+
+      - name: Add SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: placeholder
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy with rsync
+        run: rsync -avz --delete . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:
+        working-directory: custom-domain/output

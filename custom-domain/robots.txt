@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /edit/
+Disallow: /suggested-edits/
+Disallow: /login
+Disallow: /logout
+Disallow: /v9
+Disallow: /v8
+Disallow: /v7
+Disallow: /v6
+Disallow: /v5
+Disallow: /v4
+Disallow: /v3
+Disallow: /v2
+Disallow: /v1
+
+Sitemap: https://api.seatable.com/sitemap.xml
