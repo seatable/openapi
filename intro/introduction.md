@@ -74,7 +74,7 @@ The result of the [Get Base-Token with API-Token](https://api.seatable.com/refer
   "app_name": "my first api token",
   "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODA0NDcxMTQsamX0YWJsVZ80dWlkIjoiZmJlMTZkNzMtYjI4Zi00YWY4LWIzOWQtZDc4YzU3YTg4YjkwIiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6InRlc3QifQ.huQz07WOQUvaJNy2bTR2iRm0-oATjaMGPAAIYtpkZjU",
   "dtable_uuid": "fb3f1d72-b28f-3af8-a29d-d78c57a88b90",
-  "dtable_server": "https://cloud.seatable.io/dtable-server/",
+  "dtable_server": "https://cloud.seatable.io/api-gateway/",
   "dtable_socket": "https://cloud.seatable.io/",
   "dtable_db": "https://cloud.seatable.io/dtable-db/",
   "workspace_id": 234,

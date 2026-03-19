@@ -1828,7 +1828,7 @@ components:
           description: |
             The formula of this column.
           enum: ["count_links"]
-          example: lookup
+          example: count_links
         link_column:
           type: string
           description: Name of the link column.
@@ -1868,7 +1868,7 @@ components:
           description: |
             The formula of this column.
           enum: ["rollup"]
-          example: lookup
+          example: rollup
         link_column:
           type: string
           description: Name of the link column.
@@ -1893,7 +1893,7 @@ components:
           description: |
             The formula of this column.
           enum: ["findmin"]
-          example: lookup
+          example: findmin
         link_column:
           type: string
           description: Name of the link column.
@@ -1918,7 +1918,7 @@ components:
           description: |
             The formula of this column.
           enum: ["findmax"]
-          example: lookup
+          example: findmax
         link_column:
           type: string
           description: Name of the link column.

@@ -376,7 +376,7 @@ components:
         type: string
         pattern: "^[a-f0-9]{32}(@auth.local)$"
       required: true
-      example: 12345678-d378-4c12-8d7a-6da0fb48ee83
+      example: 12345678d3784c128d7a6da0fb48ee83@auth.local
     webhook_id:
       name: webhook_id
       description: The ID of the webhook.
@@ -542,13 +542,13 @@ components:
     dtable_uuid:
       type: string
       description: The UUID of the base.
-      example: 650d8a0d-7e27-46a8-8b18-6cc6f3dbvh46
+      example: 650d8a0d-7e27-46a8-8b18-6cc6f3db2046
       required:
         - dtable_uuid
     dst_dtable_uuid:
       type: string
       description: The UUID of the destination base.
-      example: 650d8a0d-7e27-46a8-8b18-6cc6f3dbvh46
+      example: 650d8a0d-7e27-46a8-8b18-6cc6f3db2046
     dst_table_id:
       type: string
       example: pzoO
@@ -2129,7 +2129,7 @@ components:
     item_id:
       type: string
       description: When moving a base, use its `UUID`. Required.
-      example: "650d8a0d-7e27-46a8-8b18-6cc6f3dbvh46"
+      example: "650d8a0d-7e27-46a8-8b18-6cc6f3db2046"
     from:
       type: string
       description: >-
@@ -4681,7 +4681,7 @@ paths:
                   "165":
                     - id: 355
                       workspace_id: 377
-                      uuid: 03d8b71c-84c7-4a16-b314-94c886dc170p
+                      uuid: 03d8b71c-84c7-4a16-b314-94c886dc170a
                       name: Surveys
                       creator: Robert Teamplayer
                       modifier: Robert Teamplayer

@@ -170,7 +170,7 @@ components:
       description: >-
         The ID of the user you are querying. Optional. If you don't define a
         user, all the users are queried.
-      example: 123abc456def789ghi123jkl456mno789@auth.local
+      example: 123abc456def789abc123def456abc789@auth.local
     role:
       name: role
       in: query
@@ -271,7 +271,7 @@ components:
         type: string
         pattern: "^[a-f0-9]{32}(@auth.local)$"
       required: true
-      example: 23abc456def789ghi123jkl456mno789@auth.local
+      example: 23abc456def789abc123def456abc789a@auth.local
     org_id:
       name: org_id
       in: path
@@ -290,7 +290,7 @@ components:
       schema:
         type: string
       required: true
-      example: base_id
+      example: 123
     automation_rule_id:
       name: automation_rule_id
       in: path
@@ -421,7 +421,7 @@ components:
       example: "Hello user!"
     username:
       type: string
-      example: "123abc456def789ghi123jkl456mno789@auth.local"
+      example: "123abc456def789abc123def456abc789@auth.local"
     system_admin_force_2fa:
       type: boolean
       description: Enforce Two Factor for all accounts
@@ -534,7 +534,7 @@ components:
     parent_group:
       type: string
       description: The ID of the parent department. Optional. -1 by default.
-      example: parent_department_id
+      example: -1
     handled:
       type: boolean
       description: >-
@@ -1395,7 +1395,7 @@ paths:
                     obj_name: 650d8a0d-7e27-46a8-8b18-6cc6f3db2057
                     file_size: ""
                     last_update: "2021-03-11T13:36:37+00:00"
-                email: 123abc456def789ghi123jkl456mno789@auth.local
+                email: 123abc456def789abc123def456abc789@auth.local
   /api/v2.1/admin/users/{user_id}/dtables/:
     get:
       tags:
@@ -1774,7 +1774,7 @@ paths:
                 id: 1
                 parent_group_id: 0
                 name: Group New
-                owner: 123abc456def789ghi123jkl456mno789@auth.local
+                owner: 123abc456def789abc123def456abc789@auth.local
                 created_at: "2020-11-19T08:14:52+00:00"
                 avatar_url: "http://cloud.seatable.io/media/avatars/groups/default.png"
                 admins:
@@ -2679,7 +2679,7 @@ paths:
                   base_external_links:
                     - id: 72
                       from_dtable: Example
-                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator: 123abc456def789abc123def456abc789@auth.local
                       creator_name: Jasmin Tee
                       token: fleischkaesebroetchen
                       permission: r
@@ -2689,7 +2689,7 @@ paths:
                         https://cloud.seatable.io/dtable/external-links/custom/fleischkaesebroetchen/
                     - id: 73
                       from_dtable: Example
-                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator: 123abc456def789abc123def456abc789@auth.local
                       creator_name: Jasmin Tee
                       token: 42a42b34f97745948765
                       permission: r
@@ -2700,7 +2700,7 @@ paths:
                   view_external_links:
                     - id: 12
                       from_dtable: Example
-                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator: 123abc456def789abc123def456abc789@auth.local
                       creator_name: Jasmin Tee
                       token: 922008ae1f1742f788f8
                       permission: r
@@ -2714,7 +2714,7 @@ paths:
                       expire_date: ""
                     - id: 13
                       from_dtable: Example
-                      creator: 123abc456def789ghi123jkl456mno789@auth.local
+                      creator: 123abc456def789abc123def456abc789@auth.local
                       creator_name: Jasmin Tee
                       token: 35967f61163848b29c44
                       permission: r
