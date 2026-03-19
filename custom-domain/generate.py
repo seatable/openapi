@@ -361,6 +361,13 @@ def generate_llms_txt(intro_pages, specs_data):
         "",
         f"- [llms-full.txt]({BASE_URL}/llms-full.txt): Complete API reference"
         " with all endpoints, parameters, and descriptions",
+        "",
+        "## Optional",
+        "",
+        "- [SeaTable Website](https://seatable.com): Product website with features, pricing, and use cases",
+        "- [Developer Manual](https://developer.seatable.com): Tutorials, SDK documentation, and code examples",
+        "- [Admin Manual](https://admin.seatable.com): Self-hosting installation, configuration, and administration",
+        "- [Community Forum](https://forum.seatable.com): Community support, discussions, and feature requests",
     ]
     return "\n".join(lines) + "\n"
 
