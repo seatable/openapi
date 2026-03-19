@@ -135,7 +135,7 @@ jobs:
         run: python3 custom-domain/generate.py
 
       - name: Validate sitemap.xml
-        run: xmllint --noout custom-domain/output/sitemap.xml
+        run: python3 -c "import xml.etree.ElementTree as ET; ET.parse('custom-domain/output/sitemap.xml'); print('sitemap.xml is valid XML')"
 
       - name: Copy static files to output
         run: cp custom-domain/robots.txt custom-domain/sitemap.xsl custom-domain/output/
