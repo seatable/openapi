@@ -3283,6 +3283,7 @@ paths:
       tags: [Groups & Workspaces]
       summary: Create Group
       operationId: createGroup
+      description: Create a new group. The user who creates the group becomes its owner.
       security:
         - AccountTokenAuth: []
       requestBody:
@@ -3308,6 +3309,7 @@ paths:
       tags: [Groups & Workspaces]
       summary: Get Group
       operationId: getGroup
+      description: Get the details of a specific group including its name, owner, and admins.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -3434,6 +3436,7 @@ paths:
       tags: [Groups & Workspaces]
       summary: Get Group Members
       operationId: getGroupMembers
+      description: List all members of a group along with their roles.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -3456,6 +3459,7 @@ paths:
       tags: [Groups & Workspaces]
       summary: Add Group Member
       operationId: addGroupMember
+      description: Add a user to a group as a member.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -3488,6 +3492,7 @@ paths:
       tags: [Groups & Workspaces]
       summary: Update Group Role
       operationId: updateGroupRole
+      description: Update the role of a group member, for example to promote or demote an admin.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -4343,6 +4348,7 @@ paths:
         - Import & Export
       summary: Export Base
       operationId: exportBase
+      description: Export a base as a .dtable file. Optionally exclude assets or provide a base password for encrypted bases.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -4362,6 +4368,7 @@ paths:
         - Import & Export
       summary: Export Table
       operationId: exportTable
+      description: Export a single table from a base to an Excel file.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -4381,6 +4388,7 @@ paths:
         - Import & Export
       summary: Export View
       operationId: exportView
+      description: Export a specific view of a table from a base to an Excel file.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -5297,6 +5305,7 @@ paths:
         - Sharing Links
       summary: List Base External Links
       operationId: listBaseExternalLinks
+      description: List all external links that have been created for a specific base.
       security:
         - AccountTokenAuth: []
       parameters:

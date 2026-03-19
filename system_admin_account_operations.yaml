@@ -683,6 +683,7 @@ paths:
         - Users
       summary: List Users
       operationId: listUsers
+      description: List all users in the system with pagination support.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -781,6 +782,7 @@ paths:
         - Users
       summary: Get User
       operationId: getUser
+      description: Get the details of a specific user by their user ID.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1463,6 +1465,7 @@ paths:
         - Bases
       summary: List All Bases
       operationId: listAllBases
+      description: List all bases in the system with pagination support.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -1720,6 +1723,7 @@ paths:
       tags: [Groups]
       summary: Create Group
       operationId: createGroup
+      description: Create a new group with a specified name and owner.
       security:
         - AccountTokenAuth: []
       requestBody:
@@ -1749,6 +1753,7 @@ paths:
       tags: [Groups]
       summary: Transfer Group
       operationId: transferGroup
+      description: Transfer the ownership of a group to a new owner.
       requestBody:
         content:
           application/json:
@@ -1985,6 +1990,7 @@ paths:
         - Teams
       summary: Get Organization Names
       operationId: getOrganizationNames
+      description: Retrieve the names of one or more organizations by their IDs.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -3305,6 +3311,7 @@ paths:
         - Logs
       summary: List Registration Logs
       operationId: listRegistrationLogs
+      description: List all registration and invitation logs in the system.
       security:
         - AccountTokenAuth: []
       responses:
