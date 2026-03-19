@@ -13,6 +13,7 @@ Usage:
 
 import glob
 import os
+import subprocess
 import sys
 
 import yaml
@@ -34,6 +35,18 @@ SPEC_FILES = [
     "python-scheduler.yaml",
 ]
 
+# Priority per spec file (intro pages get 0.8)
+SPEC_PRIORITY = {
+    "authentication.yaml": 0.7,
+    "base_operations.yaml": 0.6,
+    "user_account_operations.yaml": 0.5,
+    "team_admin_account_operations.yaml": 0.3,
+    "system_admin_account_operations.yaml": 0.3,
+    "file_operations.yaml": 0.4,
+    "ping_and_info.yaml": 0.2,
+    "python-scheduler.yaml": 0.2,
+}
+
 SPEC_NAMES = {
     "authentication.yaml": "Authentication",
     "base_operations.yaml": "Base Operations",
@@ -44,6 +57,22 @@ SPEC_NAMES = {
     "ping_and_info.yaml": "Ping & Info",
     "python-scheduler.yaml": "Python Scheduler",
 }
+
+
+def git_lastmod(filepath):
+    """Get the last commit date (YYYY-MM-DD) for a file via git log."""
+    try:
+        result = subprocess.run(
+            ["git", "log", "-1", "--format=%aI", "--", filepath],
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()[:10]  # YYYY-MM-DD
+    except FileNotFoundError:
+        pass
+    return None
 
 
 def load_yaml(path):
@@ -87,6 +116,7 @@ def get_intro_pages():
                 "slug": frontmatter.get("slug", ""),
                 "title": frontmatter.get("title", ""),
                 "excerpt": frontmatter.get("excerpt", ""),
+                "file": md_file,
             }
         )
     return pages
@@ -145,26 +175,44 @@ def get_operations(spec):
 # ---------------------------------------------------------------------------
 # sitemap.xml
 # ---------------------------------------------------------------------------
-def generate_sitemap(intro_pages, all_operations):
-    urls = set()
+def generate_sitemap(intro_pages, specs_data):
+    # Collect all URLs with metadata: (url, lastmod, priority)
+    entries = []
+
+    # Intro / doc pages
     for page in intro_pages:
-        urls.add(f"{BASE_URL}/reference/{page['slug']}")
-    for op in all_operations:
-        if op["operationId"]:
-            urls.add(f"{BASE_URL}/reference/{op['operationId'].lower()}")
+        url = f"{BASE_URL}/reference/{page['slug']}"
+        lastmod = git_lastmod(page["file"])
+        entries.append((url, lastmod, 0.8))
+
+    # API operations — lastmod comes from the spec file, priority per spec
+    for spec_file, spec, operations in specs_data:
+        spec_path = os.path.join(SPEC_DIR, spec_file)
+        lastmod = git_lastmod(spec_path)
+        priority = SPEC_PRIORITY.get(spec_file, 0.3)
+        for op in operations:
+            if op["operationId"]:
+                url = f"{BASE_URL}/reference/{op['operationId'].lower()}"
+                entries.append((url, lastmod, priority))
+
+    # Deduplicate by URL (keep highest priority)
+    seen = {}
+    for url, lastmod, priority in entries:
+        if url not in seen or priority > seen[url][1]:
+            seen[url] = (lastmod, priority)
 
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ]
-    for url in sorted(urls):
-        lines += [
-            "  <url>",
-            f"    <loc>{url}</loc>",
-            "    <changefreq>weekly</changefreq>",
-            "    <priority>0.3</priority>",
-            "  </url>",
-        ]
+    for url in sorted(seen):
+        lastmod, priority = seen[url]
+        lines.append("  <url>")
+        lines.append(f"    <loc>{url}</loc>")
+        if lastmod:
+            lines.append(f"    <lastmod>{lastmod}</lastmod>")
+        lines.append(f"    <priority>{priority}</priority>")
+        lines.append("  </url>")
     lines.append("</urlset>")
     return "\n".join(lines) + "\n"
 
@@ -361,7 +409,7 @@ def main():
         specs_data.append((spec_file, spec, operations))
         all_operations.extend(operations)
 
-    sitemap = generate_sitemap(intro_pages, all_operations)
+    sitemap = generate_sitemap(intro_pages, specs_data)
     with open(os.path.join(OUTPUT_DIR, "sitemap.xml"), "w") as f:
         f.write(sitemap)
     print(f"sitemap.xml   — {len(intro_pages)} doc pages + {len(all_operations)} operations")
