@@ -51,6 +51,8 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 6.0 (04.11.2025)
 
+[View API Documentation for v6.0](https://api.seatable.com/v6.0)
+
 > 📘 New requests
 >
 > **Account Operations - System Admin**
@@ -75,7 +77,7 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 5.3 (16.06.2025)
 
-[View API Documentation for v5.3](https://api.seatable.com/v5.3)
+The SeaTable API Reference for version 5.3 is no longer accessible here. However, you can find it on [Github](https://github.com/seatable/openapi/tree/v5.3).
 
 > 🚧 Breaking change: API-Gateway
 >
