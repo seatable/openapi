@@ -1,4 +1,7 @@
-# Syncs OpenAPI specs and docs to ReadMe.com on every push to a version branch.
+# Syncs OpenAPI specs and docs to ReadMe.com on every push to a version branch,
+# then generates and deploys static files (sitemap.xml, robots.txt, llms.txt,
+# llms-full.txt) to the api.seatable.com vserver via rsync.
+#
 # Documentation: https://docs.readme.com/docs/rdme or https://github.com/readmeio/rdme
 #
 # The version is derived from the branch name (e.g. v6.2 -> 6.2).
@@ -15,7 +18,7 @@
 #   6. Update the version in all YAML spec files.
 #   7. git add . && git commit && git push --set-upstream origin vX.Y
 
-name: ReadMe GitHub Action
+name: Publish
 
 on:
   push:
@@ -23,11 +26,13 @@ on:
       - "v*"
 
 jobs:
-  rdme-openapi:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for git lastmod in sitemap
 
       - name: Derive version from branch name
         run: |
@@ -46,6 +51,8 @@ jobs:
           echo "ID_PING=$(jq -r '.ping_and_info' .github/readme-ids.json)" >> $GITHUB_ENV
           echo "ID_PYTHON=$(jq -r '.python_scheduler' .github/readme-ids.json)" >> $GITHUB_ENV
 
+      # --- Validate ---
+
       - name: Check links in docs and specs
         uses: lycheeverse/lychee-action@v2
         with:
@@ -63,47 +70,71 @@ jobs:
           npx --yes swagger-cli validate ping_and_info.yaml
           npx --yes swagger-cli validate python-scheduler.yaml
 
+      # --- Publish to ReadMe ---
+
       - name: Update SeaTable API docs
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: docs ./intro --key=${{ secrets.README_API_KEY }} --version=${{ env.VERSION }}
 
       - name: Update authentication
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi authentication.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_AUTH }} --useSpecVersion
 
       - name: Update base operations
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi base_operations.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_BASE }} --useSpecVersion
 
       - name: Update file operations
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi file_operations.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_FILE }} --useSpecVersion
 
       - name: Update sys admin account operations
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi system_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_SYSADMIN }} --useSpecVersion
 
       - name: Update team admin account operations
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi team_admin_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_TEAMADMIN }} --useSpecVersion
 
       - name: Update user account operations
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi user_account_operations.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_USER }} --useSpecVersion
 
       - name: Update ping & info
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi ping_and_info.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_PING }} --useSpecVersion
 
       - name: Update python scheduler
-        uses: readmeio/rdme@v8
+        uses: readmeio/rdme@v9
         with:
           rdme: openapi python-scheduler.yaml --key=${{ secrets.README_API_KEY }} --id=${{ env.ID_PYTHON }} --useSpecVersion
+
+      # --- Generate and deploy static files ---
+
+      - name: Install Python dependencies
+        run: pip install pyyaml
+
+      - name: Generate sitemap.xml, llms.txt, llms-full.txt
+        run: python3 custom-domain/generate.py
+
+      - name: Copy robots.txt to output
+        run: cp custom-domain/robots.txt custom-domain/output/
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy static files to vserver
+        run: "rsync -avz --delete . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:"
+        working-directory: custom-domain/output
