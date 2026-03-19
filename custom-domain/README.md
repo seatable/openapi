@@ -42,7 +42,7 @@ The server must have `rrsync` configured with target `/opt/api.seatable.com/`.
 
 ### nginx configuration
 
-Nginx runs as a Docker container. The static files are mounted at `/var/www/api.seatable.com/` inside the container, while on the host they reside under `/opt/api.seatable.com/`.
+Nginx runs as a Docker container. The static files reside under `/opt/api.seatable.com/` on the host and are mounted at the same path inside the container.
 
 It is important to add any header in the nginx configuration, otherwise the google crawling bots deny crawling the page.
 
@@ -75,22 +75,22 @@ server {
     }
 
     location /sitemap.xml {
-        root /var/www/api.seatable.com/;
+        root /opt/api.seatable.com/;
         access_log off;
     }
 
     location /robots.txt {
-        root /var/www/api.seatable.com/;
+        root /opt/api.seatable.com/;
         access_log off;
     }
 
     location /llms.txt {
-        root /var/www/api.seatable.com/;
+        root /opt/api.seatable.com/;
         access_log off;
     }
 
     location /llms-full.txt {
-        root /var/www/api.seatable.com/;
+        root /opt/api.seatable.com/;
         access_log off;
     }
 }
