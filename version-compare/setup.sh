@@ -187,8 +187,11 @@ ENABLED_ROLE_PERMISSIONS = {
     },
 }
 
-# Allow Docker Gateway IP address
-REST_FRAMEWORK_THROTTING_WHITELIST = ['172.19.0.1', '127.0.0.1']
+# Disable rate limiting for API tests
+API_THROTTLE_RATES = {
+    'anon': '10000/minute',
+    'user': '10000/minute',
+}
 SETTINGS
 
 echo "Restarting SeaTable to apply settings..."
