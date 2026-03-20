@@ -1,5 +1,8 @@
+import pytest
 from conftest import Secret, system_admin_account_operations
 from schemathesis import Case
+
+pytestmark = pytest.mark.needs_large_license
 
 
 def test_admin_user_lifecycle(system_admin_account_token: Secret):

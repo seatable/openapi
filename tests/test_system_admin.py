@@ -1,8 +1,11 @@
+import pytest
 import schemathesis
 from conftest import BASE_URL, Secret, system_admin_account_operations, USERNAME
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
 from syrupy.filters import props
+
+pytestmark = pytest.mark.needs_large_license
 from syrupy.matchers import path_type
 
 

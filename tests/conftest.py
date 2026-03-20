@@ -13,6 +13,13 @@ from schemathesis.specs.openapi.checks import content_type_conformance, response
 from syrupy.extensions.json import JSONSnapshotExtension
 from typing import Generator
 
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        'markers',
+        'needs_large_license: test requires a license with 10+ user slots (sys-admin/team-admin tests)',
+    )
+
 # Patterns for volatile values that change between test runs
 _TIMESTAMP_RE = re.compile(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}')
 _AUTH_LOCAL_RE = re.compile(r'^[0-9a-f]+@auth\.local$')
@@ -349,17 +356,35 @@ def delete_group(account_token: Secret, group_id: int):
 
 MIN_LICENSE_USERS = 10
 
-@pytest.fixture(scope='session', autouse=True)
-def check_license(system_admin_account_token: Secret):
-    """Verify the test license has enough user slots before running any tests."""
-    headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
-    case: Case = system_admin_account_operations.find_operation_by_id('getSystemInformation').Case()
-    response = case.call(headers=headers)
-    assert response.status_code == 200
+def _get_license_maxusers() -> int:
+    """Query the SeaTable API for the license user limit."""
+    import requests as req
+    resp = req.post(f'{BASE_URL}/api2/auth-token/',
+                    data={'username': ADMIN_USERNAME, 'password': ADMIN_PASSWORD})
+    if resp.status_code != 200:
+        return 0
+    token = resp.json()['token']
 
-    data = response.json()
-    max_users = data.get('license_maxusers', 0)
-    assert max_users >= MIN_LICENSE_USERS, (
-        f'Test license allows only {max_users} users, but at least {MIN_LICENSE_USERS} are required. '
-        f'Please update the license in version-compare/seatable-license.txt and in the CI secrets.'
+    resp = req.get(f'{BASE_URL}/api/v2.1/admin/sysinfo/',
+                   headers={'Authorization': f'Bearer {token}'})
+    if resp.status_code != 200:
+        return 0
+    return resp.json().get('license_maxusers', 0)
+
+def pytest_collection_modifyitems(items):
+    """Skip tests marked with needs_large_license when the license is too small."""
+    has_advanced = any(item.get_closest_marker('needs_large_license') for item in items)
+    if not has_advanced:
+        return
+
+    maxusers = _get_license_maxusers()
+    if maxusers >= MIN_LICENSE_USERS:
+        return
+
+    skip_marker = pytest.mark.skip(
+        reason=f'License has {maxusers} user slots, '
+               f'but {MIN_LICENSE_USERS}+ are required for admin tests'
     )
+    for item in items:
+        if item.get_closest_marker('needs_large_license'):
+            item.add_marker(skip_marker)

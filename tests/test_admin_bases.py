@@ -1,8 +1,11 @@
+import pytest
 from conftest import (
     Base, Secret, system_admin_account_operations, USERNAME,
     user_account_operations, create_group, delete_group,
 )
 from schemathesis import Case
+
+pytestmark = pytest.mark.needs_large_license
 
 
 def test_listAllBases(system_admin_account_token: Secret, base: Base):

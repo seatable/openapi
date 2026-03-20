@@ -1,5 +1,8 @@
+import pytest
 from conftest import Secret, system_admin_account_operations, USERNAME, ADMIN_USERNAME
 from schemathesis import Case
+
+pytestmark = pytest.mark.needs_large_license
 
 
 def test_listAdminUsers(system_admin_account_token: Secret):
