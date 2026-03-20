@@ -73,7 +73,7 @@ jobs:
       - name: Check documentation quality
         run: |
           pip install pyyaml -q
-          python3 tests/validate_specs.py
+          python3 tests/validate_specs.py --strict
 
       - name: Update SeaTable API docs
         uses: readmeio/rdme@v9

@@ -301,6 +301,7 @@ paths:
       tags: [Files & Images (Custom Folder)]
       summary: Get Files from Folder
       operationId: getCustomFiles
+      description: List files and subdirectories in a custom folder of a base.
       security:
         - ApiTokenAuth: []
       parameters:
@@ -324,6 +325,7 @@ paths:
       tags: [Files & Images (Custom Folder)]
       summary: Get File Metadata
       operationId: getCustomFileMetadata
+      description: Get metadata (name, size, last update) of a file in a custom folder.
       security:
         - ApiTokenAuth: []
       parameters:
@@ -368,6 +370,7 @@ paths:
       tags: [Files & Images (Custom Folder)]
       summary: Get Upload Link
       operationId: getCustomUploadLink
+      description: Get a temporary upload link for uploading files to a custom folder.
       security:
         - ApiTokenAuth: []
       parameters:
@@ -390,6 +393,7 @@ paths:
       tags: [Files & Images (Custom Folder)]
       summary: Get Download Link
       operationId: getCustomDownloadLink
+      description: Get a temporary download link for a file in a custom folder.
       security:
         - ApiTokenAuth: []
       parameters:

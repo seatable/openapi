@@ -1996,6 +1996,7 @@ paths:
       parameters:
         - name: org_ids
           in: query
+          description: Comma-separated list of organization IDs to look up.
           schema:
             type: array
             items:
@@ -2004,6 +2005,14 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                organization_list:
+                  - org_id: 1
+                    org_name: "My Team"
   /api/v2.1/admin/organizations/{org_id}/:
     put:
       tags:
@@ -2367,6 +2376,9 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            # Actually application/x-zip-compressed, but dtable-web does not accept this in Accept header
+            application/json: {}
 
   # Common Dataset
   /api/v2.1/admin/common-datasets/:
@@ -3568,6 +3580,7 @@ paths:
         - $ref: "#/components/parameters/per_page"
         - in: query
           name: has_handled
+          description: Filter by handling status. Use `true` for handled, `false` for unhandled, or `null` for all.
           schema:
             type: string
             enum: [true, false, null]

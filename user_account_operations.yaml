@@ -2485,6 +2485,7 @@ paths:
       parameters:
         - name: q
           in: query
+          description: Search query string. Matches against email, name, or contact email.
           schema:
             type: string
           example: Micha
@@ -3415,6 +3416,7 @@ paths:
       parameters:
         - name: q
           in: query
+          description: Search query string. Matches against group name.
           schema:
             type: string
           example: Micha
@@ -3558,6 +3560,7 @@ paths:
       parameters:
         - name: q
           in: query
+          description: Search query string. Matches against member name or email.
           schema:
             type: string
           example: Micha

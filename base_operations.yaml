@@ -176,6 +176,7 @@ components:
       example: 0
     days:
       name: days
+      description: Number of days to look back for comments.
       in: query
       schema:
         type: integer
@@ -3953,6 +3954,13 @@ paths:
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+                task_id: cdb7fcc6-d2fa-4bf7-ae08-0d767c38690c
   /api-gateway/api/v2/dtables/{base_uuid}/db-operations/:
     get:
       tags: [Big Data]

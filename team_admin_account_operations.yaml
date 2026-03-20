@@ -170,6 +170,7 @@ components:
       example: 5c264e76-0e5a-448a-9f34-580b551364ca
     external_link_token:
       name: external_link_token
+      description: The token of the external link.
       in: path
       schema:
         type: string
@@ -177,6 +178,7 @@ components:
       example: "d6d006b319ca4d2aa060"
     view_external_link_token:
       name: view_external_link_token
+      description: The token of the view external link.
       in: path
       schema:
         type: string
@@ -184,6 +186,7 @@ components:
       example: "d6d006b319ca4d2aa060"
     invite_link_token:
       name: invite_link_token
+      description: The token of the invite link.
       in: path
       schema:
         type: string
