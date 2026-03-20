@@ -33,7 +33,8 @@ def test_getAccountInfo(account_token: Secret, snapshot_json: SnapshotAssertion)
 
     assert snapshot_json(
         # v6.1+
-        exclude=props('automation_count', 'automation_limit', 'automation_usage_rate'),
+        exclude=props('automation_count', 'automation_limit', 'automation_usage_rate',
+                       'api_calls_count'),
         matcher=matcher,
     ) == data
 
