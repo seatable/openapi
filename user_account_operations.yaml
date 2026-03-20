@@ -3836,9 +3836,9 @@ paths:
                           - id: 424
                             workspace_id: 204
                             uuid: 8d29d6fc-1f00-46af-98df-4007b3635e1c
-                            name: 1. Templates-Übersicht
-                            creator: Jasmin Tee
-                            modifier: Jasmin Tee
+                            name: 1. Templates Overview
+                            creator: Jane Doe
+                            modifier: Jane Doe
                             created_at: "2021-01-08T15:09:03+00:00"
                             updated_at: "2021-01-21T16:06:26+00:00"
                             color: null
@@ -8019,8 +8019,8 @@ paths:
                     row_id: TMtyvDMNROq-dOJJqaqq9w
                     op_type: modify_row
                     author_email: "2d67c225c64f4305ada3e5820ce6d660@auth.local"
-                    author_name: "Hans Müller"
-                    author_contact_email: "hans@seatable.io"
+                    author_name: "John Smith"
+                    author_contact_email: "john@example.com"
                     op_time: "2023-06-29T15:21:19+02:00"
                     table_id: 0000
                     table_name: SeaTable API Docs

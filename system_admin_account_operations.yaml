@@ -3192,7 +3192,7 @@ paths:
                     dtable_uuid: 88b0e65a-18f1-4b08-9e6f-fe63d6199c87
                     run_condition: per_update
                     trigger:
-                      rule_name: wd的提醒规则
+                      rule_name: My notification rule
                       table_id: clk6
                       view_id: "0000"
                       condition: rows_modified
@@ -3200,7 +3200,7 @@ paths:
                       watch_all_columns: true
                     action:
                       type: notify
-                      default_msg: 呜呜呜
+                      default_msg: A row has been modified.
                       users:
                         - 3d3ef49e927a4ff99e605763355027e2@auth.local
                       users_column_key: ""
@@ -3212,7 +3212,7 @@ paths:
                     dtable_uuid: 88b0e65a-18f1-4b08-9e6f-fe63d6199c87
                     run_condition: per_update
                     trigger:
-                      rule_name: wd的提醒规则2
+                      rule_name: My notification rule 2
                       table_id: clk6
                       view_id: "0000"
                       condition: rows_modified
@@ -3220,7 +3220,7 @@ paths:
                       watch_all_columns: true
                     action:
                       type: notify
-                      default_msg: 呜呜呜
+                      default_msg: A row has been modified.
                       users:
                         - 3d3ef49e927a4ff99e605763355027e2@auth.local
                       users_column_key: ""
@@ -3698,15 +3698,9 @@ paths:
                       version: 0.1.33
                       display_type: overlay
                       display_name:
-                        de: Galerie
                         en: Gallery
-                        fr: Galerie
-                        zh-cn: 图库
                       description:
-                        de: Zeigen Sie Ihre Datensätze in einer Galerie an.
                         en: Display your records in a gallery.
-                        fr: Affichez vos enregistrements dans une galerie.
-                        zh-cn: 用图库的方式展示你的记录。
                       last_modified: "2021-03-12T12:04:33+08:00"
                       has_css: true
                       has_icon: true
@@ -3720,19 +3714,9 @@ paths:
                       version: 0.4.29
                       display_type: overlay
                       display_name:
-                        de: ""
                         en: Timeline
-                        fr: ""
-                        zh-cn: 时间线
                       description:
-                        de: >-
-                          Visualisieren Sie die aufgezeichneten Informationen
-                          auf der Timeline.
                         en: Visualize the recorded information on the timeline.
-                        fr: >-
-                          Visualisez les informations enregistrées sur la
-                          chronologie.
-                        zh-cn: 在时间线上可视化展现记录信息。
                       last_modified: "2021-03-08T10:29:27+08:00"
                       has_css: true
                       has_icon: true
@@ -3745,23 +3729,9 @@ paths:
                       name: map-en
                       version: 0.0.16
                       display_name:
-                        cs: Mapy
-                        de: Karten
                         en: Map
-                        es: Mapas
-                        fr: Les cartes
-                        it: mappa
-                        ru: карта
-                        zh-cn: 地图
                       description:
-                        de: >-
-                          Das Karten-Plugin kann Datensätze auf der Karte
-                          anzeigen
                         en: Map plugin can display records on the map
-                        fr: >-
-                          Le plugin de carte peut afficher des enregistrements
-                          sur la carte
-                        zh-cn: 地图插件能把记录显示到地图上
                       last_modified: "2020-12-08T11:04:56+08:00"
                       has_css: true
                       has_icon: true
@@ -3774,15 +3744,9 @@ paths:
                       name: deduplication
                       version: 0.0.18
                       display_name:
-                        de: Datendeduplizierung
                         en: Deduplication
-                        fr: Déduplication des données
-                        zh-cn: 数据去重
                       description:
-                        de: Entfernen Sie doppelte Datensätze in einer Tabelle
                         en: Remove duplicated records in a table
-                        fr: Supprimer les enregistrements dupliqués dans une table
-                        zh-cn: 删除表格中的重复数据
                       last_modified: "2021-02-04T11:55:26+08:00"
                       has_css: true
                       has_icon: true
@@ -3823,15 +3787,9 @@ paths:
                   name: deduplication
                   version: 0.0.18
                   display_name:
-                    de: Datendeduplizierung
                     en: Deduplication
-                    fr: Déduplication des données
-                    zh-cn: 数据去重
                   description:
-                    de: Entfernen Sie doppelte Datensätze in einer Tabelle
                     en: Remove duplicated records in a table
-                    fr: Supprimer les enregistrements dupliqués dans une table
-                    zh-cn: 删除表格中的重复数据
                   last_modified: "2021-02-04T11:55:26+08:00"
                   has_css: true
                   has_icon: true
@@ -3902,15 +3860,9 @@ paths:
                   name: deduplication
                   version: 0.0.18
                   display_name:
-                    de: Datendeduplizierung
                     en: Deduplication
-                    fr: Déduplication des données
-                    zh-cn: 数据去重
                   description:
-                    de: Entfernen Sie doppelte Datensätze in einer Tabelle
                     en: Remove duplicated records in a table
-                    fr: Supprimer les enregistrements dupliqués dans une table
-                    zh-cn: 删除表格中的重复数据
                   last_modified: "2021-02-04T11:55:26+08:00"
                   has_css: true
                   has_icon: true
