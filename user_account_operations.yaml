@@ -211,7 +211,7 @@ components:
       description: >-
         The ID of the task, returned when you **Send An Email via 3rd Party
         Email Account**.
-      example: "1616585864320"
+      example: 1616585864320
     base_password:
       name: password
       in: query
@@ -575,7 +575,7 @@ components:
       type: array
       items:
         type: integer
-        example: "52"
+        example: 52
     user_id_list:
       type: array
       items:
@@ -2143,7 +2143,7 @@ components:
     src_workspace_id:
       type: integer
       description: Source workspace's ID.
-      example: "1"
+      example: 1
     base_name:
       type: string
       description: Name of the base.
@@ -2151,7 +2151,7 @@ components:
     dst_workspace_id:
       type: integer
       description: Destination workspace's ID.
-      example: "80"
+      example: 80
     is_copy_dataset_syncs:
       type: boolean
       description: Select whether common datasets should be synchronous too. False by default.
@@ -2206,7 +2206,7 @@ components:
     expire_days:
       type: integer
       description: Add expiration period in days. Optional.
-      example: "30"
+      example: 30
     token:
       type: string
       description: >-
@@ -3181,7 +3181,7 @@ paths:
             type: integer
           required: true
           description: The ID of the trashed base.
-          example: "497"
+          example: 497
       responses:
         "200":
           description: OK

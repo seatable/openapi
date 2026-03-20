@@ -279,7 +279,7 @@ components:
     team_admin_quota_total:
       type: integer
       description: Update their total quota in MB.
-      example: "3"
+      example: 3
     team_admin_group_id:
       type: string
       description: The ID of the group you'd like to move.
