@@ -2214,7 +2214,7 @@ components:
         it'll appear as
         "https<span>://cloud.seatable.io/dtable/view-external-links/custom/example/".
         If not given, SeaTable will give a random token to the link.
-      example: fleischkaesebroetchen
+      example: my-custom-link
     dataset_name:
       type: string
       description: The name of the common dataset.
@@ -6910,6 +6910,8 @@ paths:
                   success:
                     type: boolean
                     example: true
+              example:
+                success: true
 
   # Notifications
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/notification-rules/:
@@ -7838,7 +7840,7 @@ paths:
                       "role_id": 21,
                       "role_name": "default",
                       "role_permission": "rw",
-                      "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                      "avatar_url": "https://cloud.seatable.io/media/avatars/default.png",
                     },
                   ]
 
@@ -8122,3 +8124,5 @@ paths:
                                 _id: "SQNJkddjSDGBdWBtdLZC6g"
                                 _last_modifier: "509fe338ed4f44099158d7143e4e4de3@auth.local"
                                 _mtime: "2024-08-19T11:53:13.103871879+08:00"
+              example:
+                operations: []

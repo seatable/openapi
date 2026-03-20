@@ -244,6 +244,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiTokenList"
+              example:
+                api_tokens:
+                  - app_name: "My App"
+                    api_token: "4ed751818b040c85a49a2aff29f0176d032269fb"
+                    generated_by: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local"
+                    generated_at: "2021-03-02T09:47:41+00:00"
+                    last_access: "2021-03-02T09:47:41+00:00"
+                    permission: "rw"
         "401":
           description: Unauthorized
           content:

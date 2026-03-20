@@ -804,7 +804,7 @@ paths:
                 owner: JiweRan
                 email: c882391bfa0144c4af64e4e0cde50b6c@auth.local
                 group_id: -1
-                owner_deleted: false,
+                owner_deleted: false
                 rows_count: 2
     delete:
       tags:
@@ -1316,6 +1316,8 @@ paths:
             application/json:
               schema:
                 type: object
+              example:
+                success: true
     delete:
       tags:
         - Groups
@@ -1358,6 +1360,8 @@ paths:
             application/json:
               schema:
                 type: object
+              example:
+                share_list: []
   /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/api-tokens/:
     get:
       tags:
@@ -2251,10 +2255,10 @@ paths:
                 runs:
                   - dtable_uuid: 306acc83-5305-45b4-b34b-528f6f51d7b8
                     finished_at: "2026-01-06T11:57:11+01:00"
-                    id: 3,
+                    id: 3
                     operate_from: manualy
                     owner: 2a609b47d6254449a7f042a42ef02d09@auth.local
-                    return_code: 0,
+                    return_code: 0
                     script_name: DDx0.py
                     started_at: "2026-01-06T11:57:10+01:00"
                     success: true

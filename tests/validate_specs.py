@@ -206,10 +206,41 @@ def validate_specs():
 
                 # 9. Success responses (2xx) should have content
                 for status, resp in responses.items():
-                    if str(status).startswith("2") and not resp.get("content"):
+                    if not str(status).startswith("2"):
+                        continue
+                    content = resp.get("content")
+                    if not content:
                         errors.append(
                             f"{loc}: Response {status} has no content/schema/example"
                         )
+                        continue
+                    # Check that at least one media type has a schema or example
+                    for ct, media in content.items():
+                        schema = media.get("schema", {})
+                        example = media.get("example")
+                        # Skip empty schemas (binary file workaround)
+                        if not schema and example is None:
+                            continue
+                        # Resolve $ref in schema to check for embedded example
+                        if "$ref" in schema:
+                            resolved = resolve_ref(spec, schema["$ref"])
+                            if resolved.get("example") is not None:
+                                continue
+                            # Check if properties have examples
+                            props = resolved.get("properties", {})
+                            if props and all(
+                                p.get("example") is not None for p in props.values()
+                            ):
+                                continue
+                        examples = media.get("examples")
+                        if (
+                            example is None
+                            and not examples
+                            and not schema.get("example")
+                        ):
+                            errors.append(
+                                f"{loc}: Response {status} ({ct}) has schema but no example"
+                            )
 
                 # 10 & 11. Path parameters must be defined and required
                 url_params = set(PATH_PARAM_RE.findall(path))

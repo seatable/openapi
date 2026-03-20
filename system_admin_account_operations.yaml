@@ -795,7 +795,7 @@ paths:
               schema:
                 type: object
               example:
-                org_id: 1,
+                org_id: 1
                 org_name: "Team 1"
                 email: "6196ab3dacef4e539ae8da4844b58a1f@auth.local"
                 name: "John Doe"
@@ -1225,19 +1225,19 @@ paths:
                     [
                       {
                         "email": "148768b50bb44c9d9d04f101a2b34a49@auth.local",
-                        "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                        "avatar_url": "https://cloud.seatable.io/media/avatars/default.png",
                         "name": "org_guest1",
                         "contact_email": "org_guest1@example.com",
                       },
                       {
                         "email": "4919f22fa6e14a538b47428b5589ec60@auth.local",
-                        "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                        "avatar_url": "https://cloud.seatable.io/media/avatars/default.png",
                         "name": "org_guest2",
                         "contact_email": "org_guest2@example.com",
                       },
                       {
                         "email": "53f1af67b0dd492491264dd8143040b3@auth.local",
-                        "avatar_url": "http://127.0.0.1:8000/media/avatars/default.png",
+                        "avatar_url": "https://cloud.seatable.io/media/avatars/default.png",
                         "name": "org_guest",
                         "contact_email": "org_guest@example.com",
                       },
@@ -3478,6 +3478,17 @@ paths:
                     type: integer
                     description: The total number of logs available.
                     example: 15
+              example:
+                audit_log_list:
+                  - username: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local"
+                    name: "John Smith"
+                    operation: "group_delete"
+                    org_id: -1
+                    detail:
+                      id: 250
+                      name: "My Group"
+                    created_at: "2024-03-19T01:25:25+00:00"
+                    org_name: ""
   /api/v2.1/admin/group-member-audit/:
     get:
       tags:
@@ -4198,6 +4209,8 @@ paths:
                   success:
                     type: boolean
                     example: true
+              example:
+                success: true
 
   # System Notifications
   /api/v2.1/admin/sys-user-notifications/:
