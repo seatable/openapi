@@ -77,55 +77,53 @@ jobs:
           pip install pyyaml -q
           python3 tests/validate_specs.py --strict
 
-      # Breaking change detection: compares current branch against v6.0 (main).
-      # Informational only (continue-on-error) — breaking changes between
-      # versions are expected, but this makes them visible in the workflow summary.
-      # Update the base branch ref when the main branch changes.
+      # Breaking change detection: automatically derives the previous version
+      # branch (e.g. v6.1 compares against v6.0, v6.2 against v6.1).
+      # Informational only — breaking changes between versions are expected,
+      # but this makes them visible in the workflow summary.
       - name: Check for breaking changes
         continue-on-error: true
         run: |
-          git fetch origin v6.0 --depth=1
-          echo "Comparing against v6.0 for breaking changes..."
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:authentication.yaml"
-          revision: "authentication.yaml"
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:base_operations.yaml"
-          revision: "base_operations.yaml"
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:user_account_operations.yaml"
-          revision: "user_account_operations.yaml"
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:team_admin_account_operations.yaml"
-          revision: "team_admin_account_operations.yaml"
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:system_admin_account_operations.yaml"
-          revision: "system_admin_account_operations.yaml"
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:file_operations.yaml"
-          revision: "file_operations.yaml"
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:ping_and_info.yaml"
-          revision: "ping_and_info.yaml"
-      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
-        continue-on-error: true
-        with:
-          base: "origin/v6.0:python-scheduler.yaml"
-          revision: "python-scheduler.yaml"
+          # Derive previous version branch: v6.1 -> v6.0, v7.0 -> v6.0
+          CURRENT="${GITHUB_REF_NAME#v}"
+          MAJOR="${CURRENT%%.*}"
+          MINOR="${CURRENT#*.}"
+          if [ "$MINOR" -gt 0 ]; then
+            BASE_BRANCH="v${MAJOR}.$((MINOR - 1))"
+          else
+            BASE_BRANCH="v$((MAJOR - 1)).0"
+          fi
+          echo "Comparing ${GITHUB_REF_NAME} against ${BASE_BRANCH}..."
+
+          # Fetch the base branch; skip check if it doesn't exist
+          if ! git fetch origin "${BASE_BRANCH}" --depth=1 2>/dev/null; then
+            echo "Base branch ${BASE_BRANCH} not found, skipping breaking change check."
+            exit 0
+          fi
+
+          # Install oasdiff
+          go install github.com/tufin/oasdiff@latest
+          export PATH="$PATH:$(go env GOPATH)/bin"
+
+          # Compare each spec file
+          FOUND=0
+          for spec in authentication.yaml base_operations.yaml user_account_operations.yaml \
+                      team_admin_account_operations.yaml system_admin_account_operations.yaml \
+                      file_operations.yaml ping_and_info.yaml python-scheduler.yaml; do
+            echo "--- ${spec} ---"
+            if git cat-file -e "origin/${BASE_BRANCH}:${spec}" 2>/dev/null; then
+              git show "origin/${BASE_BRANCH}:${spec}" > "/tmp/base_${spec}"
+              oasdiff breaking "/tmp/base_${spec}" "${spec}" || FOUND=1
+            else
+              echo "  (new file, no comparison)"
+            fi
+          done
+
+          if [ "$FOUND" -eq 1 ]; then
+            echo "::warning::Breaking changes detected compared to ${BASE_BRANCH} (see above)"
+          else
+            echo "No breaking changes detected."
+          fi
 
       - name: Update SeaTable API docs
         uses: readmeio/rdme@v9
