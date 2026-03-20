@@ -8,11 +8,53 @@ This repository contains all supported API calls for the SeaTable Server as Open
 
 The repository is organized into version branches (e.g. `v6.1`, `v6.2`).
 
-## Publish to ReadMe
+## Publish workflow
 
-Every push to a version branch automatically syncs all OpenAPI specs and intro docs to ReadMe.com via the GitHub Action in `.github/workflows/rdme-openapi.yml`. Before uploading, the workflow validates all links (using [lychee](https://github.com/lycheeverse/lychee)) and all OpenAPI specs (using swagger-cli).
+Every push to a version branch triggers the workflow in `.github/workflows/rdme-openapi.yml`, which runs two jobs:
+
+### Job 1: Publish to ReadMe
+
+1. **Link check** — validates all URLs in docs and specs using [lychee](https://github.com/lycheeverse/lychee)
+2. **Spec validation** — validates all 8 OpenAPI specs using swagger-cli
+3. **Quality check** — runs `tests/validate_specs.py` to enforce documentation quality rules (see below)
+4. **Publish** — syncs intro docs and all OpenAPI specs to ReadMe.com
 
 The ReadMe category IDs for each version are stored in `.github/readme-ids.json`.
+
+### Job 2: Deploy static files
+
+Generates and deploys static files to the api.seatable.com vserver via rsync:
+
+- **sitemap.xml** — generated from specs with per-endpoint `lastmod` (via git blame) and per-category priority
+- **llms.txt** / **llms-full.txt** — LLM-readable API reference ([llms.txt standard](https://llmstxt.org/))
+- **robots.txt** — static file from `custom-domain/robots.txt`
+- **sitemap.xsl** — XSL stylesheet for human-readable sitemap rendering
+
+See `custom-domain/README.md` for server configuration details.
+
+### Quality checks
+
+The script `tests/validate_specs.py` enforces the following rules:
+
+| # | Check | Description |
+|---|-------|-------------|
+| 1 | operationId exists | Every operation must have an operationId |
+| 2 | camelCase | All operationIds must start with a lowercase letter |
+| 3 | No duplicates | No duplicate operationIds within the same spec file |
+| 4 | Summary | Every operation must have a summary |
+| 5 | Description | Every operation must have a description |
+| 6 | Tags | Every operation must have at least one tag |
+| 7 | Security | Every operation must declare a security scheme (public endpoints exempted) |
+| 8 | Responses | Every operation must have at least one response |
+| 9 | Response content | Every 2xx response must have a schema or example |
+| 10 | Path params defined | Path parameters in the URL must be defined in parameters |
+| 11 | Path params required | Path parameters must have `required: true` |
+| 12 | Param descriptions | All parameters must have a description |
+| 13 | No TODO in descriptions | No TODO/FIXME in description fields (YAML comments are fine) |
+| 14 | auth.local pattern | All auth.local examples must match `^[a-f0-9]{32}@auth.local$` |
+| 15 | English only | No non-ASCII characters in example values |
+
+Run locally: `python3 tests/validate_specs.py` (report) or `python3 tests/validate_specs.py --strict` (fail on issues).
 
 ### New version
 
