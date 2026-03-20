@@ -18,6 +18,8 @@ Checks enforced:
   13. No TODO/FIXME in description fields (YAML comments are fine)
   14. All auth.local examples must match ^[a-f0-9]{32}@auth.local$
   15. No non-ASCII characters in example values
+  16. Examples must match their schema (required fields, types)
+  17. Success response schemas with type:object should define properties
 
 Usage:
   python3 tests/validate_specs.py            # report issues (exit 0)
@@ -51,7 +53,7 @@ TODO_RE = re.compile(r"\b(TODO|FIXME)\b", re.IGNORECASE)
 NO_SECURITY_PATHS = {
     "/api2/ping/",
     "/server-info/",
-    "/api2/auth-token/",                         # this IS the auth endpoint
+    "/api2/auth-token/",
     "/dtable-server/ping/",
     "/dtable-db/ping/",
     "/api-gateway/api/v2/ping/",
@@ -62,6 +64,12 @@ NO_SECURITY_PREFIXES = (
     "/api/v2.1/external-link-tokens/",
     "/dtable/external-links/",
 )
+
+# Simple responses that legitimately have no properties (just success: true etc.)
+SIMPLE_RESPONSE_OPS = {
+    "repairBase",
+    "moveRowsToNormalBackend",
+}
 
 
 def find_auth_local_violations(obj, path=""):
@@ -122,8 +130,58 @@ def resolve_parameter(spec, param):
     return param
 
 
-def validate_specs():
+def validate_example_against_schema(example, schema, spec, path=""):
+    """Check that an example matches its schema definition (check 16)."""
     errors = []
+    if not schema or not example:
+        return errors
+
+    # Resolve $ref
+    if "$ref" in schema:
+        schema = resolve_ref(spec, schema["$ref"])
+        if not schema:
+            return errors
+
+    schema_type = schema.get("type")
+
+    # Type checks
+    if schema_type == "integer" and not isinstance(example, int):
+        errors.append(f"{path}: schema type is integer but example is {type(example).__name__}")
+    elif schema_type == "string" and not isinstance(example, str):
+        if isinstance(example, bool) or isinstance(example, (int, float)):
+            errors.append(f"{path}: schema type is string but example is {type(example).__name__}")
+    elif schema_type == "boolean" and not isinstance(example, bool):
+        errors.append(f"{path}: schema type is boolean but example is {type(example).__name__}")
+    elif schema_type == "array" and not isinstance(example, list):
+        errors.append(f"{path}: schema type is array but example is {type(example).__name__}")
+    elif schema_type == "object" and isinstance(example, dict):
+        # Check required fields
+        required = schema.get("required", [])
+        for field in required:
+            if field not in example:
+                errors.append(f"{path}: required field '{field}' missing from example")
+
+        # Recurse into properties
+        props = schema.get("properties", {})
+        for key, value in example.items():
+            if key in props:
+                errors.extend(
+                    validate_example_against_schema(
+                        value, props[key], spec, f"{path}.{key}"
+                    )
+                )
+
+    # Enum check
+    if "enum" in schema and example is not None:
+        if example not in schema["enum"]:
+            errors.append(f"{path}: example '{example}' not in enum {schema['enum']}")
+
+    return errors
+
+
+def validate_specs():
+    errors = []    # fail in --strict mode
+    warnings = []  # always advisory, never fail
 
     for spec_file in SPEC_FILES:
         file_operation_ids = {}
@@ -204,7 +262,7 @@ def validate_specs():
                 if not responses:
                     errors.append(f"{loc}: No responses defined")
 
-                # 9. Success responses (2xx) should have content
+                # 9, 16, 17. Success response checks
                 for status, resp in responses.items():
                     if not str(status).startswith("2"):
                         continue
@@ -214,32 +272,63 @@ def validate_specs():
                             f"{loc}: Response {status} has no content/schema/example"
                         )
                         continue
-                    # Check that at least one media type has a schema or example
+
                     for ct, media in content.items():
                         schema = media.get("schema", {})
                         example = media.get("example")
+
                         # Skip empty schemas (binary file workaround)
                         if not schema and example is None:
                             continue
+
                         # Resolve $ref in schema to check for embedded example
+                        resolved_schema = schema
                         if "$ref" in schema:
-                            resolved = resolve_ref(spec, schema["$ref"])
-                            if resolved.get("example") is not None:
-                                continue
+                            resolved_schema = resolve_ref(spec, schema["$ref"])
+                            if resolved_schema.get("example") is not None:
+                                example = resolved_schema.get("example")
                             # Check if properties have examples
-                            props = resolved.get("properties", {})
+                            props = resolved_schema.get("properties", {})
                             if props and all(
-                                p.get("example") is not None for p in props.values()
+                                p.get("example") is not None
+                                for p in props.values()
                             ):
-                                continue
-                        examples = media.get("examples")
+                                example = True  # sentinel: examples exist
+
+                        # 9. Must have example
+                        examples_plural = media.get("examples")
                         if (
                             example is None
-                            and not examples
+                            and not examples_plural
                             and not schema.get("example")
                         ):
                             errors.append(
-                                f"{loc}: Response {status} ({ct}) has schema but no example"
+                                f"{loc}: Response {status} ({ct}) has schema"
+                                f" but no example"
+                            )
+
+                        # 16. Example must match schema
+                        actual_example = media.get("example")
+                        if actual_example and resolved_schema:
+                            for e in validate_example_against_schema(
+                                actual_example, resolved_schema, spec,
+                                f"{loc} response {status}"
+                            ):
+                                errors.append(e)
+
+                        # 17. Response schemas should define properties (advisory)
+                        if (
+                            resolved_schema.get("type") == "object"
+                            and not resolved_schema.get("properties")
+                            and op_id not in SIMPLE_RESPONSE_OPS
+                            and actual_example
+                            and isinstance(actual_example, dict)
+                            and len(actual_example) > 2
+                        ):
+                            warnings.append(
+                                f"{loc}: Response {status} schema is"
+                                f" type:object without properties"
+                                f" ({len(actual_example)} fields in example)"
                             )
 
                 # 10 & 11. Path parameters must be defined and required
@@ -283,25 +372,33 @@ def validate_specs():
                 if TODO_RE.search(desc):
                     errors.append(f"{loc}: TODO/FIXME found in description")
 
-    return errors
+    return errors, warnings
 
 
 def main():
     strict = "--strict" in sys.argv
-    errors = validate_specs()
+    errors, warnings = validate_specs()
+
     if errors:
-        print(f"Found {len(errors)} quality issue(s):\n")
+        print(f"Found {len(errors)} error(s):\n")
         for e in sorted(errors):
-            print(f"  - {e}")
-        if strict:
-            print(f"\n{len(errors)} issue(s) found. Failing (--strict mode).")
-            sys.exit(1)
-        else:
-            print(f"\nRun with --strict to fail on these issues.")
-            sys.exit(0)
-    else:
+            print(f"  ERROR: {e}")
+
+    if warnings:
+        print(f"\nFound {len(warnings)} warning(s):\n")
+        for w in sorted(warnings):
+            print(f"  WARN:  {w}")
+
+    if not errors and not warnings:
         print("All quality checks passed.")
-        sys.exit(0)
+
+    if errors and strict:
+        print(f"\n{len(errors)} error(s) found. Failing (--strict mode).")
+        sys.exit(1)
+    elif errors:
+        print(f"\nRun with --strict to fail on errors.")
+
+    sys.exit(0)
 
 
 if __name__ == "__main__":

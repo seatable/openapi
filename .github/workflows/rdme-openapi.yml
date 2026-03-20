@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for oasdiff base branch comparison
 
       - name: Derive version from branch name
         run: |
@@ -74,6 +76,56 @@ jobs:
         run: |
           pip install pyyaml -q
           python3 tests/validate_specs.py --strict
+
+      # Breaking change detection: compares current branch against v6.0 (main).
+      # Informational only (continue-on-error) — breaking changes between
+      # versions are expected, but this makes them visible in the workflow summary.
+      # Update the base branch ref when the main branch changes.
+      - name: Check for breaking changes
+        continue-on-error: true
+        run: |
+          git fetch origin v6.0 --depth=1
+          echo "Comparing against v6.0 for breaking changes..."
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:authentication.yaml"
+          revision: "authentication.yaml"
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:base_operations.yaml"
+          revision: "base_operations.yaml"
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:user_account_operations.yaml"
+          revision: "user_account_operations.yaml"
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:team_admin_account_operations.yaml"
+          revision: "team_admin_account_operations.yaml"
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:system_admin_account_operations.yaml"
+          revision: "system_admin_account_operations.yaml"
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:file_operations.yaml"
+          revision: "file_operations.yaml"
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:ping_and_info.yaml"
+          revision: "ping_and_info.yaml"
+      - uses: oasdiff/oasdiff-action/breaking@v0.0.31
+        continue-on-error: true
+        with:
+          base: "origin/v6.0:python-scheduler.yaml"
+          revision: "python-scheduler.yaml"
 
       - name: Update SeaTable API docs
         uses: readmeio/rdme@v9

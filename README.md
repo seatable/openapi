@@ -53,8 +53,16 @@ The script `tests/validate_specs.py` enforces the following rules:
 | 13 | No TODO in descriptions | No TODO/FIXME in description fields (YAML comments are fine) |
 | 14 | auth.local pattern | All auth.local examples must match `^[a-f0-9]{32}@auth.local$` |
 | 15 | English only | No non-ASCII characters in example values |
+| 16 | Example-schema match | Examples must match their schema (required fields, types, enums) |
+| 17 | Schema completeness | Response schemas with `type: object` should define properties *(warning only)* |
 
-Run locally: `python3 tests/validate_specs.py` (report) or `python3 tests/validate_specs.py --strict` (fail on issues).
+Checks 1-16 are enforced in `--strict` mode (fail the build). Check 17 is advisory (reported but never fails).
+
+Run locally: `python3 tests/validate_specs.py` (report) or `python3 tests/validate_specs.py --strict` (fail on errors).
+
+### Breaking change detection
+
+The workflow uses [oasdiff](https://github.com/oasdiff/oasdiff) to compare the current specs against the main branch (v6.0). Breaking changes are reported in the workflow summary but do not block the build — changes between versions are expected. Update the base branch reference in the workflow when the main branch changes.
 
 ### New version
 
