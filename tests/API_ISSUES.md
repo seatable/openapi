@@ -2,6 +2,66 @@
 
 Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. These are server-side API behaviors — not bugs in the OpenAPI spec or test suite.
 
+## New Issues (2026-03-20)
+
+| # | Issue | Severity | Action Required |
+|---|-------|----------|-----------------|
+| 27 | appendColumns fails with link-formula columns | Medium | Yes — support link-formula in batch append |
+| 28 | insertColumn rejects DD/MM/YYYY HH:mm date format | Medium | Yes — accept European date format with time |
+| 29 | markBaseNotificationsAsSeen rejects JSON boolean | Medium | Yes — accept JSON boolean for `seen` |
+| 30 | sendToastNotification rejects request body | Medium | Yes — align request body with spec |
+| 31 | Python scheduler endpoints return 406 | Low | Investigate — may require feature flag |
+
+### 27. appendColumns fails with link-formula columns
+
+**Severity:** Medium
+
+`POST /api-gateway/api/v2/dtables/{base_uuid}/batch-append-columns/` returns an error when trying to append a `link-formula` column, even when valid `column_data` with `link_column_key`, `formula`, and `result_type` is provided.
+
+Regular `insertColumn` works for link-formula columns. Only the batch endpoint fails.
+
+**Recommendation:** Support link-formula columns in `appendColumns`, consistent with `insertColumn`.
+
+### 28. insertColumn rejects DD/MM/YYYY HH:mm date format
+
+**Severity:** Medium
+
+Creating a date column with `"format": "DD/MM/YYYY HH:mm"` (European format with hours and minutes) is rejected by the API as "not meeting specifications", while `"DD/MM/YYYY"` (without time) works fine.
+
+Other date formats with time (e.g., `"YYYY-MM-DD HH:mm"`, `"M/D/YYYY HH:mm"`) are accepted.
+
+**Recommendation:** Accept `DD/MM/YYYY HH:mm` as a valid date format.
+
+### 29. markBaseNotificationsAsSeen rejects JSON boolean for `seen`
+
+**Severity:** Medium — breaks JSON API clients
+
+`PUT /api-gateway/api/v2/dtables/{base_uuid}/notifications/` returns `400` with `"seen invalid"` when the `seen` field is sent as a JSON boolean (`true`/`false`). The API expects the form-encoded string `"true"` instead.
+
+This also affects the singular endpoint `PUT .../notifications/{notification_id}/`.
+
+**Recommendation:** Accept JSON booleans in addition to form-encoded strings.
+
+### 30. sendToastNotification rejects request body
+
+**Severity:** Medium
+
+`POST /api-gateway/api/v2/dtables/{base_uuid}/ui-toasts/` returns `400` with `"parameters invalid"` when the request body matches the documented schema (`to_users`, `msg_type`, `detail`). The actual expected format appears to differ from the spec.
+
+**Recommendation:** Align the API implementation with the documented request body format, or update the spec to match the actual expected format.
+
+### 31. Python scheduler endpoints return 406
+
+**Severity:** Low — may be environment-specific
+
+The Python scheduler statistics endpoints (e.g., `GET /admin/statistics/by-day/`) return `406 Not Acceptable` on the test server. This may be because the Python scheduler component is not enabled or not installed in the test environment.
+
+**Assessment:** Not necessarily a bug. If the scheduler is an optional component, the endpoints should return `503 Service Unavailable` or a clear error message instead of `406`.
+
+---
+
+## Previous Issues (reported to developers)
+
 ## Summary
 
 | # | Issue | Severity | Action Required |
