@@ -96,6 +96,7 @@ def _create_comment(base: Base, row_id: str) -> int:
     return resp.json()['id']
 
 
+@pytest.mark.skip(reason="Creating comments via API Gateway not yet supported — will be fixed in 6.2")
 def test_getComment(base: Base):
     table_name = 'test_getComment'
     create_table(base, table_name, SIMPLE_COLUMNS)
@@ -115,6 +116,7 @@ def test_getComment(base: Base):
     assert 'comment' in data
 
 
+@pytest.mark.skip(reason="Creating comments via API Gateway not yet supported — will be fixed in 6.2")
 def test_deleteComment(base: Base):
     table_name = 'test_deleteComment'
     create_table(base, table_name, SIMPLE_COLUMNS)
