@@ -347,17 +347,19 @@ def delete_group(account_token: Secret, group_id: int):
 
         assert response.status_code == 200
 
-def free_user_slot(headers: dict):
-    """Delete any leftover users to free a license slot (license allows max 3 users)."""
-    case: Case = system_admin_account_operations.find_operation_by_id('listUsers').Case()
-    response = case.call(headers=headers)
-    for user in response.json()['data']:
-        # Do not try to delete preconfigured users or staff members
-        if user['contact_email'] in [USERNAME, ADMIN_USERNAME] or user['is_staff'] == True:
-            continue
+MIN_LICENSE_USERS = 10
 
-        path_parameters = {'user_id': user['email']}
-        case: Case = system_admin_account_operations.find_operation_by_id('deleteUser') \
-            .Case(path_parameters=path_parameters)
-        case.call(headers=headers)
-        return
+@pytest.fixture(scope='session', autouse=True)
+def check_license(system_admin_account_token: Secret):
+    """Verify the test license has enough user slots before running any tests."""
+    headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
+    case: Case = system_admin_account_operations.find_operation_by_id('getSystemInformation').Case()
+    response = case.call(headers=headers)
+    assert response.status_code == 200
+
+    data = response.json()
+    max_users = data.get('license_maxusers', 0)
+    assert max_users >= MIN_LICENSE_USERS, (
+        f'Test license allows only {max_users} users, but at least {MIN_LICENSE_USERS} are required. '
+        f'Please update the license in version-compare/seatable-license.txt and in the CI secrets.'
+    )

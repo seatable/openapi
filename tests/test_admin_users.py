@@ -1,13 +1,10 @@
-from conftest import Secret, free_user_slot, system_admin_account_operations
+from conftest import Secret, system_admin_account_operations
 from schemathesis import Case
 
 
 def test_admin_user_lifecycle(system_admin_account_token: Secret):
     """Tests addNewUser, updateUser, deleteUser."""
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
-
-    # Free a license slot if needed
-    free_user_slot(headers)
 
     # 1. Create user
     body = {

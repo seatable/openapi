@@ -1,4 +1,4 @@
-from conftest import Secret, free_user_slot, system_admin_account_operations, USERNAME, ADMIN_USERNAME
+from conftest import Secret, system_admin_account_operations, USERNAME, ADMIN_USERNAME
 from schemathesis import Case
 
 
@@ -57,9 +57,6 @@ def test_searchUser_no_results(system_admin_account_token: Secret):
 def test_resetUserPassword(system_admin_account_token: Secret):
     """Create a temp user, reset their password, then delete them."""
     headers = {'Authorization': f'Bearer {system_admin_account_token.value}'}
-
-    # Free a slot and create temp user
-    free_user_slot(headers)
 
     body = {
         'email': 'reset-pw-test@example.com',
