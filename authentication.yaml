@@ -144,7 +144,7 @@ components:
       example:
         app_name: Example
         api_token: 1234567f17157cd6c41fdb202813f8d9a9fi3yr7
-        generated_by: 1234566569491ba42905bf1647fd3f@auth.local
+        generated_by: 123456600569491ba42905bf1647fd3f@auth.local
         generated_at: "2021-03-02T09:47:41+00:00"
         last_access: "2021-03-02T09:47:41+00:00"
         permission: rw

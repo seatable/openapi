@@ -1507,17 +1507,17 @@ components:
               color:
                 type: string
                 description: select your color-code for the background.
-                pattern: "#([A-Za-z0-9]){6}"
+                pattern: "^#[A-Fa-f0-9]{6}$"
                 example: #F4667C
               textColor:
                 type: string
                 description: select your color-code for the text.
-                pattern: "#([A-Za-z0-9]){6}"
+                pattern: "^#[A-Fa-f0-9]{6}$"
                 example: #FFFFFF
               borderColor:
                 type: string
                 description: select your color-code for the text.
-                pattern: "#([A-Za-z0-9]){6}"
+                pattern: "^#[A-Fa-f0-9]{6}$"
                 example: #7BC0D6
 
     # multiple select (with column_data)
@@ -2463,11 +2463,11 @@ paths:
                 type: object
               example:
                 user_list:
-                  - email: 244b43hr6fy54bb4afa2c2cb7369d244@auth.local
+                  - email: 244b430060f54bb4afa2c2cb7369d244@auth.local
                     name: Ginger Ale
                     contact_email: gingerale@example.com
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
-                  - email: 8cb2a6da656876hgf42905bf1647fd3f@auth.local
+                  - email: 8cb2a6da65687600f42905bf1647fd3f@auth.local
                     name: Jasmin Tee
                     contact_email: jasmintee@example.com
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
@@ -4041,7 +4041,7 @@ paths:
                 type: object
               example:
                 - id: 1
-                  author: 28dhr6e7d1754bb4afa2c2cb7369d244@auth.local
+                  author: 28d006e7d1754bb4afa2c2cb7369d244@auth.local
                   comment: This is good!
                   dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
                   row_id: NAu2B3OcRG6UrWagL-9naA
@@ -4049,7 +4049,7 @@ paths:
                   updated_at: "2021-01-15T13:35:26.000Z"
                   resolved: 0
                 - id: 2
-                  author: 28dhr6e7d1754bb4afa2c2cb7369d244@auth.local
+                  author: 28d006e7d1754bb4afa2c2cb7369d244@auth.local
                   comment: Go online tomorrow?
                   dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
                   row_id: NAu2B3OcRG6UrWagL-9naA
@@ -4105,7 +4105,7 @@ paths:
                 type: object
               example:
                 id: 1
-                author: 12345678d1757ey46fg3c2cb7369d244@auth.local
+                author: 12345678d17570046f03c2cb7369d244@auth.local
                 comment: Here is my email address
                 dtable_uuid: 12345678-7e27-46a8-8b18-6cc6374yf557
                 row_id: NAu2B3OcRG6UrWagL-9naA

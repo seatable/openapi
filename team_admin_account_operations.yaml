@@ -189,7 +189,7 @@ components:
         type: string
         pattern: "^[0-9a-f]{20}$"
       required: true
-      example: "0366b8995d7f47d8eu3t"
+      example: "0366b8995d7f47d8ae3c"
     group_id:
       name: group_id
       in: path
@@ -241,11 +241,11 @@ components:
         The `user_id` of the owner of the group. Optional. If left
         blank, the newly added group will not be visible to anyone
         but still operatable.
-      example: "123abc456def789ghi123jkl456mno789@auth.local"
+      example: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local"
     team_admin_user_id:
       type: string
       description: The unique `user_id` in the form ...@auth.local. This is not the email address of the user.
-      example: "123abc456def789ghi123jkl456mno789@auth.local"
+      example: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local"
     team_admin_email:
       type: string
       description: User's contact email to login.
@@ -1097,7 +1097,7 @@ paths:
                 id: 1
                 group_name: Group New
                 ctime: "2020-11-19T08:14:52+00:00"
-                creator_email: 123abc456def789ghi123jkl456mno789@auth.local
+                creator_email: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
                 creator_name: Michael Jackson
                 creator_contact_email: michael@example.com
                 size: 98842

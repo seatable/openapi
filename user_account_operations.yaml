@@ -580,7 +580,7 @@ components:
       type: array
       items:
         type: string
-        example: "123abc456def789ghi123jkl456mno789@auth.local"
+        example: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local"
     account_name:
       type: string
       example: "Email Server2"
@@ -630,7 +630,7 @@ components:
           type: array
           items:
             type: string
-            example: c7fh3rda6569491ba42905bf1647fd3f@auth.local
+            example: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7@auth.local
     is_admin:
       type: string
       enum: ["", "true", "false"]
@@ -2196,7 +2196,7 @@ components:
     user_account_email:
       type: string
       description: The user ID ending with @auth.local
-      example: 123abc456def789ghi123jkl456mno789@auth.local
+      example: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
     table_id:
       type: string
       example: "0000"
@@ -2324,7 +2324,7 @@ paths:
                 row_total: -1
                 row_usage: 88
                 avatar_url: https://cloud.seatable.io/media/avatars/default.png
-                email: 7fhe63g949b946a3b200555db5de1d23@auth.local
+                email: 7f0e63a949b946a3b200555db5de1d23@auth.local
                 name: Robert Teamplayer
                 login_id: ""
                 contact_email: teamplayer@example.com
@@ -2462,10 +2462,10 @@ paths:
                 type: object
               example:
                 user_list:
-                  - email: 244b43hr6fy54bb4afa2c2cb7369d244@auth.local
+                  - email: 244b430060f54bb4afa2c2cb7369d244@auth.local
                     name: Ginger Ale
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
-                  - email: 8cb2a6da656876hgf42905bf1647fd3f@auth.local
+                  - email: 8cb2a6da65687600f42905bf1647fd3f@auth.local
                     name: Jasmin Tee
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
 
@@ -3373,7 +3373,7 @@ paths:
                 id: 1
                 parent_group_id: 0
                 name: Group New
-                owner: 123abc456def789ghi123jkl456mno789@auth.local
+                owner: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
                 created_at: "2020-11-19T08:14:52+00:00"
                 avatar_url: "http://cloud.seatable.io/media/avatars/groups/default.png"
                 admins:
@@ -3450,7 +3450,7 @@ paths:
                 type: object
               example:
                 - name: Production
-                  email: 123abc456def789ghi123jkl456mno789@auth.local
+                  email: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
                   contact_email: hans@example.com
                   is_admin: 1
                   role: owner
@@ -3482,7 +3482,7 @@ paths:
               example:
                 group_id: 1
                 name: Production
-                email: 123abc456def789ghi123jkl456mno789@auth.local
+                email: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
                 contact_email: "hans@example.com"
                 login_id: ""
                 is_admin: false
@@ -4538,7 +4538,7 @@ paths:
                 type: object
               example:
                 user_list:
-                  - email: oe3jr7v949b946a3b200555db5de1d23@auth.local
+                  - email: 0e30070949b946a3b200555db5de1d23@auth.local
                     name: Robert Teamplayer
                     contact_email: teamplayer@example.com
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
@@ -4946,7 +4946,7 @@ paths:
               example:
                 id: 0
                 dtable_name: Example
-                from_user: 123abc456def789ghi123jkl456mno789@auth.local
+                from_user: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
                 from_user_name: John Doe
                 to_group_id: "1"
                 to_group_name: Group One
@@ -5006,7 +5006,7 @@ paths:
               example:
                 id: 0
                 dtable_name: Example
-                from_user: 123abc456def789ghi123jkl456mno789@auth.local
+                from_user: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
                 from_user_name: John Doe
                 to_group_id: "1"
                 to_group_name: Group One
@@ -5291,10 +5291,10 @@ paths:
                 type: object
               example:
                 user_list:
-                  - email: 244b43hr6fy54bb4afa2c2cb7369d244@auth.local
+                  - email: 244b430060f54bb4afa2c2cb7369d244@auth.local
                     name: Ginger Ale
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
-                  - email: 8cb2a6da656876hgf42905bf1647fd3f@auth.local
+                  - email: 8cb2a6da65687600f42905bf1647fd3f@auth.local
                     name: Jasmin Tee
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
 
@@ -6794,7 +6794,7 @@ paths:
                 actions:
                   - type: notify
                     users:
-                      - 123456a6569491ba42905bf1647fd3f@auth.local
+                      - 1234560a6569491ba42905bf1647fd3f@auth.local
                     default_msg: Take a look at this!
                     _id: "365729"
                     users_column_key: ""
