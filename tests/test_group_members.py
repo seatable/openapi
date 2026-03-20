@@ -60,7 +60,7 @@ def test_group_member_lifecycle(account_token: Secret, system_admin_account_toke
         delete_group(account_token, group_id)
 
 
-@pytest.mark.xfail(reason="API issue #32: is_admin as JSON boolean crashes with 500 — expects string 'true'/'false'")
+@pytest.mark.xfail(reason="API issue #35: is_admin as JSON boolean crashes with 500 — expects string 'true'/'false'")
 def test_updateGroupRole(account_token: Secret, system_admin_account_token: Secret):
     headers = {'Authorization': f'Bearer {account_token.value}'}
     group_id, workspace_id = create_group(account_token, 'test-update-role')

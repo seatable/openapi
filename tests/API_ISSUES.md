@@ -11,7 +11,10 @@ Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. 
 | 29 | markBaseNotificationsAsSeen rejects JSON boolean | Medium | Yes — accept JSON boolean for `seen` |
 | 30 | sendToastNotification rejects request body | Medium | Yes — align request body with spec |
 | 31 | Python scheduler endpoints return 406 | Low | Investigate — may require feature flag |
-| 32 | updateGroupRole crashes with JSON boolean | Medium | Yes — same root cause as #29 |
+| 32 | SQL INSERT via api-gateway returns "base not found" | Medium | Yes — fix INSERT handling in api-gateway |
+| 33 | SQL JOIN results ignore `convert_keys: true` | Low | Yes — apply convert_keys to JOIN results |
+| 34 | SQL constants `pi`/`e` not recognized standalone | Low | No — document workaround |
+| 35 | updateGroupRole crashes with JSON boolean | Medium | Yes — same root cause as #29 |
 
 ### 27. appendColumns fails with link-formula columns
 
@@ -59,7 +62,52 @@ The Python scheduler statistics endpoints (e.g., `GET /admin/statistics/by-day/`
 
 **Assessment:** Not necessarily a bug. If the scheduler is an optional component, the endpoints should return `503 Service Unavailable` or a clear error message instead of `406`.
 
-### 32. updateGroupRole crashes with JSON boolean for `is_admin`
+### 32. SQL INSERT via api-gateway returns "base not found"
+
+**Severity:** Medium — SQL INSERT broken via api-gateway
+
+`POST /api-gateway/api/v2/dtables/{base_uuid}/sql/` with an `INSERT INTO` statement returns `400` with `{"error_message": "base {uuid} not found: insert on non-existent base"}`, even though the base exists and is accessible.
+
+`UPDATE` and `DELETE` statements work correctly through the same endpoint. Only `INSERT` fails. A preceding `SELECT` on the same base does not resolve the issue.
+
+```
+SQL:    INSERT INTO `table` (`col`) VALUES ('value')
+Result: 400 — "base {uuid} not found: insert on non-existent base"
+```
+
+**Tested on:** SeaTable 6.1.8
+
+**Recommendation:** Fix INSERT handling in the api-gateway to match UPDATE/DELETE behavior.
+
+### 33. SQL JOIN results ignore `convert_keys: true`
+
+**Severity:** Low — inconsistent behavior
+
+When executing an implicit JOIN query via `POST /api-gateway/api/v2/dtables/{base_uuid}/sql/` with `convert_keys: true`, the result rows use internal column key IDs (e.g., `rLfY`, `kz15`) instead of column names. For non-JOIN SELECT queries, `convert_keys: true` correctly returns column names as keys.
+
+```
+Query:   SELECT `orders`.`product`, `customers`.`name` FROM `orders`, `customers` WHERE ...
+Result:  [{"rLfY": "Widget", "kz15": "Alice"}, ...]   ← internal keys instead of names
+```
+
+The column names are available in the response `metadata` array, so callers can manually map keys to names. But this is an inconsistency with non-JOIN queries where `convert_keys` works as expected.
+
+**Recommendation:** Apply `convert_keys` mapping to JOIN result rows, consistent with non-JOIN queries.
+
+### 34. SQL constants `pi` and `e` not recognized as standalone expressions
+
+**Severity:** Low — parser limitation
+
+The documented constants `pi` and `e` work correctly as function arguments (e.g., `SELECT multiply(pi, 2)` returns `6.28...`), but fail when used as standalone SELECT expressions. The parser interprets them as column names.
+
+```
+SELECT pi FROM `table`              → 400: "no such column: pi"
+SELECT multiply(pi, 2) FROM `table` → 200: 6.28318...
+```
+
+**Assessment:** Edge case with a simple workaround. Document that constants must be used inside function calls.
+
+### 35. updateGroupRole crashes with JSON boolean for `is_admin`
 
 **Severity:** Medium — same root cause as #29
 
