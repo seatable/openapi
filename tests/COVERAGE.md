@@ -3,7 +3,7 @@
 Generated: 2026-03-20
 
 **Total API Endpoints Defined:** 343 across 8 OpenAPI spec files
-**Total Endpoints Tested:** 100 (29%)
+**Total Endpoints Tested:** 115 (33%)
 
 ## Coverage by Spec
 
@@ -11,7 +11,7 @@ Generated: 2026-03-20
 |-----------|-------|--------|----------|
 | authentication.yaml | 7 | 7 | 100% |
 | base_operations.yaml | 52 | 44 | 84% |
-| user_account_operations.yaml | 117 | 18 | 15% |
+| user_account_operations.yaml | 117 | 33 | 28% |
 | team_admin_account_operations.yaml | 48 | 4 | 8% |
 | system_admin_account_operations.yaml | 98 | 18 | 18% |
 | file_operations.yaml | 9 | 3 | 33% |
@@ -123,7 +123,7 @@ Generated: 2026-03-20
 - [x] `GET /api-gateway/api/v2/dtables/{base_uuid}/metadata/` - getMetadata
 - [x] `GET /api-gateway/api/v2/dtables/{base_uuid}/related-users/` - listCollaborators
 
-## User Account Operations (18/117)
+## User Account Operations (33/117)
 
 ### Email Accounts (0/6)
 
@@ -134,17 +134,17 @@ Generated: 2026-03-20
 - [ ] `GET /api/v2.1/third-party-accounts/{base_uuid}/` - listEmailAccounts
 - [ ] `PUT /api/v2.1/third-party-accounts/{base_uuid}/{3rd_party_account_id}/` - updateEmailAccount
 
-### Groups & Workspaces (1/9)
+### Groups & Workspaces (6/9)
 
 - [x] `GET /api/v2.1/workspaces/` - listWorkspaces
-- [ ] `POST /api/v2.1/groups/{group_id}/members/` - addGroupMember
+- [x] `POST /api/v2.1/groups/{group_id}/members/` - addGroupMember
 - [ ] `POST /api/v2.1/dtable-external-link/dtable-copy/` - copyBaseFromExternalLink
 - [ ] `POST /api/v2.1/dtable-copy/` - copyBaseFromWorkspace
-- [ ] `GET /api/v2.1/groups/{group_id}/members/` - getGroupMembers
-- [ ] `DELETE /api/v2.1/groups/{group_id}/members/{group_member}/` - removeGroupMember
-- [ ] `GET /api/v2.1/search-group/` - searchGroup
+- [x] `GET /api/v2.1/groups/{group_id}/members/` - getGroupMembers
+- [x] `DELETE /api/v2.1/groups/{group_id}/members/{group_member}/` - removeGroupMember
+- [x] `GET /api/v2.1/search-group/` - searchGroup
 - [ ] `GET /api/v2.1/groups/{group_id}/search-member/` - searchGroupMembers
-- [ ] `PUT /api/v2.1/groups/{group_id}/members/{group_member}/` - updateGroupRole
+- [x] `PUT /api/v2.1/groups/{group_id}/members/{group_member}/` - updateGroupRole
 
 ### Notifications (0/3)
 
@@ -152,12 +152,12 @@ Generated: 2026-03-20
 - [ ] `DELETE /api/v2.1/notifications/` - markNotificationAsSeen
 - [ ] `PUT /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/notification-rules/{notification_rule_id}/` - updateNotificationRule
 
-### User (1/5)
+### User (3/5)
 
 - [x] `GET /api2/account/info/` - getAccountInfo
 - [ ] `POST /api/v2.1/user-avatar/` - addUserAvatar
-- [ ] `GET /api/v2.1/user-common-info/{user_id}/` - getPublicUserInfo
-- [ ] `POST /api/v2.1/user-list/` - listPublicUserInfos
+- [x] `GET /api/v2.1/user-common-info/{user_id}/` - getPublicUserInfo
+- [x] `POST /api/v2.1/user-list/` - listPublicUserInfos
 - [ ] `PUT /api/v2.1/user/contact-email/` - updateEmailAddress
 
 ### Import & Export (0/9)
@@ -172,7 +172,7 @@ Generated: 2026-03-20
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-table/` - importTableFromFile
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/update-table-via-excel-csv/` - updateFromFile
 
-### Bases (4/15)
+### Bases (9/15)
 
 - [x] `POST /api/v2.1/dtables/` - createBase
 - [x] `POST /api/v2.1/starred-dtables/` - favoriteBase
@@ -180,14 +180,14 @@ Generated: 2026-03-20
 - [x] `DELETE /api/v2.1/starred-dtables/` - unfavoriteBase
 - [ ] `PUT /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/password/` - basePassword
 - [ ] `DELETE /api/v2.1/trash-dtables/` - clearTrash
-- [ ] `POST /api/v2.1/workspace/{workspace_id}/folders/` - createFolder
-- [ ] `DELETE /api/v2.1/workspace/{workspace_id}/folders/{folder_id}/` - deleteFolder
-- [ ] `GET /api/v2.1/dtable/{base_uuid}/size/` - getBaseSize
+- [x] `POST /api/v2.1/workspace/{workspace_id}/folders/` - createFolder
+- [x] `DELETE /api/v2.1/workspace/{workspace_id}/folders/{folder_id}/` - deleteFolder
+- [x] `GET /api/v2.1/dtable/{base_uuid}/size/` - getBaseSize
 - [ ] `GET /api/v2.1/groups/{group_id}/trash-dtables/` - listGroupTrashedBases
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/folder-item-moving/` - moveBaseIntoFolder
 - [ ] `PUT /api/v2.1/groups/{group_id}/trash-dtables/{base_uuid}/` - restoreGroupTrashedBase
-- [ ] `GET /api/v2.1/dtable/items-search/` - searchBaseOrApps
-- [ ] `PUT /api/v2.1/workspace/{workspace_id}/dtable/` - updateBase
+- [x] `GET /api/v2.1/dtable/items-search/` - searchBaseOrApps
+- [x] `PUT /api/v2.1/workspace/{workspace_id}/dtable/` - updateBase
 - [ ] `PUT /api/v2.1/workspace/{workspace_id}/folders/{folder_id}/` - updateFolder
 
 ### Apps (0/5)
@@ -207,11 +207,11 @@ Generated: 2026-03-20
 - [ ] `GET /api/v2.1/dtable-recent-asset/{base_uuid}/` - listRecentlyUploadedFiles
 - [ ] `POST /api/v2.1/dtable-asset/{base_uuid}/rename/` - renameBaseAsset
 
-### Automations (0/4)
+### Automations (1/4)
 
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/automation-rules/` - createAutomationRule
 - [ ] `DELETE /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/automation-rules/{automation_rule_id}/` - deleteAutomationRule
-- [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/automation-rules/` - listAutomationRules
+- [x] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/automation-rules/` - listAutomationRules
 - [ ] `PUT /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/automation-rules/{automation_rule_id}/` - updateAutomationRule
 
 ### Sharing Links (0/3)
@@ -228,7 +228,7 @@ Generated: 2026-03-20
 - [ ] `PUT /api/v2.1/forms/{form_token}/` - updateForm
 - [ ] `POST /api/v2.1/forms/{form_token}/logos/` - uploadFormLogo
 
-### Sharing (8/24)
+### Sharing (11/24)
 
 - [x] `POST /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/group-shares/` - createGroupShare
 - [x] `POST /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/share/` - createUserShare
@@ -245,12 +245,12 @@ Generated: 2026-03-20
 - [ ] `DELETE /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/user-view-shares/` - deleteUserAllViewShare
 - [ ] `DELETE /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/user-view-shares/{user_view_share_id}/` - deleteUserViewShare
 - [ ] `DELETE /api/v2.1/dtables/view-shares-user-shared/{user_view_share_id}/` - leaveSharedView
-- [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/related-users/` - listCollaboratorsAsUser
+- [x] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/related-users/` - listCollaboratorsAsUser
 - [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/group-view-shares/` - listGroupViewShares
-- [ ] `GET /api/v2.1/dtables/group-shared/` - listMyGroupShares
+- [x] `GET /api/v2.1/dtables/group-shared/` - listMyGroupShares
 - [ ] `GET /api/v2.1/dtables/view-shares-group-shared/` - listMyGroupViewShares
 - [ ] `GET /api/v2.1/dtables/view-shares-user-shared/` - listMyUserViewShares
-- [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/share/` - listUserShares
+- [x] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/share/` - listUserShares
 - [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/user-view-shares/` - listUserViewShares
 - [ ] `PUT /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/group-view-shares/{group_view_share_id}/` - updateGroupViewShare
 - [ ] `PUT /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/user-view-shares/{user_view_share_id}/` - updateUserViewShare
@@ -274,27 +274,27 @@ Generated: 2026-03-20
 - [ ] `POST /api/v2.1/dtable/common-datasets/{dataset_id}/sync/` - syncCommonDataset
 - [ ] `PUT /api/v2.1/dtable/common-datasets/{dataset_id}/sync/` - updateCommonDatasetSync
 
-### Activities & Logs (0/3)
+### Activities & Logs (1/3)
 
-- [ ] `GET /api/v2.1/dtable-activities/` - getBaseActivities
+- [x] `GET /api/v2.1/dtable-activities/` - getBaseActivities
 - [ ] `GET /api/v2.1/dtable-activities/detail/` - getBaseActivityDetails
 - [ ] `GET /api/v2.1/dtables/{base_uuid}/big-data-operation-logs/` - getBigDataOperationLogs
 
-### Snapshots (0/4)
+### Snapshots (1/4)
 
 - [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/big-data-state/` - getBigDataStatus
 - [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/archive-backups/` - listBigDataBackups
-- [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/snapshots/` - listSnapshots
+- [x] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/snapshots/` - listSnapshots
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/snapshots/{commit_id}/restore/` - restoreSnapshot
 
 ### Departments (0/1)
 
 - [ ] `GET /api/v2.1/address-book/departments/{department_id}/members/` - listDeparmentMembers
 
-### System Notifications (0/2)
+### System Notifications (1/2)
 
 - [ ] `GET /api/v2.1/sys-user-notifications/unseen/` - listSystemNotifications
-- [ ] `PUT /api/v2.1/sys-user-notifications/{sys_notification_id}/seen/` - markSystemNotificationsAsSeen
+- [x] `PUT /api/v2.1/notifications/` - markNotificationAsSeen
 
 ## Team Admin Account Operations (4/48)
 

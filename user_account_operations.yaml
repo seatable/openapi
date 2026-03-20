@@ -2647,7 +2647,7 @@ paths:
               schema:
                 type: object
               example:
-                result:
+                results:
                   - id: 514
                     workspace_id: 3
                     uuid: f5a8bbe1-2a2e-44a4-b993-4b599fd5e837
@@ -3489,7 +3489,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
               example:
                 - id: 92
                   name: Production
@@ -3512,7 +3512,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
               example:
                 - name: Production
                   email: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
@@ -3538,8 +3538,8 @@ paths:
                 email:
                   $ref: "#/components/schemas/user_id"
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           content:
             application/json:
               schema:

@@ -11,6 +11,7 @@ Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. 
 | 29 | markBaseNotificationsAsSeen rejects JSON boolean | Medium | Yes — accept JSON boolean for `seen` |
 | 30 | sendToastNotification rejects request body | Medium | Yes — align request body with spec |
 | 31 | Python scheduler endpoints return 406 | Low | Investigate — may require feature flag |
+| 32 | updateGroupRole crashes with JSON boolean | Medium | Yes — same root cause as #29 |
 
 ### 27. appendColumns fails with link-formula columns
 
@@ -57,6 +58,18 @@ This also affects the singular endpoint `PUT .../notifications/{notification_id}
 The Python scheduler statistics endpoints (e.g., `GET /admin/statistics/by-day/`) return `406 Not Acceptable` on the test server. This may be because the Python scheduler component is not enabled or not installed in the test environment.
 
 **Assessment:** Not necessarily a bug. If the scheduler is an optional component, the endpoints should return `503 Service Unavailable` or a clear error message instead of `406`.
+
+### 32. updateGroupRole crashes with JSON boolean for `is_admin`
+
+**Severity:** Medium — same root cause as #29
+
+`PUT /api/v2.1/groups/{group_id}/members/{group_member}/` returns `500 Internal Server Error` when `is_admin` is sent as a JSON boolean (`true`/`false`). The API expects the string `"true"` or `"false"`.
+
+**Root cause:** In `seahub/api2/endpoints/group_members.py:226`, the code calls `is_admin.lower()` on the value from `request.data`. When a JSON boolean is sent, Python receives `True` (a bool), and `bool` has no `.lower()` method → `AttributeError` → 500.
+
+Sending `is_admin: "true"` (as string) works correctly and returns 200.
+
+**Recommendation:** Cast to string before calling `.lower()`, or accept both booleans and strings. Same pattern as #29.
 
 ---
 
