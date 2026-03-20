@@ -455,6 +455,21 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  app_name:
+                    type: string
+                  access_token:
+                    type: string
+                  dtable_uuid:
+                    type: string
+                  dtable_server:
+                    type: string
+                  workspace_id:
+                    type: integer
+                  use_api_gateway:
+                    type: boolean
+                  dtable_name:
+                    type: string
               example:
                 app_name: postman
                 access_token: >-

@@ -763,6 +763,27 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  contact_email:
+                    type: string
+                  login_id:
+                    type: string
+                  id_in_org:
+                    type: string
+                  is_staff:
+                    type: boolean
+                  is_active:
+                    type: boolean
+                  create_time:
+                    type: string
+                  role:
+                    type: string
+                  add_user_tip:
+                    type: string
               example:
                 email: 12345678219d4067816452757a850b61@auth.local
                 name: Example User
@@ -794,6 +815,39 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  org_id:
+                    type: integer
+                  org_name:
+                    type: string
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  contact_email:
+                    type: string
+                  unit:
+                    type: string
+                  login_id:
+                    type: string
+                  id_in_org:
+                    type: string
+                  is_staff:
+                    type: boolean
+                  is_active:
+                    type: boolean
+                  phone:
+                    type: string
+                  create_time:
+                    type: string
+                  role:
+                    type: string
+                  avatar_url:
+                    type: string
+                  has_default_device:
+                    type: boolean
+                  is_force_2fa:
+                    type: boolean
               example:
                 org_id: 1
                 org_name: "Team 1"
@@ -864,6 +918,37 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  contact_email:
+                    type: string
+                  unit:
+                    type: string
+                  login_id:
+                    type: string
+                  id_in_org:
+                    type: string
+                  is_staff:
+                    type: boolean
+                  is_active:
+                    type: boolean
+                  phone:
+                    type: string
+                  org_id:
+                    type: integer
+                  org_name:
+                    type: string
+                  create_time:
+                    type: string
+                  role:
+                    type: string
+                  update_status_tip:
+                    type: string
+                  monthly_automation_limit_per_user:
+                    type: integer
               example:
                 email: 876543216569491ba42905bf1647fd3f@auth.local
                 name: Michael Jackson
@@ -1775,6 +1860,21 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  parent_group_id:
+                    type: integer
+                  name:
+                    type: string
+                  owner:
+                    type: string
+                  created_at:
+                    type: string
+                  avatar_url:
+                    type: string
+                  admins:
+                    type: array
               example:
                 id: 1
                 parent_group_id: 0
@@ -1917,6 +2017,35 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  org_id:
+                    type: integer
+                  org_name:
+                    type: string
+                  ctime:
+                    type: string
+                  org_url_prefix:
+                    type: string
+                  role:
+                    type: string
+                  creator_email:
+                    type: string
+                  creator_name:
+                    type: string
+                  creator_contact_email:
+                    type: string
+                  quota:
+                    type: integer
+                  storage_usage:
+                    type: integer
+                  storage_quota:
+                    type: integer
+                  max_user_number:
+                    type: integer
+                  rows_count:
+                    type: integer
+                  row_limit:
+                    type: integer
               example:
                 org_id: 2937
                 org_name: SeaTable Testing
@@ -2053,6 +2182,37 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  org_id:
+                    type: integer
+                  org_name:
+                    type: string
+                  ctime:
+                    type: string
+                  org_url_prefix:
+                    type: string
+                  role:
+                    type: string
+                  creator_email:
+                    type: string
+                  creator_name:
+                    type: string
+                  creator_contact_email:
+                    type: string
+                  quota:
+                    type: integer
+                  storage_usage:
+                    type: integer
+                  storage_quota:
+                    type: integer
+                  max_user_number:
+                    type: integer
+                  rows_count:
+                    type: integer
+                  row_limit:
+                    type: integer
+                  monthly_automation_limit_per_user:
+                    type: integer
               example:
                 org_id: 176
                 org_name: Team SeaTable
@@ -2088,6 +2248,41 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  org_id:
+                    type: integer
+                  org_name:
+                    type: string
+                  ctime:
+                    type: string
+                  org_url_prefix:
+                    type: string
+                  role:
+                    type: string
+                  creator_email:
+                    type: string
+                  creator_name:
+                    type: string
+                  creator_contact_email:
+                    type: string
+                  quota:
+                    type: integer
+                  storage_usage:
+                    type: integer
+                  storage_quota:
+                    type: integer
+                  max_user_number:
+                    type: integer
+                  rows_count:
+                    type: integer
+                  row_limit:
+                    type: integer
+                  users_count:
+                    type: integer
+                  active_users_count:
+                    type: integer
+                  groups_count:
+                    type: integer
               example:
                 org_id: 1
                 org_name: SeaTable
@@ -2226,6 +2421,29 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  org_id:
+                    type: integer
+                  workspace_id:
+                    type: integer
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  contact_email:
+                    type: string
+                  is_org_admin:
+                    type: boolean
+                  quota_total:
+                    type: integer
+                  quota_usage:
+                    type: integer
+                  create_time:
+                    type: string
+                  last_login:
+                    type: string
+                  active:
+                    type: boolean
               example:
                 org_id: 1
                 workspace_id: 357
@@ -2273,6 +2491,29 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  org_id:
+                    type: integer
+                  workspace_id:
+                    type: integer
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  contact_email:
+                    type: string
+                  is_org_admin:
+                    type: boolean
+                  quota_total:
+                    type: integer
+                  quota_usage:
+                    type: integer
+                  create_time:
+                    type: string
+                  last_login:
+                    type: string
+                  active:
+                    type: boolean
               example:
                 org_id: 1
                 workspace_id: 357
@@ -2557,6 +2798,25 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  owner:
+                    type: string
+                  created_at:
+                    type: string
+                  parent_group_id:
+                    type: integer
+                  quota:
+                    type: integer
+                  groups:
+                    type: array
+                  members:
+                    type: array
+                  ancestor_groups:
+                    type: array
               example:
                 id: 1
                 name: Sys Dev
@@ -2607,6 +2867,19 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  owner:
+                    type: string
+                  created_at:
+                    type: string
+                  parent_group_id:
+                    type: integer
+                  quota:
+                    type: integer
               example:
                 id: 2
                 name: Test Department
@@ -2633,6 +2906,25 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  owner:
+                    type: string
+                  created_at:
+                    type: string
+                  parent_group_id:
+                    type: integer
+                  quota:
+                    type: integer
+                  groups:
+                    type: array
+                  members:
+                    type: array
+                  ancestor_groups:
+                    type: array
               example:
                 id: 2
                 name: Test department
@@ -3401,6 +3693,25 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  dtable_uuid:
+                    type: string
+                  reporter:
+                    type: string
+                  external_link_token:
+                    type: string
+                  create_time:
+                    type: string
+                  abuse_type:
+                    type: string
+                  description:
+                    type: string
+                  handled:
+                    type: boolean
+                  dtable_name:
+                    type: string
               example:
                 id: 1
                 dtable_uuid: 12345678-ebe8-466c-89f6-492a0f956af9
@@ -3804,6 +4115,17 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  plugin_name:
+                    type: string
+                  info:
+                    type: object
+                  added_by:
+                    type: string
+                  added_time:
+                    type: string
               example:
                 id: 6
                 plugin_name: deduplication
@@ -3877,6 +4199,17 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  plugin_name:
+                    type: string
+                  info:
+                    type: object
+                  added_by:
+                    type: string
+                  added_time:
+                    type: string
               example:
                 id: 6
                 plugin_name: deduplication
@@ -3964,6 +4297,13 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  active_user_list:
+                    type: array
+                  page:
+                    type: integer
+                  total_count:
+                    type: integer
               example:
                 active_user_list:
                   - avatar_url: https://cloud.seatable.io/media/avatars/default.png
@@ -4323,6 +4663,43 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  version:
+                    type: string
+                  users_count:
+                    type: integer
+                  active_users_count:
+                    type: integer
+                  groups_count:
+                    type: integer
+                  org_count:
+                    type: integer
+                  dtables_count:
+                    type: integer
+                  multi_tenancy_enabled:
+                    type: boolean
+                  is_pro:
+                    type: boolean
+                  with_license:
+                    type: boolean
+                  license_expiration:
+                    type: string
+                  license_mode:
+                    type: string
+                  license_maxusers:
+                    type: integer
+                  license_to:
+                    type: string
+                  dtable_server_info:
+                    type: array
+                  dtable_server_info_in_etcd:
+                    type: array
+                  archived_base_count:
+                    type: integer
+                  archived_row_count:
+                    type: integer
+                  archived_base_storage:
+                    type: integer
               example:
                 version: 3.3.7
                 users_count: 417
@@ -4410,6 +4787,37 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  ENABLE_SIGNUP:
+                    type: integer
+                  ACTIVATE_AFTER_REGISTRATION:
+                    type: integer
+                  REGISTRATION_SEND_MAIL:
+                    type: integer
+                  LOGIN_REMEMBER_DAYS:
+                    type: integer
+                  USER_STRONG_PASSWORD_REQUIRED:
+                    type: integer
+                  USER_PASSWORD_MIN_LENGTH:
+                    type: integer
+                  USER_PASSWORD_STRENGTH_LEVEL:
+                    type: integer
+                  FORCE_PASSWORD_CHANGE:
+                    type: integer
+                  LOGIN_ATTEMPT_LIMIT:
+                    type: integer
+                  FREEZE_USER_ON_LOGIN_FAILED:
+                    type: integer
+                  ENABLE_TWO_FACTOR_AUTH:
+                    type: integer
+                  ENABLE_BRANDING_CSS:
+                    type: integer
+                  SITE_NAME:
+                    type: string
+                  SITE_TITLE:
+                    type: string
+                  CUSTOM_CSS:
+                    type: string
               example:
                 ENABLE_SIGNUP: 1
                 ACTIVATE_AFTER_REGISTRATION: 1

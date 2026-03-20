@@ -436,6 +436,27 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  is_active:
+                    type: boolean
+                  ctime:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  contact_email:
+                    type: string
+                  last_login:
+                    type: string
+                  self_usage:
+                    type: integer
+                  quota:
+                    type: integer
+                  workspace_id:
+                    type: integer
               example:
                 id: 125
                 is_active: true
@@ -467,6 +488,29 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  contact_email:
+                    type: string
+                  quota_usage:
+                    type: integer
+                  quota_total:
+                    type: integer
+                  avatar_url:
+                    type: string
+                  id_in_org:
+                    type: string
+                  has_default_device:
+                    type: boolean
+                  is_force_2fa:
+                    type: boolean
+                  is_active:
+                    type: boolean
+                  is_org_admin:
+                    type: boolean
               example:
                 email: "6196ab3dacef4e539ae8da4844b58a1f@auth.local"
                 name: "John Doe"
@@ -517,6 +561,31 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  contact_email:
+                    type: string
+                  quota_usage:
+                    type: integer
+                  quota_total:
+                    type: integer
+                  is_active:
+                    type: boolean
+                  id:
+                    type: integer
+                  ctime:
+                    type: string
+                  id_in_org:
+                    type: string
+                  last_login:
+                    type: string
+                  self_usage:
+                    type: integer
+                  quota:
+                    type: integer
               example:
                 email: 23456789d1754bb4afa2c2cb7369d244@auth.local
                 name: Stefan
@@ -788,6 +857,41 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  workspace_id:
+                    type: integer
+                  uuid:
+                    type: string
+                  name:
+                    type: string
+                  created_at:
+                    type: string
+                  updated_at:
+                    type: string
+                  color:
+                    type: string
+                  text_color:
+                    type: string
+                  icon:
+                    type: string
+                  is_encrypted:
+                    type: boolean
+                  in_storage:
+                    type: boolean
+                  org_id:
+                    type: integer
+                  owner:
+                    type: string
+                  email:
+                    type: string
+                  group_id:
+                    type: integer
+                  owner_deleted:
+                    type: boolean
+                  rows_count:
+                    type: integer
               example:
                 id: 158
                 workspace_id: 304
@@ -973,6 +1077,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  groups:
+                    type: array
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  page_next:
+                    type: boolean
               example:
                 groups:
                   - id: 51
@@ -1021,6 +1134,19 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  group_name:
+                    type: string
+                  ctime:
+                    type: string
+                  creator_email:
+                    type: string
+                  creator_name:
+                    type: string
+                  creator_contact_email:
+                    type: string
               example:
                 id: 3
                 group_name: Test group
@@ -1047,6 +1173,19 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  group_name:
+                    type: string
+                  ctime:
+                    type: string
+                  creator_email:
+                    type: string
+                  creator_name:
+                    type: string
+                  creator_contact_email:
+                    type: string
               example:
                 id: 1
                 group_name: Test Group
@@ -1096,6 +1235,21 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  id:
+                    type: integer
+                  group_name:
+                    type: string
+                  ctime:
+                    type: string
+                  creator_email:
+                    type: string
+                  creator_name:
+                    type: string
+                  creator_contact_email:
+                    type: string
+                  size:
+                    type: integer
               example:
                 id: 1
                 group_name: Group New
@@ -1223,6 +1377,13 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  group_id:
+                    type: integer
+                  group_name:
+                    type: string
+                  members:
+                    type: array
               example:
                 group_id: 1
                 group_name: Sample Group
@@ -1487,6 +1648,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  dtable_user_shares:
+                    type: array
+                  dtable_group_shares:
+                    type: array
+                  view_user_shares:
+                    type: array
+                  view_group_shares:
+                    type: array
               example:
                 dtable_user_shares:
                   - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
@@ -1739,6 +1909,25 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  username:
+                    type: string
+                  permission:
+                    type: string
+                  token:
+                    type: string
+                  link:
+                    type: string
+                  dtable:
+                    type: string
+                  dtable_id:
+                    type: integer
+                  workspace_id:
+                    type: integer
+                  expire_date:
+                    type: string
+                  ctime:
+                    type: string
               example:
                 username: 876543216569491ba42905bf1647fd3f@auth.local
                 permission: rw
@@ -1792,6 +1981,37 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  org_id:
+                    type: integer
+                  org_name:
+                    type: string
+                  storage_quota:
+                    type: integer
+                  storage_usage:
+                    type: integer
+                  member_quota:
+                    type: integer
+                  member_usage:
+                    type: integer
+                  active_members:
+                    type: integer
+                  row_usage:
+                    type: integer
+                  row_total:
+                    type: integer
+                  role:
+                    type: string
+                  big_data_row_limit:
+                    type: integer
+                  big_data_total_rows:
+                    type: integer
+                  big_data_total_storage:
+                    type: integer
+                  scripts_running_total:
+                    type: integer
+                  scripts_running_count:
+                    type: integer
               example:
                 org_id: 1
                 org_name: SeaTable GmbH
@@ -1869,6 +2089,13 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  enable_force_2fa:
+                    type: boolean
+                  enable_new_user_email:
+                    type: boolean
+                  enable_external_user_access_invite_link:
+                    type: boolean
               example:
                 enable_force_2fa: false
                 enable_new_user_email: true
@@ -1904,6 +2131,13 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  enable_force_2fa:
+                    type: boolean
+                  enable_new_user_email:
+                    type: boolean
+                  enable_external_user_access_invite_link:
+                    type: boolean
               example:
                 enable_force_2fa: true
                 enable_new_user_email: true

@@ -141,6 +141,13 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  month:
+                    type: string
+                  results:
+                    type: array
+                  total_count:
+                    type: integer
               example:
                 month: "2023-02"
                 results:
@@ -178,6 +185,13 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  month:
+                    type: string
+                  results:
+                    type: array
+                  total_count:
+                    type: integer
               example:
                 month: "2023-02"
                 results:
@@ -215,6 +229,13 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  month:
+                    type: string
+                  results:
+                    type: array
+                  total_count:
+                    type: integer
               example:
                 month: "2023-02"
                 results:

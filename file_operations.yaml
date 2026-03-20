@@ -138,6 +138,17 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  upload_link:
+                    type: string
+                  workspace_id:
+                    type: integer
+                  parent_path:
+                    type: string
+                  img_relative_path:
+                    type: string
+                  file_relative_path:
+                    type: string
               example:
                 upload_link: >-
                   https://cloud.seatable.io/seafhttp/upload-api/83e701c8-84ba-498c-91b1-ddb3789edb7e
