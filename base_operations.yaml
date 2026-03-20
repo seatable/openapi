@@ -4305,7 +4305,7 @@ paths:
       tags:
         - Notifications
       summary: Send Toast Notification
-      operationId: SendToastNotification
+      operationId: sendToastNotification
       description: Send a toast notification
       requestBody:
         content:

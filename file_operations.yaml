@@ -267,7 +267,7 @@ paths:
       tags:
         - Files & Images
       summary: Delete a Base Asset
-      operationId: DeleteBaseAsset
+      operationId: deleteBaseAsset
       description: |
         Delete a base's attachment.
 
@@ -346,7 +346,7 @@ paths:
     delete:
       tags: [Files & Images (Custom Folder)]
       summary: Delete a Base Asset in Custom Folder
-      operationId: DeleteBaseCustomFolderAsset
+      operationId: deleteBaseCustomFolderAsset
       description: |
         Delete a base's attachment in custom folder.
 

@@ -70,6 +70,11 @@ jobs:
           npx --yes swagger-cli validate ping_and_info.yaml
           npx --yes swagger-cli validate python-scheduler.yaml
 
+      - name: Check documentation quality
+        run: |
+          pip install pyyaml -q
+          python3 tests/validate_specs.py
+
       - name: Update SeaTable API docs
         uses: readmeio/rdme@v9
         with:
