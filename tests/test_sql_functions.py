@@ -635,6 +635,59 @@ class TestMySQLFunctionsNotSupported:
     def test_case_when_not_supported(self, base: Base):
         assert _sql_error(base, f"SELECT CASE WHEN `age` > 30 THEN 'old' ELSE 'young' END FROM `{TABLE}`") == 400
 
+    # MySQL date functions with different names in SeaTable
+    def test_dayofweek_not_supported(self, base: Base):
+        """MySQL DAYOFWEEK() → SeaTable weekday()."""
+        assert _sql_error(base, f"SELECT DAYOFWEEK(`birthday`) FROM `{TABLE}`") == 400
+
+    def test_week_not_supported(self, base: Base):
+        """MySQL WEEK() → SeaTable weeknum()."""
+        assert _sql_error(base, f"SELECT WEEK(`birthday`) FROM `{TABLE}`") == 400
+
+    def test_last_day_not_supported(self, base: Base):
+        """MySQL LAST_DAY() → SeaTable eomonth()."""
+        assert _sql_error(base, f"SELECT LAST_DAY(`birthday`) FROM `{TABLE}`") == 400
+
+    # --- Additional common MySQL functions: supported or not? ---
+
+    def test_timestampdiff_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT TIMESTAMPDIFF(DAY, '2024-01-01', '2025-01-01') FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_timestampadd_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT TIMESTAMPADD(DAY, 1, '2025-01-01') FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_dayofmonth_not_supported(self, base: Base):
+        """MySQL DAYOFMONTH() → SeaTable day()."""
+        assert _sql_error(base, f"SELECT DAYOFMONTH(`birthday`) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_dayname_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT DAYNAME(`birthday`) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_monthname_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT MONTHNAME(`birthday`) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_cast_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT CAST(`age` AS CHAR) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_convert_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT CONVERT(`age`, CHAR) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_greatest_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT GREATEST(`age`, `score`) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_least_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT LEAST(`age`, `score`) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_log2_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT LOG2(8) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_mysql_date_function_not_supported(self, base: Base):
+        """MySQL DATE() extracts the date part from a datetime."""
+        assert _sql_error(base, f"SELECT DATE(`birthday`) FROM `{TABLE}` LIMIT 1") == 400
+
+    def test_str_to_date_not_supported(self, base: Base):
+        assert _sql_error(base, f"SELECT STR_TO_DATE('01-01-2025', '%d-%m-%Y') FROM `{TABLE}` LIMIT 1") == 400
+
     # MySQL aggregate
     def test_group_concat_not_supported(self, base: Base):
         assert _sql_error(base, f"SELECT GROUP_CONCAT(`name`) FROM `{TABLE}`") == 400
@@ -1239,3 +1292,96 @@ class TestFunctionsInClauses:
         data = _sql(base, f"SELECT `city`, COUNT(*) FROM `{TABLE}` GROUP BY `city` HAVING COUNT(*) >= 2")
         assert len(data['results']) == 1
         assert data['results'][0]['city'] == 'Berlin'
+
+
+# ===================================================================
+# DOCUMENTATION CONSISTENCY TESTS
+# These tests resolve open questions from the developer docs review.
+# ===================================================================
+
+class TestDocConsistency:
+    """Tests that clarify contradictions or ambiguities in the SQL docs."""
+
+    # --- dateDif: is the unit parameter required or optional? ---
+
+    def test_dateDif_without_unit(self, base: Base):
+        """functions.md says unit is 'optional', but the comparison table says 'required'.
+        This test determines which is correct."""
+        _setup(base)
+        data = _sql(base, f"SELECT dateDif('2023-01-01', '2025-01-01') FROM `{TABLE}` LIMIT 1")
+        result = _val(data)
+        # If this succeeds, unit is truly optional. The result should be in days (default).
+        assert isinstance(result, (int, float))
+
+    def test_dateDif_with_unit_D(self, base: Base):
+        data = _sql(base, f"SELECT dateDif('2023-01-01', '2025-01-01', 'D') FROM `{TABLE}` LIMIT 1")
+        assert _val(data) == 730 or _val(data) == 731  # leap year
+
+    # --- average() vs AVG(): are they the same? ---
+
+    def test_avg_aggregate(self, base: Base):
+        """AVG() is a standard SQL aggregate function."""
+        data = _sql(base, f"SELECT AVG(`age`) FROM `{TABLE}`")
+        assert data['results'][0]['AVG(age)'] == 29.5
+
+    def test_average_as_aggregate(self, base: Base):
+        """Can average() be used as an aggregate like AVG()?"""
+        data = _sql(base, f"SELECT average(`age`) FROM `{TABLE}`")
+        result = _val(data)
+        # If this works, average() works as aggregate on a column
+        assert isinstance(result, (int, float))
+
+    def test_average_NOT_usable_in_group_by(self, base: Base):
+        """average() is a formula function, NOT an aggregate — it fails with GROUP BY."""
+        assert _sql_error(base, f"SELECT `city`, average(`age`) FROM `{TABLE}` GROUP BY `city`") == 400
+
+    def test_avg_in_group_by(self, base: Base):
+        """AVG() in GROUP BY for comparison."""
+        data = _sql(base, f"SELECT `city`, AVG(`age`) FROM `{TABLE}` GROUP BY `city`")
+        assert len(data['results']) == 3
+
+    # --- statistical functions: can they be used as aggregates? ---
+
+    def test_counta_on_column(self, base: Base):
+        """Can counta() be used on a column (as aggregate)?"""
+        data = _sql(base, f"SELECT counta(`name`) FROM `{TABLE}`")
+        result = _val(data)
+        assert isinstance(result, (int, float))
+
+    def test_countall_on_column(self, base: Base):
+        """Can countall() be used on a column (as aggregate)?"""
+        data = _sql(base, f"SELECT countall(`name`) FROM `{TABLE}`")
+        result = _val(data)
+        assert isinstance(result, (int, float))
+
+    def test_countblank_on_column(self, base: Base):
+        """Can countblank() be used on a column (as aggregate)?"""
+        data = _sql(base, f"SELECT countblank(`name`) FROM `{TABLE}`")
+        result = _val(data)
+        assert isinstance(result, (int, float))
+
+    # --- ILIKE: case-insensitive LIKE ---
+
+    def test_ilike(self, base: Base):
+        """ILIKE for case-insensitive matching (documented in select.md)."""
+        data = _sql(base, f"SELECT `name` FROM `{TABLE}` WHERE `name` ILIKE 'alice'")
+        assert len(data['results']) == 1
+        assert data['results'][0]['name'] == 'Alice'
+
+    # --- Case insensitivity of function names ---
+
+    def test_function_name_uppercase(self, base: Base):
+        """index.md says SQL is case insensitive. Do uppercase function names work?"""
+        data = _sql(base, f"SELECT UPPER(`name`) FROM `{TABLE}` WHERE `name` = 'Alice'")
+        assert _val(data) == 'ALICE'
+
+    def test_function_name_mixed_case(self, base: Base):
+        """Mixed case function name."""
+        data = _sql(base, f"SELECT Upper(`name`) FROM `{TABLE}` WHERE `name` = 'Alice'")
+        assert _val(data) == 'ALICE'
+
+    def test_now_uppercase(self, base: Base):
+        """NOW() should work the same as now()."""
+        data = _sql(base, f"SELECT NOW() FROM `{TABLE}` LIMIT 1")
+        result = _val(data)
+        assert '202' in result  # returns a date string
