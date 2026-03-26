@@ -4314,6 +4314,33 @@ paths:
                   created_at: "2021-01-15T13:53:13.000Z"
                   updated_at: "2021-01-15T13:53:13.000Z"
                   resolved: 1
+    post: 
+      tags:
+        - Row Comments
+      summary: Create Row Comment
+      operationId: createRowComment
+      description: >-
+        Create a comment for a certain row.
+      security:
+        - BaseTokenAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/create_row_comment"
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/table_id"
+        - $ref: "#/components/parameters/row_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success:true
   /api-gateway/api/v2/dtables/{base_uuid}/comments/{comment_id}/:
     delete:
       tags:
