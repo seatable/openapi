@@ -3490,6 +3490,18 @@ paths:
             application/json:
               schema:
                 type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    owner:
+                      type: string
+                    created_at:
+                      type: string
+                      format: date-time
               example:
                 - id: 92
                   name: Production
@@ -3513,6 +3525,21 @@ paths:
             application/json:
               schema:
                 type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    contact_email:
+                      type: string
+                    is_admin:
+                      type: integer
+                    role:
+                      type: string
+                    group_id:
+                      type: integer
               example:
                 - name: Production
                   email: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6@auth.local
