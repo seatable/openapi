@@ -30,6 +30,7 @@ jobs:
   # Job 1: Publish OpenAPI specs and docs to ReadMe.com
   # -----------------------------------------------------------------------
   publish:
+    if: false  # temporarily disabled
     name: Publish to ReadMe
     runs-on: ubuntu-latest
     steps:
@@ -174,6 +175,7 @@ jobs:
   # Job 2: Generate and deploy static files to vserver
   # -----------------------------------------------------------------------
   deploy-static:
+    if: false  # temporarily disabled
     name: Deploy static files
     if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
