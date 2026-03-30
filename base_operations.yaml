@@ -2498,7 +2498,8 @@ paths:
 
         - [SELECT](https://developer.seatable.com/sql/select/) — retrieve, filter, sort, group, and join rows
         - [INSERT](https://developer.seatable.com/sql/insert/) — append rows (big data storage only)
-        - [UPDATE and DELETE](https://developer.seatable.com/sql/insert-update-delete/) — modify or remove rows
+        - [UPDATE](https://developer.seatable.com/sql/update/) — modify rows
+        - [DELETE](https://developer.seatable.com/sql/delete/) — remove rows
         - [Functions](https://developer.seatable.com/sql/functions/) — all supported functions and MySQL/MariaDB equivalents
         - [Limitations](https://developer.seatable.com/sql/limitations/) — column writability, NULL handling, list types
 
