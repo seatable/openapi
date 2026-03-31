@@ -524,26 +524,3 @@ paths:
           content:
             application/json:
               example: { "error_msg": "dtable <base_name> not found." }
-
-  /api/v2.1/external-link-tokens/{external_link_token}/access-token/:
-    get:
-      tags:
-        - Base-Token
-      summary: Get Base-Token with External-Link
-      operationId: getBaseTokenWithExternLink
-      description: >-
-        Generate a Base-Token from an external link to this base. Because external links always grant read-only permissions, the Base-Token generated from a external link will only grant read permissions to the base.
-      parameters:
-        - $ref: "#/components/parameters/external_link_token"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AccessToken"
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              example: { "error_msg": "Token <external_link_token> not found" }
