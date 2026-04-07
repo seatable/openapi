@@ -1,11 +1,11 @@
 {
   "version": "6.2",
-  "authentication": "",
-  "base_operations": "",
-  "file_operations": "",
-  "system_admin_account_operations": "",
-  "team_admin_account_operations": "",
-  "user_account_operations": "",
-  "ping_and_info": "",
-  "python_scheduler": ""
+  "authentication": "69d4dc0c1422831f8d6fbb8e",
+  "base_operations": "69d4dc0c1422831f8d6fbb96",
+  "file_operations": "69d4dc0c1422831f8d6fbb95",
+  "system_admin_account_operations": "69d4dc0c1422831f8d6fbb92",
+  "team_admin_account_operations": "69d4dc0c1422831f8d6fbb91",
+  "user_account_operations": "69d4dc0c1422831f8d6fbb93",
+  "ping_and_info": "69d4dc0c1422831f8d6fbb90",
+  "python_scheduler": "69d4dc0c1422831f8d6fbb94"
 }
