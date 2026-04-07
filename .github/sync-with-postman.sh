@@ -33,10 +33,11 @@ jq '{"collection": .}' < postman/collection.json > postman/collection.wrapped.js
 
 DESCRIPTION="This is the reference for the SeaTable API. On this page you will find everything you need to know to use SeaTable's API.
 
-    The SeaTable API is organized around REST. This means: SeaTable's API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+The SeaTable API is organized around REST. This means: SeaTable's API has predictable resource-oriented URLs, accepts form-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-    With SeaTable, you can design individual databases, workflows and apps in no time at all - without any programming knowledge.
-    Our no-code solution combines the intuitive operation of tables with the power of modern database and app builder functions and also impresses as a flexible low-code platform for all users.
+With SeaTable, you can design individual databases, workflows and apps in no time at all - without any programming knowledge.
+
+Our no-code solution combines the intuitive operation of tables with the power of modern database and app builder functions and also impresses as a flexible low-code platform for all users.
 "
 
 # Set description (required for Postman verification)
