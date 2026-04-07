@@ -30,7 +30,6 @@ jobs:
   # Job 1: Publish OpenAPI specs and docs to ReadMe.com
   # -----------------------------------------------------------------------
   publish:
-    if: false  # temporarily disabled
     name: Publish to ReadMe
     runs-on: ubuntu-latest
     steps:
