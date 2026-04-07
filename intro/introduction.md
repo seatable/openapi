@@ -1,7 +1,7 @@
 ---
 title: Introduction
 excerpt: This is the reference for the SeaTable API. On this page you will find everything you need to know to use SeaTable's API.
-category: 6978dfd7217b10efe565eee6
+category: 69d4dc0c1422831f8d6fbb86
 isReference: true
 slug: introduction
 ---
