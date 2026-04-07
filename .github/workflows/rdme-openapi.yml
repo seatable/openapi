@@ -10,13 +10,13 @@
 # Process for new version:
 #   1. git checkout -b vX.Y
 #   2. Login to https://dash.readme.com/login and fork the API definition to the new version.
-#   3. Get the new category IDs from https://dash.readme.com/project/seatable/vX.Y/reference
-#      or via API: https://docs.readme.com/main/reference/getcategories
+#   3a. Get the new category IDs from https://dash.readme.com/project/seatable/vX.Y/reference
+#   3b. Update .github/readme-ids.json with the new IDs.
+#   4a. Get the _id (of SeaTable API) via API: https://docs.readme.com/main/reference/getcategories
 #      (use the API key from https://dash.readme.com/project/seatable/vX.Y/api-key as password - username stays empty)
-#   4. Update .github/readme-ids.json with the new IDs.
-#   5. Update the "category" value in all intro/*.md frontmatter.
-#   6. Update the version in all YAML spec files.
-#   7. git add . && git commit && git push --set-upstream origin vX.Y
+#   4b. Update the "category" value in all intro/*.md frontmatter.
+#   5. Update the version in all YAML spec files.
+#   6. git add . && git commit && git push --set-upstream origin vX.Y
 
 name: Publish
 
