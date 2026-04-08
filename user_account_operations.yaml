@@ -3433,6 +3433,8 @@ paths:
                     type: string
                   admins:
                     type: array
+                    items:
+                      type: string
               example:
                 id: 1
                 parent_group_id: 0
@@ -6031,10 +6033,16 @@ paths:
                 properties:
                   rows:
                     type: array
+                    items:
+                      type: object
                   columns:
                     type: array
+                    items:
+                      type: object
                   related_user_list:
                     type: array
+                    items:
+                      type: object
               example:
                 rows:
                   - _id: Sn7svBUYTTmup7WuMsJhGw
@@ -7072,6 +7080,8 @@ paths:
                     type: object
                   actions:
                     type: array
+                    items:
+                      type: object
                   creator:
                     type: string
                   ctime:
@@ -7152,6 +7162,8 @@ paths:
                     type: object
                   actions:
                     type: array
+                    items:
+                      type: object
                   creator:
                     type: string
                   ctime:

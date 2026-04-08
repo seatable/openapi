@@ -2636,6 +2636,8 @@ paths:
                     type: integer
                   row_ids:
                     type: array
+                    items:
+                      type: object
                   first_row:
                     type: object
               example:
@@ -2742,6 +2744,8 @@ paths:
                     type: string
                   link:
                     type: array
+                    items:
+                      type: object
               example:
                 _id: Qtf7xPmoRaiFyQPO1aENTj
                 _mtime: "2021-03-10T16:19:31.761+00:00"
@@ -3170,12 +3174,18 @@ paths:
                     type: string
                   columns:
                     type: array
+                    items:
+                      type: object
                   rows:
                     type: array
+                    items:
+                      type: object
                   id_row_map:
                     type: object
                   views:
                     type: array
+                    items:
+                      type: object
               example:
                 _id: oW2Q
                 name: Appointments
@@ -3284,20 +3294,34 @@ paths:
                     type: string
                   filters:
                     type: array
+                    items:
+                      type: object
                   sorts:
                     type: array
+                    items:
+                      type: object
                   groupbys:
                     type: array
+                    items:
+                      type: object
                   group_rows:
                     type: array
+                    items:
+                      type: object
                   groups:
                     type: array
+                    items:
+                      type: object
                   colorbys:
                     type: object
                   hidden_columns:
                     type: array
+                    items:
+                      type: object
                   rows:
                     type: array
+                    items:
+                      type: object
                   formula_rows:
                     type: object
                   link_rows:
@@ -3357,20 +3381,34 @@ paths:
                     type: string
                   filters:
                     type: array
+                    items:
+                      type: object
                   sorts:
                     type: array
+                    items:
+                      type: object
                   groupbys:
                     type: array
+                    items:
+                      type: object
                   group_rows:
                     type: array
+                    items:
+                      type: object
                   groups:
                     type: array
+                    items:
+                      type: object
                   colorbys:
                     type: object
                   hidden_columns:
                     type: array
+                    items:
+                      type: object
                   rows:
                     type: array
+                    items:
+                      type: object
                   formula_rows:
                     type: object
                   link_rows:
@@ -3449,20 +3487,34 @@ paths:
                     type: string
                   filters:
                     type: array
+                    items:
+                      type: object
                   sorts:
                     type: array
+                    items:
+                      type: object
                   groupbys:
                     type: array
+                    items:
+                      type: object
                   group_rows:
                     type: array
+                    items:
+                      type: object
                   groups:
                     type: array
+                    items:
+                      type: object
                   colorbys:
                     type: object
                   hidden_columns:
                     type: array
+                    items:
+                      type: object
                   rows:
                     type: array
+                    items:
+                      type: object
                   formula_rows:
                     type: object
                   link_rows:
@@ -3629,6 +3681,8 @@ paths:
                     type: string
                   permitted_users:
                     type: array
+                    items:
+                      type: string
               example:
                 key: e48W
                 type: link-formula
@@ -3706,6 +3760,8 @@ paths:
                     type: string
                   permitted_users:
                     type: array
+                    items:
+                      type: string
               example:
                 key: cSDV
                 type: number

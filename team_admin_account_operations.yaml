@@ -1080,6 +1080,8 @@ paths:
                 properties:
                   groups:
                     type: array
+                    items:
+                      type: object
                   page:
                     type: integer
                   per_page:
@@ -1384,6 +1386,8 @@ paths:
                     type: string
                   members:
                     type: array
+                    items:
+                      type: object
               example:
                 group_id: 1
                 group_name: Sample Group
@@ -1651,12 +1655,20 @@ paths:
                 properties:
                   dtable_user_shares:
                     type: array
+                    items:
+                      type: object
                   dtable_group_shares:
                     type: array
+                    items:
+                      type: object
                   view_user_shares:
                     type: array
+                    items:
+                      type: object
                   view_group_shares:
                     type: array
+                    items:
+                      type: object
               example:
                 dtable_user_shares:
                   - dtable_uuid: 3c899a81-6a0c-4111-bb19-288ebf8442fd
