@@ -1875,6 +1875,8 @@ paths:
                     type: string
                   admins:
                     type: array
+                    items:
+                      type: string
               example:
                 id: 1
                 parent_group_id: 0
@@ -2813,10 +2815,16 @@ paths:
                     type: integer
                   groups:
                     type: array
+                    items:
+                      type: object
                   members:
                     type: array
+                    items:
+                      type: object
                   ancestor_groups:
                     type: array
+                    items:
+                      type: object
               example:
                 id: 1
                 name: Sys Dev
@@ -2921,10 +2929,16 @@ paths:
                     type: integer
                   groups:
                     type: array
+                    items:
+                      type: object
                   members:
                     type: array
+                    items:
+                      type: object
                   ancestor_groups:
                     type: array
+                    items:
+                      type: object
               example:
                 id: 2
                 name: Test department
@@ -4300,6 +4314,8 @@ paths:
                 properties:
                   active_user_list:
                     type: array
+                    items:
+                      type: object
                   page:
                     type: integer
                   total_count:
@@ -4692,8 +4708,12 @@ paths:
                     type: string
                   dtable_server_info:
                     type: array
+                    items:
+                      type: object
                   dtable_server_info_in_etcd:
                     type: array
+                    items:
+                      type: object
                   archived_base_count:
                     type: integer
                   archived_row_count:

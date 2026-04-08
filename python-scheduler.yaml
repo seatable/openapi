@@ -146,6 +146,8 @@ paths:
                     type: string
                   results:
                     type: array
+                    items:
+                      type: object
                   total_count:
                     type: integer
               example:
@@ -190,6 +192,8 @@ paths:
                     type: string
                   results:
                     type: array
+                    items:
+                      type: object
                   total_count:
                     type: integer
               example:
@@ -234,6 +238,8 @@ paths:
                     type: string
                   results:
                     type: array
+                    items:
+                      type: object
                   total_count:
                     type: integer
               example:
