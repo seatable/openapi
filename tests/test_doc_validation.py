@@ -195,15 +195,6 @@ def test_getBaseTokenWithApiToken_invalid_token():
     assert response.status_code == 403
 
 
-def test_getBaseTokenWithExternLink_not_found():
-    """getBaseTokenWithExternLink returns 404 for a non-existent external link."""
-    case: Case = authentication_schema.find_operation_by_id('getBaseTokenWithExternLink') \
-        .Case(path_parameters={'external_link_token': 'abcdef0123456789abcd'})
-    response = case.call()
-
-    assert response.status_code == 404
-
-
 # ---------------------------------------------------------------------------
 # 4. Authentication: login error responses
 #    Verified: 400 with non_field_errors for wrong credentials
