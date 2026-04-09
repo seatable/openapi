@@ -48,6 +48,9 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > - [List Team Operations](/reference/listteamoperationlog): New query parameters `operation_group`, `start`, and `end` for filtering.
 > - [List Team Logins](/reference/listteamlogins): New query parameters `login_status`, `start`, and `end` for filtering.
 
+> 🚧 Breaking changes
+>
+> - Get Base-Token with External-Link (`GET /api/v2.1/external-link-tokens/{external_link_token}/access-token/`) was removed
 
 ## Version 6.0 (04.11.2025)
 
