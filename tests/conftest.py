@@ -86,6 +86,7 @@ assert CLEANUP_AFTER_TESTS in ["True", "False"], "CLEANUP_AFTER_TESTS environmen
 
 user_account_operations = schemathesis.openapi.from_path('../user_account_operations.yaml')
 system_admin_account_operations = schemathesis.openapi.from_path('../system_admin_account_operations.yaml')
+team_admin_account_operations = schemathesis.openapi.from_path('../team_admin_account_operations.yaml')
 authentication_schema = schemathesis.openapi.from_path('../authentication.yaml')
 base_operations_schema = schemathesis.openapi.from_path('../base_operations.yaml')
 

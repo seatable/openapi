@@ -1,0 +1,20 @@
+{
+  "active_members": "int",
+  "api_calls_count": "int",
+  "api_calls_limit": "int",
+  "automation_count": "int",
+  "automation_limit": "int",
+  "big_data_row_limit": "int",
+  "big_data_storage_quota": "int",
+  "big_data_total_rows": "int",
+  "big_data_total_storage": "int",
+  "member_quota": "int",
+  "member_usage": "int",
+  "org_id": "int",
+  "org_name": "str",
+  "role": "str",
+  "row_total": "int",
+  "row_usage": "int",
+  "storage_quota": "int",
+  "storage_usage": "int"
+}
