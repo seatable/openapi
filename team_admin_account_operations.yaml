@@ -1082,6 +1082,21 @@ paths:
                     type: array
                     items:
                       type: object
+                      properties:
+                        id:
+                          type: integer
+                        group_name:
+                          type: string
+                        ctime:
+                          type: string
+                        creator_name:
+                          type: string
+                        creator_email:
+                          type: string
+                        creator_contact_email:
+                          type: string
+                        size:
+                          type: integer
                   page:
                     type: integer
                   per_page:
@@ -1380,6 +1395,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  org_id:
+                    type: integer
                   group_id:
                     type: integer
                   group_name:
@@ -1388,23 +1405,33 @@ paths:
                     type: array
                     items:
                       type: object
+                      properties:
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        contact_email:
+                          type: string
+                        avatar_url:
+                          type: string
+                        is_admin:
+                          type: boolean
+                        role:
+                          type: string
               example:
+                org_id: 1
                 group_id: 1
                 group_name: Sample Group
                 members:
-                  - group_id: 1
-                    name: Jasmin Tee
+                  - name: Jasmin Tee
                     email: 123456786569491ba42905bf1647fd3f@auth.local
                     contact_email: jasmin@example.com
-                    login_id: ""
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
                     is_admin: false
                     role: Member
-                  - group_id: 1
-                    name: Ginger Ale
+                  - name: Ginger Ale
                     email: 87654321d1754bb4afa2c2cb7369d244@auth.local
                     contact_email: ginger@example.com
-                    login_id: ""
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
                     is_admin: true
                     role: Owner
@@ -2016,9 +2043,19 @@ paths:
                     type: string
                   big_data_row_limit:
                     type: integer
+                  big_data_storage_quota:
+                    type: integer
                   big_data_total_rows:
                     type: integer
                   big_data_total_storage:
+                    type: integer
+                  api_calls_count:
+                    type: integer
+                  api_calls_limit:
+                    type: integer
+                  automation_count:
+                    type: integer
+                  automation_limit:
                     type: integer
                   scripts_running_total:
                     type: integer

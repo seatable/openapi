@@ -1,0 +1,9 @@
+{
+  "creator_contact_email": "automated-testing-team-admin@seatable.io",
+  "creator_email": "str",
+  "creator_name": "str",
+  "ctime": "str",
+  "group_name": "Test Group",
+  "id": "int",
+  "size": "int"
+}
