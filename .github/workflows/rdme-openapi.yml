@@ -102,7 +102,7 @@ jobs:
           fi
 
           # Install oasdiff
-          go install github.com/tufin/oasdiff@latest
+          go install github.com/oasdiff/oasdiff@latest
           export PATH="$PATH:$(go env GOPATH)/bin"
 
           # Compare each spec file
