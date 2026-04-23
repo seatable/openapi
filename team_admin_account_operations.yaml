@@ -2061,6 +2061,10 @@ paths:
                     type: integer
                   scripts_running_count:
                     type: integer
+                  ai_cost:
+                    type: number
+                  ai_credit:
+                    type: number
               example:
                 org_id: 1
                 org_name: SeaTable GmbH
@@ -2077,6 +2081,8 @@ paths:
                 big_data_total_storage: 0
                 scripts_running_total: -1
                 scripts_running_count: 0
+                ai_cost: 1234.56
+                ai_credit: 5000
     put:
       tags:
         - Info & Settings
