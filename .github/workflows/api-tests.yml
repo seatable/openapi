@@ -14,8 +14,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "SeaTable version (e.g. 6.1.0)"
+        description: "SeaTable version (e.g. 6.1.8)"
         required: true
+        default: "6.1.8"
       image:
         description: "Docker Hub repository"
         required: true
