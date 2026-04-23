@@ -11,6 +11,7 @@
 name: "[RUN] API Tests"
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       version:
@@ -25,6 +26,10 @@ on:
         options:
           - "seatable/seatable-enterprise"
           - "seatable/seatable-enterprise-testing"
+
+env:
+  DEFAULT_VERSION: "6.1.8"
+  DEFAULT_IMAGE: "seatable/seatable-enterprise"
 
 
 jobs:
@@ -43,8 +48,8 @@ jobs:
       - name: Determine SeaTable version
         id: version
         run: |
-          echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-          echo "image=${{ inputs.image }}" >> "$GITHUB_OUTPUT"
+          echo "version=${{ inputs.version || env.DEFAULT_VERSION }}" >> "$GITHUB_OUTPUT"
+          echo "image=${{ inputs.image || env.DEFAULT_IMAGE }}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Python
         uses: actions/setup-python@v6
