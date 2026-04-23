@@ -2125,6 +2125,10 @@ paths:
         `false`).
 
 
+        `enable_force_sso_login`: if login via single-sign on (SSO) is enforced (`true` or
+        `false`).
+
+
         `enable_new_user_email`: if newly added users will get a system email
         (`true` or `false`).
 
@@ -2147,14 +2151,20 @@ paths:
                 properties:
                   enable_force_2fa:
                     type: boolean
+                  enable_force_sso_login:
+                    type: boolean
                   enable_new_user_email:
                     type: boolean
                   enable_external_user_access_invite_link:
                     type: boolean
+                  enable_member_modify_name:
+                    type: boolean
               example:
                 enable_force_2fa: false
+                enable_force_sso_login: false
                 enable_new_user_email: true
                 enable_external_user_access_invite_link: true
+                enable_member_modify_name: true
     put:
       tags:
         - Info & Settings
