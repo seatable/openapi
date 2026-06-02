@@ -4288,7 +4288,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                items:
+                  type: object
               example:
                 - id: 1
                   author: 28d006e7d1754bb4afa2c2cb7369d244@auth.local
@@ -4348,13 +4350,7 @@ paths:
       summary: Delete Comment
       operationId: deleteComment
       deprecated: true
-      description: >-
-        Delete a certain comment by its ID.
-
-
-        > 🚧 Creating comments via the API Gateway is not yet supported.
-        This will be fixed in SeaTable 6.2. Until then, comments can only be
-        created via `POST /api/v2.1/dtables/{dtable_uuid}/comments/` (dtable-web).
+      description: Delete a certain comment by its ID.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -4375,13 +4371,7 @@ paths:
       summary: Get Comment
       operationId: getComment
       deprecated: true
-      description: >-
-        Get the details of a certain comment with its ID.
-
-
-        > 🚧 Creating comments via the API Gateway is not yet supported.
-        This will be fixed in SeaTable 6.2. Until then, comments can only be
-        created via `POST /api/v2.1/dtables/{dtable_uuid}/comments/` (dtable-web).
+      description: Get the details of a certain comment with its ID.
       security:
         - BaseTokenAuth: []
       parameters:

@@ -83,25 +83,44 @@ def test_getNumberOfComments(base: Base):
     assert response.status_code == 200
 
 
-def _create_comment(base: Base, row_id: str) -> int:
-    """Helper: create a comment via direct API call, returns comment_id."""
-    import os, requests
-    server = os.environ['SEATABLE_SERVER']
-    resp = requests.post(
-        f'{server}/api-gateway/api/v2/dtables/{base.uuid}/comments/',
-        json={'row_id': row_id, 'comment': 'Test comment from automated tests'},
-        headers=_headers(base),
-    )
-    assert resp.status_code in (200, 201), f'Failed to create comment: {resp.status_code} {resp.text}'
-    return resp.json()['id']
+def _table_id(base: Base, table_name: str) -> str:
+    metadata: Case = base_operations_schema.find_operation_by_id('getMetadata') \
+        .Case(path_parameters={'base_uuid': base.uuid}, headers=_headers(base))
+    tables = metadata.call().json()['metadata']['tables']
+    return next(t['_id'] for t in tables if t['name'] == table_name)
 
 
-@pytest.mark.skip(reason="Creating comments via API Gateway not yet supported — will be fixed in 6.2")
+def _list_comment_ids(base: Base, row_id: str) -> list[int]:
+    """createRowComment does not return the new comment's id, so look it up via listRowComments."""
+    case: Case = base_operations_schema.find_operation_by_id('listRowComments') \
+        .Case(path_parameters={'base_uuid': base.uuid}, query={'row_id': row_id}, headers=_headers(base))
+    data = case.call().json()
+    # API returns [] when no comments exist, {"comments": [...]} otherwise.
+    comments = data['comments'] if isinstance(data, dict) else data
+    return [c['id'] for c in comments]
+
+
 def test_getComment(base: Base):
     table_name = 'test_getComment'
     create_table(base, table_name, SIMPLE_COLUMNS)
     row_ids = append_rows(base, table_name, [{'text': 'comment target'}])
-    comment_id = _create_comment(base, row_ids[0])
+
+    comment_text = 'Test comment from automated tests'
+    create: Case = base_operations_schema.find_operation_by_id('createRowComment') \
+        .Case(
+            path_parameters={'base_uuid': base.uuid},
+            query={'table_id': _table_id(base, table_name), 'row_id': row_ids[0]},
+            body={'comment': comment_text},
+            headers=_headers(base),
+        )
+    create_response = create.call()
+    assert create_response.status_code == 200, \
+        f'Failed to create comment: {create_response.status_code} {create_response.text}'
+
+    # createRowComment does not return the comment ID, so we need to fetch all comments for this row
+    comment_ids = _list_comment_ids(base, row_ids[0])
+    assert len(comment_ids) == 1
+    comment_id = comment_ids[0]
 
     case: Case = base_operations_schema.find_operation_by_id('getComment') \
         .Case(
@@ -113,15 +132,28 @@ def test_getComment(base: Base):
     assert response.status_code == 200
     data = response.json()
     assert data['id'] == comment_id
-    assert 'comment' in data
+    assert data['comment'] == comment_text
 
 
-@pytest.mark.skip(reason="Creating comments via API Gateway not yet supported — will be fixed in 6.2")
 def test_deleteComment(base: Base):
     table_name = 'test_deleteComment'
     create_table(base, table_name, SIMPLE_COLUMNS)
     row_ids = append_rows(base, table_name, [{'text': 'delete target'}])
-    comment_id = _create_comment(base, row_ids[0])
+
+    create: Case = base_operations_schema.find_operation_by_id('createRowComment') \
+        .Case(
+            path_parameters={'base_uuid': base.uuid},
+            query={'table_id': _table_id(base, table_name), 'row_id': row_ids[0]},
+            body={'comment': 'Test comment from automated tests'},
+            headers=_headers(base),
+        )
+    create_response = create.call()
+    assert create_response.status_code == 200, \
+        f'Failed to create comment: {create_response.status_code} {create_response.text}'
+
+    comment_ids = _list_comment_ids(base, row_ids[0])
+    assert len(comment_ids) == 1
+    comment_id = comment_ids[0]
 
     case: Case = base_operations_schema.find_operation_by_id('deleteComment') \
         .Case(
