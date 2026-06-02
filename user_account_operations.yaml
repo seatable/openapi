@@ -3323,7 +3323,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                items:
+                  type: object
               example:
                 - id: 1
                   parent_group_id: 0
