@@ -1,5 +1,6 @@
 {
   "table": {
+    "backend": "js",
     "color": null,
     "created_at": "str",
     "icon": null,
