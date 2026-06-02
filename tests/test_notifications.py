@@ -75,7 +75,6 @@ def test_markBaseNotificationAsSeen(base: Base):
     assert response.status_code == 200
 
 
-@pytest.mark.xfail(reason="API returns 400 'parameters invalid' — request body format differs from spec")
 def test_sendToastNotification(base: Base):
     """Send a toast notification. Requires at least one recipient user."""
     import os, requests
@@ -94,8 +93,8 @@ def test_sendToastNotification(base: Base):
         .Case(
             path_parameters={'base_uuid': base.uuid},
             body={
-                'to_users': [user_id],
-                'msg_type': 'toast',
+                'to_user': user_id,
+                'toast_type': 'toast',
                 'detail': {'table_id': '0000', 'msg': 'Hello from test'},
             },
             headers=_headers(base),
