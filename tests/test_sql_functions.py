@@ -387,9 +387,9 @@ class TestDateFunctions:
         data = _sql(base, f"SELECT isomonth('2025-01-01 11:00:00') FROM `{TABLE}` LIMIT 1")
         assert _val(data) == '2025-01'
 
-    def test_hours_not_supported_in_sql(self, base: Base):
-        """hours() is documented in functions.md but NOT supported in SQL queries."""
-        assert _sql_error(base, f"SELECT hours('2025-02-14 13:00', '2025-02-14 15:00') FROM `{TABLE}` LIMIT 1") == 400
+    def test_hours(self, base: Base):
+        data = _sql(base, f"SELECT hours('2025-02-14 13:00', '2025-02-14 15:00') FROM `{TABLE}` LIMIT 1")
+        assert _val(data) == 2
 
     def test_months(self, base: Base):
         data = _sql(base, f"SELECT months('2025-02-01', '2025-05-01') FROM `{TABLE}` LIMIT 1")
