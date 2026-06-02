@@ -167,7 +167,7 @@ def test_download_link_nonexistent_file(base: Base):
         .Case(query={'path': '/files/2020-01/nonexistent.txt'})
     response = case.call(headers=_api_headers(base))
 
-    assert response.status_code == 400
+    assert response.status_code == 404
 
 
 def test_delete_nonexistent_file(base: Base):
