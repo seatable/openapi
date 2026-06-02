@@ -451,6 +451,7 @@ paths:
                     type: string
                   last_login:
                     type: string
+                    nullable: true
                   self_usage:
                     type: integer
                   quota:
@@ -2302,6 +2303,46 @@ paths:
                     ],
                   "total_count": 3,
                 }
+  /api/v2.1/org/{org_id}/admin/audit-logs/:
+    get:
+      tags:
+        - Activities & Logs
+      summary: List Audit Logs
+      operationId: listAuditLogs
+      description: Retrieves audit logs.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/org_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                audit_log_list:
+                  - username: 58e399fe8a3548abb7d7e346f5c94a30@auth.local
+                    name: Org Admin
+                    operation: group_rename
+                    org_id: 87
+                    detail:
+                      id: 210
+                      name: New Group Name
+                      old_name: Test Group
+                    created_at: "2026-06-03T14:21:28+02:00"
+                  - username: 58e399fe8a3548abb7d7e346f5c94a30@auth.local
+                    name: Org Admin
+                    operation: group_create
+                    org_id: 87
+                    detail:
+                      id: 210
+                      name: Test Group
+                    created_at: "2026-06-03T14:21:28+02:00"
+                count: 2
   /api/v2.1/org/{org_id}/admin/group-member-audit/:
     get:
       tags:
