@@ -263,8 +263,8 @@ paths:
               example:
                 download_link: >-
                   https://cloud.seatable.io/seafhttp/files/12345678-1234-4672-834c-4eca40dc104b/test.png
-        "400":
-          description: Bad Request — file not found at the given path.
+        "404":
+          description: Not Found — file not found at the given path.
           content:
             application/json:
               schema:
