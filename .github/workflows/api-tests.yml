@@ -28,7 +28,7 @@ on:
           - "seatable/seatable-enterprise-testing"
 
 env:
-  DEFAULT_VERSION: "6.2.7"
+  DEFAULT_VERSION: "6.2.8"
   DEFAULT_IMAGE: "seatable/seatable-enterprise-testing"
 
 
