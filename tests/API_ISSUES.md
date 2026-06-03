@@ -134,11 +134,9 @@ Sending `is_admin: "true"` (as string) works correctly and returns 200.
 | 5 | Invalid date: silently stored as `null` | Medium | Yes — return error |
 | 7 | Read-only columns: inconsistent enforcement | Medium | Yes — same as #4 |
 | 9 | DELETE /links/ reports success for non-existing links | Medium | Yes — return count 0 |
-| 12 | No createRowComment endpoint | Medium | Yes — re-added in 6.1 |
 | 17 | addNewUser returns 403 for license limit | Medium | Yes — use 409 or 402 |
 | 22 | updateColumn to link type creates broken column | Medium | Yes — validate column_data |
 | 23 | Temp API-Token creation uses GET instead of POST | Low | Yes — use POST |
-| 26 | getFileDownloadLink returns 400 instead of 404 | Low | Yes — return 404 |
 | 24 | app_name inconsistently used as path vs body param | Low | No — document behavior |
 | 25 | Base-Token endpoints return different field sets | Low | No — document behavior |
 | 2 | Select columns: unknown options auto-created | Low | No — acceptable behavior |
@@ -261,14 +259,6 @@ Formula, creator, and created time correctly reject writes. Auto-number does not
 Unlinking a row pair that doesn't exist returns `{ deleted_links_count: 1, success: true }` instead of `{ deleted_links_count: 0 }`.
 
 **Recommendation:** Return the actual count of deleted links.
-
-### 12. No createRowComment endpoint
-
-**Severity:** Medium
-
-There is no API endpoint to create a row comment. The `create_row_comment` schema exists in `base_operations.yaml` but no POST operation is defined on `/api-gateway/api/v2/dtables/{base_uuid}/comments/` (returns 405 Method Not Allowed).
-
-**Status:** Will be re-added in 6.2.
 
 ### 17. addNewUser returns 403 for license limit
 
@@ -445,12 +435,3 @@ The five ping endpoints return three different response formats:
 
 **Workaround:** OpenAPI spec in this repository has been adjusted to match actual behavior.
 
-### 26. getFileDownloadLink returns 400 instead of 404 for non-existent file
-
-**Severity:** Low — inconsistent error codes
-
-`GET /api/v2.1/dtable/app-download-link/?path=/files/2020-01/nonexistent.txt` returns 400 with `{"error_msg": "path ... not found."}`. In contrast, `DELETE /api/v2.1/dtable/app-asset/` correctly returns 404 with `{"error_msg": "File not found."}` for the same situation.
-
-A missing file is a 404 case, not a 400 (bad request).
-
-**Recommendation:** Return 404 from `getFileDownloadLink` when the file does not exist, consistent with `DeleteBaseAsset`.
