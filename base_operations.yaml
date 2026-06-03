@@ -4316,7 +4316,7 @@ paths:
                   created_at: "2021-01-15T13:53:13.000Z"
                   updated_at: "2021-01-15T13:53:13.000Z"
                   resolved: 1
-    post: 
+    post:
       tags:
         - Row Comments
       summary: Create Row Comment
