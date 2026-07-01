@@ -378,3 +378,67 @@ def test_deleteColumn(base: Base):
     column_names = [c['name'] for c in response.json()['columns']]
     assert 'keep' in column_names
     assert 'delete-me' not in column_names
+
+
+def test_insertColumn_duplicate_name_returns_400(base: Base):
+    table_name = 'test_insertColumn_duplicate'
+    create_table(base, table_name, [{'column_name': 'existing', 'column_type': 'text'}])
+
+    path_parameters = {'base_uuid': base.uuid}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    body = {'table_name': table_name, 'column_name': 'existing', 'column_type': 'text'}
+
+    # Inserting a column whose name collides with an existing column is rejected
+    case: Case = base_operations_schema.find_operation_by_id('insertColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 400
+    # application/json is also enforced by the conformance hook against the documented 400
+    assert response.headers['content-type'][0].startswith('application/json')
+
+
+@pytest.mark.xfail(
+    reason="insertColumn returns the plain-text body 'Column ColA exists.' with an "
+           "application/json content-type on a duplicate-column 400 (not valid JSON)",
+)
+def test_insertColumn_duplicate_name_returns_json(base: Base):
+    table_name = 'test_insertColumn_duplicate_json'
+    create_table(base, table_name, [{'column_name': 'existing', 'column_type': 'text'}])
+
+    path_parameters = {'base_uuid': base.uuid}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    body = {'table_name': table_name, 'column_name': 'existing', 'column_type': 'text'}
+
+    case: Case = base_operations_schema.find_operation_by_id('insertColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 400
+    # The body should be valid JSON; currently raises JSONDecodeError (plain text)
+    response.json()
+
+
+def test_updateColumn_rename_collision_returns_400(base: Base):
+    table_name = 'test_updateColumn_collision'
+    create_table(base, table_name, [
+        {'column_name': 'col-a', 'column_type': 'text'},
+        {'column_name': 'col-b', 'column_type': 'text'},
+    ])
+
+    path_parameters = {'base_uuid': base.uuid}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    body = {
+        'op_type': 'rename_column',
+        'table_name': table_name,
+        'column': 'col-b',
+        'new_column_name': 'col-a',
+    }
+
+    # Renaming a column to collide with an existing column name is rejected
+    case: Case = base_operations_schema.find_operation_by_id('updateColumn') \
+        .Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 400
+    assert response.headers['content-type'][0].startswith('application/json')

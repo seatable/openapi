@@ -153,3 +153,54 @@ def test_deleteView(base: Base):
     assert response.status_code == 200
     view_names = [v['name'] for v in response.json()['views']]
     assert 'View To Delete' not in view_names
+
+
+def test_createView_duplicate_name_returns_400(base: Base):
+    table_name = 'test_createView_duplicate'
+    create_table(base, table_name, SIMPLE_COLUMNS)
+
+    path_parameters = {'base_uuid': base.uuid}
+    query = {'table_name': table_name}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    body = {'name': 'Collision View', 'type': 'table'}
+
+    # Create the view once
+    case: Case = base_operations_schema.find_operation_by_id('createView') \
+        .Case(path_parameters=path_parameters, query=query, body=body, headers=headers)
+    response = case.call()
+    assert response.status_code == 200
+
+    # Creating a second view with the same name is rejected
+    case = base_operations_schema.find_operation_by_id('createView') \
+        .Case(path_parameters=path_parameters, query=query, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 400
+    # application/json is also enforced by the conformance hook against the documented 400
+    assert response.headers['content-type'][0].startswith('application/json')
+
+
+def test_updateView_rename_collision_returns_400(base: Base):
+    table_name = 'test_updateView_collision'
+    create_table(base, table_name, SIMPLE_COLUMNS)
+
+    path_parameters = {'base_uuid': base.uuid}
+    query = {'table_name': table_name}
+    headers = {'Authorization': f'Bearer {base.token}'}
+
+    # Create a second view (the table already has a "Default View")
+    body = {'name': 'Second View', 'type': 'table'}
+    case: Case = base_operations_schema.find_operation_by_id('createView') \
+        .Case(path_parameters=path_parameters, query=query, body=body, headers=headers)
+    response = case.call()
+    assert response.status_code == 200
+
+    # Renaming it to collide with the existing "Default View" is rejected
+    rename_path = {'base_uuid': base.uuid, 'view_name': 'Second View'}
+    rename_body = {'name': 'Default View'}
+    case = base_operations_schema.find_operation_by_id('updateView') \
+        .Case(path_parameters=rename_path, query=query, body=rename_body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 400
+    assert response.headers['content-type'][0].startswith('application/json')
