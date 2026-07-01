@@ -160,18 +160,18 @@ Generated: 2026-03-20
 - [x] `POST /api/v2.1/user-list/` - listPublicUserInfos
 - [ ] `PUT /api/v2.1/user/contact-email/` - updateEmailAddress
 
-### Import & Export (5/10)
+### Import & Export (10/10)
 
-- [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/append-excel-csv-to-table/` - appendToTableFromFile
+- [x] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/append-excel-csv-to-table/` - appendToTableFromFile
 - [x] `GET /dtable/external-links/{external_link_token}/download-zip/` - exportBaseFromExternalLink
 - [x] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-dtable/` - exportBase
 - [x] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/convert-big-data-view-to-excel/` - exportBigDataView
 - [x] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-table-to-excel/` - exportTable (xfail: 406 on real Accept header, backend not yet fixed)
 - [x] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-view-to-excel/` - exportView (xfail: 406 on real Accept header, backend not yet fixed)
-- [ ] `POST /api/v2.1/workspace/{workspace_id}/import-dtable/` - importBasefromDTableFile
-- [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-base/` - importBasefromFile
-- [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-table/` - importTableFromFile
-- [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/update-table-via-excel-csv/` - updateFromFile
+- [x] `POST /api/v2.1/workspace/{workspace_id}/import-dtable/` - importBasefromDTableFile
+- [x] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-base/` - importBasefromFile
+- [x] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-table/` - importTableFromFile
+- [x] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/update-table-via-excel-csv/` - updateFromFile
 
 ### Bases (9/15)
 
