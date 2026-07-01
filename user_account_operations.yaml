@@ -4479,8 +4479,7 @@ paths:
         "200":
           description: OK
           content:
-            # TODO: Actually "application/x-zip-compressed", but dtable-web does not accept this when specified inside an "Accept" header
-            application/json: {}
+            application/x-zip-compressed: {}
   /api/v2.1/workspace/{workspace_id}/synchronous-export/export-table-to-excel/:
     get:
       tags:
@@ -4499,7 +4498,11 @@ paths:
         "200":
           description: OK
           content:
-            # TODO: Actually "application/ms-excel", but dtable-web does not accept this when specified inside an "Accept" header
+            # Response body is actually "application/ms-excel", but dtable-web still returns
+            # 406 "Could not satisfy the request Accept header" when that value is sent in the
+            # "Accept" header (only */* or application/json work). Keep the workaround until the
+            # backend is fixed; regression is tracked by the xfail test
+            # tests/test_export.py::test_exportTable_accepts_excel_content_type.
             application/json: {}
   /api/v2.1/workspace/{workspace_id}/synchronous-export/export-view-to-excel/:
     get:
@@ -4521,7 +4524,11 @@ paths:
         "200":
           description: OK
           content:
-            # TODO: Actually "application/ms-excel", but dtable-web does not accept this when specified inside an "Accept" header
+            # Response body is actually "application/ms-excel", but dtable-web still returns
+            # 406 "Could not satisfy the request Accept header" when that value is sent in the
+            # "Accept" header (only */* or application/json work). Keep the workaround until the
+            # backend is fixed; regression is tracked by the xfail test
+            # tests/test_export.py::test_exportView_accepts_excel_content_type.
             application/json: {}
   /dtable/external-links/{external_link_token}/download-zip/:
     get:
@@ -4538,8 +4545,7 @@ paths:
         "200":
           description: OK
           content:
-            # TODO: Actually "application/x-zip-compressed", but dtable-web does not accept this when specified inside an "Accept" header
-            application/json: {}
+            application/x-zip-compressed: {}
 
   /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/convert-big-data-view-to-excel/:
     get:

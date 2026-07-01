@@ -111,6 +111,7 @@ class Base:
     """Class for storing base info"""
     workspace_id: int
     uuid: str
+    name: str
     # Hide base token from console output by setting repr=False
     token: str = field(repr=False)
     # Temporary API token for file uploads
@@ -190,7 +191,7 @@ def base(account_token: Secret):
     api_token = get_api_token(account_token, workspace_id, base_name)
 
     # Yield back to the test function
-    yield Base(workspace_id=workspace_id, uuid=base_uuid, token=base_token, api_token=api_token.value)
+    yield Base(workspace_id=workspace_id, uuid=base_uuid, name=base_name, token=base_token, api_token=api_token.value)
 
     if CLEANUP_AFTER_TESTS == 'True':
         # Delete base to not cause any issues on future test runs
