@@ -2620,7 +2620,11 @@ paths:
         "200":
           description: OK
           content:
-            # Actually application/x-zip-compressed, but dtable-web does not accept this in Accept header
+            # Response body is actually "application/x-zip-compressed", but dtable-web still returns
+            # 406 "Could not satisfy the request Accept header" when that value is sent in the "Accept"
+            # header on this admin endpoint (only */* or application/json work). Keep the workaround
+            # until the backend is fixed; regression is tracked by the xfail test
+            # tests/test_export.py::test_adminExportBase_accepts_zip_content_type.
             application/json: {}
 
   # Common Dataset
