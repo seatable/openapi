@@ -3348,6 +3348,12 @@ paths:
                 link_rows: {}
                 summaries: {}
                 colors: {}
+        "400":
+          description: A view with this name already exists in the table.
+          content:
+            application/json:
+              example:
+                error_msg: params invalid
   /api-gateway/api/v2/dtables/{base_uuid}/views/{view_name}/:
     get:
       tags:
@@ -3549,6 +3555,12 @@ paths:
                 link_rows: {}
                 summaries: {}
                 colors: {}
+        "400":
+          description: The target view name already exists in the table.
+          content:
+            application/json:
+              example:
+                error_msg: params invalid
     delete:
       tags:
         - Views
@@ -3702,6 +3714,11 @@ paths:
                   conditions: []
                 permission_type: ""
                 permitted_users: []
+        "400":
+          description: A column with this name already exists in the table.
+          content:
+            application/json:
+              example: Column ColA exists.
     put:
       tags:
         - Columns
@@ -3773,6 +3790,13 @@ paths:
                 data: null
                 permission_type: ""
                 permitted_users: []
+        "400":
+          description: A column with this name already exists in the table.
+          content:
+            application/json:
+              example:
+                error_type: column_already_exists
+                error_message: column name already exists
     delete:
       tags:
         - Columns
