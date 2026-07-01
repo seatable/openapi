@@ -160,13 +160,14 @@ Generated: 2026-03-20
 - [x] `POST /api/v2.1/user-list/` - listPublicUserInfos
 - [ ] `PUT /api/v2.1/user/contact-email/` - updateEmailAddress
 
-### Import & Export (0/9)
+### Import & Export (5/10)
 
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/append-excel-csv-to-table/` - appendToTableFromFile
-- [ ] `GET /dtable/external-links/{external_link_token}/download-zip/` - exportBaseFromExternalLink
-- [ ] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/convert-big-data-view-to-excel/` - exportBigDataView
-- [ ] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-table-to-excel/` - exportTable
-- [ ] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-view-to-excel/` - exportView
+- [x] `GET /dtable/external-links/{external_link_token}/download-zip/` - exportBaseFromExternalLink
+- [x] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-dtable/` - exportBase
+- [x] `GET /api/v2.1/workspace/{workspace_id}/dtable/{base_name}/convert-big-data-view-to-excel/` - exportBigDataView
+- [x] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-table-to-excel/` - exportTable (xfail: 406 on real Accept header, backend not yet fixed)
+- [x] `GET /api/v2.1/workspace/{workspace_id}/synchronous-export/export-view-to-excel/` - exportView (xfail: 406 on real Accept header, backend not yet fixed)
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/import-dtable/` - importBasefromDTableFile
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-base/` - importBasefromFile
 - [ ] `POST /api/v2.1/workspace/{workspace_id}/synchronous-import/import-excel-csv-to-table/` - importTableFromFile
@@ -498,9 +499,9 @@ Generated: 2026-03-20
 - [ ] `PUT /api/v2.1/admin/abuse-reports/{abuse_report_id}/` - updateAbuseReport
 - [ ] `PUT /api/v2.1/admin/virus-files/{virus_id}/` - updateVirusFile
 
-### Export (0/1)
+### Export (1/1)
 
-- [ ] `GET /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/` - exportBase
+- [x] `GET /api/v2.1/admin/dtables/{base_uuid}/synchronous-export/export-dtable/` - exportBase (xfail: 406 on real Accept header, backend not yet fixed)
 
 ### Statistics (0/7)
 
