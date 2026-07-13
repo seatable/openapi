@@ -22,9 +22,9 @@ The SeaTable API is organized around REST. This means: SeaTable's API has predic
 
 Take a look at our [development quick start guide](https://developer.seatable.com) for concrete examples or guided first steps. Or if you are not a developer, use [SeaTable’s no-code Integrations](https://seatable.com/integrations/) like Zapier, Make.com or N8n to get started with SeaTable without any coding required. Almost all resources can be found in our [Help Area](https://seatable.com/help/).
 
-> 👍 New Online Courses Available: Level 1 (Beginner) and Level 2 (Intermediate)!
+> 👍 Online Courses Available: Online Course 1 – Getting Started and Online Course 2 – Inputs and Outputs!
 >
-> We are excited to announce the launch of our brand-new online courses, designed especially for those who want to build a solid foundation in SeaTable. At the end of each course, you’ll have the opportunity to test your knowledge with a quiz. Successfully passing the quiz will earn you a new badge on [SeaTable Forum](https://forum.seatable.com), proudly displaying your proficiency level for everyone to see!
+> Our online courses are designed especially for those who want to build a solid foundation in SeaTable. At the end of each course, you’ll have the opportunity to test your knowledge with a quiz. Successfully passing the quiz will earn you a new badge on [SeaTable Forum](https://forum.seatable.com), proudly displaying your proficiency level for everyone to see!
 >
 > Ready to get started? **[Let's go](https://seatable.com/help/online-courses/)**
 
