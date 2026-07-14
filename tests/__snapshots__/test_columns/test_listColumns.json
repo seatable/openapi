@@ -84,6 +84,50 @@
       "colorbys": {},
       "data": {
         "decimal": "comma",
+        "format": "number",
+        "thousands": "space"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number-decimal-comma-thousands-space",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "decimal": "dot",
+        "format": "number",
+        "thousands": "no"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number-decimal-dot-thousands-no",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "decimal": "comma",
         "format": "percent",
         "thousands": "no"
       },
@@ -549,6 +593,126 @@
       "editable": true,
       "key": "str",
       "name": "formula-boolean-return-value",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{number}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-number",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{number-decimal-dot-thousands-comma}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-number-decimal-dot-thousands-comma",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{number-decimal-comma-thousands-space}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-number-decimal-comma-thousands-space",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{number-decimal-dot-thousands-no}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-number-decimal-dot-thousands-no",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{number-percent}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-number-percent",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{number-euro}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-number-euro",
       "permission_type": "",
       "permitted_group": [],
       "permitted_users": [],

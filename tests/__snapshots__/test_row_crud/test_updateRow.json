@@ -31,6 +31,12 @@
   "formula-boolean-return-value": false,
   "formula-float-return-value": 3.9000000000000004,
   "formula-integer-return-value": 3,
+  "formula-number": 999.01,
+  "formula-number-decimal-comma-thousands-space": 1000000.123,
+  "formula-number-decimal-dot-thousands-comma": 2000000.456,
+  "formula-number-decimal-dot-thousands-no": 1000000.123,
+  "formula-number-euro": 42,
+  "formula-number-percent": 99.5,
   "geolocation-country-region": {
     "country_region": "France"
   },
@@ -43,7 +49,9 @@
     "option-3"
   ],
   "number": 999.01,
+  "number-decimal-comma-thousands-space": 1000000.123,
   "number-decimal-dot-thousands-comma": 2000000.456,
+  "number-decimal-dot-thousands-no": 1000000.123,
   "number-euro": 42,
   "number-percent": 99.5,
   "rate": 10,
