@@ -31,6 +31,12 @@
   "formula-boolean-return-value": false,
   "formula-float-return-value": 3.9000000000000004,
   "formula-integer-return-value": 3,
+  "formula-number": 499.99,
+  "formula-number-decimal-comma-thousands-space": 1000000.123,
+  "formula-number-decimal-dot-thousands-comma": 1000000.123,
+  "formula-number-decimal-dot-thousands-no": 1000000.123,
+  "formula-number-euro": 5.23,
+  "formula-number-percent": 5,
   "geolocation-country-region": {
     "country_region": "Germany"
   },
@@ -44,7 +50,9 @@
     "option-2"
   ],
   "number": 499.99,
+  "number-decimal-comma-thousands-space": 1000000.123,
   "number-decimal-dot-thousands-comma": 1000000.123,
+  "number-decimal-dot-thousands-no": 1000000.123,
   "number-euro": 5.23,
   "number-percent": 5,
   "rate": 7,

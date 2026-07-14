@@ -31,6 +31,24 @@ COLUMNS = [
         },
     },
     {
+        'column_name': 'number-decimal-comma-thousands-space',
+        'column_type': 'number',
+        'column_data': {
+            'format': 'number',
+            'decimal': 'comma',
+            'thousands': 'space',
+        },
+    },
+    {
+        'column_name': 'number-decimal-dot-thousands-no',
+        'column_type': 'number',
+        'column_data': {
+            'format': 'number',
+            'decimal': 'dot',
+            'thousands': 'no',
+        },
+    },
+    {
         'column_name': 'number-percent',
         'column_type': 'number',
         'column_data': {
@@ -195,6 +213,50 @@ COLUMNS = [
             'formula': 'and(true(), false())',
         },
     },
+    # Formula columns referencing each number/percent/currency column, to check
+    # how the formula output inherits (or ignores) the source column's format.
+    {
+        'column_name': 'formula-number',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{number}',
+        },
+    },
+    {
+        'column_name': 'formula-number-decimal-dot-thousands-comma',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{number-decimal-dot-thousands-comma}',
+        },
+    },
+    {
+        'column_name': 'formula-number-decimal-comma-thousands-space',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{number-decimal-comma-thousands-space}',
+        },
+    },
+    {
+        'column_name': 'formula-number-decimal-dot-thousands-no',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{number-decimal-dot-thousands-no}',
+        },
+    },
+    {
+        'column_name': 'formula-number-percent',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{number-percent}',
+        },
+    },
+    {
+        'column_name': 'formula-number-euro',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{number-euro}',
+        },
+    },
     {
         'column_name': 'geolocation-country-region',
         'column_type': 'geolocation',
@@ -249,6 +311,8 @@ ROWS = [
         'long-text': '## Heading\n- Item 1\n- Item 2',
         'number': 499.99,
         'number-decimal-dot-thousands-comma': 1_000_000.123,
+        'number-decimal-comma-thousands-space': 1_000_000.123,
+        'number-decimal-dot-thousands-no': 1_000_000.123,
         'number-percent': 5,
         'number-euro': 5.23,
         'date-iso': '2030/06/20',
