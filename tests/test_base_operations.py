@@ -257,6 +257,59 @@ COLUMNS = [
             'formula': '{number-euro}',
         },
     },
+    # Formula columns referencing each date column, to check how the formula
+    # output inherits (or ignores) the source column's date/time format.
+    {
+        'column_name': 'formula-date-iso',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{date-iso}',
+        },
+    },
+    {
+        'column_name': 'formula-date-iso-hours-minutes',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{date-iso-hours-minutes}',
+        },
+    },
+    {
+        'column_name': 'formula-date-us',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{date-us}',
+        },
+    },
+    {
+        'column_name': 'formula-date-us-hours-minutes',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{date-us-hours-minutes}',
+        },
+    },
+    {
+        'column_name': 'formula-date-european',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{date-european}',
+        },
+    },
+    # FIXME: Add a formula-date-european-hours-minutes column once API_ISSUES #28
+    # is fixed and the DD/MM/YYYY HH:mm date column can be created.
+    {
+        'column_name': 'formula-date-german',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{date-german}',
+        },
+    },
+    {
+        'column_name': 'formula-date-german-hours-minutes',
+        'column_type': 'formula',
+        'column_data': {
+            'formula': '{date-german-hours-minutes}',
+        },
+    },
     {
         'column_name': 'geolocation-country-region',
         'column_type': 'geolocation',

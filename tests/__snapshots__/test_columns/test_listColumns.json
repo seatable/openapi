@@ -723,6 +723,146 @@
     {
       "colorbys": {},
       "data": {
+        "formula": "{date-iso}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-date-iso",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{date-iso-hours-minutes}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-date-iso-hours-minutes",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{date-us}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-date-us",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{date-us-hours-minutes}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-date-us-hours-minutes",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{date-european}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-date-european",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{date-german}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-date-german",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "formula": "{date-german-hours-minutes}"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "formula-date-german-hours-minutes",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "formula",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
         "geo_format": "country_region",
         "lang": "en"
       },
