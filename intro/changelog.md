@@ -14,6 +14,19 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.com/blog) for detailed release notes.
 
+## Version 6.2 (21.07.2026)
+
+> 📘 New requests
+>
+> **Base Operations**
+>
+> - [Create Row Comment](/reference/createrowcomment) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span>
+
+> 👍 Other changes
+>
+> - [Query SeaTable with SQL](/reference/querysql): The `hours()` function is now supported in SQL queries.
+> - [Get File Download Link](/reference/getfiledownloadlink): Now returns `404` instead of `400` when the file cannot be found at the given path.
+
 ## Version 6.1 (19.03.2026)
 
 > 📘 New requests
