@@ -4373,7 +4373,6 @@ paths:
         - Row Comments
       summary: Delete Comment
       operationId: deleteComment
-      deprecated: true
       description: Delete a certain comment by its ID.
       security:
         - BaseTokenAuth: []
@@ -4394,7 +4393,6 @@ paths:
         - Row Comments
       summary: Get Comment
       operationId: getComment
-      deprecated: true
       description: Get the details of a certain comment with its ID.
       security:
         - BaseTokenAuth: []
