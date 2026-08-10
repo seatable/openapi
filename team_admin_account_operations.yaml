@@ -2057,7 +2057,7 @@ paths:
                     type: integer
                   automation_limit:
                     type: integer
-                  scripts_running_total:
+                  scripts_running_limit:
                     type: integer
                   scripts_running_count:
                     type: integer
@@ -2079,7 +2079,7 @@ paths:
                 big_data_row_limit: -1
                 big_data_total_rows: 0
                 big_data_total_storage: 0
-                scripts_running_total: -1
+                scripts_running_limit: -1
                 scripts_running_count: 0
                 ai_cost: 1234.56
                 ai_credit: 5000
