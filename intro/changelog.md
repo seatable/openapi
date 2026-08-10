@@ -16,6 +16,10 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 
 ## Version 6.2 (21.07.2026)
 
+> 🚧 Breaking changes
+>
+> - [Get Team Info](/reference/getteaminfo): The response field `scripts_running_total` was renamed to `scripts_running_limit`.
+
 > 📘 New requests
 >
 > **Base Operations**
