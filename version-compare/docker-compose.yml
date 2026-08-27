@@ -46,8 +46,6 @@ services:
       - MYSQL_LOG_CONSOLE=true
       - MARIADB_AUTO_UPGRADE=1
       - TZ=${TIME_ZONE}
-    volumes:
-      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql:ro
     networks:
       - backend
     healthcheck:
