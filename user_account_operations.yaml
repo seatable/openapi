@@ -4142,6 +4142,50 @@ paths:
                 type: object
               example:
                 success: true
+  /api/v2.1/dtable-asset/{base_uuid}/asset-size/:
+    get:
+      tags:
+        - Attachment
+      summary: Get Base Asset Size
+      operationId: getBaseAssetSize
+      description: >-
+        Get the total size of all assets (attachments, images and files) stored
+        in a base and check whether the base can be exported together with its
+        assets.
+
+        All sizes are given in megabytes, rounded down. `max_size_of_export` is
+        the server-wide limit configured by the system administrator (default:
+        100). If `can_export_asset` is `false`, the assets of this base exceed
+        that limit and the base can only be exported without its assets.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/base_uuid"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  asset_size:
+                    type: integer
+                    description: Total size of all assets of the base.
+                  max_size_of_export:
+                    type: integer
+                    description: Maximum asset size that can be included in an export.
+                  unit:
+                    type: string
+                    description: Unit of the returned sizes.
+                  can_export_asset:
+                    type: boolean
+                    description: Whether the assets of this base can be included in an export.
+              example:
+                asset_size: 0
+                max_size_of_export: 100
+                unit: mb
+                can_export_asset: true
   /api/v2.1/dtable-recent-asset/{base_uuid}/:
     get:
       tags:
