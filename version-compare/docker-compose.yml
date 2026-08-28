@@ -40,7 +40,7 @@ services:
       - backend
 
   dtable-server:
-    image: ${DTABLE_SERVER_IMAGE:-seatable/dtable-server-go}:${DTABLE_SERVER_VERSION:?Variable is not set}
+    image: ${DTABLE_SERVER_IMAGE:?Variable is not set}:${DTABLE_SERVER_VERSION:?Variable is not set}
     container_name: dtable-server
     restart: unless-stopped
     environment:
