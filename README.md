@@ -101,7 +101,7 @@ export SEATABLE_VERSION=6.0.10
 
 # seatable/dtable-server-js or seatable/dtable-server-go
 export DTABLE_SERVER_IMAGE=seatable/dtable-server-js
-export DTABLE_SERVER_VERSION=7.0.3-testing
+export DTABLE_SERVER_VERSION=7.0.5-testing
 
 # Create license file
 cp "SOURCE" seatable-license.txt
