@@ -1,5 +1,5 @@
 import pytest
-from conftest import Base, base_operations_schema
+from conftest import Base, base_operations_schema, USES_GO_DTABLE_SERVER
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
 from syrupy.matchers import path_type
@@ -399,6 +399,7 @@ def test_insertColumn_duplicate_name_returns_400(base: Base):
 
 
 @pytest.mark.xfail(
+    not USES_GO_DTABLE_SERVER,
     reason="insertColumn returns the plain-text body 'Column ColA exists.' with an "
            "application/json content-type on a duplicate-column 400 (not valid JSON)",
 )
