@@ -5,11 +5,16 @@
   "archived_row_count": "int",
   "dtable_server_info": [
     {
+      "assigned_keys_count": 0,
+      "backend": "",
       "enable_cluster": false,
       "last_dtable_saving_count": "int",
       "last_period_operations_count": "int",
       "loaded_dtables_count": "int",
+      "local_node_url": "http://dtable-server:5000",
+      "node_id": "",
       "operation_count_since_up": "int",
+      "start_time": "",
       "web_socket_count": "int"
     }
   ],

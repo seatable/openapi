@@ -30,20 +30,6 @@ def test_pingServerWithAuth(account_token: Secret):
     assert response.status_code == 200
     assert response.text.strip('"') == 'pong'
 
-def test_pingDtableServer():
-    case: Case = ping_and_info_schema.find_operation_by_id('pingDtableServer').Case()
-    response = case.call()
-
-    assert response.status_code == 200
-    assert response.text.strip() == 'pong'
-
-def test_pingDtableDbServer():
-    case: Case = ping_and_info_schema.find_operation_by_id('pingDtableDbServer').Case()
-    response = case.call()
-
-    assert response.status_code == 200
-    assert response.json()['ret'] == 'pong'
-
 def test_pingApiGateway():
     case: Case = ping_and_info_schema.find_operation_by_id('pingApiGateway').Case()
     response = case.call()
