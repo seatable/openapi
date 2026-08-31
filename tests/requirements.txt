@@ -5,3 +5,4 @@ pytest-icdiff>=0.9
 pytest-subtests>=0.7
 requests>=2.32
 seatable-api==4.0.0
+websocket-client==1.9.1
