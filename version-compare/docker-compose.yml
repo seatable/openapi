@@ -20,8 +20,10 @@ services:
       - SEATABLE_ADMIN_EMAIL=admin@example.com
       - SEATABLE_ADMIN_PASSWORD=admin1234
       - TIME_ZONE=Europe/Berlin
+      - INNER_DTABLE_SERVER_URL=http://dtable-server:5000
     volumes:
       - ./seatable-data:/shared
+      - ./config/seatable-nginx.conf:/etc/nginx/sites-enabled/default
       - type: bind
         source: ./seatable-license.txt
         target: /shared/seatable/seatable-license.txt
@@ -37,8 +39,43 @@ services:
     networks:
       - backend
 
+  dtable-server:
+    image: ${DTABLE_SERVER_IMAGE:-seatable/dtable-server-js}:${DTABLE_SERVER_VERSION:?Variable is not set}
+    container_name: dtable-server
+    restart: unless-stopped
+    environment:
+      - SEATABLE_MYSQL_DB_HOST=mariadb
+      - SEATABLE_MYSQL_DB_USER=root
+      - SEATABLE_MYSQL_DB_PORT=3306
+      - SEATABLE_MYSQL_DB_PASSWORD=seatable
+      - SEATABLE_MYSQL_DB_DTABLE_DB_NAME=dtable_db
+      - SEATABLE_MYSQL_DB_CCNET_DB_NAME=ccnet_db
+      - SEATABLE_MYSQL_DB_SEAFILE_DB_NAME=seafile_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=seatable
+      - JWT_PRIVATE_KEY=test-jwt-private-key-for-ci
+      - TIME_ZONE=Europe/Berlin
+      - TZ=Europe/Berlin
+      - INNER_DTABLE_WEB_SERVICE_URL=http://seatable-server:80
+      - INNER_DTABLE_DB_URL=http://seatable-server:7777
+    volumes:
+      - ./seatable-data:/shared
+      - type: bind
+        source: ./seatable-license.txt
+        target: /shared/seatable/seatable-license.txt
+        bind:
+          create_host_path: false
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - backend
+
   mariadb:
-    image: mariadb:11.8.3-noble
+    image: mariadb:11.8.5-noble
     container_name: mariadb
     command: ["mariadbd", "--innodb_snapshot_isolation=OFF"]
     environment:
@@ -56,7 +93,7 @@ services:
       timeout: 10s
 
   redis:
-    image: redis:8.2.2-bookworm
+    image: redis:8.4.0-bookworm
     container_name: redis
     command: ["redis-server", "--requirepass", "seatable"]
     networks:

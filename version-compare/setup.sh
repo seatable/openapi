@@ -18,7 +18,7 @@ echo "Waiting for SeaTable to become available..."
 start_time=$(date +%s)
 
 while true; do
-    if curl -sf "${SEATABLE_SERVER}/dtable-server/ping/" > /dev/null 2>&1; then
+    if curl -sf "${SEATABLE_SERVER}/api-gateway/api/v2/ping/" > /dev/null 2>&1; then
         echo "SeaTable is ready."
         break
     fi
@@ -196,5 +196,16 @@ SETTINGS
 
 echo "Restarting SeaTable to apply settings..."
 docker exec seatable-server /templates/seatable.sh restart
+
+# FIXME: dtable-server boots in parallel with seatable-server and only symlinks
+# /opt/seatable/storage-data -> /shared/seatable/storage-data if that directory
+# already exists. On a fresh data directory it does not, so dtable-server keeps a
+# container-local storage-data, cannot find any base, and every base operation
+# fails with HTTP 500. The container must be *recreated* (not just restarted) —
+# a restart keeps the local directory and the symlink step fails with
+# "cannot overwrite directory". Remove once dtable-server creates the symlink
+# unconditionally.
+echo "Recreating dtable-server..."
+docker compose up -d --force-recreate dtable-server
 
 echo "Setup complete."
