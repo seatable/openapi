@@ -15,9 +15,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "SeaTable version (e.g. 6.1.8)"
+        description: "SeaTable version"
         required: true
-        default: "6.1.8"
+        default: "7.0.5"
       image:
         description: "Docker Hub repository"
         required: true
@@ -28,13 +28,14 @@ on:
           - "seatable/seatable-enterprise-testing"
 
 env:
-  DEFAULT_VERSION: "6.2.12"
+  DEFAULT_VERSION: "7.0.5"
   DEFAULT_IMAGE: "seatable/seatable-enterprise-testing"
+  DTABLE_SERVER_VERSION: "7.0.3-testing"
 
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
@@ -67,8 +68,11 @@ jobs:
 
       - name: Start SeaTable ${{ steps.version.outputs.version }}
         working-directory: version-compare
+        env:
+          SEATABLE_IMAGE: ${{ steps.version.outputs.image }}
+          SEATABLE_VERSION: ${{ steps.version.outputs.version }}
         run: |
-          SEATABLE_IMAGE=${{ steps.version.outputs.image }} SEATABLE_VERSION=${{ steps.version.outputs.version }} docker compose up -d
+          docker compose up -d
           ./setup.sh
 
       - name: Run API tests

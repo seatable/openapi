@@ -115,10 +115,14 @@ paths:
         - Ping
       summary: Ping dtable Server
       operationId: pingDtableServer
-      description: >-
+      description: |-
         Check the status of the dtable-server. Base related operations are
         carried out by the dtable-server. These operations are included in the
         section **Base Operations**.
+
+        > 🚧 Not exposed by default
+        >
+        > As of SeaTable 7.0, the default NGINX configuration no longer routes `/dtable-server/` and this endpoint returns `404`.
       responses:
         "200":
           description: Service is available and running
@@ -134,7 +138,12 @@ paths:
         - Ping
       summary: Ping dtable-db Server
       operationId: pingDtableDbServer
-      description: Check the status of the dtable-db server.
+      description: |-
+        Check the status of the dtable-db server.
+
+        > 🚧 Not exposed by default
+        >
+        > As of SeaTable 7.0, the default NGINX configuration no longer routes `/dtable-db/` and this endpoint returns `404`.
       responses:
         "200":
           description: Service is available and running
