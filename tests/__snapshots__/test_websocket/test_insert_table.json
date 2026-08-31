@@ -1,0 +1,29 @@
+{
+  "_id": "str",
+  "columns": [
+    {
+      "key": "str",
+      "name": "Name",
+      "type": "text"
+    }
+  ],
+  "is_header_locked": false,
+  "name": "test_insert_table",
+  "views": [
+    {
+      "_id": "str",
+      "colorbys": {},
+      "filter_conjunction": "And",
+      "filters": [],
+      "formula_rows": {},
+      "groupbys": [],
+      "groups": [],
+      "hidden_columns": [],
+      "name": "Default View",
+      "row_height": "default",
+      "rows": [],
+      "sorts": [],
+      "type": "table"
+    }
+  ]
+}
