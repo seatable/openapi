@@ -25,6 +25,10 @@ Listed below are all the changes to the SeaTable API. Each date corresponds to a
 > **Base Operations**
 >
 > - [Create Row Comment](/reference/createrowcomment) <span class="APIMethod APIMethod_fixedWidth APIMethod_post">post</span>
+>
+> **Account Operations - User**
+>
+> - [Get Base Asset Size](/reference/getbaseassetsize) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
 
 > 👍 Other changes
 >
