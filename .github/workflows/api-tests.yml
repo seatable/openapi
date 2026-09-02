@@ -41,7 +41,7 @@ jobs:
       matrix:
         include:
           - implementation: go
-            dtable_server_version: "7.0.5-testing"
+            dtable_server_version: "7.0.6-testing"
           - implementation: js
             dtable_server_version: "7.0.3-testing"
     env:
