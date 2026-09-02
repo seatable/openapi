@@ -30,12 +30,23 @@ on:
 env:
   DEFAULT_VERSION: "7.0.6"
   DEFAULT_IMAGE: "seatable/seatable-enterprise-testing"
-  DTABLE_SERVER_VERSION: "7.0.3-testing"
 
 
 jobs:
   test:
+    name: "test (dtable-server-${{ matrix.implementation }})"
     runs-on: ubuntu-26.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - implementation: go
+            dtable_server_version: "7.0.6-testing"
+          - implementation: js
+            dtable_server_version: "7.0.3-testing"
+    env:
+      DTABLE_SERVER_IMAGE: "seatable/dtable-server-${{ matrix.implementation }}"
+      DTABLE_SERVER_VERSION: ${{ matrix.dtable_server_version }}
     steps:
       - name: Check out repo
         uses: actions/checkout@v6
@@ -95,6 +106,7 @@ jobs:
           # API Test Report
 
           **SeaTable:** ${{ steps.version.outputs.image }}:${{ steps.version.outputs.version }}
+          **dtable-server:** ${DTABLE_SERVER_IMAGE}:${DTABLE_SERVER_VERSION}
           **Branch:** ${GITHUB_REF_NAME}
           **Results:** ${passed} ${failed} ${errors}
           HEADER
@@ -132,7 +144,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: api-tests-${{ steps.version.outputs.version }}
+          name: api-tests-seatable-server-${{ steps.version.outputs.version }}-dtable-server-${{ matrix.implementation }}-${{ matrix.dtable_server_version }}
           path: /tmp/report/
           retention-days: 30
 
