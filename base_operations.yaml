@@ -78,6 +78,26 @@ components:
       description: The number of results that should be returned. If no value is provided, 25 results will be returned.
       example: 25
       required: false
+    per_page_10:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 10
+      description: The number of results that should be returned. If no value is provided, 10 results will be returned.
+      example: 10
+      required: false
+    per_page_100:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 100
+      description: The number of results that should be returned. If no value is provided, 100 results will be returned.
+      example: 100
+      required: false
     op_type:
       name: op_type
       description: >-
@@ -2339,9 +2359,17 @@ components:
     create_row_comment:
       type: object
       properties:
+        row_id:
+          $ref: "#/components/parameters/row_id"
+        table_id:
+          $ref: "#/components/parameters/table_id"
         comment:
           type: string
           example: "Let's discuss this tomorrow"
+      required:
+        - row_id
+        - table_id
+        - comment
 
     generate_snapshot:
       type: object
@@ -2444,7 +2472,7 @@ paths:
                 type: object
               example:
                 error_message: invalid token
-  /api-gateway/api/v2/dtables/{base_uuid}/related-users/:
+  /api/v2.1/dtables/{base_uuid}/related-users/:
     get:
       tags:
         - Base Info
@@ -2466,12 +2494,15 @@ paths:
                 user_list:
                   - email: 244b430060f54bb4afa2c2cb7369d244@auth.local
                     name: Ginger Ale
-                    contact_email: gingerale@example.com
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    id_in_org: W-00026
+                    name_pinyin: ginger'ale
+                app_user_list:
                   - email: 8cb2a6da65687600f42905bf1647fd3f@auth.local
                     name: Jasmin Tee
-                    contact_email: jasmintee@example.com
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    id_in_org: W-00027
+                    name_pinyin: jasmin'tee
 
   # Rows
   /api-gateway/api/v2/dtables/{base_uuid}/sql/:
@@ -4292,7 +4323,7 @@ paths:
                 success:true
 
   # Row Comments
-  /api-gateway/api/v2/dtables/{base_uuid}/comments/:
+  /api/v2.1/dtables/{base_uuid}/comments/:
     get:
       tags:
         - Row Comments
@@ -4305,6 +4336,8 @@ paths:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page_10"
         - $ref: "#/components/parameters/row_id"
       responses:
         "200":
@@ -4312,34 +4345,19 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
+                type: object
               example:
-                - id: 1
-                  author: 28d006e7d1754bb4afa2c2cb7369d244@auth.local
-                  comment: This is good!
-                  dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
-                  row_id: NAu2B3OcRG6UrWagL-9naA
-                  created_at: "2021-01-15T13:35:26.000Z"
-                  updated_at: "2021-01-15T13:35:26.000Z"
-                  resolved: 0
-                - id: 2
-                  author: 28d006e7d1754bb4afa2c2cb7369d244@auth.local
-                  comment: Go online tomorrow?
-                  dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
-                  row_id: NAu2B3OcRG6UrWagL-9naA
-                  created_at: "2021-01-15T13:52:48.000Z"
-                  updated_at: "2021-01-15T13:52:48.000Z"
-                  resolved: 0
-                - id: 3
-                  author: 8cb2a6da1928374ba42905bf1647fd3f@auth.local
-                  comment: Agreed!
-                  dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
-                  row_id: NAu2B3OcRG6UrWagL-9naA
-                  created_at: "2021-01-15T13:53:13.000Z"
-                  updated_at: "2021-01-15T13:53:13.000Z"
-                  resolved: 1
+                comment_list:
+                  - id: 1
+                    author: 28d006e7d1754bb4afa2c2cb7369d244@auth.local
+                    comment: This is good!
+                    dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
+                    row_id: NAu2B3OcRG6UrWagL-9naA
+                    created_at: "2021-01-15T13:35:26.000Z"
+                    updated_at: "2021-01-15T13:35:26.000Z"
+                    detail: null
+                    resolved: false
+                count: 1
     post:
       tags:
         - Row Comments
@@ -4356,8 +4374,6 @@ paths:
               $ref: "#/components/schemas/create_row_comment"
       parameters:
         - $ref: "#/components/parameters/base_uuid"
-        - $ref: "#/components/parameters/table_id"
-        - $ref: "#/components/parameters/row_id"
       responses:
         "200":
           description: OK
@@ -4367,7 +4383,7 @@ paths:
                 type: object
               example:
                 success:true
-  /api-gateway/api/v2/dtables/{base_uuid}/comments/{comment_id}/:
+  /api/v2.1/dtables/{base_uuid}/comments/{comment_id}/:
     delete:
       tags:
         - Row Comments
@@ -4388,17 +4404,31 @@ paths:
                 type: object
               example:
                 success: true
-    get:
+    put:
       tags:
         - Row Comments
-      summary: Get Comment
-      operationId: getComment
-      description: Get the details of a certain comment with its ID.
+      summary: Resolve Comment
+      operationId: resolveComment
+      description: Update the resolved status of a certain comment by its ID.
       security:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
         - $ref: "#/components/parameters/comment_id"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                options:
+                  type: object
+                  properties:
+                    resolved:
+                      type: integer
+                      enum: [0, 1]
+              required:
+                - options
       responses:
         "200":
           description: OK
@@ -4406,33 +4436,9 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  id:
-                    type: integer
-                  author:
-                    type: string
-                  comment:
-                    type: string
-                  dtable_uuid:
-                    type: string
-                  row_id:
-                    type: string
-                  created_at:
-                    type: string
-                  updated_at:
-                    type: string
-                  resolved:
-                    type: integer
               example:
-                id: 1
-                author: 12345678d17570046f03c2cb7369d244@auth.local
-                comment: Here is my email address
-                dtable_uuid: 12345678-7e27-46a8-8b18-6cc6374yf557
-                row_id: NAu2B3OcRG6UrWagL-9naA
-                created_at: "2021-01-15T13:52:48.000Z"
-                updated_at: "2021-01-15T13:52:48.000Z"
-                resolved: 0
-  /api-gateway/api/v2/dtables/{base_uuid}/comments-count/:
+                success: true
+  /api/v2.1/dtables/{base_uuid}/comments-count/:
     get:
       tags:
         - Row Comments
@@ -4455,37 +4461,6 @@ paths:
                 type: object
               example:
                 count: 3
-  /api-gateway/api/v2/dtables/{base_uuid}/comments-within-days/:
-    get:
-      tags:
-        - Row Comments
-      summary: List Comments within Days
-      operationId: listCommentsWithinDays
-      description: >-
-        List all the comments in a base within a given number of days before
-        today.
-      security:
-        - BaseTokenAuth: []
-      parameters:
-        - $ref: "#/components/parameters/base_uuid"
-        - $ref: "#/components/parameters/days"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-              example:
-                comments:
-                  - id: 1
-                    author: 123456786569491ba42905bf1647fd3f@auth.local
-                    comment: Let's discuss this tomorrow
-                    dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
-                    row_id: Qtf7xPmoRaiFyQPO1aNTjA
-                    created_at: "2021-03-09T15:54:22.000Z"
-                    updated_at: "2021-03-09T15:54:22.000Z"
-                    resolved: 0
   /api/v2.1/dtables/{base_uuid}/rows-comments-num/:
     get:
       tags:
@@ -4510,7 +4485,7 @@ paths:
                   C0LWRVCHT0OoAGjoXBuKMA: 1
 
   # Notifications (Base)
-  /api-gateway/api/v2/dtables/{base_uuid}/notifications/:
+  /api/v2.1/dtables/{base_uuid}/notifications/:
     get:
       tags:
         - Notifications
@@ -4521,6 +4496,8 @@ paths:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/base_uuid"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
       responses:
         "200":
           description: OK
@@ -4532,6 +4509,7 @@ paths:
                 notification_list:
                   - id: 200
                     username: 123456786569491ba42905bf1647fd3f@auth.local
+                    dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
                     msg_type: row_comment
                     created_at: "2021-02-25T10:38:14.000Z"
                     detail:
@@ -4665,7 +4643,7 @@ paths:
                 success: true
 
   # Activities & Logs
-  /api-gateway/api/v2/dtables/{base_uuid}/operations/:
+  /api/v2.1/dtables/{base_uuid}/operation-logs/:
     get:
       tags:
         - Activities & Logs
@@ -4676,6 +4654,7 @@ paths:
         - BaseTokenAuth: []
       parameters:
         - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page_100"
         - $ref: "#/components/parameters/base_uuid"
       responses:
         "200":
@@ -4686,7 +4665,9 @@ paths:
                 type: object
               example:
                 operations:
-                  - author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                  - id: 118
+                    dtable_uuid: 650d8a0d-7e27-46a8-8b18-6cc6374yf557
+                    author: 12345678d1754bb4afa2c2cb7369d244@auth.local
                     app: null
                     op_time: 1610981745927
                     operation: >-
@@ -4704,7 +4685,7 @@ paths:
                     operation: >-
                       {"op_type":"delete_column","table_id":"0000","column_key":"jQyv","old_column":{"rowType":"header","key":"jQyv","type":null,"name":null,"editable":true,"width":200,"resizable":true,"draggable":true,"data":null,"permission_type":"","permitted_users":[],"editor":{"key":null,"ref":null,"props":{},"_owner":null},"formatter":null,"left":480,"idx":3},"upper_column_key":"J2mq"}
                     op_id: 116
-  /api-gateway/api/v2/dtables/{base_uuid}/activities/:
+  /api/v2.1/dtables/{base_uuid}/row-activities/:
     get:
       tags:
         - Activities & Logs
@@ -4716,7 +4697,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/row_id"
         - $ref: "#/components/parameters/page"
-        - $ref: "#/components/parameters/per_page"
+        - $ref: "#/components/parameters/per_page_10"
         - $ref: "#/components/parameters/base_uuid"
       responses:
         "200":
@@ -4729,14 +4710,17 @@ paths:
                 activities:
                   - id: 6782
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_count: 1
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_app: null
                     op_type: modify_row
                     op_time: "2021-01-14T09:01:57.000Z"
                     detail:
                       table_id: "0000"
                       table_name: Table1
                       row_name: Meng
+                      row_name_option: ""
                       row_data:
                         - column_key: BydO
                           column_name: Date
@@ -4747,14 +4731,17 @@ paths:
                           old_value: "2020-08-16"
                   - id: 6778
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_count: 1
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_app: null
                     op_type: modify_row
                     op_time: "2021-01-14T08:56:53.000Z"
                     detail:
                       table_id: "0000"
                       table_name: Table1
                       row_name: Meng
+                      row_name_option: ""
                       row_data:
                         - column_key: "0000"
                           column_name: Name
@@ -4771,14 +4758,17 @@ paths:
                           old_value: ""
                   - id: 5960
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_count: 1
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_app: null
                     op_type: insert_row
                     op_time: "2020-11-18T12:42:14.000Z"
                     detail:
                       table_id: "0000"
                       table_name: Table1
                       row_name: ""
+                      row_name_option: ""
                       row_data:
                         - column_key: "0000"
                           column_name: Name
