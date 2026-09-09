@@ -50,4 +50,5 @@ def test_listCollaborators(base: Base):
     user = data['user_list'][0]
     assert 'email' in user
     assert 'name' in user
-    assert 'contact_email' in user
+    assert 'id_in_org' in user
+    assert 'name_pinyin' in user

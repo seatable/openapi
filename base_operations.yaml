@@ -4518,22 +4518,12 @@ paths:
                       row_id: fS8qtN6FQ1uPOaNAC0Locw
                       comment: Did you see this?
                     seen: 1
-    put:
+    delete:
       tags:
         - Notifications
-      summary: Mark Base Notifications as seen
-      operationId: markBaseNotificationsAsSeen
-      description: Use this request to mark all the notifications as read.
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                seen:
-                  type: boolean
-                  description: true or false for read or unread. Otherwise invalid.
-                  example: true
+      summary: Delete Base Notifications
+      operationId: deleteBaseNotifications
+      description: Delete all the notifications in the current base irrevocably.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -4547,12 +4537,26 @@ paths:
                 type: object
               example:
                 success: true
-    delete:
+  /api-gateway/api/v2/dtables/{base_uuid}/notifications/:
+    put:
       tags:
         - Notifications
-      summary: Delete Base Notifications
-      operationId: deleteBaseNotifications
-      description: Delete all the notifications in the current base irrevocably.
+      summary: Mark Base Notifications as seen
+      operationId: markBaseNotificationsAsSeen
+      description: Use this request to mark all the notifications as read.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                seen:
+                  type: string
+                  enum: ["true", "false"]
+                  description: '`true` to mark as read and `false` to mark as unread.'
+                  example: "true"
+              required:
+                - seen
       security:
         - BaseTokenAuth: []
       parameters:
@@ -4580,9 +4584,12 @@ paths:
               type: object
               properties:
                 seen:
-                  type: boolean
+                  type: string
+                  enum: ["true", "false"]
                   description: '`true` to mark as "seen" and `false` as "unseen".'
-                  example: false
+                  example: "true"
+              required:
+                - seen
       security:
         - BaseTokenAuth: []
       parameters:

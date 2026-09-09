@@ -22,12 +22,11 @@ def test_listBaseNotifications(base: Base):
     assert 'notification_list' in data
 
 
-@pytest.mark.xfail(reason="API returns 400 'seen invalid' — expects form-encoded string 'true', not JSON boolean")
 def test_markBaseNotificationsAsSeen(base: Base):
     case: Case = base_operations_schema.find_operation_by_id('markBaseNotificationsAsSeen') \
         .Case(
             path_parameters={'base_uuid': base.uuid},
-            body={'seen': True},
+            body={'seen': 'true'},
             headers=_headers(base),
         )
     response = case.call()
@@ -46,18 +45,14 @@ def test_deleteBaseNotifications(base: Base):
     assert response.status_code == 200
 
 
-@pytest.mark.xfail(reason="API returns 400 'seen invalid' — expects form-encoded string 'true', not JSON boolean")
 def test_markBaseNotificationAsSeen(base: Base):
     """Mark a single notification as seen. Requires an existing notification_id."""
     # First list notifications to get an ID
-    import os, requests
-    server = os.environ['SEATABLE_SERVER']
-    resp = requests.get(
-        f'{server}/api-gateway/api/v2/dtables/{base.uuid}/notifications/',
-        headers=_headers(base),
-    )
-    assert resp.status_code == 200
-    notifications = resp.json().get('notification_list', [])
+    case: Case = base_operations_schema.find_operation_by_id('listBaseNotifications') \
+        .Case(path_parameters={'base_uuid': base.uuid}, headers=_headers(base))
+    response = case.call()
+    assert response.status_code == 200
+    notifications = response.json().get('notification_list', [])
 
     if not notifications:
         pytest.skip('No notifications available to mark as seen')
@@ -67,7 +62,7 @@ def test_markBaseNotificationAsSeen(base: Base):
     case: Case = base_operations_schema.find_operation_by_id('markBaseNotificationAsSeen') \
         .Case(
             path_parameters={'base_uuid': base.uuid, 'notification_id': notification_id},
-            body={'seen': True},
+            body={'seen': 'true'},
             headers=_headers(base),
         )
     response = case.call()
