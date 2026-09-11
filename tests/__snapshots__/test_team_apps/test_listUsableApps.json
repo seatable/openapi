@@ -1,0 +1,20 @@
+{
+  "can_use_apps": [
+    {
+      "app_config": "{\"app_type\": \"universal-app\", \"app_name\": \"Test App\", \"settings\": {\"pages\": [], \"navigation\": []}}",
+      "app_id": "int",
+      "app_name": "Test App",
+      "app_user_id": "int",
+      "app_uuid": "str",
+      "dtable_name": "UsableAppsTest",
+      "dtable_uuid": "str",
+      "edit_link": "str",
+      "joined_at": "str",
+      "link": "str",
+      "permission": "rw",
+      "role_name": "default",
+      "workspace_id": "int"
+    }
+  ],
+  "count": 1
+}
