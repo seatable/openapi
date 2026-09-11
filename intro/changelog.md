@@ -14,6 +14,12 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.com/blog) for detailed release notes.
 
+## Version 7.0
+
+> 🚧 Breaking changes
+>
+> - The deprecated API Gateway endpoints for base activity logs, row activities, row comments, collaborators, and base notifications were moved to `/api/v2.1/dtables/{base_uuid}/`. `GET /api-gateway/api/v2/dtables/{base_uuid}/comments-within-days/` was removed; use `GET /api/v2.1/dtables/{base_uuid}/comments/?row_id={row_id}` instead.
+
 ## Version 6.2 (21.07.2026)
 
 > 🚧 Breaking changes
