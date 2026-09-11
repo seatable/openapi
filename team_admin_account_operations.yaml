@@ -451,6 +451,7 @@ paths:
                     type: string
                   last_login:
                     type: string
+                    nullable: true
                   self_usage:
                     type: integer
                   quota:
