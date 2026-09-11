@@ -1,0 +1,25 @@
+{
+  "count": 1,
+  "dtable_list": [
+    {
+      "backend": "js",
+      "color": null,
+      "created_at": "str",
+      "creator": "str",
+      "file_size": "int",
+      "from_user": "str",
+      "from_user_name": "str",
+      "icon": null,
+      "id": "int",
+      "in_storage": true,
+      "is_encrypted": false,
+      "modifier": "str",
+      "name": "SharedBasesTest",
+      "rows_count": 0,
+      "text_color": null,
+      "updated_at": "str",
+      "uuid": "str",
+      "workspace_id": "int"
+    }
+  ]
+}
