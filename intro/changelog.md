@@ -14,6 +14,16 @@ slug: changelog
 
 Listed below are all the changes to the SeaTable API. Each date corresponds to a new version of SeaTable Server Enterprise Edition. If you’re looking for changes beyond the API, see the SeaTable [Changelog](https://seatable.com/changelog) or check out the [SeaTable Blog](https://seatable.com/blog) for detailed release notes.
 
+## Version 7.0
+
+> 📘 New requests
+>
+> **Account Operations - Team Admin**
+>
+> - [List Managed Apps](/reference/listmanagedapps) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List Usable Apps](/reference/listusableapps) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+> - [List Bases Shared to User](/reference/listbasessharedtouser-1) <span class="APIMethod APIMethod_fixedWidth APIMethod_get">get</span>
+
 ## Version 6.2 (21.07.2026)
 
 > 🚧 Breaking changes
