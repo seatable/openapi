@@ -1,0 +1,16 @@
+{
+  "failed": [],
+  "success": [
+    {
+      "avatar_url": "str",
+      "contact_email": "admin@example.com",
+      "department_id": "int",
+      "email": "str",
+      "group_id": "int",
+      "is_admin": false,
+      "login_id": "",
+      "name": "admin",
+      "role": "Member"
+    }
+  ]
+}

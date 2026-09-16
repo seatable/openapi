@@ -356,6 +356,69 @@ def delete_group(account_token: Secret, group_id: int):
 
         assert response.status_code == 200
 
+# Departments (system admin)
+
+def _admin_headers(token: Secret) -> dict:
+    return {'Authorization': f'Bearer {token.value}'}
+
+
+def list_departments(token: Secret, parent_id: int = -1) -> list[dict]:
+    case: Case = system_admin_account_operations.find_operation_by_id('listDepartments') \
+        .Case(query={'parent_id': parent_id})
+    response = case.call(headers=_admin_headers(token))
+    assert response.status_code == 200
+    return response.json()['department_list']
+
+
+def create_department(token: Secret, name: str, parent_id: int) -> int:
+    case: Case = system_admin_account_operations.find_operation_by_id('addDepartment') \
+        .Case(body={'name': name, 'parent_id': parent_id})
+    response = case.call(headers=_admin_headers(token))
+    assert response.status_code == 200
+
+    department_id = response.json()['department']['id']
+    assert isinstance(department_id, int)
+    return department_id
+
+
+def delete_department(token: Secret, department_id: int):
+    """Deletes a department including all of its sub-departments."""
+    if CLEANUP_AFTER_TESTS != 'True':
+        return
+
+    for sub_department in list_departments(token, department_id):
+        delete_department(token, sub_department['id'])
+
+    case: Case = system_admin_account_operations.find_operation_by_id('deleteDepartment') \
+        .Case(path_parameters={'department_id': department_id})
+    response = case.call(headers=_admin_headers(token))
+    assert response.status_code == 200
+
+
+@pytest.fixture(scope='module')
+def top_department(system_admin_account_token: Secret) -> Generator[int, None, None]:
+    """There can be only one top-level department, so it is shared by all tests in a module."""
+    existing = list_departments(system_admin_account_token)
+    if existing:
+        department_id = existing[0]['id']
+    else:
+        department_id = create_department(system_admin_account_token, 'automated-testing-top', -1)
+
+    yield department_id
+
+    delete_department(system_admin_account_token, department_id)
+
+
+@pytest.fixture(scope='module')
+def user_id(system_admin_account_token: Secret) -> str:
+    """The internal @auth.local ID of the regular test user."""
+    case: Case = system_admin_account_operations.find_operation_by_id('listUsers').Case()
+    response = case.call(headers=_admin_headers(system_admin_account_token))
+    assert response.status_code == 200
+
+    user = next(u for u in response.json()['data'] if u['contact_email'] == USERNAME)
+    return user['email']
+
 MIN_LICENSE_USERS = 10
 
 def _get_license_maxusers() -> int:

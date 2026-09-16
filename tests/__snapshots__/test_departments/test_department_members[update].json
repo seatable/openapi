@@ -1,0 +1,9 @@
+{
+  "member": {
+    "avatar_url": "str",
+    "contact_email": "testuser@example.com",
+    "email": "str",
+    "is_staff": true,
+    "name": "Test User"
+  }
+}

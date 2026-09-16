@@ -1,0 +1,11 @@
+{
+  "department_list": [
+    {
+      "id": "int",
+      "id_in_org": "int",
+      "name": "automated-testing-sub",
+      "org_id": -1,
+      "parent_id": "int"
+    }
+  ]
+}

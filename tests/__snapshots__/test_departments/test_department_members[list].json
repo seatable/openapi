@@ -1,0 +1,11 @@
+{
+  "member_list": [
+    {
+      "avatar_url": "str",
+      "contact_email": "testuser@example.com",
+      "email": "str",
+      "is_staff": false,
+      "name": "Test User"
+    }
+  ]
+}

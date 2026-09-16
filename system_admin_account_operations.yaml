@@ -103,13 +103,6 @@ components:
       required: true
       description: The unique identifier of a base. Sometimes also called dtable_uuid.
       example: 5c264e76-0e5a-448a-9f34-580b551364ca
-    return_ancestors:
-      name: return_ancestors
-      in: query
-      description: Whether to include ancestor groups in the response.
-      schema:
-        type: boolean
-      example: true
     starting_time:
       name: start
       in: query
@@ -329,14 +322,24 @@ components:
         The ID of the invalid synchronization, retrievable from the previous
         call.
       example: 2
-    parent_department_id:
-      name: parent_department_id
-      in: path
+    parent_id_query:
+      name: parent_id
+      in: query
       schema:
         type: integer
-      required: true
-      description: Optional. -1 by default.
+        minimum: -1
+      description: >-
+        The ID of the parent department. Optional. Without it (or with `-1`),
+        the top-level department is returned.
       example: 1
+    department_org_id_query:
+      name: org_id
+      in: query
+      schema:
+        type: integer
+        minimum: -1
+      description: The ID of the team. Optional. `-1` (system-level departments) by default.
+      example: -1
     department_id:
       name: department_id
       in: path
@@ -531,10 +534,28 @@ components:
     group_quota:
       type: integer
       description: The quota in MB.
-    parent_group:
+    department_name:
       type: string
-      description: The ID of the parent department. Optional. -1 by default.
+      description: The name of the department. Has to be unique within the parent department.
+      example: Developers
+    department_parent_id:
+      type: integer
+      description: The ID of the parent department. Use `-1` to create the top-level department.
+      example: 1
+    department_org_id:
+      type: integer
+      description: The ID of the team. Optional. `-1` (system-level department) by default.
       example: -1
+    department_is_staff:
+      type: boolean
+      description: "`true` if the user should be an administrator of the department."
+      example: true
+    department_ids:
+      type: array
+      description: The IDs of the departments the user should be added to.
+      items:
+        type: integer
+      example: [2, 3]
     handled:
       type: boolean
       description: >-
@@ -2781,22 +2802,27 @@ paths:
                 success: true
 
   # Departments
-  /api/v2.1/admin/address-book/groups/{parent_department_id}/:
+  /api/v2.1/admin/address-book-v2/departments/:
     get:
       tags:
         - Departments
       summary: List Departments
       operationId: listDepartments
       description: >-
-        List all the departments in the current level.
-        The parameter `parent_department_id` in the URL is optional. If not
-        given, the default of `-1` is taken.
-        In this example, the parent department has the ID of `1`, and there are
-        two departments with the IDs of `2` and `3` in it.
+        List the departments on one level of the department tree. Without
+        `parent_id` (or with `parent_id=-1`), the top-level department is
+        returned. With `parent_id`, the sub-departments of that department are
+        returned.
+
+
+        Departments of a team are listed by passing the team's `org_id`.
+        Without `org_id`, the system-level departments (`org_id` of `-1`) are
+        returned.
       security:
         - AccountTokenAuth: []
       parameters:
-        - $ref: "#/components/parameters/parent_department_id"
+        - $ref: "#/components/parameters/parent_id_query"
+        - $ref: "#/components/parameters/department_org_id_query"
       responses:
         "200":
           description: OK
@@ -2805,71 +2831,50 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  owner:
-                    type: string
-                  created_at:
-                    type: string
-                  parent_group_id:
-                    type: integer
-                  quota:
-                    type: integer
-                  groups:
-                    type: array
-                    items:
-                      type: object
-                  members:
-                    type: array
-                    items:
-                      type: object
-                  ancestor_groups:
+                  department_list:
                     type: array
                     items:
                       type: object
               example:
-                id: 1
-                name: Sys Dev
-                owner: system admin
-                created_at: "2021-02-26T11:21:19+00:00"
-                parent_group_id: -1
-                quota: -2
-                groups:
+                department_list:
                   - id: 2
                     name: Developers
-                    owner: system admin
-                    created_at: "2021-02-26T13:53:44+00:00"
-                    parent_group_id: 1
-                    quota: -2
+                    parent_id: 1
+                    org_id: -1
+                    id_in_org: 2
                   - id: 3
                     name: Test Department
-                    owner: system admin
-                    created_at: "2021-02-26T14:17:06+00:00"
-                    parent_group_id: 1
-                    quota: -2
-                members: []
-                ancestor_groups: []
-  /api/v2.1/admin/address-book/groups/:
+                    parent_id: 1
+                    org_id: -1
+                    id_in_org: 3
     post:
       tags:
         - Departments
       summary: Add Department
       operationId: addDepartment
       description: >-
-        Add a new department with a desired name and, by optional, in a parent
-        department.
+        Add a new department with a desired name below a parent department.
+
+
+        There can be only one top-level department (`parent_id` of `-1`) per
+        system or team. Every further department has to be created below an
+        existing department. Department names have to be unique within the
+        same parent department.
       requestBody:
         content:
           application/json:
             schema:
               type: object
+              required:
+                - name
+                - parent_id
               properties:
-                group_name:
-                  $ref: "#/components/schemas/system_admin_group_name"
-                parent_group:
-                  $ref: "#/components/schemas/parent_group"
+                name:
+                  $ref: "#/components/schemas/department_name"
+                parent_id:
+                  $ref: "#/components/schemas/department_parent_id"
+                org_id:
+                  $ref: "#/components/schemas/department_org_id"
       security:
         - AccountTokenAuth: []
       responses:
@@ -2880,36 +2885,55 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  owner:
-                    type: string
-                  created_at:
-                    type: string
-                  parent_group_id:
-                    type: integer
-                  quota:
-                    type: integer
+                  department:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      parent_id:
+                        type: integer
+                      org_id:
+                        type: integer
+                      id_in_org:
+                        type: integer
               example:
-                id: 2
-                name: Test Department
-                owner: system admin
-                created_at: "2021-02-26T14:17:06+00:00"
-                parent_group_id: 1
-                quota: -2
-  /api/v2.1/admin/address-book/groups/{department_id}/:
-    get:
+                department:
+                  id: 2
+                  name: Developers
+                  parent_id: 1
+                  org_id: -1
+                  id_in_org: 2
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error_msg: Top department exists
+  /api/v2.1/admin/address-book-v2/departments/{department_id}/:
+    put:
       tags:
         - Departments
-      summary: Get Department
-      operationId: getDepartments
-      description: Get the information of a certain department by its ID.
+      summary: Update Department
+      operationId: updateDepartment
+      description: >-
+        Rename a department by its ID. If the department has a
+        [group](/reference/createdepartmentgroup), the group is renamed as
+        well.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/department_name"
       security:
         - AccountTokenAuth: []
       parameters:
-        - $ref: "#/components/parameters/return_ancestors"
         - $ref: "#/components/parameters/department_id"
       responses:
         "200":
@@ -2919,52 +2943,41 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  owner:
-                    type: string
-                  created_at:
-                    type: string
-                  parent_group_id:
-                    type: integer
-                  quota:
-                    type: integer
-                  groups:
-                    type: array
-                    items:
-                      type: object
-                  members:
-                    type: array
-                    items:
-                      type: object
-                  ancestor_groups:
-                    type: array
-                    items:
-                      type: object
+                  department:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      parent_id:
+                        type: integer
+                      org_id:
+                        type: integer
+                      id_in_org:
+                        type: integer
               example:
-                id: 2
-                name: Test department
-                owner: system admin
-                created_at: "2021-02-26T11:21:34+00:00"
-                parent_group_id: 74
-                quota: -2
-                groups: []
-                members: []
-                ancestor_groups:
-                  - id: 1
-                    name: sys-dep-1
-                    owner: system admin
-                    created_at: "2021-02-26T11:20:47+00:00"
-                    parent_group_id: -1
-                    quota: -2
+                department:
+                  id: 2
+                  name: Developers
+                  parent_id: 1
+                  org_id: -1
+                  id_in_org: 2
     delete:
       tags:
         - Departments
       summary: Delete Department
       operationId: deleteDepartment
-      description: Delete a department by its ID.
+      description: >-
+        Delete a department by its ID. The department's group (if any) is
+        deleted along with it.
+
+
+        > 🚧 Department must not have sub-departments
+        >
+        > A department can only be deleted if it has no sub-departments.
+        Delete all sub-departments first, otherwise the API returns `400`
+        with `"Forbidden deleting departments with sub departments"`.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -2978,6 +2991,327 @@ paths:
                 type: object
               example:
                 success: true
+  /api/v2.1/admin/address-book-v2/departments/{department_id}/members/:
+    get:
+      tags:
+        - Departments
+      summary: List Department Members
+      operationId: listDepartmentMembers
+      description: List the members of a department by its ID.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member_list:
+                    type: array
+                    items:
+                      type: object
+              example:
+                member_list:
+                  - email: 167a5413f442440389eb69dcd01d45bf@auth.local
+                    name: Jasmin Tee
+                    contact_email: jasmin@example.com
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    is_staff: false
+    post:
+      tags:
+        - Departments
+      summary: Add Department Members
+      operationId: addDepartmentMembers
+      description: >-
+        Add one or more users to a department. Repeat the `email` field for
+        every user you want to add.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/username"
+            encoding:
+              email:
+                style: form
+                explode: true
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: array
+                    items:
+                      type: object
+                  failed:
+                    type: array
+                    items:
+                      type: object
+              example:
+                success:
+                  - email: 167a5413f442440389eb69dcd01d45bf@auth.local
+                    name: Jasmin Tee
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    contact_email: jasmin@example.com
+                failed:
+                  - email: 12abc456def789abc123def456abc789@auth.local
+                    error_msg: User Max Example is already a department member.
+  /api/v2.1/admin/address-book-v2/departments/{department_id}/members/{user_id}/:
+    put:
+      tags:
+        - Departments
+      summary: Update Department Member
+      operationId: updateDepartmentMember
+      description: Set whether a department member is an administrator of the department.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_staff:
+                  $ref: "#/components/schemas/department_is_staff"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      name:
+                        type: string
+                      avatar_url:
+                        type: string
+                      contact_email:
+                        type: string
+                      is_staff:
+                        type: boolean
+              example:
+                member:
+                  email: 167a5413f442440389eb69dcd01d45bf@auth.local
+                  name: Jasmin Tee
+                  avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                  contact_email: jasmin@example.com
+                  is_staff: true
+    delete:
+      tags:
+        - Departments
+      summary: Remove Department Member
+      operationId: removeDepartmentMember
+      description: Remove a user from a department.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/address-book-v2/departments/add-to-departments/:
+    post:
+      tags:
+        - Departments
+      summary: Add User to Departments
+      operationId: addUserToDepartments
+      description: >-
+        Add a single user to one or more system-level departments at once.
+        Departments the user is already a member of are listed under `failed`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - department_ids
+              properties:
+                email:
+                  $ref: "#/components/schemas/username"
+                department_ids:
+                  $ref: "#/components/schemas/department_ids"
+      security:
+        - AccountTokenAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: array
+                    items:
+                      type: object
+                  failed:
+                    type: array
+                    items:
+                      type: object
+              example:
+                success:
+                  - id: 3
+                    name: Test Department
+                    parent_id: 1
+                    org_id: -1
+                    id_in_org: 3
+                failed:
+                  - department:
+                      id: 2
+                      name: Developers
+                      parent_id: 1
+                      org_id: -1
+                      id_in_org: 2
+                    error_msg: User has been in Developers
+  /api/v2.1/admin/address-book-v2/departments/{department_id}/group/:
+    post:
+      tags:
+        - Departments
+      summary: Create Department Group
+      operationId: createDepartmentGroup
+      description: >-
+        Create a group (with its own workspace) for a department, so that the
+        department can own bases. A department can have at most one group.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  group_id:
+                    type: integer
+                  group_name:
+                    type: string
+              example:
+                group_id: 48
+                group_name: Developers
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                error_msg: Group of department exists
+    get:
+      tags:
+        - Departments
+      summary: Get Department Group
+      operationId: getDepartmentGroup
+      description: Get the group of a department. Returns `404` if the department has no group.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  group_id:
+                    type: integer
+                  group_name:
+                    type: string
+              example:
+                group_id: 48
+                group_name: Developers
+    delete:
+      tags:
+        - Departments
+      summary: Delete Department Group
+      operationId: deleteDepartmentGroup
+      description: >-
+        Delete the group of a department. The department itself is kept.
+
+
+        > 🚧 Group must be empty
+        >
+        > The group can only be deleted if it contains no bases. Delete or move all bases out of the group first, otherwise the API returns `400` with `"Cannot delete group with bases"`.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/admin/address-book-v2/non-department-users/:
+    get:
+      tags:
+        - Departments
+      summary: List Users without Department
+      operationId: listNonDepartmentUsers
+      description: >-
+        List all active users that are not a member of any department. Team
+        users are not included.
+      security:
+        - AccountTokenAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_list:
+                    type: array
+                    items:
+                      type: object
+              example:
+                user_list:
+                  - email: 12abc456def789abc123def456abc789@auth.local
+                    name: Max Example
+                    contact_email: max@example.com
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
 
   # Sharing Links
   /api/v2.1/admin/dtable/{base_id}/external-links/:

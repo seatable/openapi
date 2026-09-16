@@ -1,0 +1,11 @@
+{
+  "avatar_url": "str",
+  "contact_email": "admin@example.com",
+  "department_id": "int",
+  "email": "str",
+  "group_id": "int",
+  "is_admin": true,
+  "login_id": "",
+  "name": "admin",
+  "role": "Admin"
+}

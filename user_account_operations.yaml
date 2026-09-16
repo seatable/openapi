@@ -634,6 +634,10 @@ components:
     is_admin:
       type: string
       enum: ["", "true", "false"]
+    department_member_emails:
+      type: string
+      description: The unique user IDs (`xxx@auth.local`) of the users to add, separated by commas.
+      example: 12abc456def789abc123def456abc789@auth.local,2abc456def789abc123def456abc789a@auth.local
     is_inactive:
       type: object
       properties:
@@ -6294,20 +6298,20 @@ paths:
                     last_sync_time: "2021-08-26T12:30:44+00:00"
 
   # Departments
-  /api/v2.1/address-book/departments/:
+  /api/v2.1/address-book-v2/departments/:
     get:
       tags:
         - Departments
       summary: List Departments
       operationId: listDepartments
       description: >-
-        As a team (organization) user, you can use this API request to list all
-        the departments in your team (organization).
+        List all the departments of the system or, as a team user, of your team
+        (organization).
 
 
         The returned `id` values are the IDs of each department. If the
-        `parent_group_id` is `-1`, it means this department is in the root
-        level.
+        `parent_id` is `-1`, it means this department is the top-level
+        department.
       security:
         - AccountTokenAuth: []
       responses:
@@ -6317,21 +6321,69 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  departments:
+                    type: array
+                    items:
+                      type: object
               example:
                 departments:
-                  - id: 10
-                    name: Hulk's department
-                    owner: Hulk
-                    created_at: "2021-08-25T08:35:52+00:00"
-                    parent_group_id: -1
-                    quota: -2
-  /api/v2.1/address-book/departments/{department_id}/members/:
+                  - id: 1
+                    name: Sys Dev
+                    parent_id: -1
+                    org_id: -1
+                    id_in_org: 1
+                  - id: 2
+                    name: Developers
+                    parent_id: 1
+                    org_id: -1
+                    id_in_org: 2
+  /api/v2.1/address-book-v2/user-departments/:
     get:
       tags:
         - Departments
-      summary: List Deparment Members
-      operationId: listDeparmentMembers
-      description: List the members of a department in your team (organization).
+      summary: List User's Departments
+      operationId: listUserDepartments
+      description: >-
+        List the departments you are a member of. Every department is returned
+        together with its tree of `sub_departments`. Departments that are
+        already contained in the tree of another returned department are not
+        listed again.
+      security:
+        - AccountTokenAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  department_list:
+                    type: array
+                    items:
+                      type: object
+              example:
+                department_list:
+                  - id: 1
+                    name: Sys Dev
+                    parent_id: -1
+                    org_id: -1
+                    id_in_org: 1
+                    sub_departments:
+                      - id: 2
+                        name: Developers
+                        parent_id: 1
+                        org_id: -1
+                        id_in_org: 2
+                        sub_departments: []
+  /api/v2.1/address-book-v2/departments/{department_id}/sub-departments/:
+    get:
+      tags:
+        - Departments
+      summary: List Sub-Departments
+      operationId: listSubDepartments
+      description: List the direct sub-departments of a department.
       security:
         - AccountTokenAuth: []
       parameters:
@@ -6343,20 +6395,256 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  department_list:
+                    type: array
+                    items:
+                      type: object
               example:
-                members:
+                department_list:
+                  - id: 2
+                    name: Developers
+                    parent_id: 1
+                    org_id: -1
+                    id_in_org: 2
+  /api/v2.1/address-book-v2/departments/{department_id}/members/:
+    get:
+      tags:
+        - Departments
+      summary: List Department Members
+      operationId: listDepartmentMembers
+      description: List the members of a department in your system or team (organization).
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member_list:
+                    type: array
+                    items:
+                      type: object
+              example:
+                member_list:
                   - email: df0b9a4ca7f24d899a3039d082123456@auth.local
                     name: Thor
                     contact_email: thor@seatable.io
-                    avatar_url: ""
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    is_staff: false
                     is_admin: false
                     role: Member
                   - email: 51a96159d5334afc9914561187654321@auth.local
                     name: Hulk
                     contact_email: hulk@seatable.io
-                    avatar_url: ""
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                    is_staff: true
+                    is_admin: true
+                    role: Admin
+    post:
+      tags:
+        - Departments
+      summary: Add Department Members
+      operationId: addDepartmentMembers
+      description: >-
+        Add one or more users to a department. You have to be an admin of the
+        department, and the department has to have a group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - emails
+              properties:
+                emails:
+                  $ref: "#/components/schemas/department_member_emails"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: array
+                    items:
+                      type: object
+                  failed:
+                    type: array
+                    items:
+                      type: object
+              example:
+                success:
+                  - group_id: 48
+                    name: Thor
+                    email: df0b9a4ca7f24d899a3039d082123456@auth.local
+                    contact_email: thor@seatable.io
+                    login_id: ""
+                    avatar_url: https://cloud.seatable.io/media/avatars/default.png
                     is_admin: false
                     role: Member
+                    department_id: 2
+                failed:
+                  - email: 51a96159d5334afc9914561187654321@auth.local
+                    error_msg: User Hulk is already a department member.
+  /api/v2.1/address-book-v2/departments/{department_id}/members/{user_id}/:
+    put:
+      tags:
+        - Departments
+      summary: Update Department Member
+      operationId: updateDepartmentMember
+      description: >-
+        Promote a department member to department admin or demote them. You
+        have to be an admin of the department, and the department has to have
+        a group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_admin:
+                  $ref: "#/components/schemas/is_admin"
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  group_id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  contact_email:
+                    type: string
+                  login_id:
+                    type: string
+                  avatar_url:
+                    type: string
+                  is_admin:
+                    type: boolean
+                  role:
+                    type: string
+                  department_id:
+                    type: integer
+              example:
+                group_id: 48
+                name: Thor
+                email: df0b9a4ca7f24d899a3039d082123456@auth.local
+                contact_email: thor@seatable.io
+                login_id: ""
+                avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                is_admin: true
+                role: Admin
+                department_id: 2
+    delete:
+      tags:
+        - Departments
+      summary: Remove Department Member
+      operationId: removeDepartmentMember
+      description: >-
+        Remove a user from a department. You have to be an admin of the
+        department, and the department has to have a group.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                success: true
+  /api/v2.1/address-book-v2/departments/{department_id}/members/{user_id}/dtables/:
+    get:
+      tags:
+        - Departments
+      summary: List Department Member's Bases
+      operationId: listDepartmentMemberBases
+      description: >-
+        List the personal bases of a department member. You have to be a
+        member of one of the department's ancestor departments.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/department_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dtable_list:
+                    type: array
+                    items:
+                      type: object
+              example:
+                dtable_list:
+                  - id: 100
+                    workspace_id: 200
+                    uuid: 12345678-1f00-46af-98df-4007b3635e1c
+                    name: CRM
+                    created_at: "2021-03-02T10:15:40+00:00"
+                    updated_at: "2021-03-02T10:18:01+00:00"
+                    color: null
+                    text_color: null
+                    icon: null
+                    is_encrypted: false
+                    in_storage: true
+                    backend: js
+  /api/v2.1/address-book-v2/departments/groups/{group_id}/members-count/:
+    get:
+      tags:
+        - Departments
+      summary: Get Department Group Members Count
+      operationId: getDepartmentGroupMembersCount
+      description: >-
+        Get the number of members of a department group. The members of a
+        department group are the members of the department and of all its
+        sub-departments.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/group_id"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+              example:
+                count: 12
 
   # Forms
   /api/v2.1/forms/:
