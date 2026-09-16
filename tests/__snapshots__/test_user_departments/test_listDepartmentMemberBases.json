@@ -1,0 +1,18 @@
+{
+  "dtable_list": [
+    {
+      "backend": "js",
+      "color": null,
+      "created_at": "str",
+      "icon": null,
+      "id": "int",
+      "in_storage": true,
+      "is_encrypted": false,
+      "name": "automated-testing-departments",
+      "text_color": null,
+      "updated_at": "str",
+      "uuid": "str",
+      "workspace_id": "int"
+    }
+  ]
+}

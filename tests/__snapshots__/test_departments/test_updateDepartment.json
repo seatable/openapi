@@ -1,0 +1,9 @@
+{
+  "department": {
+    "id": "int",
+    "id_in_org": "int",
+    "name": "new-name",
+    "org_id": -1,
+    "parent_id": "int"
+  }
+}

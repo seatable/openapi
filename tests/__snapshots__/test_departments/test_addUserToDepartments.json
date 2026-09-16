@@ -1,0 +1,23 @@
+{
+  "failed": [
+    {
+      "department": {
+        "id": "int",
+        "id_in_org": "int",
+        "name": "multi-add-1",
+        "org_id": -1,
+        "parent_id": "int"
+      },
+      "error_msg": "User has been in multi-add-1"
+    }
+  ],
+  "success": [
+    {
+      "id": "int",
+      "id_in_org": "int",
+      "name": "multi-add-2",
+      "org_id": -1,
+      "parent_id": "int"
+    }
+  ]
+}
