@@ -1,0 +1,13 @@
+[
+  {
+    "key": "str",
+    "name": "first",
+    "type": "text"
+  },
+  {
+    "data": null,
+    "key": "str",
+    "name": "second",
+    "type": "number"
+  }
+]

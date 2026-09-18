@@ -1,0 +1,71 @@
+{
+  "_id": "str",
+  "columns": [
+    {
+      "colorbys": {},
+      "data": null,
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "text",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "text",
+      "width": 200
+    },
+    {
+      "colorbys": {},
+      "data": {
+        "decimal": "dot",
+        "format": "number",
+        "thousands": "no"
+      },
+      "description": null,
+      "draggable": true,
+      "edit_metadata_permission_type": "",
+      "edit_metadata_permitted_group": [],
+      "edit_metadata_permitted_users": [],
+      "editable": true,
+      "key": "str",
+      "name": "number",
+      "permission_type": "",
+      "permitted_group": [],
+      "permitted_users": [],
+      "resizable": true,
+      "type": "number",
+      "width": 200
+    }
+  ],
+  "header_settings": {},
+  "is_header_locked": false,
+  "name": "test_rename_table_renamed",
+  "summary_configs": {},
+  "views": [
+    {
+      "_id": "str",
+      "colorbys": {},
+      "colors": {},
+      "column_colors": {},
+      "filter_conjunction": "And",
+      "filters": [],
+      "formula_rows": {},
+      "groupbys": [],
+      "groups": [],
+      "hidden_columns": [],
+      "is_locked": false,
+      "name": "Default View",
+      "private_for": null,
+      "row_height": "default",
+      "rows": [],
+      "sorts": [],
+      "summaries": {},
+      "type": "table"
+    }
+  ]
+}
