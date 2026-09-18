@@ -451,6 +451,7 @@ paths:
                     type: string
                   last_login:
                     type: string
+                    nullable: true
                   self_usage:
                     type: integer
                   quota:
@@ -715,6 +716,88 @@ paths:
               example:
                 success: true
 
+  /api/v2.1/org/{org_id}/admin/users/{user_id}/managed-external-apps/:
+    get:
+      tags:
+        - Users
+      summary: List Managed Apps
+      operationId: listManagedApps
+      description: >-
+        List all the universal apps a certain user manages, i.e. the apps in
+        which the user has the `admin` role. Inactive apps and apps of deleted
+        bases are not included.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                managed_apps:
+                  - app_user_id: 12
+                    app_id: 4
+                    app_name: Customer Portal
+                    app_uuid: 25ed3722-7988-4389-8095-9a46373cd8a5
+                    app_config: '{"app_type": "universal-app", "app_name": "Customer Portal", "settings": {"pages": [], "navigation": []}}'
+                    role_name: admin
+                    permission: rw
+                    dtable_uuid: c56624fd757f4f4bae7de76235aeb1f0
+                    dtable_name: CRM
+                    workspace_id: 2
+                    link: https://cloud.seatable.io/external-apps/25ed3722-7988-4389-8095-9a46373cd8a5/
+                    edit_link: https://cloud.seatable.io/dtable/external-apps-edit/25ed3722-7988-4389-8095-9a46373cd8a5/
+                    joined_at: '2025-11-28T14:16:30+01:00'
+                count: 1
+
+  /api/v2.1/org/{org_id}/admin/users/{user_id}/can-use-external-apps/:
+    get:
+      tags:
+        - Users
+      summary: List Usable Apps
+      operationId: listUsableApps
+      description: >-
+        List all the universal apps a certain user can use, i.e. the apps in
+        which the user has a role other than `admin`. Inactive apps and apps
+        of deleted bases are not included.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                can_use_apps:
+                  - app_user_id: 13
+                    app_id: 4
+                    app_name: Customer Portal
+                    app_uuid: 25ed3722-7988-4389-8095-9a46373cd8a5
+                    app_config: '{"app_type": "universal-app", "app_name": "Customer Portal", "settings": {"pages": [], "navigation": []}}'
+                    role_name: default
+                    permission: rw
+                    dtable_uuid: c56624fd757f4f4bae7de76235aeb1f0
+                    dtable_name: CRM
+                    workspace_id: 2
+                    link: https://cloud.seatable.io/external-apps/25ed3722-7988-4389-8095-9a46373cd8a5/
+                    edit_link: https://cloud.seatable.io/dtable/external-apps-edit/25ed3722-7988-4389-8095-9a46373cd8a5/
+                    joined_at: '2025-11-28T14:16:30+01:00'
+                count: 1
+
   # Bases
   /api/v2.1/org/{org_id}/admin/dtables/:
     get:
@@ -837,6 +920,48 @@ paths:
                     owner_deleted: false
                     rows_count: 0
                 count: 2
+  /api/v2.1/org/{org_id}/admin/users/{user_id}/shared-dtables/:
+    get:
+      tags:
+        - Bases
+      summary: List Bases Shared to User
+      operationId: listBasesSharedToUser
+      description: List all the bases shared to a certain user by the user's ID.
+      security:
+        - AccountTokenAuth: []
+      parameters:
+        - $ref: "#/components/parameters/org_id"
+        - $ref: "#/components/parameters/user_id"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                dtable_list:
+                  - id: 8
+                    workspace_id: 2
+                    uuid: 3a6e34b7-c9e1-4c2f-8b0e-2f5d3f21c7a4
+                    name: CRM
+                    created_at: '2025-11-28T14:16:30+01:00'
+                    updated_at: '2025-11-28T14:17:04+01:00'
+                    color: "#E91E63"
+                    text_color: null
+                    icon: icon-user-interview
+                    is_encrypted: false
+                    in_storage: true
+                    backend: js
+                    creator: org-1-admin
+                    modifier: org-1-admin
+                    file_size: 1389
+                    rows_count: 7
+                    from_user: e38487b4357e40c8b1359223ba87a1af@auth.local
+                    from_user_name: org-1-admin
+                count: 1
   /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/:
     get:
       tags:
