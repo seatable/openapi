@@ -38,6 +38,12 @@ services:
         condition: service_healthy
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8000 || exit 1"]
+      interval: 20s
+      retries: 3
+      start_period: 30s
+      timeout: 10s
 
   dtable-server:
     image: ${DTABLE_SERVER_IMAGE:-seatable/dtable-server-js}:${DTABLE_SERVER_VERSION:?Variable is not set}
@@ -70,6 +76,8 @@ services:
       mariadb:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      seatable-server:
         condition: service_healthy
     networks:
       - backend
