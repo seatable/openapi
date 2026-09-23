@@ -120,6 +120,8 @@ def test_getComment(base: Base, snapshot_json: SnapshotAssertion):
     assert response.status_code == 200
     data = response.json()
     assert data['id'] == comment_id
+    # dtable_uuid is masked in the snapshot, so check its format (with dashes) here
+    assert data['dtable_uuid'] == base.uuid
 
     matcher = path_type({
         'author': (str,),
@@ -208,7 +210,10 @@ def test_listRowComments_multiple_comments(base: Base, snapshot_json: SnapshotAs
     response = case.call()
 
     assert response.status_code == 200
-    assert snapshot_json(matcher=COMMENT_MATCHER) == response.json()
+    data = response.json()
+    # dtable_uuid is masked in the snapshot, so check its format (with dashes) here
+    assert all(c['dtable_uuid'] == base.uuid for c in data)
+    assert snapshot_json(matcher=COMMENT_MATCHER) == data
 
 
 def test_getRowCommentsCount_multiple_comments(base: Base, snapshot_json: SnapshotAssertion):
@@ -242,6 +247,8 @@ def test_listCommentsWithinDays_multiple_comments(base: Base, snapshot_json: Sna
 
     # The endpoint lists all comments in the (module-scoped) base, so only keep this row's comments
     data['comments'] = [c for c in data['comments'] if c['row_id'] == row_id]
+    # dtable_uuid is masked in the snapshot, so check its format (with dashes) here
+    assert all(c['dtable_uuid'] == base.uuid for c in data['comments'])
 
     assert snapshot_json(matcher=COMMENT_MATCHER) == data
 
