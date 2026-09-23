@@ -1,4 +1,3 @@
-import pytest
 from conftest import Base, base_operations_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
@@ -17,27 +16,20 @@ def _headers(base):
 
 
 def test_listRowComments(base: Base, snapshot_json: SnapshotAssertion):
-    """Test listing comments for a row.
-
-    Note: API returns [] (array) when no comments exist, but
-    {"comments": [...]} when comments exist. The schema says type:object
-    which is only true when comments exist. We test the empty case here
-    and accept both formats.
-    """
     table_name = 'test_listRowComments'
     create_table(base, table_name, SIMPLE_COLUMNS)
     row_ids = append_rows(base, table_name, [{'text': 'target'}])
 
-    import os, requests
-    server = os.environ['SEATABLE_SERVER']
-    resp = requests.get(
-        f'{server}/api-gateway/api/v2/dtables/{base.uuid}/comments/',
-        params={'row_id': row_ids[0]},
-        headers=_headers(base),
-    )
+    case: Case = base_operations_schema.find_operation_by_id('listRowComments') \
+        .Case(
+            path_parameters={'base_uuid': base.uuid},
+            query={'row_id': row_ids[0]},
+            headers=_headers(base),
+        )
+    response = case.call()
 
-    assert resp.status_code == 200
-    assert snapshot_json == resp.json()
+    assert response.status_code == 200
+    assert snapshot_json == response.json()
 
 
 def test_getRowCommentsCount(base: Base, snapshot_json: SnapshotAssertion):
@@ -93,10 +85,7 @@ def _list_comment_ids(base: Base, row_id: str) -> list[int]:
     """createRowComment does not return the new comment's id, so look it up via listRowComments."""
     case: Case = base_operations_schema.find_operation_by_id('listRowComments') \
         .Case(path_parameters={'base_uuid': base.uuid}, query={'row_id': row_id}, headers=_headers(base))
-    data = case.call().json()
-    # API returns [] when no comments exist, {"comments": [...]} otherwise.
-    comments = data['comments'] if isinstance(data, dict) else data
-    return [c['id'] for c in comments]
+    return [c['id'] for c in case.call().json()]
 
 
 def test_getComment(base: Base, snapshot_json: SnapshotAssertion):
@@ -173,3 +162,102 @@ def test_deleteComment(base: Base, snapshot_json: SnapshotAssertion):
 
     assert response.status_code == 200
     assert snapshot_json == response.json()
+
+
+def _create_row_with_comments(base: Base, table_name: str, comments: list[str]) -> str:
+    create_table(base, table_name, SIMPLE_COLUMNS)
+    row_id = append_rows(base, table_name, [{'text': 'comment target'}])[0]
+    table_id = _table_id(base, table_name)
+
+    for comment in comments:
+        create: Case = base_operations_schema.find_operation_by_id('createRowComment') \
+            .Case(
+                path_parameters={'base_uuid': base.uuid},
+                query={'table_id': table_id, 'row_id': row_id},
+                body={'comment': comment},
+                headers=_headers(base),
+            )
+        create_response = create.call()
+        assert create_response.status_code == 200, \
+            f'Failed to create comment: {create_response.status_code} {create_response.text}'
+
+    return row_id
+
+
+MULTIPLE_COMMENTS = ['First comment', 'Second comment']
+
+COMMENT_MATCHER = path_type({
+    r'(.*\.)?author': (str,),
+    r'(.*\.)?created_at': (str,),
+    r'(.*\.)?dtable_uuid': (str,),
+    r'(.*\.)?id': (int,),
+    r'(.*\.)?row_id': (str,),
+    r'(.*\.)?updated_at': (str,),
+}, regex=True)
+
+
+def test_listRowComments_multiple_comments(base: Base, snapshot_json: SnapshotAssertion):
+    row_id = _create_row_with_comments(base, 'test_listRowComments_multiple_comments', MULTIPLE_COMMENTS)
+
+    case: Case = base_operations_schema.find_operation_by_id('listRowComments') \
+        .Case(
+            path_parameters={'base_uuid': base.uuid},
+            query={'row_id': row_id},
+            headers=_headers(base),
+        )
+    response = case.call()
+
+    assert response.status_code == 200
+    assert snapshot_json(matcher=COMMENT_MATCHER) == response.json()
+
+
+def test_getRowCommentsCount_multiple_comments(base: Base, snapshot_json: SnapshotAssertion):
+    row_id = _create_row_with_comments(base, 'test_getRowCommentsCount_multiple_comments', MULTIPLE_COMMENTS)
+
+    case: Case = base_operations_schema.find_operation_by_id('getRowCommentsCount') \
+        .Case(
+            path_parameters={'base_uuid': base.uuid},
+            query={'row_id': row_id},
+            headers=_headers(base),
+        )
+    response = case.call()
+
+    assert response.status_code == 200
+    assert snapshot_json == response.json()
+
+
+def test_listCommentsWithinDays_multiple_comments(base: Base, snapshot_json: SnapshotAssertion):
+    row_id = _create_row_with_comments(base, 'test_listCommentsWithinDays_multiple_comments', MULTIPLE_COMMENTS)
+
+    case: Case = base_operations_schema.find_operation_by_id('listCommentsWithinDays') \
+        .Case(
+            path_parameters={'base_uuid': base.uuid},
+            query={'days': 7},
+            headers=_headers(base),
+        )
+    response = case.call()
+
+    assert response.status_code == 200
+    data = response.json()
+
+    # The endpoint lists all comments in the (module-scoped) base, so only keep this row's comments
+    data['comments'] = [c for c in data['comments'] if c['row_id'] == row_id]
+
+    assert snapshot_json(matcher=COMMENT_MATCHER) == data
+
+
+def test_getNumberOfComments_multiple_comments(base: Base, snapshot_json: SnapshotAssertion):
+    row_id = _create_row_with_comments(base, 'test_getNumberOfComments_multiple_comments', MULTIPLE_COMMENTS)
+
+    case: Case = base_operations_schema.find_operation_by_id('getNumberOfComments') \
+        .Case(
+            path_parameters={'base_uuid': base.uuid},
+            headers=_headers(base),
+        )
+    response = case.call()
+
+    assert response.status_code == 200
+    data = response.json()
+
+    # The response is keyed by row ID and covers all rows in the (module-scoped) base
+    assert data['rows_comments_num'][row_id] == 2

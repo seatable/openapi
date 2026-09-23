@@ -1,0 +1,24 @@
+{
+  "comments": [
+    {
+      "author": "str",
+      "comment": "First comment",
+      "created_at": "str",
+      "dtable_uuid": "str",
+      "id": "int",
+      "resolved": 0,
+      "row_id": "str",
+      "updated_at": "str"
+    },
+    {
+      "author": "str",
+      "comment": "Second comment",
+      "created_at": "str",
+      "dtable_uuid": "str",
+      "id": "int",
+      "resolved": 0,
+      "row_id": "str",
+      "updated_at": "str"
+    }
+  ]
+}
