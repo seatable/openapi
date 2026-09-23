@@ -1,0 +1,16 @@
+{
+  "notification_list": [
+    {
+      "created_at": "str",
+      "detail": {
+        "author": "str",
+        "row_id": "str",
+        "table_id": "str"
+      },
+      "id": "int",
+      "msg_type": "selected_collaborator",
+      "seen": 0,
+      "username": "str"
+    }
+  ]
+}
