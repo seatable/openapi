@@ -1,6 +1,7 @@
 import json
 import time
 
+import pytest
 from conftest import Base, base_operations_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
@@ -49,6 +50,7 @@ def test_getBaseActivityLog(base: Base, snapshot_json: SnapshotAssertion):
     assert snapshot_json(matcher=matcher) == data
 
 
+@pytest.mark.slow
 def test_listRowActivities(base: Base, snapshot_json: SnapshotAssertion):
     SIMPLE_COLUMNS = [{'column_name': 'text', 'column_type': 'text'}]
     table_name = 'test_row_activities'
