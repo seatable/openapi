@@ -74,6 +74,9 @@ def test_listRowActivities(base: Base, snapshot_json: SnapshotAssertion):
             break
         time.sleep(0.5)
 
+    # dtable_uuid is masked in the snapshot, so check its format (with dashes) here
+    assert all(a['dtable_uuid'] == base.uuid for a in data['activities'])
+
     matcher = path_type({
         r'activities\.\d+\.(id|dtable_uuid|row_id|op_user|op_time)': (str, int),
         r'activities\.\d+\.detail\.table_id': (str,),
