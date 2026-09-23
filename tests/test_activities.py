@@ -1,6 +1,10 @@
-import pytest
+import json
+import time
+
 from conftest import Base, base_operations_schema
 from schemathesis import Case
+from syrupy.assertion import SnapshotAssertion
+from syrupy.matchers import path_type
 
 from test_base_operations import create_table, append_rows
 
@@ -9,7 +13,7 @@ def _headers(base):
     return {'Authorization': f'Bearer {base.token}'}
 
 
-def test_getBaseActivityLog(base: Base):
+def test_getBaseActivityLog(base: Base, snapshot_json: SnapshotAssertion):
     # Generate some activity first
     SIMPLE_COLUMNS = [{'column_name': 'text', 'column_type': 'text'}]
     table_name = 'test_activity_log'
@@ -26,10 +30,26 @@ def test_getBaseActivityLog(base: Base):
 
     assert response.status_code == 200
     data = response.json()
-    assert 'operations' in data
+
+    # The base is shared by all tests in this module, so only keep the operations on this test's table
+    operations = [json.loads(op['operation']) for op in data['operations']]
+    table_id = next(
+        op['table_data']['_id'] for op in operations
+        if op['op_type'] == 'insert_table' and op['table_data']['name'] == table_name
+    )
+    data['operations'] = [
+        op for op, operation in zip(data['operations'], operations)
+        if table_id in (operation.get('table_id'), operation.get('table_data', {}).get('_id'))
+    ]
+
+    matcher = path_type({
+        r'operations\.\d+\.(author|op_id|op_time|operation)': (str, int),
+    }, regex=True)
+
+    assert snapshot_json(matcher=matcher) == data
 
 
-def test_listRowActivities(base: Base):
+def test_listRowActivities(base: Base, snapshot_json: SnapshotAssertion):
     SIMPLE_COLUMNS = [{'column_name': 'text', 'column_type': 'text'}]
     table_name = 'test_row_activities'
     create_table(base, table_name, SIMPLE_COLUMNS)
@@ -41,11 +61,24 @@ def test_listRowActivities(base: Base):
             query={'row_id': row_ids[0], 'page': 1, 'per_page': 25},
             headers=_headers(base),
         )
-    response = case.call()
 
-    assert response.status_code == 200
-    data = response.json()
-    assert 'activities' in data
+    # Row activities are recorded asynchronously (by dtable-events)
+    deadline = time.monotonic() + 10
+    while True:
+        response = case.call()
+        assert response.status_code == 200
+        data = response.json()
+        if data['activities'] or time.monotonic() > deadline:
+            break
+        time.sleep(0.5)
+
+    matcher = path_type({
+        r'activities\.\d+\.(id|dtable_uuid|row_id|op_user|op_time)': (str, int),
+        r'activities\.\d+\.detail\.table_id': (str,),
+        r'activities\.\d+\.detail\.row_data': (list,),
+    }, regex=True)
+
+    assert snapshot_json(matcher=matcher) == data
 
 
 def test_createSnapshot(base: Base):

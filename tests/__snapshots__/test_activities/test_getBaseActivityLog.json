@@ -1,0 +1,18 @@
+{
+  "operations": [
+    {
+      "app": "",
+      "author": "str",
+      "op_id": "int",
+      "op_time": "int",
+      "operation": "str"
+    },
+    {
+      "app": null,
+      "author": "str",
+      "op_id": "int",
+      "op_time": "int",
+      "operation": "str"
+    }
+  ]
+}
