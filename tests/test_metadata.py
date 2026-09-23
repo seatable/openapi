@@ -1,10 +1,12 @@
 from conftest import Base, base_operations_schema
 from schemathesis import Case
+from syrupy.assertion import SnapshotAssertion
+from syrupy.matchers import path_type
 
 from test_base_operations import create_table
 
 
-def test_getMetadata(base: Base):
+def test_getMetadata(base: Base, snapshot_json: SnapshotAssertion):
     create_table(base, 'test_metadata', [
         {'column_name': 'text', 'column_type': 'text'},
         {'column_name': 'number', 'column_type': 'number'},
@@ -20,19 +22,16 @@ def test_getMetadata(base: Base):
     assert response.status_code == 200
 
     data = response.json()
-    assert 'metadata' in data
-    assert 'tables' in data['metadata']
-    table_names = [t['name'] for t in data['metadata']['tables']]
-    assert 'test_metadata' in table_names
 
-    # Verify table has our columns
-    table = next(t for t in data['metadata']['tables'] if t['name'] == 'test_metadata')
-    column_names = [c['name'] for c in table['columns']]
-    assert 'text' in column_names
-    assert 'number' in column_names
+    matcher = path_type({
+        r"metadata\.tables\..*\._id": (str,),
+        r"metadata\.tables\..*\.columns\..*\.key": (str,),
+    }, regex=True)
+
+    assert snapshot_json(matcher=matcher) == data
 
 
-def test_listCollaborators(base: Base):
+def test_listCollaborators(base: Base, snapshot_json: SnapshotAssertion):
     path_parameters = {'base_uuid': base.uuid}
     headers = {'Authorization': f'Bearer {base.token}'}
 
@@ -43,11 +42,13 @@ def test_listCollaborators(base: Base):
     assert response.status_code == 200
 
     data = response.json()
-    assert 'user_list' in data
-    assert isinstance(data['user_list'], list)
-    assert len(data['user_list']) >= 1
 
-    user = data['user_list'][0]
-    assert 'email' in user
-    assert 'name' in user
-    assert 'contact_email' in user
+    matcher = path_type({
+        r"user_list\..*\.email": (str,),
+        r"user_list\..*\.avatar_url": (str,),
+        r"user_list\..*\.contact_email": (str,),
+        r"user_list\..*\.name": (str,),
+        r"user_list\..*\.name_pinyin": (str,),
+    }, regex=True)
+
+    assert snapshot_json(matcher=matcher) == data
