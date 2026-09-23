@@ -138,6 +138,7 @@ NOTIFICATION_MATCHER = path_type({
 }, regex=True)
 
 
+@pytest.mark.slow
 def test_listBaseNotifications_selected_collaborator(
     base: Base, admin_base: tuple[Base, str], snapshot_json: SnapshotAssertion,
 ):
@@ -149,6 +150,7 @@ def test_listBaseNotifications_selected_collaborator(
     assert snapshot_json(matcher=NOTIFICATION_MATCHER) == data
 
 
+@pytest.mark.slow
 def test_markBaseNotificationAsSeen(base: Base, admin_base: tuple[Base, str], snapshot_json: SnapshotAssertion):
     admin, admin_email = admin_base
     data = _create_selected_collaborator_notification(base, admin, admin_email, 'test_markBaseNotificationAsSeen')
@@ -172,6 +174,7 @@ def test_markBaseNotificationAsSeen(base: Base, admin_base: tuple[Base, str], sn
     assert snapshot_json(matcher=NOTIFICATION_MATCHER) == _list_notifications(admin)
 
 
+@pytest.mark.slow
 def test_markBaseNotificationsAsSeen(base: Base, admin_base: tuple[Base, str], snapshot_json: SnapshotAssertion):
     admin, admin_email = admin_base
     data = _create_selected_collaborator_notification(base, admin, admin_email, 'test_markBaseNotificationsAsSeen')
@@ -194,6 +197,7 @@ def test_markBaseNotificationsAsSeen(base: Base, admin_base: tuple[Base, str], s
     assert snapshot_json(matcher=NOTIFICATION_MATCHER) == _list_notifications(admin)
 
 
+@pytest.mark.slow
 def test_deleteBaseNotifications(base: Base, admin_base: tuple[Base, str], snapshot_json: SnapshotAssertion):
     admin, admin_email = admin_base
     data = _create_selected_collaborator_notification(base, admin, admin_email, 'test_deleteBaseNotifications')

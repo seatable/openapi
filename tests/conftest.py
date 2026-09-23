@@ -19,6 +19,10 @@ def pytest_configure(config):
         'markers',
         'needs_large_license: test requires a license with 10+ user slots (sys-admin/team-admin tests)',
     )
+    config.addinivalue_line(
+        'markers',
+        'slow: test waits for asynchronous server-side processing (e.g. notifications, row activities)',
+    )
 
 # Patterns for volatile values that change between test runs
 _TIMESTAMP_RE = re.compile(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}')
