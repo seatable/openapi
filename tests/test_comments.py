@@ -1,6 +1,8 @@
 import pytest
 from conftest import Base, base_operations_schema
 from schemathesis import Case
+from syrupy.assertion import SnapshotAssertion
+from syrupy.matchers import path_type
 
 from test_base_operations import create_table, append_rows
 
@@ -14,7 +16,7 @@ def _headers(base):
     return {'Authorization': f'Bearer {base.token}'}
 
 
-def test_listRowComments(base: Base):
+def test_listRowComments(base: Base, snapshot_json: SnapshotAssertion):
     """Test listing comments for a row.
 
     Note: API returns [] (array) when no comments exist, but
@@ -35,12 +37,10 @@ def test_listRowComments(base: Base):
     )
 
     assert resp.status_code == 200
-    data = resp.json()
-    # Empty: [] or {"comments": []}
-    assert isinstance(data, (list, dict))
+    assert snapshot_json == resp.json()
 
 
-def test_getRowCommentsCount(base: Base):
+def test_getRowCommentsCount(base: Base, snapshot_json: SnapshotAssertion):
     table_name = 'test_getRowCommentsCount'
     create_table(base, table_name, SIMPLE_COLUMNS)
     row_ids = append_rows(base, table_name, [{'text': 'target'}])
@@ -54,11 +54,10 @@ def test_getRowCommentsCount(base: Base):
     response = case.call()
 
     assert response.status_code == 200
-    data = response.json()
-    assert 'count' in data
+    assert snapshot_json == response.json()
 
 
-def test_listCommentsWithinDays(base: Base):
+def test_listCommentsWithinDays(base: Base, snapshot_json: SnapshotAssertion):
     case: Case = base_operations_schema.find_operation_by_id('listCommentsWithinDays') \
         .Case(
             path_parameters={'base_uuid': base.uuid},
@@ -68,11 +67,10 @@ def test_listCommentsWithinDays(base: Base):
     response = case.call()
 
     assert response.status_code == 200
-    data = response.json()
-    assert 'comments' in data
+    assert snapshot_json == response.json()
 
 
-def test_getNumberOfComments(base: Base):
+def test_getNumberOfComments(base: Base, snapshot_json: SnapshotAssertion):
     case: Case = base_operations_schema.find_operation_by_id('getNumberOfComments') \
         .Case(
             path_parameters={'base_uuid': base.uuid},
@@ -81,6 +79,7 @@ def test_getNumberOfComments(base: Base):
     response = case.call()
 
     assert response.status_code == 200
+    assert snapshot_json == response.json()
 
 
 def _table_id(base: Base, table_name: str) -> str:
@@ -100,7 +99,7 @@ def _list_comment_ids(base: Base, row_id: str) -> list[int]:
     return [c['id'] for c in comments]
 
 
-def test_getComment(base: Base):
+def test_getComment(base: Base, snapshot_json: SnapshotAssertion):
     table_name = 'test_getComment'
     create_table(base, table_name, SIMPLE_COLUMNS)
     row_ids = append_rows(base, table_name, [{'text': 'comment target'}])
@@ -132,10 +131,20 @@ def test_getComment(base: Base):
     assert response.status_code == 200
     data = response.json()
     assert data['id'] == comment_id
-    assert data['comment'] == comment_text
+
+    matcher = path_type({
+        'author': (str,),
+        'created_at': (str,),
+        'dtable_uuid': (str,),
+        'id': (int,),
+        'row_id': (str,),
+        'updated_at': (str,),
+    })
+
+    assert snapshot_json(matcher=matcher) == data
 
 
-def test_deleteComment(base: Base):
+def test_deleteComment(base: Base, snapshot_json: SnapshotAssertion):
     table_name = 'test_deleteComment'
     create_table(base, table_name, SIMPLE_COLUMNS)
     row_ids = append_rows(base, table_name, [{'text': 'delete target'}])
@@ -163,5 +172,4 @@ def test_deleteComment(base: Base):
     response = case.call()
 
     assert response.status_code == 200
-    data = response.json()
-    assert data.get('success') is True
+    assert snapshot_json == response.json()

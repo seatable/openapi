@@ -1,0 +1,13 @@
+{
+  "user_list": [
+    {
+      "avatar_url": "str",
+      "contact_email": "str",
+      "email": "str",
+      "id_in_org": "",
+      "is_admin": true,
+      "name": "str",
+      "name_pinyin": "str"
+    }
+  ]
+}
