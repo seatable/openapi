@@ -43,8 +43,11 @@ def test_getBaseActivityLog(base: Base, snapshot_json: SnapshotAssertion):
         if table_id in (operation.get('table_id'), operation.get('table_data', {}).get('_id'))
     ]
 
+    # dtable_uuid is masked in the snapshot, so check its format (with dashes) here
+    assert all(op['dtable_uuid'] == base.uuid for op in data['operations'])
+
     matcher = path_type({
-        r'operations\.\d+\.(author|op_id|op_time|operation)': (str, int),
+        r'operations\.\d+\.(author|dtable_uuid|id|op_id|op_time|operation)': (str, int),
     }, regex=True)
 
     assert snapshot_json(matcher=matcher) == data
