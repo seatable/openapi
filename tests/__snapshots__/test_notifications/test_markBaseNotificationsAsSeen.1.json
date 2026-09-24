@@ -7,6 +7,7 @@
         "row_id": "str",
         "table_id": "str"
       },
+      "dtable_uuid": "str",
       "id": "int",
       "msg_type": "selected_collaborator",
       "seen": 1,
