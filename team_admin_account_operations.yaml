@@ -2641,6 +2641,7 @@ paths:
                     rule_id: 454
                     rule_name: Send Email
                     trigger_time: "2025-11-28T14:05:52+01:00"
+                    end_time: "2025-11-28T14:05:53+01:00"
                     run_condition: per_update
                     success: true
                     org_id: -1
@@ -2651,6 +2652,7 @@ paths:
                     rule_id: 454
                     rule_name: Send Email
                     trigger_time: "2025-11-28T14:05:55+01:00"
+                    end_time: "2025-11-28T14:05:57+01:00"
                     run_condition: per_update
                     success: true
                     org_id: -1
