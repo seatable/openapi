@@ -2472,6 +2472,7 @@ paths:
                     name: Jasmin Tee
                     contact_email: jasmintee@example.com
                     avatar_url: https://cloud.seatable.io/media/avatars/default.png
+                app_user_list: []
 
   # Rows
   /api-gateway/api/v2/dtables/{base_uuid}/sql/:
@@ -4531,6 +4532,7 @@ paths:
               example:
                 notification_list:
                   - id: 200
+                    dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
                     username: 123456786569491ba42905bf1647fd3f@auth.local
                     msg_type: row_comment
                     created_at: "2021-02-25T10:38:14.000Z"
@@ -4686,19 +4688,25 @@ paths:
                 type: object
               example:
                 operations:
-                  - author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                  - id: 245
+                    dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
+                    author: 12345678d1754bb4afa2c2cb7369d244@auth.local
                     app: null
                     op_time: 1610981745927
                     operation: >-
                       {"op_type":"delete_column","table_id":"0000","column_key":"iJB4","old_column":{"rowType":"header","key":"iJB4","type":null,"name":null,"editable":true,"width":200,"resizable":true,"draggable":true,"data":null,"permission_type":"","permitted_users":[],"editor":{"key":null,"ref":null,"props":{},"_owner":null},"formatter":null,"left":1058,"idx":5},"upper_column_key":"LfGJ"}
                     op_id: 118
-                  - author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                  - id: 244
+                    dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
+                    author: 12345678d1754bb4afa2c2cb7369d244@auth.local
                     app: null
                     op_time: 1610981742518
                     operation: >-
                       {"op_type":"delete_column","table_id":"0000","column_key":"J2mq","old_column":{"rowType":"header","key":"J2mq","type":null,"name":null,"editable":true,"width":200,"resizable":true,"draggable":true,"data":null,"permission_type":"","permitted_users":[],"editor":{"key":null,"ref":null,"props":{},"_owner":null},"formatter":null,"left":280,"idx":2},"upper_column_key":"0000"}
                     op_id: 117
-                  - author: 12345678d1754bb4afa2c2cb7369d244@auth.local
+                  - id: 243
+                    dtable_uuid: 12345678-7e27-46a8-8b18-6cc6f3db2057
+                    author: 12345678d1754bb4afa2c2cb7369d244@auth.local
                     app: null
                     op_time: 1610981739830
                     operation: >-
@@ -4729,8 +4737,10 @@ paths:
                 activities:
                   - id: 6782
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_count: 1
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_app: ""
                     op_type: modify_row
                     op_time: "2021-01-14T09:01:57.000Z"
                     detail:
@@ -4747,8 +4757,10 @@ paths:
                           old_value: "2020-08-16"
                   - id: 6778
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_count: 1
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_app: ""
                     op_type: modify_row
                     op_time: "2021-01-14T08:56:53.000Z"
                     detail:
@@ -4771,8 +4783,10 @@ paths:
                           old_value: ""
                   - id: 5960
                     dtable_uuid: a57b56d3-1cc5-4ebd-8a6c-a1b28ac3dbdf
+                    row_count: 1
                     row_id: YMIviMeERQCUiQhPPqo6Gw
                     op_user: 0ef256cb715841dd81b147b2530c2904@auth.local
+                    op_app: ""
                     op_type: insert_row
                     op_time: "2020-11-18T12:42:14.000Z"
                     detail:

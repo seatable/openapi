@@ -10,9 +10,11 @@
       },
       "dtable_uuid": "str",
       "id": "int",
+      "op_app": "",
       "op_time": "str",
       "op_type": "insert_row",
       "op_user": "str",
+      "row_count": 1,
       "row_id": "str"
     }
   ],

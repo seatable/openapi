@@ -3,6 +3,8 @@
     {
       "app": "",
       "author": "str",
+      "dtable_uuid": "str",
+      "id": "int",
       "op_id": "int",
       "op_time": "int",
       "operation": "str"
@@ -10,6 +12,8 @@
     {
       "app": null,
       "author": "str",
+      "dtable_uuid": "str",
+      "id": "int",
       "op_id": "int",
       "op_time": "int",
       "operation": "str"

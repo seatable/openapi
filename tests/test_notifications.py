@@ -116,6 +116,8 @@ def _create_selected_collaborator_notification(base: Base, admin_base: Base, adm
         assert response.status_code == 200
         data = response.json()
         if data['notification_list'] or time.monotonic() > deadline:
+            # dtable_uuid is masked in the snapshot, so check its format (with dashes) here
+            assert all(n['dtable_uuid'] == base.uuid for n in data['notification_list'])
             return data
         time.sleep(0.5)
 
@@ -130,6 +132,7 @@ def _list_notifications(base: Base) -> dict:
 
 NOTIFICATION_MATCHER = path_type({
     r'notification_list\..*\.id': (int,),
+    r'notification_list\..*\.dtable_uuid': (str,),
     r'notification_list\..*\.username': (str,),
     r'notification_list\..*\.created_at': (str,),
     r'notification_list\..*\.detail\.author': (str,),
