@@ -14,6 +14,9 @@ from syrupy.extensions.json import JSONSnapshotExtension
 from typing import Generator
 
 
+USES_GO_DTABLE_SERVER = os.environ.get('DTABLE_SERVER_IMAGE', '').endswith('dtable-server-go')
+
+
 def pytest_configure(config):
     config.addinivalue_line(
         'markers',
