@@ -12,19 +12,23 @@ Usage:
 """
 
 import glob
+import json
 import os
 import re
 import subprocess
 import sys
+import urllib.request
 from datetime import datetime, timezone
 
 import yaml
 
 BASE_URL = "https://api.seatable.com"
+README_HUB_URL = "https://seatable.readme.io"
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
 SPEC_DIR = REPO_ROOT
 INTRO_DIR = os.path.join(REPO_ROOT, "intro")
+README_IDS_FILE = os.path.join(REPO_ROOT, ".github", "readme-ids.json")
 
 SPEC_FILES = [
     "authentication.yaml",
@@ -203,6 +207,72 @@ def resolve_parameter(spec, param):
     return param
 
 
+def load_readme_ids():
+    """Load the ReadMe version and API definition IDs from .github/readme-ids.json."""
+    try:
+        with open(README_IDS_FILE) as f:
+            return json.load(f)
+    except (OSError, ValueError) as e:
+        print(f"Warning: could not read {README_IDS_FILE}: {e}", file=sys.stderr)
+        return {}
+
+
+def readme_api_id(readme_ids, spec_file):
+    """Return the ReadMe API definition ID for a spec file (python-scheduler.yaml -> python_scheduler)."""
+    key = os.path.splitext(spec_file)[0].replace("-", "_")
+    return readme_ids.get(key, "")
+
+
+def fetch_readme_slugs(version):
+    """Fetch the page slugs ReadMe assigned to each operation.
+
+    ReadMe derives the slug from the operationId, but appends -1, -2, ... when the
+    same operationId exists in more than one API definition (e.g. deleteBase).
+    The public reference page embeds the full sidebar as JSON, including the
+    operationId ("sync_unique") and the API definition ID ("apiSetting") of each page.
+
+    Returns dict: (api_definition_id, operationId) -> slug. Empty dict on failure.
+    """
+    url = f"{README_HUB_URL}/v{version}/reference/introduction"
+    request = urllib.request.Request(url, headers={"User-Agent": "seatable-openapi-generate/1.0"})
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            html = response.read().decode("utf-8")
+    except OSError as e:
+        print(f"Warning: could not fetch {url}: {e}", file=sys.stderr)
+        return {}
+
+    match = re.search(
+        r'<script id="ssr-props" type="application/x-ssr-props">(.*?)</script>', html, re.S
+    )
+    if not match:
+        print(f"Warning: no sidebar data found in {url}", file=sys.stderr)
+        return {}
+    try:
+        sidebar = json.loads(match.group(1)).get("sidebars", {}).get("refs", [])
+    except ValueError as e:
+        print(f"Warning: could not parse sidebar data from {url}: {e}", file=sys.stderr)
+        return {}
+
+    slugs = {}
+
+    def walk(node):
+        if isinstance(node, dict):
+            api = node.get("api")
+            if node.get("type") == "endpoint" and isinstance(api, dict):
+                key = (api.get("apiSetting", ""), node.get("sync_unique", ""))
+                if all(key) and node.get("slug"):
+                    slugs[key] = node["slug"]
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(sidebar)
+    return slugs
+
+
 def get_intro_pages():
     """Extract slug and title from intro/*.md frontmatter."""
     pages = []
@@ -277,9 +347,10 @@ def get_operations(spec):
 # ---------------------------------------------------------------------------
 # sitemap.xml
 # ---------------------------------------------------------------------------
-def generate_sitemap(intro_pages, specs_data):
+def generate_sitemap(intro_pages, specs_data, readme_ids, readme_slugs):
     # Collect all URLs with metadata: (url, lastmod, priority)
     entries = []
+    unresolved = []
 
     # Intro / doc pages
     for page in intro_pages:
@@ -292,14 +363,31 @@ def generate_sitemap(intro_pages, specs_data):
         spec_path = os.path.join(SPEC_DIR, spec_file)
         op_lastmods, fallback = get_operation_lastmods(spec_path)
         priority = SPEC_PRIORITY.get(spec_file, 0.3)
+        api_id = readme_api_id(readme_ids, spec_file)
         for op in operations:
             if op["operationId"]:
-                url = f"{BASE_URL}/reference/{op['operationId'].lower()}"
+                slug = readme_slugs.get((api_id, op["operationId"]))
+                if not slug:
+                    # Fallback: ReadMe's default slug, wrong for duplicate operationIds
+                    slug = op["operationId"].lower()
+                    unresolved.append(f"{spec_file}: {op['operationId']}")
+                url = f"{BASE_URL}/reference/{slug}"
                 if op_lastmods:
                     lastmod = op_lastmods.get(op["operationId"], fallback)
                 else:
                     lastmod = fallback
                 entries.append((url, lastmod, priority))
+
+    if unresolved:
+        print(
+            f"Warning: no ReadMe slug found for {len(unresolved)} operations, "
+            "using lowercase operationId:",
+            file=sys.stderr,
+        )
+        # List names only on a partial mismatch; if the fetch failed, all are missing
+        if readme_slugs:
+            for name in unresolved:
+                print(f"  {name}", file=sys.stderr)
 
     # Deduplicate by URL (keep highest priority)
     seen = {}
@@ -523,7 +611,12 @@ def main():
         specs_data.append((spec_file, spec, operations))
         all_operations.extend(operations)
 
-    sitemap = generate_sitemap(intro_pages, specs_data)
+    readme_ids = load_readme_ids()
+    version = readme_ids.get("version", "")
+    readme_slugs = fetch_readme_slugs(version) if version else {}
+    print(f"ReadMe slugs  — {len(readme_slugs)} endpoints (version {version or 'unknown'})")
+
+    sitemap = generate_sitemap(intro_pages, specs_data, readme_ids, readme_slugs)
     with open(os.path.join(OUTPUT_DIR, "sitemap.xml"), "w") as f:
         f.write(sitemap)
     print(f"sitemap.xml   — {len(intro_pages)} doc pages + {len(all_operations)} operations")
