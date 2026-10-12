@@ -751,6 +751,8 @@ paths:
                     permission: rw
                     dtable_uuid: c56624fd757f4f4bae7de76235aeb1f0
                     dtable_name: CRM
+                    dtable_icon: icon-user-interview
+                    dtable_color: "#E91E63"
                     workspace_id: 2
                     link: https://cloud.seatable.io/external-apps/25ed3722-7988-4389-8095-9a46373cd8a5/
                     edit_link: https://cloud.seatable.io/dtable/external-apps-edit/25ed3722-7988-4389-8095-9a46373cd8a5/
@@ -792,6 +794,8 @@ paths:
                     permission: rw
                     dtable_uuid: c56624fd757f4f4bae7de76235aeb1f0
                     dtable_name: CRM
+                    dtable_icon: icon-user-interview
+                    dtable_color: "#E91E63"
                     workspace_id: 2
                     link: https://cloud.seatable.io/external-apps/25ed3722-7988-4389-8095-9a46373cd8a5/
                     edit_link: https://cloud.seatable.io/dtable/external-apps-edit/25ed3722-7988-4389-8095-9a46373cd8a5/

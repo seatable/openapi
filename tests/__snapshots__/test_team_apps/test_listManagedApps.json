@@ -7,6 +7,8 @@
       "app_name": "Test App",
       "app_user_id": "int",
       "app_uuid": "str",
+      "dtable_color": null,
+      "dtable_icon": null,
       "dtable_name": "ManagedAppsTest",
       "dtable_uuid": "str",
       "edit_link": "str",
