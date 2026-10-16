@@ -1,6 +1,8 @@
 {
   "metadata": {
+    "description": null,
     "format_version": 9,
+    "scripts": [],
     "settings": {
       "date_settings": {
         "first_day_of_week": "Monday"
@@ -11,29 +13,43 @@
         "_id": "str",
         "columns": [
           {
+            "colorbys": {},
+            "data": null,
+            "description": null,
+            "draggable": false,
+            "edit_metadata_permission_type": "",
+            "edit_metadata_permitted_group": [],
+            "edit_metadata_permitted_users": [],
             "editable": true,
             "key": "str",
             "name": "Name",
+            "permission_type": "",
+            "permitted_group": [],
+            "permitted_users": [],
             "resizable": true,
             "type": "text",
             "width": 200
           }
         ],
+        "description": "",
+        "header_settings": {},
+        "is_header_locked": false,
         "name": "Table1",
+        "summary_configs": {},
+        "table_permissions": {},
         "views": [
           {
             "_id": "str",
+            "colorbys": {},
             "filter_conjunction": "And",
             "filters": [],
-            "formula_rows": {},
             "groupbys": [],
-            "groups": [],
             "hidden_columns": [],
             "is_locked": false,
             "name": "Default View",
-            "rows": [],
+            "private_for": null,
+            "row_height": "default",
             "sorts": [],
-            "summaries": [],
             "type": "table"
           }
         ]
@@ -82,29 +98,25 @@
             "width": 200
           }
         ],
+        "description": "",
         "header_settings": {},
         "is_header_locked": false,
         "name": "test_metadata",
         "summary_configs": {},
+        "table_permissions": {},
         "views": [
           {
             "_id": "str",
             "colorbys": {},
-            "colors": {},
-            "column_colors": {},
             "filter_conjunction": "And",
             "filters": [],
-            "formula_rows": {},
             "groupbys": [],
-            "groups": [],
             "hidden_columns": [],
             "is_locked": false,
             "name": "Default View",
             "private_for": null,
             "row_height": "default",
-            "rows": [],
             "sorts": [],
-            "summaries": {},
             "type": "table"
           }
         ]

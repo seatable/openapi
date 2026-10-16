@@ -1,0 +1,56 @@
+{
+  "rows": [
+    {
+      "_archived": false,
+      "_creator": "str",
+      "_ctime": "str",
+      "_id": "str",
+      "_last_modifier": "str",
+      "_locked": null,
+      "_locked_by": null,
+      "_mtime": "str",
+      "date": "2030-06-20T00:00:00+02:00",
+      "date-hours-minutes": "2030-06-20T01:55:00+02:00",
+      "text": "milliseconds-since-unix-epoch"
+    },
+    {
+      "_archived": false,
+      "_creator": "str",
+      "_ctime": "str",
+      "_id": "str",
+      "_last_modifier": "str",
+      "_locked": null,
+      "_locked_by": null,
+      "_mtime": "str",
+      "date": "2030-06-21T00:00:00+02:00",
+      "date-hours-minutes": "2030-06-21T01:55:00+02:00",
+      "text": "rfc-3339-nano"
+    },
+    {
+      "_archived": false,
+      "_creator": "str",
+      "_ctime": "str",
+      "_id": "str",
+      "_last_modifier": "str",
+      "_locked": null,
+      "_locked_by": null,
+      "_mtime": "str",
+      "date": "2030-06-20T00:00:00+02:00",
+      "date-hours-minutes": "2030-06-20T00:00:00+02:00",
+      "text": "iso-date"
+    },
+    {
+      "_archived": false,
+      "_creator": "str",
+      "_ctime": "str",
+      "_id": "str",
+      "_last_modifier": "str",
+      "_locked": null,
+      "_locked_by": null,
+      "_mtime": "str",
+      "date": "2030-06-20T00:00:00+02:00",
+      "date-hours-minutes": "2030-06-20T23:55:00+02:00",
+      "text": "iso-date-hours-minutes"
+    }
+  ]
+}

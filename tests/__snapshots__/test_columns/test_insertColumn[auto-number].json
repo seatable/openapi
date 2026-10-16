@@ -3,7 +3,9 @@
   "data": {
     "digits": 4,
     "format": "0000",
-    "max_used_auto_number": 0
+    "max_used_auto_number": 0,
+    "prefix": "",
+    "prefix_type": ""
   },
   "description": null,
   "draggable": true,

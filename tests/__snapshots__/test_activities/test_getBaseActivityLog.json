@@ -10,7 +10,7 @@
       "operation": "str"
     },
     {
-      "app": null,
+      "app": "",
       "author": "str",
       "dtable_uuid": "str",
       "id": "int",

@@ -81,7 +81,7 @@ def test_listRowActivities(base: Base, snapshot_json: SnapshotAssertion):
     assert all(a['dtable_uuid'] == base.uuid for a in data['activities'])
 
     matcher = path_type({
-        r'activities\.\d+\.(id|dtable_uuid|row_id|op_user|op_time)': (str, int),
+        r'activities\.\d+\.(id|dtable_uuid|row_id|op_app|op_user|op_time)': (str, int),
         r'activities\.\d+\.detail\.table_id': (str,),
         r'activities\.\d+\.detail\.row_data': (list,),
     }, regex=True)

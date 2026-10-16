@@ -2651,6 +2651,8 @@ paths:
                   _id: Bko1e60YT-egit2SljWSZA
                   _creator: 123456786569491ba42905bf1647fd3f@auth.local
                   _last_modifier: 123456786569491ba42905bf1647fd3f@auth.local
+        "400":
+          description: Bad Request
 
     put:
       tags:

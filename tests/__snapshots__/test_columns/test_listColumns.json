@@ -523,7 +523,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "dateAdd({date-iso}, 1, 'year')"
+        "formula": "dateAdd({date-iso}, 1, 'year')",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -543,7 +544,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "1 + 2"
+        "formula": "1 + 2",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -563,7 +565,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "1.3 + 2.6"
+        "formula": "1.3 + 2.6",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -583,7 +586,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "and(true(), false())"
+        "formula": "and(true(), false())",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -603,7 +607,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{number}"
+        "formula": "{number}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -623,7 +628,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{number-decimal-dot-thousands-comma}"
+        "formula": "{number-decimal-dot-thousands-comma}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -643,7 +649,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{number-decimal-comma-thousands-space}"
+        "formula": "{number-decimal-comma-thousands-space}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -663,7 +670,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{number-decimal-dot-thousands-no}"
+        "formula": "{number-decimal-dot-thousands-no}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -683,7 +691,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{number-percent}"
+        "formula": "{number-percent}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -703,7 +712,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{number-euro}"
+        "formula": "{number-euro}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -723,7 +733,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{date-iso}"
+        "formula": "{date-iso}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -743,7 +754,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{date-iso-hours-minutes}"
+        "formula": "{date-iso-hours-minutes}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -763,7 +775,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{date-us}"
+        "formula": "{date-us}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -783,7 +796,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{date-us-hours-minutes}"
+        "formula": "{date-us-hours-minutes}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -803,7 +817,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{date-european}"
+        "formula": "{date-european}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -823,7 +838,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{date-german}"
+        "formula": "{date-german}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -843,7 +859,8 @@
     {
       "colorbys": {},
       "data": {
-        "formula": "{date-german-hours-minutes}"
+        "formula": "{date-german-hours-minutes}",
+        "operated_columns": []
       },
       "description": null,
       "draggable": true,
@@ -905,7 +922,9 @@
       "colorbys": {},
       "data": {
         "digits": 4,
-        "format": "0000"
+        "format": "0000",
+        "prefix": "",
+        "prefix_type": ""
       },
       "description": null,
       "draggable": true,
@@ -950,6 +969,7 @@
       "data": {
         "digits": 4,
         "format": "0000",
+        "prefix": "",
         "prefix_type": "date"
       },
       "description": null,

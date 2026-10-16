@@ -4,13 +4,13 @@
       "detail": {
         "row_data": "list",
         "row_name": "activity target",
-        "row_name_option": "",
+        "row_name_option": null,
         "table_id": "str",
         "table_name": "test_row_activities"
       },
       "dtable_uuid": "str",
       "id": "int",
-      "op_app": "",
+      "op_app": "str",
       "op_time": "str",
       "op_type": "insert_row",
       "op_user": "str",

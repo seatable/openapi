@@ -368,17 +368,17 @@ ROWS = [
         'number-decimal-dot-thousands-no': 1_000_000.123,
         'number-percent': 5,
         'number-euro': 5.23,
-        'date-iso': '2030/06/20',
-        'date-iso-hours-minutes': '2030/06/20 23:55',
-        'date-us': '6/5/2024',
-        'date-us-hours-minutes': '6/5/2024 23:55',
-        'date-european': '05/06/2024',
-        'date-european-hours-minutes': '05/06/2024 23:55',
-        'date-german': '20.06.2030',
-        'date-german-hours-minutes': '20.06.2030 23:55',
+        # 'date-iso': '2030/06/20',
+        # 'date-iso-hours-minutes': '2030/06/20 23:55',
+        # 'date-us': '6/5/2024',
+        # 'date-us-hours-minutes': '6/5/2024 23:55',
+        #'date-european': '05/06/2024',
+        #'date-european-hours-minutes': '05/06/2024 23:55',
+        # 'date-german': '20.06.2030',
+        # 'date-german-hours-minutes': '20.06.2030 23:55',
         # Duration values are in seconds
-        'duration-hours-minutes': '5400',
-        'duration-hours-minutes-seconds': '5430',
+        # 'duration-hours-minutes': '5400',
+        # 'duration-hours-minutes-seconds': '5430',
         'single-select': 'option-1',
         'multiple-select': ['option-1', 'option-2'],
         'email': 'example@seatable.io',
@@ -400,10 +400,10 @@ ROWS = [
         'number': 500,
         'number-percent': 5.12345,
         'number-euro': 10.2345,
-        'date-iso': '2030/06/20',
-        'date-iso-hours-minutes': '2030/06/20 23:55',
-        'date-german': '20.06.2030',
-        'date-german-hours-minutes': '20.06.2030 23:55',
+        #'date-iso': '2030/06/20',
+        #'date-iso-hours-minutes': '2030/06/20 23:55',
+        #'date-german': '20.06.2030',
+        #'date-german-hours-minutes': '20.06.2030 23:55',
         'single-select': 'option-2',
         'multiple-select': ['option-2', 'option-3'],
         'checkbox': False,
@@ -412,10 +412,10 @@ ROWS = [
         'text': 'E',
         'long-text': '## Heading\n- Item 1\n- Item 2',
         'number': -10,
-        'date-iso': '2030/06/20',
-        'date-iso-hours-minutes': '2030/06/20 23:55',
-        'date-german': '20.06.2030',
-        'date-german-hours-minutes': '20.06.2030 23:55',
+        #'date-iso': '2030/06/20',
+        #'date-iso-hours-minutes': '2030/06/20 23:55',
+        #'date-german': '20.06.2030',
+        #'date-german-hours-minutes': '20.06.2030 23:55',
         'single-select': 'option-3',
         'multiple-select': ['option-1', 'option-2', 'option-3'],
         'checkbox': True,
@@ -822,6 +822,100 @@ def test_querySQL(base: Base, snapshot_json: SnapshotAssertion, operation_id: st
     )
 
     assert snapshot_json(matcher=matcher) == response.json()
+
+def test_appendRows_accepts_supported_date_formats(base: Base, snapshot_json: SnapshotAssertion):
+    table_name = 'test_appendRows_accepts_supported_date_formats'
+    columns = [
+        {'column_name': 'text', 'column_type': 'text'},
+        {'column_name': 'date', 'column_type': 'date', 'column_data': {'format': 'YYYY-MM-DD'}},
+        {'column_name': 'date-hours-minutes', 'column_type': 'date', 'column_data': {'format': 'YYYY-MM-DD HH:mm'}},
+    ]
+    create_table(base, table_name, columns)
+
+    values = {
+        'milliseconds-since-unix-epoch': 1908143700000,
+        'rfc-3339-nano': '2030-06-20T23:55:00.123456789Z',
+        'iso-date': '2030-06-20',
+        'iso-date-hours-minutes': '2030-06-20 23:55',
+    }
+    rows = [
+        {'text': name, 'date': value, 'date-hours-minutes': value}
+        for name, value in values.items()
+    ]
+    append_rows(base, table_name, rows)
+
+    path_parameters = {'base_uuid': base.uuid}
+    query = {'table_name': table_name, 'convert_keys': True}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    operation = base_operations_schema.find_operation_by_id('listRows')
+    case: Case = operation.Case(path_parameters=path_parameters, query=query, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 200
+
+    matcher = path_type(
+        {
+            r"rows\..*\.(_id|_ctime|_mtime|_creator|_last_modifier)": (str,),
+        },
+        regex=True,
+    )
+
+    assert snapshot_json(matcher=matcher) == response.json()
+
+@pytest.mark.parametrize('date_format, value', [
+    ('YYYY-MM-DD', '2030/06/20'),
+    ('YYYY-MM-DD HH:mm', '2030/06/20 23:55'),
+    ('YYYY-MM-DD', '6/5/2024'),
+    ('YYYY-MM-DD HH:mm', '6/5/2024 23:55'),
+    ('YYYY-MM-DD', '05/06/2024'),
+    ('YYYY-MM-DD HH:mm', '05/06/2024 23:55'),
+    ('YYYY-MM-DD', '20.06.2030'),
+    ('YYYY-MM-DD HH:mm', '20.06.2030 23:55'),
+])
+def test_appendRows_rejects_unsupported_date_formats(base: Base, date_format: str, value: str):
+    # Table names must be unique per case since all cases share the same base
+    table_name = f'test_appendRows_rejects_unsupported_date_formats_{abs(hash((date_format, value)))}'
+    columns = [{'column_name': 'date', 'column_type': 'date', 'column_data': {'format': date_format}}]
+
+    create_table(base, table_name, columns)
+
+    path_parameters = {'base_uuid': base.uuid}
+    body = {'table_name': table_name, 'rows': [{'date': value}]}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    operation = base_operations_schema.find_operation_by_id('appendRows')
+
+    case: Case = operation.Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 400
+
+@pytest.mark.parametrize('duration_format, value', [
+    ('h:mm', '5400'),
+    ('h:mm:ss', '5430'),
+])
+def test_appendRows_rejects_unsupported_duration_formats(base: Base, duration_format: str, value: str):
+    # Table names must be unique per case since all cases share the same base
+    table_name = f'test_appendRows_rejects_unsupported_duration_formats_{abs(hash((duration_format, value)))}'
+    columns = [
+        {'column_name': 'text', 'column_type': 'text'},
+        {
+            'column_name': 'duration',
+            'column_type': 'duration',
+            'column_data': {'format': 'duration', 'duration_format': duration_format},
+        },
+    ]
+
+    create_table(base, table_name, columns)
+
+    path_parameters = {'base_uuid': base.uuid}
+    body = {'table_name': table_name, 'rows': [{'duration': value}]}
+    headers = {'Authorization': f'Bearer {base.token}'}
+    operation = base_operations_schema.find_operation_by_id('appendRows')
+
+    case: Case = operation.Case(path_parameters=path_parameters, body=body, headers=headers)
+    response = case.call()
+
+    assert response.status_code == 400
 
 def create_table(base: Base, table_name: str, columns: list[dict]):
     path_parameters = {'base_uuid': base.uuid}
