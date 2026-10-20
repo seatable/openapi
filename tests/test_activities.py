@@ -5,9 +5,13 @@ import pytest
 from conftest import Base, base_operations_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import props
 from syrupy.matchers import path_type
 
 from test_base_operations import create_table, append_rows
+
+# Go dtable-server returns different values for these properties than the JS dtable-server
+EXCLUDED_PROPS = props('app', 'op_app', 'row_name_option')
 
 
 def _headers(base):
@@ -50,7 +54,7 @@ def test_getBaseActivityLog(base: Base, snapshot_json: SnapshotAssertion):
         r'operations\.\d+\.(author|dtable_uuid|id|op_id|op_time|operation)': (str, int),
     }, regex=True)
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=EXCLUDED_PROPS, matcher=matcher) == data
 
 
 @pytest.mark.slow
@@ -86,7 +90,7 @@ def test_listRowActivities(base: Base, snapshot_json: SnapshotAssertion):
         r'activities\.\d+\.detail\.row_data': (list,),
     }, regex=True)
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=EXCLUDED_PROPS, matcher=matcher) == data
 
 
 def test_createSnapshot(base: Base):

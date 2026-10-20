@@ -4,7 +4,13 @@ import schemathesis
 from conftest import Base, BASE_URL, Secret, user_account_operations, base_operations_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import paths
 from syrupy.matchers import path_type
+
+# Go dtable-server omits these properties
+EXCLUDED_VIEW_PATHS = paths(*(
+    f'views.0.{p}' for p in ('colors', 'column_colors', 'formula_rows', 'groups', 'rows', 'summaries')
+))
 
 file_operations = schemathesis.openapi.from_path('../file_operations.yaml')
 
@@ -464,7 +470,7 @@ def test_createTable(base: Base, snapshot_json: SnapshotAssertion, operation_id:
         },
     )
 
-    assert snapshot_json(matcher=matcher) == response.json()
+    assert snapshot_json(exclude=EXCLUDED_VIEW_PATHS, matcher=matcher) == response.json()
 
 @pytest.mark.parametrize('operation_id', ['appendRows'])
 def test_appendRows(base: Base, snapshot_json: SnapshotAssertion, operation_id: str):

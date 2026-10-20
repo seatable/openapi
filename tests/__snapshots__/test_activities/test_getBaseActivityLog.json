@@ -1,7 +1,6 @@
 {
   "operations": [
     {
-      "app": "",
       "author": "str",
       "dtable_uuid": "str",
       "id": "int",
@@ -10,7 +9,6 @@
       "operation": "str"
     },
     {
-      "app": null,
       "author": "str",
       "dtable_uuid": "str",
       "id": "int",

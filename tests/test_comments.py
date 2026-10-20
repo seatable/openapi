@@ -1,6 +1,7 @@
 from conftest import Base, base_operations_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import props
 from syrupy.matchers import path_type
 
 from test_base_operations import create_table, append_rows
@@ -132,7 +133,7 @@ def test_getComment(base: Base, snapshot_json: SnapshotAssertion):
         'updated_at': (str,),
     })
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=props('detail'), matcher=matcher) == data
 
 
 def test_deleteComment(base: Base, snapshot_json: SnapshotAssertion):

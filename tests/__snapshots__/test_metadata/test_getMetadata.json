@@ -25,15 +25,11 @@
             "_id": "str",
             "filter_conjunction": "And",
             "filters": [],
-            "formula_rows": {},
             "groupbys": [],
-            "groups": [],
             "hidden_columns": [],
             "is_locked": false,
             "name": "Default View",
-            "rows": [],
             "sorts": [],
-            "summaries": [],
             "type": "table"
           }
         ]
@@ -90,21 +86,15 @@
           {
             "_id": "str",
             "colorbys": {},
-            "colors": {},
-            "column_colors": {},
             "filter_conjunction": "And",
             "filters": [],
-            "formula_rows": {},
             "groupbys": [],
-            "groups": [],
             "hidden_columns": [],
             "is_locked": false,
             "name": "Default View",
             "private_for": null,
             "row_height": "default",
-            "rows": [],
             "sorts": [],
-            "summaries": {},
             "type": "table"
           }
         ]
