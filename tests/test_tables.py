@@ -1,9 +1,15 @@
 from conftest import Base, base_operations_schema, normalize, normalize_row
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import paths
 from syrupy.matchers import path_type
 
 from test_base_operations import create_table, append_rows
+
+# Go dtable-server omits these properties
+EXCLUDED_VIEW_PATHS = paths(*(
+    f'views.0.{p}' for p in ('colors', 'custom_colors', 'formula_rows', 'groups', 'rows', 'summaries')
+))
 
 
 def test_renameTable(base: Base):
@@ -58,7 +64,9 @@ def test_duplicateTable(base: Base, snapshot_json: SnapshotAssertion):
         r"columns\..*\.key": (str,),
     }, regex=True)
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=paths('summary_configs', *(
+        f'views.0.{p}' for p in ('colors', 'column_colors', 'formula_rows', 'groups', 'link_rows', 'rows', 'summaries')
+    )), matcher=matcher) == data
 
 
 def test_deleteTable(base: Base):

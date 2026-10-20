@@ -2,6 +2,7 @@ import pytest
 from conftest import Base, base_operations_schema
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import props
 from syrupy.matchers import path_type
 
 from test_base_operations import create_table, append_rows
@@ -11,6 +12,9 @@ SIMPLE_COLUMNS = [
     {'column_name': 'text', 'column_type': 'text'},
     {'column_name': 'number', 'column_type': 'number'},
 ]
+
+# Go dtable-server omits these properties
+EXCLUDED_PROPS = props('colors', 'column_colors', 'custom_colors', 'formula_rows', 'groups', 'rows', 'summaries')
 
 
 def test_listViews(base: Base, snapshot_json: SnapshotAssertion):
@@ -39,7 +43,7 @@ def test_listViews(base: Base, snapshot_json: SnapshotAssertion):
         r"views\..*\._id": (str,),
     }, regex=True)
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=EXCLUDED_PROPS, matcher=matcher) == data
 
 
 def test_createView(base: Base, snapshot_json: SnapshotAssertion):
@@ -64,7 +68,7 @@ def test_createView(base: Base, snapshot_json: SnapshotAssertion):
         '_id': (str,),
     })
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=EXCLUDED_PROPS, matcher=matcher) == data
 
 
 def test_getView(base: Base, snapshot_json: SnapshotAssertion):
@@ -88,7 +92,7 @@ def test_getView(base: Base, snapshot_json: SnapshotAssertion):
         '_id': (str,),
     })
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=EXCLUDED_PROPS, matcher=matcher) == data
 
 
 def test_updateView(base: Base):

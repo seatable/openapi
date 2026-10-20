@@ -2,9 +2,19 @@ import pytest
 from conftest import Base, base_operations_schema, USES_GO_DTABLE_SERVER
 from schemathesis import Case
 from syrupy.assertion import SnapshotAssertion
+from syrupy.filters import paths
 from syrupy.matchers import path_type
 
 from test_base_operations import create_table, COLUMNS
+
+# Go dtable-server returns these properties, the JS dtable-server doesn't
+LIST_COLUMNS_EXCLUDED_PATHS = paths(
+    *(f'columns.{i}.data.operated_columns' for i in range(24, 41)),  # formula columns
+    'columns.43.data.prefix',
+    'columns.43.data.prefix_type',
+    'columns.45.data.prefix',
+)
+INSERT_COLUMN_EXCLUDED_PATHS = paths('data.prefix', 'data.prefix_type')
 
 
 def test_listColumns(base: Base, snapshot_json: SnapshotAssertion):
@@ -32,7 +42,7 @@ def test_listColumns(base: Base, snapshot_json: SnapshotAssertion):
         r"columns\..*\.key": (str,),
     }, regex=True)
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=LIST_COLUMNS_EXCLUDED_PATHS, matcher=matcher) == data
 
 
 # Column definitions for insertColumn and appendColumns tests — covers complex types
@@ -143,7 +153,7 @@ def test_insertColumn(base: Base, snapshot_json: SnapshotAssertion, column: dict
         'key': (str,),
     })
 
-    assert snapshot_json(matcher=matcher) == data
+    assert snapshot_json(exclude=INSERT_COLUMN_EXCLUDED_PATHS, matcher=matcher) == data
 
 
 # appendColumns (batch) does not support formula and auto-number column types
