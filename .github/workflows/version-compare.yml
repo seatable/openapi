@@ -24,6 +24,17 @@ on:
         options:
           - "seatable/seatable-enterprise"
           - "seatable/seatable-enterprise-testing"
+      old_dtable_server_image:
+        description: "dtable-server image for baseline"
+        required: true
+        type: choice
+        default: "seatable/dtable-server-js"
+        options:
+          - "seatable/dtable-server-js"
+          - "seatable/dtable-server-go"
+      old_dtable_server_version:
+        description: "dtable-server version for baseline (e.g. 7.0.10-testing)"
+        required: true
       new_version:
         description: "New version to compare (e.g. 6.1.0)"
         required: true
@@ -35,6 +46,17 @@ on:
         options:
           - "seatable/seatable-enterprise"
           - "seatable/seatable-enterprise-testing"
+      new_dtable_server_image:
+        description: "dtable-server image for new version"
+        required: true
+        type: choice
+        default: "seatable/dtable-server-js"
+        options:
+          - "seatable/dtable-server-js"
+          - "seatable/dtable-server-go"
+      new_dtable_server_version:
+        description: "dtable-server version for new version (e.g. 7.0.10-testing)"
+        required: true
 
 jobs:
   compare:
@@ -68,18 +90,21 @@ jobs:
       - name: Start SeaTable ${{ inputs.old_version }}
         working-directory: version-compare
         run: |
-          SEATABLE_IMAGE=${{ inputs.old_image }} SEATABLE_VERSION=${{ inputs.old_version }} docker compose up -d
+          DTABLE_SERVER_IMAGE=${{ inputs.old_dtable_server_image }} DTABLE_SERVER_VERSION=${{ inputs.old_dtable_server_version }} SEATABLE_IMAGE=${{ inputs.old_image }} SEATABLE_VERSION=${{ inputs.old_version }} docker compose up -d
           ./setup.sh
 
       - name: Run tests against ${{ inputs.old_version }} (create baseline snapshots)
         working-directory: tests
+        env:
+          DTABLE_SERVER_IMAGE: ${{ inputs.old_dtable_server_image }}
+          DTABLE_SERVER_VERSION: ${{ inputs.old_dtable_server_version }}
         run: |
           set -a && source ../version-compare/.env && set +a
           pytest --snapshot-update --color=yes -v 2>&1 | tee /tmp/baseline-output.txt || true
 
       - name: Stop SeaTable ${{ inputs.old_version }}
         working-directory: version-compare
-        run: SEATABLE_VERSION=${{ inputs.old_version }} docker compose down -v
+        run: DTABLE_SERVER_IMAGE=${{ inputs.old_dtable_server_image }} DTABLE_SERVER_VERSION=${{ inputs.old_dtable_server_version }} SEATABLE_VERSION=${{ inputs.old_version }} docker compose down -v
 
       # --- New version ---
 
@@ -94,11 +119,14 @@ jobs:
       - name: Start SeaTable ${{ inputs.new_version }}
         working-directory: version-compare
         run: |
-          SEATABLE_IMAGE=${{ inputs.new_image }} SEATABLE_VERSION=${{ inputs.new_version }} docker compose up -d
+          DTABLE_SERVER_IMAGE=${{ inputs.new_dtable_server_image }} DTABLE_SERVER_VERSION=${{ inputs.new_dtable_server_version }} SEATABLE_IMAGE=${{ inputs.new_image }} SEATABLE_VERSION=${{ inputs.new_version }} docker compose up -d
           ./setup.sh
 
       - name: Run tests against ${{ inputs.new_version }} (compare with baseline)
         working-directory: tests
+        env:
+          DTABLE_SERVER_IMAGE: ${{ inputs.new_dtable_server_image }}
+          DTABLE_SERVER_VERSION: ${{ inputs.new_dtable_server_version }}
         run: |
           set -a && source ../version-compare/.env && set +a
           pytest --color=yes -v 2>&1 | tee /tmp/compare-output.txt
@@ -179,7 +207,7 @@ jobs:
       - name: Stop SeaTable ${{ inputs.new_version }}
         if: always()
         working-directory: version-compare
-        run: SEATABLE_VERSION=${{ inputs.new_version }} docker compose down -v
+        run: DTABLE_SERVER_IMAGE=${{ inputs.new_dtable_server_image }} DTABLE_SERVER_VERSION=${{ inputs.new_dtable_server_version }} SEATABLE_VERSION=${{ inputs.new_version }} docker compose down -v
 
       - name: Upload comparison report
         if: always()
