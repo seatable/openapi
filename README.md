@@ -97,11 +97,11 @@ cd version-compare
 
 # seatable/seatable-enterprise or seatable/seatable-enterprise-testing
 export SEATABLE_IMAGE=seatable/seatable-enterprise
-export SEATABLE_VERSION=6.0.10
+export SEATABLE_VERSION=7.0.10
 
 # seatable/dtable-server-go or seatable/dtable-server-js
 export DTABLE_SERVER_IMAGE=seatable/dtable-server-go
-export DTABLE_SERVER_VERSION=7.0.7-testing
+export DTABLE_SERVER_VERSION=7.0.10-testing
 
 # Create license file
 cp "SOURCE" seatable-license.txt
