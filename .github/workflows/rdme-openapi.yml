@@ -5,18 +5,20 @@
 # Documentation: https://docs.readme.com/docs/rdme or https://github.com/readmeio/rdme
 #
 # The version is derived from the branch name (e.g. v6.2 -> 6.2).
-# The ReadMe category IDs are stored in .github/readme-ids.json (one per branch).
+# The ReadMe API definition IDs (one set per branch) are stored in
+# .github/readme-ids.json, the category ID of the intro pages in their frontmatter.
 #
-# Process for new version:
+# Process for a new version (vX.Y):
 #   1. git checkout -b vX.Y
-#   2. Login to https://dash.readme.com/login and fork the API definition to the new version.
-#   3a. Get the new category IDs from https://dash.readme.com/project/seatable/vX.Y/reference
-#   3b. Update .github/readme-ids.json with the new IDs.
-#   4a. Get the _id (of SeaTable API) via API: https://docs.readme.com/main/reference/getcategories
-#      (use the API key from https://dash.readme.com/project/seatable/vX.Y/api-key as password - username stays empty)
-#   4b. Update the "category" value in all intro/*.md frontmatter.
-#   5. Update the version in all YAML spec files.
-#   6. git add . && git commit && git push --set-upstream origin vX.Y
+#   2. Login to https://dash.readme.com/login and fork the API definition to the
+#      new version. This copies the definitions and the categories, both with new IDs.
+#   3. Update .github/readme-ids.json (API definition IDs and version) and the
+#      "category" value in all intro/*.md frontmatter:
+#      .github/get-readme-ids.sh --write
+#   4. Bump the version in README.md and in all spec files (used as the ReadMe
+#      version via --useSpecVersion):
+#      sed -i 's/^  version: ".*"/  version: "X.Y"/' *.yaml
+#   5. git add . && git commit && git push --set-upstream origin vX.Y
 
 name: Publish
 

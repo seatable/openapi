@@ -19,7 +19,7 @@ Every push to a version branch triggers the workflow in `.github/workflows/rdme-
 3. **Quality check** — runs `tests/validate_specs.py` to enforce documentation quality rules (see below)
 4. **Publish** — syncs intro docs and all OpenAPI specs to ReadMe.com
 
-The ReadMe category IDs for each version are stored in `.github/readme-ids.json`.
+The ReadMe API definition IDs for each version are stored in `.github/readme-ids.json`.
 
 ### Job 2: Deploy static files
 
@@ -70,11 +70,9 @@ To publish a new API version (e.g. v6.2):
 
 1. Create a new branch: `git checkout -b v6.2`
 2. Fork the API definition on https://dash.readme.com to the new version.
-3. Get the new category IDs from the ReadMe dashboard or via API.
-4. Update `.github/readme-ids.json` with the new IDs and version.
-5. Update the `category` value in all `intro/*.md` frontmatter.
-6. Update the version in all YAML spec files.
-7. Push the branch: `git push --set-upstream origin v6.2`
+3. Update `.github/readme-ids.json` and the `category` in all `intro/*.md`: `.github/get-readme-ids.sh --write`
+4. Bump the version in this README and in all YAML spec files.
+5. Push the branch: `git push --set-upstream origin v6.2`
 
 ## Tests
 
