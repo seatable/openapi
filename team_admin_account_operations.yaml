@@ -965,6 +965,7 @@ paths:
                     rows_count: 7
                     from_user: e38487b4357e40c8b1359223ba87a1af@auth.local
                     from_user_name: org-1-admin
+                    permission: rw
                 count: 1
   /api/v2.1/org/{org_id}/admin/dtables/{base_uuid}/:
     get:
