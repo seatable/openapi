@@ -17,7 +17,7 @@ on:
       version:
         description: "SeaTable version"
         required: true
-        default: "7.0.10"
+        default: "7.0.11"
       image:
         description: "Docker Hub repository"
         required: true
@@ -28,7 +28,7 @@ on:
           - "seatable/seatable-enterprise-testing"
 
 env:
-  DEFAULT_VERSION: "7.0.10"
+  DEFAULT_VERSION: "7.0.11"
   DEFAULT_IMAGE: "seatable/seatable-enterprise-testing"
 
 
@@ -41,9 +41,9 @@ jobs:
       matrix:
         include:
           - implementation: go
-            dtable_server_version: "7.0.10-testing"
+            dtable_server_version: "7.0.11-testing"
           - implementation: js
-            dtable_server_version: "7.0.10-testing"
+            dtable_server_version: "7.0.11-testing"
     env:
       DTABLE_SERVER_IMAGE: "seatable/dtable-server-${{ matrix.implementation }}"
       DTABLE_SERVER_VERSION: ${{ matrix.dtable_server_version }}

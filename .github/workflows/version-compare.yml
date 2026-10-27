@@ -33,7 +33,7 @@ on:
           - "seatable/dtable-server-js"
           - "seatable/dtable-server-go"
       old_dtable_server_version:
-        description: "dtable-server version for baseline (e.g. 7.0.10-testing)"
+        description: "dtable-server version for baseline (e.g. 7.0.11-testing)"
         required: true
       new_version:
         description: "New version to compare (e.g. 6.1.0)"
@@ -55,7 +55,7 @@ on:
           - "seatable/dtable-server-js"
           - "seatable/dtable-server-go"
       new_dtable_server_version:
-        description: "dtable-server version for new version (e.g. 7.0.10-testing)"
+        description: "dtable-server version for new version (e.g. 7.0.11-testing)"
         required: true
 
 jobs:
