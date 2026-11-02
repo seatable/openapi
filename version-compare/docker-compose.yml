@@ -15,6 +15,9 @@ services:
       - REDIS_PORT=6379
       - REDIS_PASSWORD=seatable
       - JWT_PRIVATE_KEY=test-jwt-private-key-for-ci
+      - SECRET_KEY=dtable-web-secret-key-for-ci
+      # Required in order to call /temp-api-token endpoint
+      - PYTHON_SCHEDULER_AUTH_TOKEN=python-scheduler-auth-token-for-ci
       - SEATABLE_SERVER_HOSTNAME=localhost
       - SEATABLE_SERVER_PROTOCOL=http
       - SEATABLE_ADMIN_EMAIL=admin@example.com
