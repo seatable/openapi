@@ -15,6 +15,8 @@ Issues discovered during automated API testing against SeaTable 6.0.10 and 6.1. 
 | 33 | SQL JOIN results ignore `convert_keys: true` | Low | Yes — apply convert_keys to JOIN results |
 | 34 | SQL constants `pi`/`e` not recognized standalone | Low | No — document workaround |
 | 35 | updateGroupRole crashes with JSON boolean | Medium | Yes — same root cause as #29 |
+| 36 | appendRows returns plain-text 413 body (JS dtable-server) | Low | Yes — return JSON `error_message` like Go |
+| 37 | deleteRow reports wrong `deleted_rows` above 1,000 rows (JS dtable-server) | Low | Yes — report the total count |
 
 ### 27. appendColumns fails with link-formula columns
 
@@ -120,6 +122,26 @@ Sending `is_admin: "true"` (as string) works correctly and returns 200.
 **Recommendation:** Cast to string before calling `.lower()`, or accept both booleans and strings. Same pattern as #29.
 
 ---
+
+### 36. appendRows returns plain-text 413 body (JS dtable-server)
+
+**Severity:** Low
+
+`POST /api-gateway/api/v2/dtables/{base_uuid}/rows/` with more than 1,000 rows returns HTTP 413 with the body `Exceed the operation limit on rows` (plain text) but `Content-Type: application/json`. The Go dtable-server returns `{"error_message": "exceed the operation limit on rows"}`, and updateRow/deleteRow return JSON on both implementations.
+
+Observed with SeaTable 7.0.12 (`dtable-server-js:7.0.12-testing`). Covered by `test_appendRows_above_limit_returns_json` (xfail on JS).
+
+**Recommendation:** Return `{"error_message": "..."}` like the other row endpoints.
+
+### 37. deleteRow reports wrong `deleted_rows` above 1,000 rows (JS dtable-server)
+
+**Severity:** Low
+
+`DELETE /api-gateway/api/v2/dtables/{base_uuid}/rows/` with more than 1,000 existing row IDs deletes all rows, but `deleted_rows` only contains the count of the last batch of 1,000: deleting 1,001 rows returns `{"deleted_rows": 1}`, deleting 1,003 rows returns `{"deleted_rows": 3}`. The Go dtable-server returns the correct total.
+
+Observed with SeaTable 7.0.12 (`dtable-server-js:7.0.12-testing`). Covered by `test_deleteRow_above_row_limit` (xfail on JS).
+
+**Recommendation:** Sum up the deleted rows of all internal batches.
 
 ## Previous Issues (reported to developers)
 

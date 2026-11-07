@@ -154,7 +154,7 @@ components:
         minimum: 1
         maximum: 1000
       required: false
-      description: Number of rows that should be returned. 1000 by default.
+      description: Number of rows that should be returned. 1,000 by default. Maximum 1,000; larger values are silently capped to 1,000.
       example: 100
     listRowLinkLimit:
       name: limit
@@ -530,8 +530,9 @@ components:
           $ref: "#/components/schemas/table_name"
         rows:
           type: array
-          description: "Defines the rows which should be added."
+          description: "Defines the rows which should be added. Maximum 1,000 rows per call."
           title: Row Object X
+          maxItems: 1000
           items:
             $ref: "#/components/schemas/row"
         apply_default:
@@ -548,7 +549,8 @@ components:
           $ref: "#/components/schemas/table_name"
         updates:
           type: array
-          description: "Defines the rows which should be updated."
+          description: "Defines the rows which should be updated. Maximum 1,000 rows per call."
+          maxItems: 1000
           items:
             type: object
             properties:
@@ -568,7 +570,8 @@ components:
           $ref: "#/components/schemas/table_name"
         row_ids:
           type: array
-          description: "Defines the rows which should be deleted."
+          description: "Defines the rows which should be deleted. Maximum 10,000 row IDs per call."
+          maxItems: 10000
           items:
             $ref: "#/components/schemas/row_id"
       required:
@@ -2350,6 +2353,19 @@ components:
           type: string
           example: Example
 
+  responses:
+    RowLimitExceeded:
+      description: Payload Too Large — the request affects more rows than allowed in a single call. See [Limits](/reference/limits).
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error_message:
+                type: string
+          example:
+            error_message: Exceed the operation limit on rows
+
 paths:
   /api-gateway/api/v2/dtables/{base_uuid}/metadata/:
     get:
@@ -2568,9 +2584,13 @@ paths:
         >
         > If no view is selected, all columns (even hidden one) are returned. If a view is selected, only the visible columns of that view are returned with the request.
 
-        > 📘 Link Columns
+        > ❗ Limits
         >
-        > From version 5.3 onward, the link column of a row returns a maximum of 50 records.
+        > - **Default and maximum:** 1,000 rows per call. Larger `limit` values are silently capped; no error is returned.
+        > - To retrieve more rows, paginate with `start` and `limit` until fewer than `limit` rows are returned.
+        > - **Link columns** return a maximum of 50 linked records per row (since version 5.3).
+        >
+        > See [Limits](/reference/limits) for details.
 
       security:
         - BaseTokenAuth: []
@@ -2611,6 +2631,12 @@ paths:
       operationId: appendRows
       description: |-
         Append multiple rows to a table. Define the column:values pairs of each column in the [rows object](/reference/models).
+
+        > ❗ Limits
+        >
+        > - **Maximum:** 1,000 rows per call. Larger requests are rejected with `413` and no rows are added. Split larger amounts into multiple calls.
+        >
+        > See [Limits](/reference/limits) for details.
         
         > 🚧 Column names only
         >
@@ -2651,6 +2677,8 @@ paths:
                   _id: Bko1e60YT-egit2SljWSZA
                   _creator: 123456786569491ba42905bf1647fd3f@auth.local
                   _last_modifier: 123456786569491ba42905bf1647fd3f@auth.local
+        "413":
+          $ref: "#/components/responses/RowLimitExceeded"
 
     put:
       tags:
@@ -2659,6 +2687,12 @@ paths:
       operationId: updateRow
       description: |
         Change the values in one or multiple existing row(s) by defining the new values for necessary columns in the row object. Both SeaTable backends are supported.
+
+        > ❗ Limits
+        >
+        > - **Maximum:** 1,000 rows per call. Larger requests are rejected with `413` and no rows are updated. Split larger amounts into multiple calls.
+        >
+        > See [Limits](/reference/limits) for details.
 
         > 📘 Structure of the row object
         > 
@@ -2685,6 +2719,8 @@ paths:
                 type: object
               example:
                 success: true
+        "413":
+          $ref: "#/components/responses/RowLimitExceeded"
     delete:
       tags:
         - Rows
@@ -2692,6 +2728,12 @@ paths:
       operationId: deleteRow
       description: |
         Deletes one or multiple rows from the table, identified by its row id no matter if the row is stored in big data or normal backend.
+
+        > ❗ Limits
+        >
+        > - **Maximum:** 10,000 row IDs per call. Larger requests are rejected with `413` and no rows are deleted. Split larger amounts into multiple calls.
+        >
+        > See [Limits](/reference/limits) for details.
       security:
         - BaseTokenAuth: []
       parameters:
@@ -2708,8 +2750,14 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  deleted_rows:
+                    type: integer
+                    description: Number of rows that were deleted. Row IDs that do not exist are ignored.
               example:
-                success: true
+                deleted_rows: 2
+        "413":
+          $ref: "#/components/responses/RowLimitExceeded"
 
   /api-gateway/api/v2/dtables/{base_uuid}/rows/{row_id}/:
     get:
@@ -2780,6 +2828,10 @@ paths:
       description: |
         Locks one or more rows. It is ok to include rows that were already locked. Rows in big data backend can not be locked.
 
+        > 📘 No row limit
+        >
+        > There is no limit on the number of row IDs per call. See [Limits](/reference/limits) for details.
+
         > 📘 Advanced feature
         > 
         > Lock rows is an advanced feature in SeaTable and only available for [enterprise subscriptions](https://seatable.com/prices/).
@@ -2811,6 +2863,10 @@ paths:
         Use this API request to unlock one or more locked rows. As this request
         makes sure that all the mentioned rows are unlocked, it's OK to include
         rows that were not locked.
+
+        > 📘 No row limit
+        >
+        > There is no limit on the number of row IDs per call. See [Limits](/reference/limits) for details.
       requestBody:
         content:
           application/json:

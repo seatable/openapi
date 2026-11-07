@@ -127,6 +127,7 @@ def test_deleteRow(base: Base):
     response = case.call()
 
     assert response.status_code == 200
+    assert response.json() == {'deleted_rows': 2}
 
     # Verify only one row remains
     query = {'table_name': table_name, 'convert_keys': True}

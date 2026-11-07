@@ -80,9 +80,13 @@ Besides the rate limits, there are size limits for how many rows a **single call
 
 | Action and Endpoints                                                                                                                      | Max. number of rows |
 | :---------------------------------------------------------------------------------------------------------------------------------------- | :------------------ |
-| [List rows (with SQL)](https://api.seatable.com/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/`                     | 10.000              |
+| [List rows (with SQL)](https://api.seatable.com/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/`                     | 10,000              |
 | [Insert, Update or Delete Rows (with SQL)](https://api.seatable.com/reference/querysql)<br/>`POST /api-gateway/api/v2/dtables/{...}/sql/` | unlimited           |
-| [List rows](https://api.seatable.com/reference/listrows)<br/>`GET /api-gateway/api/v2/dtables/{...}/rows/`                                | 1.000               |
-| [Append rows](https://api.seatable.com/reference/appendrows)<br/>`POST /api-gateway/api/v2/dtables/{...}/rows/`                           | 1.000               |
-| [Update rows](https://api.seatable.com/reference/updaterow)<br/>`PUT /api-gateway/api/v2/dtables/{...}/rows/`                            | 1.000               |
-| [Delete rows](https://api.seatable.com/reference/deleterow)<br/>`DELETE /api-gateway/api/v2/dtables/{base_uuid}/rows/`                   | 10.000              |
+| [List rows](https://api.seatable.com/reference/listrows)<br/>`GET /api-gateway/api/v2/dtables/{...}/rows/`                                | 1,000               |
+| [Append rows](https://api.seatable.com/reference/appendrows)<br/>`POST /api-gateway/api/v2/dtables/{...}/rows/`                           | 1,000               |
+| [Update rows](https://api.seatable.com/reference/updaterow)<br/>`PUT /api-gateway/api/v2/dtables/{...}/rows/`                            | 1,000               |
+| [Delete rows](https://api.seatable.com/reference/deleterow)<br/>`DELETE /api-gateway/api/v2/dtables/{...}/rows/`                         | 10,000              |
+| [Lock rows](https://api.seatable.com/reference/lockrows)<br/>`PUT /api-gateway/api/v2/dtables/{...}/lock-rows/`                          | unlimited           |
+| [Unlock rows](https://api.seatable.com/reference/unlockrows)<br/>`PUT /api-gateway/api/v2/dtables/{...}/unlock-rows/`                    | unlimited           |
+
+Requests that exceed the limit of Append, Update or Delete rows are rejected with HTTP status **413 Payload Too Large** and no rows are changed. List rows is the exception: larger `limit` values are silently capped to 1,000 rows without an error, so use `start` and `limit` to paginate through larger tables.
