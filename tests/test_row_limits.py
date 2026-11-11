@@ -180,11 +180,6 @@ def test_lockRows_unlockRows_above_delete_limit(base: Base, row_ids: list[str], 
 
 # Runs last: deletes all rows of the shared table
 
-@pytest.mark.xfail(
-    not USES_GO_DTABLE_SERVER,
-    reason="deleteRow reports only the rows of the last internal batch of 1,000 in "
-           "'deleted_rows' (e.g. 1 instead of 1001), although all rows are deleted",
-)
 def test_deleteRow_above_row_limit(base: Base, row_ids: list[str]):
     response = _delete_rows(base, row_ids)
 
