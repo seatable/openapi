@@ -17,7 +17,7 @@ on:
       version:
         description: "SeaTable version"
         required: true
-        default: "7.0.14"
+        default: "7.0.15"
       image:
         description: "Docker Hub repository"
         required: true
@@ -28,7 +28,7 @@ on:
           - "seatable/seatable-enterprise-testing"
 
 env:
-  DEFAULT_VERSION: "7.0.14"
+  DEFAULT_VERSION: "7.0.15"
   DEFAULT_IMAGE: "seatable/seatable-enterprise-testing"
 
 
